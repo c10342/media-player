@@ -1,0 +1,22 @@
+{
+  "name": "@media/player",
+  "version": "0.0.0",
+  "description": "player",
+  "main": "dist/index.js",
+  "doc": "index.js",
+  "typings": "types/index.d.ts",
+  "keywords": [
+    "player"
+  ],
+  "homepage": "https://github.com/c10342/video-player",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c10342/video-player"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}

@@ -1,0 +1,6 @@
+/**/dist
+/examples
+/types
+/coverage
+node_modules
+.vscode
