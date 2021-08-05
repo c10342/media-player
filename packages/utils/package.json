@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "utils",
   "main": "dist/index.js",
-  "doc": "index.js",
+  "doc": "index.ts",
   "typings": "types/index.d.ts",
   "keywords": [
     "utils"

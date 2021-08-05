@@ -1,6 +1,6 @@
 const toString = Object.prototype.toString;
 
-export function isString(data: any) {
+export function isString(data: any): data is string {
   return typeof data === "string";
 }
 

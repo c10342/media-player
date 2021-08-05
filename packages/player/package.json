@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "player",
   "main": "dist/index.js",
-  "doc": "index.js",
+  "doc": "index.ts",
   "typings": "types/index.d.ts",
   "keywords": [
     "player"
@@ -18,5 +18,7 @@
   },
   "author": "",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "@media/utils": "^0.0.0"
+  }
 }
