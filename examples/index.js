@@ -1,1 +1,5 @@
-console.log(1);
+import VideoPlayer from '@media/player'
+
+const player = new VideoPlayer({
+    el:'.container'
+})
