@@ -31,14 +31,6 @@ const clean = (cleanPath) => {
   });
 };
 
-const getTsLoaderConfig = () => {
-  return {
-    test: /\.tsx?$/,
-    loader: "ts-loader",
-    exclude: /node_modules/
-  };
-};
-
 const whiteList = ["multi-locale", "multi-utils"];
 
 function toHump(name) {
@@ -51,6 +43,5 @@ module.exports = {
   getExternals,
   clean,
   whiteList,
-  toHump,
-  getTsLoaderConfig
+  toHump
 };

@@ -13,7 +13,7 @@ const entry = path.resolve(__dirname, "../examples/index.js");
 const devConfig = {
   mode: "development",
   resolve: {
-    extensions: [".ts",".js"]
+    extensions: [".ts", ".js"]
   },
   entry,
   output: {
@@ -32,7 +32,7 @@ const devConfig = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "../examples/index.html"),
       filename: "index.html"
-    }),
+    })
   ]
 };
 

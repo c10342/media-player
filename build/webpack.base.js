@@ -12,14 +12,20 @@ const baseConfig = {
     chunkModules: false
   },
   resolve: {
-    extensions: [".ts",".js"],
+    extensions: [".ts", ".js"],
     alias: {
-      "@lin-player": path.join(__dirname, "../packages")
+      "@media": path.join(__dirname, "../packages")
     },
+    // modules: ["node_modules"],
     mainFields: ["doc", "main"]
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+        exclude: /node_modules/
+      },
       {
         test: /\.(js|jsx)$/,
         use: ["babel-loader"],

@@ -6,7 +6,7 @@ const baseConfig = require("./webpack.base.js");
 
 const path = require("path");
 
-const { getExternals, clean, getTsLoaderConfig } = require("./utils.js");
+const { getExternals, clean } = require("./utils.js");
 
 const root = path.resolve(__dirname, "../packages/utils");
 
@@ -23,14 +23,6 @@ const config = {
     path: resolve("./dist"),
     filename: "index.js",
     libraryTarget: "commonjs2"
-  },
-  module: {
-    rules: [
-      // 添加解析规则
-      {
-        ...getTsLoaderConfig(),
-      }
-    ]
   }
 };
 
