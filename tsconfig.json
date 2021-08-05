@@ -5,7 +5,7 @@
       "outDir": ".",
       "moduleResolution": "node",
       "paths": {
-        "@media/*": ["packages/*/src"]
+        "@media/*": ["packages/*"]
       },
       "target": "es5",
       "module": "es2015",
