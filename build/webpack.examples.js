@@ -8,7 +8,7 @@ const { merge } = require("webpack-merge");
 
 const output = path.resolve(__dirname, "../examples-dist");
 
-const entry = path.resolve(__dirname, "../examples/index.js");
+const entry = path.resolve(__dirname, "../examples/index.ts");
 
 const devConfig = {
   mode: "development",
