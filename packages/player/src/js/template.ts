@@ -1,13 +1,11 @@
-import templateTpl from "../template/layout.art";
+import templateTpl from "../template/layout";
 
-import { PlayerOptions } from "../types/index";
-
-type ElementProp = HTMLElement | null;
+import { HtmlElementProp, PlayerOptions } from "../types/index";
 
 class Template {
   private options: PlayerOptions;
 
-  containerElement: ElementProp;
+  containerElement: HtmlElementProp;
 
   constructor(options: PlayerOptions) {
     this.options = options;
