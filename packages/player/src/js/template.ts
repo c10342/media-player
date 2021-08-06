@@ -1,4 +1,4 @@
-import templateTpl from "../template/layout";
+import templateTpl from "../template/layout.art";
 
 import { HtmlElementProp, PlayerOptions } from "../types/index";
 
@@ -6,6 +6,8 @@ class Template {
   private options: PlayerOptions;
 
   containerElement: HtmlElementProp;
+
+  videoElement: HTMLVideoElement | null;
 
   constructor(options: PlayerOptions) {
     this.options = options;
@@ -24,6 +26,7 @@ class Template {
   private initDom() {
     const el = this.options.el as HTMLElement;
     this.containerElement = el.querySelector(".player-container");
+    this.videoElement = el.querySelector(".player-video");
   }
 }
 

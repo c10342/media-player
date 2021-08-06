@@ -1,6 +1,11 @@
+export type VideoListItem = { label: string; url: string };
+
+export type VideoListParams = Array<VideoListItem>;
+
 export interface PlayerOptions {
   el: string | HTMLElement;
-  type?: string;
+  customType?: (videoElement: HTMLVideoElement, options: VideoListItem) => void;
+  videoList: VideoListParams;
 }
 
 export type HtmlElementProp = HTMLElement | null;

@@ -1,17 +1,21 @@
+import "./style/index.scss";
 import Template from "./js/template";
 import { PlayerOptions } from "./types";
 import { isString } from "@media/utils";
+import VideoPlayer from "./component/video-player";
 
-class VideoPlayer {
+class Player {
   private options: PlayerOptions;
   private templateInstance: Template;
+  private videoPlayerInstance: VideoPlayer;
   constructor(options: PlayerOptions) {
     this.options = options;
     this.initParmas();
     this.initTemplate();
+    this.initVideoPlayer();
   }
 
-  initParmas() {
+  private initParmas() {
     let { el } = this.options;
     if (isString(el)) {
       el = document.querySelector(el) as HTMLElement;
@@ -22,9 +26,16 @@ class VideoPlayer {
     this.options.el = el;
   }
 
-  initTemplate() {
+  private initTemplate() {
     this.templateInstance = new Template(this.options);
+  }
+
+  private initVideoPlayer() {
+    this.videoPlayerInstance = new VideoPlayer({
+      options: this.options,
+      templateInstance: this.templateInstance
+    });
   }
 }
 
-export default VideoPlayer;
+export default Player;

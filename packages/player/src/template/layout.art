@@ -1,0 +1,4 @@
+<div class="player-container">
+  <video class="player-video"></video>
+  {{ include './controls.art' }}
+</div>

@@ -100,7 +100,7 @@ class AnimationHelper extends EventEmit {
       });
   }
 
-  onAfterLeave() {
+  private onAfterLeave() {
     if (this.isHideStatus) {
       const element = this.element;
       element.className = this.originalClassName;
@@ -110,7 +110,7 @@ class AnimationHelper extends EventEmit {
     }
   }
 
-  onAfterEnter() {
+  private onAfterEnter() {
     if (this.isShowStatus) {
       const element = this.element;
       // 重置类名和样式
@@ -119,16 +119,16 @@ class AnimationHelper extends EventEmit {
     }
   }
 
-  onAnimationend() {
+  private onAnimationend() {
     this.onAfterEnter();
     this.onAfterLeave();
   }
 
-  get isHideStatus() {
+  private get isHideStatus() {
     return this.isShow === false;
   }
 
-  get isShowStatus() {
+  private get isShowStatus() {
     return this.isShow === true;
   }
 }

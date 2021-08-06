@@ -1,0 +1,9 @@
+<div class="player-controls">
+  <div class="player-controls-mask"></div>
+  <div class="player-controls-group">
+    <div class="player-process-container"></div>
+    <span class="player-icon-play player-icon-item"></span>
+    <span class="player-time-tip">00:00/00:00</span>
+    <div class="player-controls-right"></div>
+  </div>
+</div>
