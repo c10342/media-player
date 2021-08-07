@@ -5,10 +5,7 @@ import {
   HTMLVideoElementProp
 } from "../types";
 
-enum PlayButtonIcon {
-  pause = "player-icon-play",
-  play = "player-icon-pause"
-}
+import { PlayButtonIcon } from "../config/enum";
 
 class VideoPlayButton {
   private options: ComponentOptions;
@@ -78,20 +75,20 @@ class VideoPlayButton {
   private showPlayIcon() {
     const playElement = this.playElement;
     if (playElement) {
-      if (playElement.classList.contains(PlayButtonIcon.pause)) {
-        playElement.classList.remove(PlayButtonIcon.pause);
+      if (playElement.classList.contains(PlayButtonIcon.Pause)) {
+        playElement.classList.remove(PlayButtonIcon.Pause);
       }
-      playElement.classList.add(PlayButtonIcon.play);
+      playElement.classList.add(PlayButtonIcon.Play);
     }
   }
 
   private showPauseIcon() {
     const playElement = this.playElement;
     if (playElement) {
-      if (playElement.classList.contains(PlayButtonIcon.play)) {
-        playElement.classList.remove(PlayButtonIcon.play);
+      if (playElement.classList.contains(PlayButtonIcon.Play)) {
+        playElement.classList.remove(PlayButtonIcon.Play);
       }
-      playElement.classList.add(PlayButtonIcon.pause);
+      playElement.classList.add(PlayButtonIcon.Pause);
     }
   }
 

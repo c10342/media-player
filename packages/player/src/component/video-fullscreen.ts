@@ -5,8 +5,7 @@ import {
   isBrowserFullscreenEnabled
 } from "@media/utils";
 import { ComponentOptions, HtmlElementProp } from "../types";
-
-const WebFullscreenClassName = "player-fullscreen";
+import { WEBFULLSCREENCLASSNAME, ESCKEY } from "../config/constant";
 
 class VideoFullscreen {
   private options: ComponentOptions;
@@ -69,21 +68,21 @@ class VideoFullscreen {
   private exitWebFullscreen() {
     this.isWebFullscreen = false;
     const el = this.options.el as HTMLElement;
-    if (el.classList.contains(WebFullscreenClassName)) {
-      el.classList.remove(WebFullscreenClassName);
+    if (el.classList.contains(WEBFULLSCREENCLASSNAME)) {
+      el.classList.remove(WEBFULLSCREENCLASSNAME);
     }
   }
 
   private enterWebFullscreen() {
     this.isWebFullscreen = true;
     const el = this.options.el as HTMLElement;
-    if (!el.classList.contains(WebFullscreenClassName)) {
-      el.classList.add(WebFullscreenClassName);
+    if (!el.classList.contains(WEBFULLSCREENCLASSNAME)) {
+      el.classList.add(WEBFULLSCREENCLASSNAME);
     }
   }
 
   private onKeypress(event: KeyboardEvent) {
-    if (event.key === "Escape" && this.isWebFullscreen) {
+    if (event.key === ESCKEY && this.isWebFullscreen) {
       this.exitWebFullscreen();
     }
   }
