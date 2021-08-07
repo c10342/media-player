@@ -1,4 +1,4 @@
-import { isNumber, isUndef, secondToTime } from "@media/utils";
+import { EventManager, isNumber, isUndef, secondToTime } from "@media/utils";
 import { checkData } from "../js/utils";
 import {
   ComponentOptions,
@@ -24,6 +24,7 @@ class VideoProgress {
   private processTimeElement: HtmlElementProp;
   private processMaskInfo: { left: number; width: number } | null;
   private isMousedown = false;
+  private eventManager: EventManager | null;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initElement();
@@ -40,6 +41,7 @@ class VideoProgress {
       left: clientRect?.left || 0,
       width: clientRect?.width || 0
     };
+    this.eventManager = new EventManager();
   }
 
   private initElement() {
@@ -54,16 +56,26 @@ class VideoProgress {
 
   private initVideoListener() {
     const videoElement = this.videoElement;
-    if (!isUndef(videoElement)) {
-      videoElement.addEventListener("timeupdate", () =>
-        this.onVideoTimeupdate()
-      );
-      videoElement.addEventListener("loadedmetadata", () =>
-        this.onVideoLoadedmetadata()
-      );
-      videoElement.addEventListener("progress", () => this.onVideoProgress());
-      videoElement.addEventListener("seeked", () => this.onVideoSeeked());
-    }
+    this.eventManager?.addEventListener({
+      element: videoElement,
+      eventName: "timeupdate",
+      handler: this.onVideoTimeupdate.bind(this)
+    });
+    this.eventManager?.addEventListener({
+      element: videoElement,
+      eventName: "loadedmetadata",
+      handler: this.onVideoLoadedmetadata.bind(this)
+    });
+    this.eventManager?.addEventListener({
+      element: videoElement,
+      eventName: "progress",
+      handler: this.onVideoProgress.bind(this)
+    });
+    this.eventManager?.addEventListener({
+      element: videoElement,
+      eventName: "seeked",
+      handler: this.onVideoSeeked.bind(this)
+    });
   }
 
   private initDrag() {
@@ -76,6 +88,7 @@ class VideoProgress {
 
   private initAnimationHelper() {
     const progressBallElement = this.progressBallElement;
+
     if (!isUndef(progressBallElement)) {
       this.ballAnimationHelperInstance = new AnimationHelper(
         progressBallElement,
@@ -85,7 +98,7 @@ class VideoProgress {
 
     const processTimeElement = this.processTimeElement;
     if (!isUndef(processTimeElement)) {
-      this.ballAnimationHelperInstance = new AnimationHelper(
+      this.timeAnimationHelperInstance = new AnimationHelper(
         processTimeElement,
         "player-fade"
       );
@@ -111,18 +124,21 @@ class VideoProgress {
 
   private initProgressListener() {
     const progressMaskElement = this.progressMaskElement;
-    if (!isUndef(progressMaskElement)) {
-      progressMaskElement.addEventListener("mousemove", (event) =>
-        this.onMaskMousemove(event)
-      );
-      progressMaskElement.addEventListener("mouseleave", () =>
-        this.onMaskMouseleave()
-      );
-    }
+    this.eventManager?.addEventListener({
+      element: progressMaskElement,
+      eventName: "mousemove",
+      handler: this.onMaskMousemove.bind(this)
+    });
+    this.eventManager?.addEventListener({
+      element: progressMaskElement,
+      eventName: "mouseleave",
+      handler: this.onMaskMouseleave.bind(this)
+    });
   }
 
   private onMaskMousemove(event: MouseEvent) {
     this.ballAnimationHelperInstance?.show();
+
     this.showProcessTime(event);
   }
   private onMaskMouseleave() {
@@ -249,10 +265,12 @@ class VideoProgress {
     this.processTimeElement = null;
     this.processMaskInfo = null;
     this.isMousedown = false;
+    this.eventManager = null;
   }
 
   destroy() {
     this.dragInstance?.destroy();
+    this.eventManager?.removeEventListener();
     this.resetData();
   }
 }

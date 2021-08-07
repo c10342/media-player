@@ -70,6 +70,10 @@ class Template {
     this.fullscreenWebElement = el.querySelector(".player-fullscreen-web");
     this.loadingWrapperElement = el.querySelector(".player-loading-container");
   }
+
+  destroy() {
+    // todo
+  }
 }
 
 export default Template;

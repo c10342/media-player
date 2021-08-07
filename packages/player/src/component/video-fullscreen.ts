@@ -2,7 +2,8 @@ import {
   enterBrowserFullScreen,
   exitBrowserFullscreen,
   isBrowserFullscreen,
-  isBrowserFullscreenEnabled
+  EventManager,
+  isUndef
 } from "@media/utils";
 import { ComponentOptions, HtmlElementProp } from "../types";
 import { WEBFULLSCREENCLASSNAME, ESCKEY } from "../config/constant";
@@ -12,7 +13,8 @@ class VideoFullscreen {
   private fullscreenBrowserElement: HtmlElementProp;
   private fullscreenWebElement: HtmlElementProp;
   private isWebFullscreen = false;
-  private _onKeypress: (event: KeyboardEvent) => void;
+  private eventManager: EventManager | null;
+  private containerElement: HtmlElementProp;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initElement();
@@ -22,29 +24,41 @@ class VideoFullscreen {
   }
 
   private initVar() {
-    this._onKeypress = this.onKeypress.bind(this);
+    this.eventManager = new EventManager();
   }
 
   private initElement() {
     const templateInstance = this.options.templateInstance;
     this.fullscreenBrowserElement = templateInstance.fullscreenBrowserElement;
     this.fullscreenWebElement = templateInstance.fullscreenWebElement;
+    this.containerElement = templateInstance.containerElement;
   }
 
   private initListener() {
-    this.fullscreenWebElement?.addEventListener("click", () =>
-      this.onWebFullscreen()
-    );
-    this.fullscreenBrowserElement?.addEventListener("click", () =>
-      this.onBrowserFullscreen()
-    );
+    this.eventManager?.addEventListener({
+      element: this.fullscreenWebElement,
+      eventName: "click",
+      handler: this.onWebFullscreen.bind(this)
+    });
+    this.eventManager?.addEventListener({
+      element: this.fullscreenBrowserElement,
+      eventName: "click",
+      handler: this.onBrowserFullscreen.bind(this)
+    });
   }
 
   private initGlobalListener() {
-    window.addEventListener("keyup", this._onKeypress);
+    this.eventManager?.addEventListener({
+      element: document,
+      eventName: "keyup",
+      handler: this.onKeypress.bind(this)
+    });
   }
 
   private onWebFullscreen() {
+    if (isBrowserFullscreen()) {
+      exitBrowserFullscreen();
+    }
     if (this.isWebFullscreen) {
       this.exitWebFullscreen();
     } else {
@@ -56,9 +70,10 @@ class VideoFullscreen {
     if (this.isWebFullscreen) {
       this.exitWebFullscreen();
     }
-    if (isBrowserFullscreenEnabled()) {
+    const containerElement = this.containerElement;
+    if (!isUndef(containerElement)) {
       if (!isBrowserFullscreen()) {
-        enterBrowserFullScreen(this.options.el as HTMLElement);
+        enterBrowserFullScreen(containerElement);
       } else {
         exitBrowserFullscreen();
       }
@@ -67,17 +82,23 @@ class VideoFullscreen {
 
   private exitWebFullscreen() {
     this.isWebFullscreen = false;
-    const el = this.options.el as HTMLElement;
-    if (el.classList.contains(WEBFULLSCREENCLASSNAME)) {
-      el.classList.remove(WEBFULLSCREENCLASSNAME);
+    const containerElement = this.containerElement;
+    if (
+      !isUndef(containerElement) &&
+      containerElement.classList.contains(WEBFULLSCREENCLASSNAME)
+    ) {
+      containerElement.classList.remove(WEBFULLSCREENCLASSNAME);
     }
   }
 
   private enterWebFullscreen() {
     this.isWebFullscreen = true;
-    const el = this.options.el as HTMLElement;
-    if (!el.classList.contains(WEBFULLSCREENCLASSNAME)) {
-      el.classList.add(WEBFULLSCREENCLASSNAME);
+    const containerElement = this.containerElement;
+    if (
+      !isUndef(containerElement) &&
+      !containerElement.classList.contains(WEBFULLSCREENCLASSNAME)
+    ) {
+      containerElement.classList.add(WEBFULLSCREENCLASSNAME);
     }
   }
 
@@ -91,10 +112,11 @@ class VideoFullscreen {
     this.fullscreenBrowserElement = null;
     this.fullscreenWebElement = null;
     this.isWebFullscreen = false;
+    this.eventManager = null;
   }
 
   destroy() {
-    window.removeEventListener("keyup", this._onKeypress);
+    this.eventManager?.removeEventListener();
     this.resetData();
   }
 }

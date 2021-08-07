@@ -1,4 +1,4 @@
-import { isUndef, secondToTime } from "@media/utils";
+import { EventManager, isUndef, secondToTime } from "@media/utils";
 import {
   ComponentOptions,
   HtmlElementProp,
@@ -11,10 +11,16 @@ class VideoTime {
   private totalTimeElement: HtmlElementProp;
   private videoElement: HTMLVideoElementProp;
   private currentTime = 0;
+  private eventManager: EventManager | null;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initElement();
+    this.initVar();
     this.initVideoListener();
+  }
+
+  private initVar() {
+    this.eventManager = new EventManager();
   }
 
   private initElement() {
@@ -26,14 +32,16 @@ class VideoTime {
 
   private initVideoListener() {
     const videoElement = this.videoElement;
-    if (!isUndef(videoElement)) {
-      videoElement.addEventListener("loadedmetadata", () =>
-        this.onVideoLoadedmetadata()
-      );
-      videoElement.addEventListener("timeupdate", () =>
-        this.onVideoTimeupdate()
-      );
-    }
+    this.eventManager?.addEventListener({
+      element: videoElement,
+      eventName: "loadedmetadata",
+      handler: this.onVideoLoadedmetadata.bind(this)
+    });
+    this.eventManager?.addEventListener({
+      element: videoElement,
+      eventName: "timeupdate",
+      handler: this.onVideoTimeupdate.bind(this)
+    });
   }
 
   private onVideoLoadedmetadata() {
@@ -75,9 +83,11 @@ class VideoTime {
     this.totalTimeElement = null;
     this.videoElement = null;
     this.currentTime = 0;
+    this.eventManager = null;
   }
 
   destroy() {
+    this.eventManager?.removeEventListener();
     this.resetData();
   }
 }

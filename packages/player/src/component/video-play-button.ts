@@ -1,4 +1,4 @@
-import { isUndef } from "@media/utils";
+import { EventManager } from "@media/utils";
 import {
   ComponentOptions,
   HtmlElementProp,
@@ -11,11 +11,17 @@ class VideoPlayButton {
   private options: ComponentOptions;
   private playElement: HtmlElementProp;
   private videoElement: HTMLVideoElementProp;
+  private eventManager: EventManager | null;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initElement();
+    this.initVar();
     this.initVideoListener();
     this.initPlayButtonListener();
+  }
+
+  private initVar() {
+    this.eventManager = new EventManager();
   }
   private get paused() {
     return this.videoElement?.paused;
@@ -29,19 +35,25 @@ class VideoPlayButton {
 
   private initVideoListener() {
     const videoElement = this.videoElement;
-    if (!isUndef(videoElement)) {
-      videoElement.addEventListener("play", () => this.onVideoPlay());
-      videoElement.addEventListener("pause", () => this.onVideoPause());
-    }
+    this.eventManager?.addEventListener({
+      element: videoElement,
+      eventName: "play",
+      handler: this.onVideoPlay.bind(this)
+    });
+    this.eventManager?.addEventListener({
+      element: videoElement,
+      eventName: "pause",
+      handler: this.onVideoPause.bind(this)
+    });
   }
 
   private initPlayButtonListener() {
     const playElement = this.playElement;
-    if (!isUndef(playElement)) {
-      playElement.addEventListener("click", (event) =>
-        this.onPlayButtonClick(event)
-      );
-    }
+    this.eventManager?.addEventListener({
+      element: playElement,
+      eventName: "click",
+      handler: this.onPlayButtonClick.bind(this)
+    });
   }
 
   private onVideoPlay() {
@@ -95,9 +107,11 @@ class VideoPlayButton {
   private resetData() {
     this.playElement = null;
     this.videoElement = null;
+    this.eventManager = null;
   }
 
   destroy() {
+    this.eventManager?.removeEventListener();
     this.resetData();
   }
 }

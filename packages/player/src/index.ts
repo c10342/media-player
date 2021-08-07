@@ -1,7 +1,7 @@
 import "./style/index.scss";
 import Template from "./js/template";
 import { PlayerOptions } from "./types";
-import { isString } from "@media/utils";
+import { isString, isUndef } from "@media/utils";
 import VideoPlayer from "./component/video-player";
 import VideoPlayButton from "./component/video-play-button";
 import VideoTime from "./component/video-time";
@@ -11,7 +11,7 @@ import VideoLoading from "./component/video-loading";
 
 class Player {
   private options: PlayerOptions;
-  private templateInstance: Template;
+  private templateInstance: Template | null;
   private videoPlayerInstance: VideoPlayer | null;
   private playButtonInstance: VideoPlayButton | null;
   private videoTimeInstance: VideoTime | null;
@@ -46,45 +46,67 @@ class Player {
   }
 
   private initVideoPlayer() {
-    this.videoPlayerInstance = new VideoPlayer({
-      ...this.options,
-      templateInstance: this.templateInstance
-    });
+    if (!isUndef(this.templateInstance)) {
+      this.videoPlayerInstance = new VideoPlayer({
+        ...this.options,
+        templateInstance: this.templateInstance
+      });
+    }
   }
 
   private initVideoPlayButton() {
-    this.playButtonInstance = new VideoPlayButton({
-      ...this.options,
-      templateInstance: this.templateInstance
-    });
+    if (!isUndef(this.templateInstance)) {
+      this.playButtonInstance = new VideoPlayButton({
+        ...this.options,
+        templateInstance: this.templateInstance
+      });
+    }
   }
 
   private initVideoTime() {
-    this.videoTimeInstance = new VideoTime({
-      ...this.options,
-      templateInstance: this.templateInstance
-    });
+    if (!isUndef(this.templateInstance)) {
+      this.videoTimeInstance = new VideoTime({
+        ...this.options,
+        templateInstance: this.templateInstance
+      });
+    }
   }
 
   private initVideoProgress() {
-    this.videoProgressInstance = new VideoProgress({
-      ...this.options,
-      templateInstance: this.templateInstance
-    });
+    if (!isUndef(this.templateInstance)) {
+      this.videoProgressInstance = new VideoProgress({
+        ...this.options,
+        templateInstance: this.templateInstance
+      });
+    }
   }
 
   private initVideoFullscreen() {
-    this.videoFullscreenInstance = new VideoFullscreen({
-      ...this.options,
-      templateInstance: this.templateInstance
-    });
+    if (!isUndef(this.templateInstance)) {
+      this.videoFullscreenInstance = new VideoFullscreen({
+        ...this.options,
+        templateInstance: this.templateInstance
+      });
+    }
   }
 
   private initVideoLoading() {
-    this.videoLoadingInstance = new VideoLoading({
-      ...this.options,
-      templateInstance: this.templateInstance
-    });
+    if (!isUndef(this.templateInstance)) {
+      this.videoLoadingInstance = new VideoLoading({
+        ...this.options,
+        templateInstance: this.templateInstance
+      });
+    }
+  }
+
+  private resetData() {
+    this.videoPlayerInstance = null;
+    this.playButtonInstance = null;
+    this.videoTimeInstance = null;
+    this.videoProgressInstance = null;
+    this.videoFullscreenInstance = null;
+    this.videoLoadingInstance = null;
+    this.templateInstance = null;
   }
 
   destroy() {
@@ -94,6 +116,8 @@ class Player {
     this.videoProgressInstance?.destroy();
     this.videoFullscreenInstance?.destroy();
     this.videoLoadingInstance?.destroy();
+    this.templateInstance?.destroy();
+    this.resetData();
   }
 }
 

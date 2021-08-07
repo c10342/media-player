@@ -1,4 +1,4 @@
-import { isFunction, isUndef } from "@media/utils";
+import { EventManager, isFunction, isUndef } from "@media/utils";
 import {
   ComponentOptions,
   HtmlElementProp,
@@ -10,11 +10,17 @@ class VideoPlayer {
   private videoElement: HTMLVideoElementProp;
   private videoMaskElement: HtmlElementProp;
   private currentIndex = 0;
+  private eventManager: EventManager | null;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initElement();
+    this.initVar();
     this.initPlayer();
     this.initMaskListener();
+  }
+
+  private initVar() {
+    this.eventManager = new EventManager();
   }
 
   private get paused() {
@@ -56,9 +62,11 @@ class VideoPlayer {
 
   private initMaskListener() {
     const videoMaskElement = this.videoMaskElement;
-    if (videoMaskElement) {
-      videoMaskElement.addEventListener("click", () => this.onVideoMaskClick());
-    }
+    this.eventManager?.addEventListener({
+      element: videoMaskElement,
+      eventName: "click",
+      handler: this.onVideoMaskClick.bind(this)
+    });
   }
 
   private onVideoMaskClick() {
@@ -85,9 +93,11 @@ class VideoPlayer {
     this.videoElement = null;
     this.videoMaskElement = null;
     this.currentIndex = 0;
+    this.eventManager = null;
   }
 
   destroy() {
+    this.eventManager?.removeEventListener();
     this.resetData();
   }
 }

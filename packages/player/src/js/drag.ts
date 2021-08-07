@@ -1,4 +1,4 @@
-import { userSelect } from "@media/utils";
+import { EventManager, isFunction, isUndef, userSelect } from "@media/utils";
 import { HtmlElementProp } from "../types";
 import EventEmit from "./event-emit";
 import { checkData } from "./utils";
@@ -19,13 +19,14 @@ class Drag extends EventEmit {
   private isMousedown = false;
   private dragElement: HtmlElementProp;
   private wrapperElement: HtmlElementProp;
-  private _onMousemove: MouseFunction;
-  private _onMouseup: MouseFunction;
+  private _onMousemove: MouseFunction | null;
+  private _onMouseup: MouseFunction | null;
   private wrapperElementInfo: WrapperElementInfo = {
     left: 0,
     width: 0
   };
   private percent = 0;
+  private eventManager: EventManager | null;
 
   constructor(options: DragOptions) {
     super();
@@ -38,7 +39,7 @@ class Drag extends EventEmit {
   private initVar() {
     this._onMousemove = this.onMousemove.bind(this);
     this._onMouseup = this.onMouseup.bind(this);
-
+    this.eventManager = new EventManager();
     const wrapperElement = this.wrapperElement;
     if (wrapperElement) {
       const clientRect = wrapperElement.getBoundingClientRect();
@@ -49,13 +50,23 @@ class Drag extends EventEmit {
     }
   }
   private init() {
-    this.dragElement?.addEventListener("mousedown", () => this.onMousedown());
-    this.dragElement?.addEventListener("click", (event) =>
-      this.onDragElementClick(event)
-    );
-    this.wrapperElement?.addEventListener("click", (event) =>
-      this.onWrapperElementClick(event)
-    );
+    const dragElement = this.dragElement;
+    const wrapperElement = this.wrapperElement;
+    this.eventManager?.addEventListener({
+      element: dragElement,
+      eventName: "mousedown",
+      handler: this.onMousedown.bind(this)
+    });
+    this.eventManager?.addEventListener({
+      element: dragElement,
+      eventName: "click",
+      handler: this.onDragElementClick.bind(this)
+    });
+    this.eventManager?.addEventListener({
+      element: wrapperElement,
+      eventName: "click",
+      handler: this.onWrapperElementClick.bind(this)
+    });
   }
 
   private onDragElementClick(event: MouseEvent) {
@@ -78,14 +89,18 @@ class Drag extends EventEmit {
     userSelect(false);
     // 鼠标按下标志位
     this.isMousedown = true;
-    document.addEventListener("mousemove", this._onMousemove);
-    document.addEventListener("mouseup", this._onMouseup);
+    if (isFunction(this._onMousemove) && isFunction(this._onMouseup)) {
+      document.addEventListener("mousemove", this._onMousemove);
+      document.addEventListener("mouseup", this._onMouseup);
+    }
     this.$emit("mousedown");
   }
 
   private removeEventListener() {
-    document.removeEventListener("mouseup", this._onMouseup);
-    document.removeEventListener("mousemove", this._onMousemove);
+    if (isFunction(this._onMousemove) && isFunction(this._onMouseup)) {
+      document.removeEventListener("mouseup", this._onMouseup);
+      document.removeEventListener("mousemove", this._onMousemove);
+    }
   }
 
   private onMousemove(event: MouseEvent) {
@@ -111,8 +126,21 @@ class Drag extends EventEmit {
     this.$emit("mouseup", this.percent);
   }
 
+  private resetData() {
+    this.isMousedown = false;
+    this.dragElement = null;
+    this.wrapperElement = null;
+    this._onMousemove = null;
+    this._onMouseup = null;
+    this.wrapperElementInfo = { width: 0, left: 0 };
+    this.percent = 0;
+    this.eventManager = null;
+  }
+
   destroy() {
+    this.eventManager?.removeEventListener();
     this.removeEventListener();
+    this.resetData();
   }
 }
 

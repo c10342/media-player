@@ -12,9 +12,6 @@
 
 .player-fade-enter-active,
 .player-fade-leave-active {
-  // transition-timing-function: ease;
-  // transition-duration: 500ms;
-  // transition-property: transform;
   transition: opacity 500ms ease;
 }
 
