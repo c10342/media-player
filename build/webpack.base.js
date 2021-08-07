@@ -16,14 +16,13 @@ const baseConfig = {
     alias: {
       "@media": path.join(__dirname, "../packages")
     },
-    // modules: ["node_modules"],
     mainFields: ["doc", "main"]
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "ts-loader",
+        use: ["babel-loader","ts-loader",],
         exclude: /node_modules/
       },
       {
