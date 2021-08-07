@@ -44,6 +44,7 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "hls.js": "^1.0.7",
     "html-webpack-plugin": "^4.5.0",
     "husky": "^7.0.1",
     "lerna": "^4.0.0",
