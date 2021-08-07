@@ -1,13 +1,26 @@
-.player-fade-enter-active,
-.player-fade-leave-active {
+.player-scale-enter-active,
+.player-scale-leave-active {
   transition-timing-function: ease;
   transition-duration: 500ms;
   transition-property: transform;
 }
 
+.player-scale-enter,
+.player-scale-leave-to {
+  transform: translateY(-50%) scale(0);
+}
+
+.player-fade-enter-active,
+.player-fade-leave-active {
+  // transition-timing-function: ease;
+  // transition-duration: 500ms;
+  // transition-property: transform;
+  transition: opacity 500ms ease;
+}
+
 .player-fade-enter,
 .player-fade-leave-to {
-  transform: translateY(-50%) scale(0);
+  opacity: 0;
 }
 
 .player-fullscreen {

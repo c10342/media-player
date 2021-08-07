@@ -1,4 +1,4 @@
-import { isNumber, isUndef } from "@media/utils";
+import { isNumber, isUndef, secondToTime } from "@media/utils";
 import { checkData } from "../js/utils";
 import {
   ComponentOptions,
@@ -17,17 +17,29 @@ class VideoProgress {
   private currentTime = 0;
   private totalTime = 0;
   private dragInstance: Drag | null;
-  private animationHelperInstance: AnimationHelper | null;
+  private ballAnimationHelperInstance: AnimationHelper | null;
+  private timeAnimationHelperInstance: AnimationHelper | null;
   private progressMaskElement: HtmlElementProp;
   private progressBallElement: HtmlElementProp;
+  private processTimeElement: HtmlElementProp;
+  private processMaskInfo: { left: number; width: number } | null;
   private isMousedown = false;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initElement();
+    this.initVar();
     this.initVideoListener();
     this.initDrag();
     this.initAnimationHelper();
     this.initProgressListener();
+  }
+
+  private initVar() {
+    const clientRect = this.progressMaskElement?.getBoundingClientRect();
+    this.processMaskInfo = {
+      left: clientRect?.left || 0,
+      width: clientRect?.width || 0
+    };
   }
 
   private initElement() {
@@ -37,6 +49,7 @@ class VideoProgress {
     this.videoPlayedElement = templateInstance.videoPlayedElement;
     this.progressMaskElement = templateInstance.progressMaskElement;
     this.progressBallElement = templateInstance.progressBallElement;
+    this.processTimeElement = templateInstance.processTimeElement;
   }
 
   private initVideoListener() {
@@ -64,8 +77,16 @@ class VideoProgress {
   private initAnimationHelper() {
     const progressBallElement = this.progressBallElement;
     if (!isUndef(progressBallElement)) {
-      this.animationHelperInstance = new AnimationHelper(
+      this.ballAnimationHelperInstance = new AnimationHelper(
         progressBallElement,
+        "player-scale"
+      );
+    }
+
+    const processTimeElement = this.processTimeElement;
+    if (!isUndef(processTimeElement)) {
+      this.ballAnimationHelperInstance = new AnimationHelper(
+        processTimeElement,
         "player-fade"
       );
     }
@@ -91,8 +112,8 @@ class VideoProgress {
   private initProgressListener() {
     const progressMaskElement = this.progressMaskElement;
     if (!isUndef(progressMaskElement)) {
-      progressMaskElement.addEventListener("mousemove", () =>
-        this.onMaskMousemove()
+      progressMaskElement.addEventListener("mousemove", (event) =>
+        this.onMaskMousemove(event)
       );
       progressMaskElement.addEventListener("mouseleave", () =>
         this.onMaskMouseleave()
@@ -100,11 +121,13 @@ class VideoProgress {
     }
   }
 
-  private onMaskMousemove() {
-    this.animationHelperInstance?.show();
+  private onMaskMousemove(event: MouseEvent) {
+    this.ballAnimationHelperInstance?.show();
+    this.showProcessTime(event);
   }
   private onMaskMouseleave() {
-    this.animationHelperInstance?.hide();
+    this.ballAnimationHelperInstance?.hide();
+    this.hideProcessTime();
   }
 
   private onVideoLoadedmetadata() {
@@ -195,6 +218,23 @@ class VideoProgress {
     }
   }
 
+  private showProcessTime(event: MouseEvent) {
+    const processTimeElement = this.processTimeElement;
+    if (!isUndef(processTimeElement) && !isUndef(this.processMaskInfo)) {
+      const { left, width } = this.processMaskInfo;
+      let offsetX = event.pageX - left;
+      offsetX = checkData(offsetX, 0, width);
+      processTimeElement.style.left = `${offsetX}px`;
+      const time = this.totalTime * (offsetX / width);
+      processTimeElement.innerHTML = secondToTime(time);
+      this.timeAnimationHelperInstance?.show();
+    }
+  }
+
+  private hideProcessTime() {
+    this.timeAnimationHelperInstance?.hide();
+  }
+
   private resetData() {
     this.videoElement = null;
     this.videoLoadedElement = null;
@@ -202,9 +242,12 @@ class VideoProgress {
     this.currentTime = 0;
     this.totalTime = 0;
     this.dragInstance = null;
-    this.animationHelperInstance = null;
+    this.ballAnimationHelperInstance = null;
+    this.timeAnimationHelperInstance = null;
     this.progressMaskElement = null;
     this.progressBallElement = null;
+    this.processTimeElement = null;
+    this.processMaskInfo = null;
     this.isMousedown = false;
   }
 

@@ -35,6 +35,8 @@ class Template {
 
   loadingWrapperElement: HtmlElementProp;
 
+  processTimeElement: HtmlElementProp;
+
   constructor(options: PlayerOptions) {
     this.options = options;
     this.initTemplate();
@@ -61,6 +63,7 @@ class Template {
     this.videoPlayedElement = el.querySelector(".player-process-played");
     this.progressMaskElement = el.querySelector(".player-process-mask");
     this.progressBallElement = el.querySelector(".player-process-ball");
+    this.processTimeElement = el.querySelector(".player-process-time");
     this.fullscreenBrowserElement = el.querySelector(
       ".player-fullscreen-browser"
     );
