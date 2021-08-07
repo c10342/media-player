@@ -6,6 +6,8 @@ const baseConfig = require("./webpack.base.js");
 
 const { merge } = require("webpack-merge");
 
+const webpack = require('webpack')
+
 const output = path.resolve(__dirname, "../examples-dist");
 
 const entry = path.resolve(__dirname, "../examples/index.ts");
@@ -32,7 +34,9 @@ const devConfig = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "../examples/index.html"),
       filename: "index.html"
-    })
+    }),
+    new webpack.NamedChunksPlugin(),
+    new webpack.HotModuleReplacementPlugin()
   ]
 };
 
