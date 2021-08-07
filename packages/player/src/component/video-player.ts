@@ -1,24 +1,30 @@
-import { isFunction } from "@media/utils";
-import Template from "../js/template";
-import { PlayerOptions } from "../types";
-
-interface VideoPlayerOptions {
-  options: PlayerOptions;
-  templateInstance: Template;
-}
+import { isFunction, isUndef } from "@media/utils";
+import {
+  ComponentOptions,
+  HtmlElementProp,
+  HTMLVideoElementProp
+} from "../types";
 
 class VideoPlayer {
-  private options: PlayerOptions;
-  private videoElement: HTMLVideoElement | null;
+  private options: ComponentOptions;
+  private videoElement: HTMLVideoElementProp;
+  private videoMaskElement: HtmlElementProp;
   private currentIndex = 0;
-  constructor(params: VideoPlayerOptions) {
-    this.options = params.options;
-    this.initElement(params.templateInstance);
+  constructor(options: ComponentOptions) {
+    this.options = options;
+    this.initElement();
     this.initPlayer();
+    this.initMaskListener();
   }
 
-  private initElement(templateInstance: Template) {
+  private get paused() {
+    return this.videoElement?.paused;
+  }
+
+  private initElement() {
+    const templateInstance = this.options.templateInstance;
     this.videoElement = templateInstance.videoElement;
+    this.videoMaskElement = templateInstance.videoMaskElement;
   }
 
   private initPlayer() {
@@ -26,7 +32,7 @@ class VideoPlayer {
     const { videoElement } = this;
     const videoItem = this.getVideoItem();
 
-    if (videoElement && videoItem) {
+    if (!isUndef(videoElement) && videoItem) {
       if (isFunction(customType)) {
         customType(videoElement, videoItem);
       } else {
@@ -46,6 +52,43 @@ class VideoPlayer {
       return videoList[currentIndex];
     }
     return null;
+  }
+
+  private initMaskListener() {
+    const videoMaskElement = this.videoMaskElement;
+    if (videoMaskElement) {
+      videoMaskElement.addEventListener("click", () => this.onVideoMaskClick());
+    }
+  }
+
+  private onVideoMaskClick() {
+    this.togglePlay();
+  }
+
+  private togglePlay() {
+    if (this.paused) {
+      this.playVideo();
+    } else {
+      this.pauseVideo();
+    }
+  }
+
+  private pauseVideo() {
+    this.videoElement?.pause();
+  }
+
+  private playVideo() {
+    this.videoElement?.play();
+  }
+
+  private resetData() {
+    this.videoElement = null;
+    this.videoMaskElement = null;
+    this.currentIndex = 0;
+  }
+
+  destroy() {
+    this.resetData();
   }
 }
 

@@ -1,0 +1,11 @@
+<div class='player-process-container'>
+  <div class="player-process-mask">
+    <span class="player-process-time">00:00</span>
+    <div class="player-process-wrapper">
+      <div class="player-process-loaded"></div>
+      <div class="player-process-played">
+          <span class="player-process-ball"></span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+.player-fullscreen-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  &:hover {
+    .player-fullscreen-hover {
+      display: block;
+    }
+  }
+
+  .player-icon-item {
+    font-size: 22px;
+  }
+}
+
+.player-fullscreen-hover {
+  position: absolute;
+  top: -23px;
+  left: 0;
+  display: none;
+  width: 100%;
+}

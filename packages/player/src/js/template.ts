@@ -1,13 +1,39 @@
 import templateTpl from "../template/layout.art";
 
-import { HtmlElementProp, PlayerOptions } from "../types/index";
+import {
+  HtmlElementProp,
+  HTMLVideoElementProp,
+  PlayerOptions
+} from "../types/index";
 
 class Template {
   private options: PlayerOptions;
 
   containerElement: HtmlElementProp;
 
-  videoElement: HTMLVideoElement | null;
+  playElement: HtmlElementProp;
+
+  videoElement: HTMLVideoElementProp;
+
+  currentTimeElement: HtmlElementProp;
+
+  totalTimeElement: HtmlElementProp;
+
+  videoLoadedElement: HtmlElementProp;
+
+  videoPlayedElement: HtmlElementProp;
+
+  progressMaskElement: HtmlElementProp;
+
+  progressBallElement: HtmlElementProp;
+
+  videoMaskElement: HtmlElementProp;
+
+  fullscreenBrowserElement: HtmlElementProp;
+
+  fullscreenWebElement: HtmlElementProp;
+
+  loadingWrapperElement: HtmlElementProp;
 
   constructor(options: PlayerOptions) {
     this.options = options;
@@ -27,6 +53,19 @@ class Template {
     const el = this.options.el as HTMLElement;
     this.containerElement = el.querySelector(".player-container");
     this.videoElement = el.querySelector(".player-video");
+    this.videoMaskElement = el.querySelector(".player-video-mask");
+    this.playElement = el.querySelector(".player-status-button");
+    this.currentTimeElement = el.querySelector(".player-currentTime");
+    this.totalTimeElement = el.querySelector(".player-totalTime");
+    this.videoLoadedElement = el.querySelector(".player-process-loaded");
+    this.videoPlayedElement = el.querySelector(".player-process-played");
+    this.progressMaskElement = el.querySelector(".player-process-mask");
+    this.progressBallElement = el.querySelector(".player-process-ball");
+    this.fullscreenBrowserElement = el.querySelector(
+      ".player-fullscreen-browser"
+    );
+    this.fullscreenWebElement = el.querySelector(".player-fullscreen-web");
+    this.loadingWrapperElement = el.querySelector(".player-loading-container");
   }
 }
 

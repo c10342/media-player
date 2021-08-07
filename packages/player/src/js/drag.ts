@@ -25,6 +25,7 @@ class Drag extends EventEmit {
     left: 0,
     width: 0
   };
+  private percent = 0;
 
   constructor(options: DragOptions) {
     super();
@@ -68,6 +69,7 @@ class Drag extends EventEmit {
     const offsetX = clientX - left;
     // 计算百分比
     const percent = checkData(offsetX / width, 0, 1);
+    this.percent = percent;
     this.$emit("click", percent);
   }
 
@@ -92,11 +94,13 @@ class Drag extends EventEmit {
       return;
     }
     const { left, width } = this.wrapperElementInfo;
+
     //   计算移动距离
     let offsetX = event.pageX - left;
     // 越界检查
     offsetX = checkData(offsetX, 0, width);
     const percent = offsetX / width;
+    this.percent = percent;
     this.$emit("mousemove", percent);
   }
 
@@ -104,7 +108,7 @@ class Drag extends EventEmit {
     userSelect(true);
     this.isMousedown = false;
     this.removeEventListener();
-    this.$emit("mouseup");
+    this.$emit("mouseup", this.percent);
   }
 
   destroy() {

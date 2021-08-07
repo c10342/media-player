@@ -1,0 +1,6 @@
+  <div class="player-fullscreen-container">
+    <span class="player-icon-full-screen  player-icon-item player-fullscreen-browser"></span>
+    <div class="player-fullscreen-hover">
+      <span class="player-icon-web-fullscreen  player-icon-item player-fullscreen-web"></span>
+    </div>
+  </div>

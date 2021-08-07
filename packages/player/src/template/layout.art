@@ -1,4 +1,6 @@
 <div class="player-container">
   <video class="player-video"></video>
+  <div class="player-video-mask"></div>
+  {{ include './loading.art' }}
   {{ include './controls.art' }}
 </div>

@@ -1,0 +1,34 @@
+.player-fade-enter-active,
+.player-fade-leave-active {
+  transition-timing-function: ease;
+  transition-duration: 500ms;
+  transition-property: transform;
+}
+
+.player-fade-enter,
+.player-fade-leave-to {
+  transform: translateY(-50%) scale(0);
+}
+
+.player-fullscreen {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.player-icon-item {
+  font-size: 25px;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
+}

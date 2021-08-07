@@ -17,6 +17,7 @@ class AnimationHelper extends EventEmit {
     super();
     // 根据动画名得到不同状态所对应的css类名
     this.className = getAnimationClassName(animationName);
+
     // 获取进行过渡动画的元素
     this.element = element;
     // 获取display的初始值

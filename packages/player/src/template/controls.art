@@ -1,9 +1,15 @@
 <div class="player-controls">
   <div class="player-controls-mask"></div>
   <div class="player-controls-group">
-    <div class="player-process-container"></div>
-    <span class="player-icon-play player-icon-item"></span>
-    <span class="player-time-tip">00:00/00:00</span>
-    <div class="player-controls-right"></div>
+  {{ include './progress.art' }}
+    <span class="player-icon-play player-icon-item player-status-button"></span>
+    <span class="player-time-tip">
+    <span class='player-currentTime'>00:00</span>
+    <span>/</span>
+    <span class='player-totalTime'>00:00</span>
+    </span>
+    <div class="player-controls-right">
+    {{ include './fullscreen.art' }}
+    </div>
   </div>
 </div>
