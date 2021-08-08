@@ -42,3 +42,6 @@ export function setClassName(...args: Array<any>) {
 // 等待n毫秒
 export const nextTick = (time?: number) => () =>
   new Promise((resolve) => setTimeout(resolve, time ? time : 1000 / 30));
+
+export const sleep = (time?: number) =>
+  new Promise((resolve) => setTimeout(resolve, time ? time : 0));

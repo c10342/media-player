@@ -1,5 +1,5 @@
 export const WEBFULLSCREENCLASSNAME = "player-fullscreen";
 
-export const ESCKEY = "Escape";
+export const ESCKEYCODE = 27;
 
 // export const

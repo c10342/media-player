@@ -8,6 +8,7 @@ import VideoTime from "./component/video-time";
 import VideoProgress from "./component/video-progress";
 import VideoFullscreen from "./component/video-fullscreen";
 import VideoLoading from "./component/video-loading";
+import VideoVolume from "./component/video-volume";
 
 class Player {
   private options: PlayerOptions;
@@ -18,6 +19,7 @@ class Player {
   private videoProgressInstance: VideoProgress | null;
   private videoFullscreenInstance: VideoFullscreen | null;
   private videoLoadingInstance: VideoLoading | null;
+  private videoVolumeInstance: VideoVolume | null;
   constructor(options: PlayerOptions) {
     this.options = options;
     this.initParams();
@@ -28,6 +30,7 @@ class Player {
     this.initVideoProgress();
     this.initVideoFullscreen();
     this.initVideoLoading();
+    this.initVideoVolume();
   }
 
   private initParams() {
@@ -99,6 +102,15 @@ class Player {
     }
   }
 
+  private initVideoVolume() {
+    if (!isUndef(this.templateInstance)) {
+      this.videoVolumeInstance = new VideoVolume({
+        ...this.options,
+        templateInstance: this.templateInstance
+      });
+    }
+  }
+
   private resetData() {
     this.videoPlayerInstance = null;
     this.playButtonInstance = null;
@@ -106,6 +118,7 @@ class Player {
     this.videoProgressInstance = null;
     this.videoFullscreenInstance = null;
     this.videoLoadingInstance = null;
+    this.videoVolumeInstance = null;
     this.templateInstance = null;
   }
 
@@ -116,6 +129,7 @@ class Player {
     this.videoProgressInstance?.destroy();
     this.videoFullscreenInstance?.destroy();
     this.videoLoadingInstance?.destroy();
+    this.videoVolumeInstance?.destroy();
     this.templateInstance?.destroy();
     this.resetData();
   }

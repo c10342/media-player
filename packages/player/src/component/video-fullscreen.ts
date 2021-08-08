@@ -6,7 +6,7 @@ import {
   isUndef
 } from "@media/utils";
 import { ComponentOptions, HtmlElementProp } from "../types";
-import { WEBFULLSCREENCLASSNAME, ESCKEY } from "../config/constant";
+import { WEBFULLSCREENCLASSNAME, ESCKEYCODE } from "../config/constant";
 
 class VideoFullscreen {
   private options: ComponentOptions;
@@ -103,7 +103,7 @@ class VideoFullscreen {
   }
 
   private onKeypress(event: KeyboardEvent) {
-    if (event.key === ESCKEY && this.isWebFullscreen) {
+    if (event.keyCode === ESCKEYCODE && this.isWebFullscreen) {
       this.exitWebFullscreen();
     }
   }

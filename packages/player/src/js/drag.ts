@@ -8,30 +8,25 @@ interface DragOptions {
   wrapperElement: HtmlElementProp;
 }
 
-type MouseFunction = (event: MouseEvent) => void;
-
-interface WrapperElementInfo {
+interface WrapperInfo {
   left: number;
   width: number;
 }
 
+type MouseFunction = (event: MouseEvent) => void;
+
 class Drag extends EventEmit {
   private isMousedown = false;
-  private dragElement: HtmlElementProp;
-  private wrapperElement: HtmlElementProp;
   private _onMousemove: MouseFunction | null;
   private _onMouseup: MouseFunction | null;
-  private wrapperElementInfo: WrapperElementInfo = {
-    left: 0,
-    width: 0
-  };
   private percent = 0;
   private eventManager: EventManager | null;
+  private wrapperInfo: WrapperInfo | null;
+  private options: DragOptions | null;
 
   constructor(options: DragOptions) {
     super();
-    this.dragElement = options.dragElement;
-    this.wrapperElement = options.wrapperElement;
+    this.options = options;
     this.initVar();
     this.init();
   }
@@ -40,33 +35,44 @@ class Drag extends EventEmit {
     this._onMousemove = this.onMousemove.bind(this);
     this._onMouseup = this.onMouseup.bind(this);
     this.eventManager = new EventManager();
-    const wrapperElement = this.wrapperElement;
+  }
+  private getWrapperInfo(): WrapperInfo {
+    if (this.wrapperInfo) {
+      return this.wrapperInfo;
+    }
+    this.wrapperInfo = { left: 0, width: 0 };
+    const wrapperElement = this.options?.wrapperElement;
     if (wrapperElement) {
       const clientRect = wrapperElement.getBoundingClientRect();
-      this.wrapperElementInfo = {
+      this.wrapperInfo = {
         left: clientRect.left,
         width: clientRect.width
       };
     }
+    return this.wrapperInfo;
   }
   private init() {
-    const dragElement = this.dragElement;
-    const wrapperElement = this.wrapperElement;
-    this.eventManager?.addEventListener({
-      element: dragElement,
-      eventName: "mousedown",
-      handler: this.onMousedown.bind(this)
-    });
-    this.eventManager?.addEventListener({
-      element: dragElement,
-      eventName: "click",
-      handler: this.onDragElementClick.bind(this)
-    });
-    this.eventManager?.addEventListener({
-      element: wrapperElement,
-      eventName: "click",
-      handler: this.onWrapperElementClick.bind(this)
-    });
+    const dragElement = this.options?.dragElement;
+    const wrapperElement = this.options?.wrapperElement;
+    if (!isUndef(dragElement)) {
+      this.eventManager?.addEventListener({
+        element: dragElement,
+        eventName: "mousedown",
+        handler: this.onMousedown.bind(this)
+      });
+      this.eventManager?.addEventListener({
+        element: dragElement,
+        eventName: "click",
+        handler: this.onDragElementClick.bind(this)
+      });
+    }
+    if (!isUndef(wrapperElement)) {
+      this.eventManager?.addEventListener({
+        element: wrapperElement,
+        eventName: "click",
+        handler: this.onWrapperElementClick.bind(this)
+      });
+    }
   }
 
   private onDragElementClick(event: MouseEvent) {
@@ -75,7 +81,8 @@ class Drag extends EventEmit {
 
   private onWrapperElementClick(event: MouseEvent) {
     event.stopPropagation();
-    const { left, width } = this.wrapperElementInfo;
+
+    const { left, width } = this.getWrapperInfo();
     const clientX = event.clientX;
     const offsetX = clientX - left;
     // 计算百分比
@@ -108,7 +115,7 @@ class Drag extends EventEmit {
       // 一定要鼠标按下才能开始移动
       return;
     }
-    const { left, width } = this.wrapperElementInfo;
+    const { left, width } = this.getWrapperInfo();
 
     //   计算移动距离
     let offsetX = event.pageX - left;
@@ -116,6 +123,7 @@ class Drag extends EventEmit {
     offsetX = checkData(offsetX, 0, width);
     const percent = offsetX / width;
     this.percent = percent;
+
     this.$emit("mousemove", percent);
   }
 
@@ -128,12 +136,10 @@ class Drag extends EventEmit {
 
   private resetData() {
     this.isMousedown = false;
-    this.dragElement = null;
-    this.wrapperElement = null;
     this._onMousemove = null;
     this._onMouseup = null;
-    this.wrapperElementInfo = { width: 0, left: 0 };
     this.percent = 0;
+    this.options = null;
     this.eventManager = null;
   }
 

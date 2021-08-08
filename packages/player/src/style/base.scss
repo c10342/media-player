@@ -7,7 +7,7 @@
 
 .player-scale-enter,
 .player-scale-leave-to {
-  transform: translateY(-50%) scale(0);
+  transform: scale(0);
 }
 
 .player-fade-enter-active,
@@ -18,6 +18,16 @@
 .player-fade-enter,
 .player-fade-leave-to {
   opacity: 0;
+}
+
+.player-strect-enter-active,
+.player-strect-leave-active {
+  transition: width 500ms ease;
+}
+
+.player-strect-enter,
+.player-strect-leave-to {
+  width: 0 !important;
 }
 
 .player-fullscreen {
@@ -32,6 +42,12 @@
 }
 
 .player-icon-item {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 5px;
   font-size: 25px;
   color: #fff;
   cursor: pointer;

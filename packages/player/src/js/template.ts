@@ -37,6 +37,20 @@ class Template {
 
   processTimeElement: HtmlElementProp;
 
+  volumeMaskElement: HtmlElementProp;
+
+  volumeBallElement: HtmlElementProp;
+
+  volumeButtonElement: HtmlElementProp;
+
+  volumeWrapperElement: HtmlElementProp;
+
+  volumeProcessElement: HtmlElementProp;
+
+  volumeContainerElement: HtmlElementProp;
+
+  volumeAnimationElement: HtmlElementProp;
+
   constructor(options: PlayerOptions) {
     this.options = options;
     this.initTemplate();
@@ -69,6 +83,13 @@ class Template {
     );
     this.fullscreenWebElement = el.querySelector(".player-fullscreen-web");
     this.loadingWrapperElement = el.querySelector(".player-loading-container");
+    this.volumeMaskElement = el.querySelector(".player-volume-mask");
+    this.volumeBallElement = el.querySelector(".player-volume-ball");
+    this.volumeButtonElement = el.querySelector(".player-volume-button");
+    this.volumeWrapperElement = el.querySelector(".player-volume-wrapper");
+    this.volumeProcessElement = el.querySelector(".player-volume-process");
+    this.volumeContainerElement = el.querySelector(".player-volume-container");
+    this.volumeAnimationElement = el.querySelector(".player-volume-animation");
   }
 
   destroy() {

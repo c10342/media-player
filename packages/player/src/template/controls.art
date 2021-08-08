@@ -1,8 +1,9 @@
 <div class="player-controls">
   <div class="player-controls-mask"></div>
   <div class="player-controls-group">
-  {{ include './progress.art' }}
+    {{ include './progress.art' }}
     <span class="player-icon-play player-icon-item player-status-button"></span>
+    {{ include './volume.art' }}
     <span class="player-time-tip">
     <span class='player-currentTime'>00:00</span>
     <span>/</span>
