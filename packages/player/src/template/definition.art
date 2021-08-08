@@ -1,0 +1,13 @@
+  <div class="player-common-list-container">
+    <ul class="player-common-list-wrapper">
+      <li class="player-common-list-item">
+        高清
+      </li>
+      <li class="player-common-list-item">
+        客户
+      </li>
+    </ul>
+    <span class="player-common-list-label">
+    标清
+    </span>
+  </div>

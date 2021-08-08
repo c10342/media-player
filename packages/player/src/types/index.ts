@@ -9,6 +9,8 @@ export interface PlayerOptions {
   el: string | HTMLElement;
   customType?: (videoElement: HTMLVideoElement, options: VideoListItem) => void;
   videoList: VideoListParams;
+  autoplay?: boolean;
+  mute?: boolean;
 }
 
 export type HtmlElementProp = HTMLElement | null;

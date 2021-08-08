@@ -1,5 +1,5 @@
 <div class="player-container">
-  <video class="player-video"></video>
+  <video class="player-video" {{if autoplay}} autoplay {{/if}}></video>
   <div class="player-video-mask"></div>
   {{ include './loading.art' }}
   {{ include './controls.art' }}

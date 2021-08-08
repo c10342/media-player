@@ -1,0 +1,16 @@
+  <div class="player-common-list-container">
+    <ul class="player-common-list-wrapper">
+      <li class="player-common-list-item">
+        0.5x
+      </li>
+      <li class="player-common-list-item">
+        1x
+      </li>
+      <li class="player-common-list-item">
+        1.5x
+      </li>
+    </ul>
+    <span class="player-common-list-label">
+    正常
+    </span>
+  </div>

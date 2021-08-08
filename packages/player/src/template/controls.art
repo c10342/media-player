@@ -10,6 +10,8 @@
     <span class='player-totalTime'>00:00</span>
     </span>
     <div class="player-controls-right">
+    {{ include './speed.art' }}
+    {{ include './definition.art' }}
     {{ include './fullscreen.art' }}
     </div>
   </div>

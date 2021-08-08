@@ -14,6 +14,7 @@ class VideoVolume {
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
+    this.initAutoplay();
     this.initVolumeProgress();
     this.initDrag();
     this.initVideoListener();
@@ -28,6 +29,13 @@ class VideoVolume {
 
   private initVar() {
     this.eventManager = new EventManager();
+  }
+
+  private initAutoplay() {
+    const { autoplay, mute } = this.options ?? {};
+    if (autoplay && mute) {
+      this.setVolume(0);
+    }
   }
 
   private initDrag() {
@@ -77,7 +85,7 @@ class VideoVolume {
   }
 
   private initVolumeProgress() {
-    this.prevVolume = this.volume;
+    this.prevVolume = this.volume || 1;
     this.setProgressWidth(this.volume);
   }
 
