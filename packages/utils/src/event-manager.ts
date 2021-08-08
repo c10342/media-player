@@ -1,5 +1,7 @@
+import { isFunction, isString, isUndef } from "./is";
+
 interface EventItem {
-  element: HTMLElement | null | Window | Document;
+  element: HTMLElement | null | Window | Document | undefined;
   eventName: string;
   handler: (event?: any) => void;
 }
@@ -15,9 +17,12 @@ class EventManager {
       );
     });
   }
+  private canReister({ element, eventName, handler }: EventItem) {
+    return !isUndef(element) && isString(eventName) && isFunction(handler);
+  }
   addEventListener(options: EventItem) {
     const index = this.findIndex(options);
-    if (index === -1) {
+    if (index === -1 && this.canReister(options)) {
       const { element, eventName, handler } = options;
       this.eventList.push(options);
       element?.addEventListener(eventName, handler);

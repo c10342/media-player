@@ -1,19 +1,12 @@
-import { EventManager, isFunction, isUndef } from "@media/utils";
-import {
-  ComponentOptions,
-  HtmlElementProp,
-  HTMLVideoElementProp
-} from "../types";
+import { EventManager, isArray, isFunction, isUndef } from "@media/utils";
+import { ComponentOptions } from "../types";
 
 class VideoPlayer {
-  private options: ComponentOptions;
-  private videoElement: HTMLVideoElementProp;
-  private videoMaskElement: HtmlElementProp;
+  private options: ComponentOptions | null;
   private currentIndex = 0;
   private eventManager: EventManager | null;
   constructor(options: ComponentOptions) {
     this.options = options;
-    this.initElement();
     this.initVar();
     this.initPlayer();
     this.initMaskListener();
@@ -24,18 +17,13 @@ class VideoPlayer {
   }
 
   private get paused() {
-    return this.videoElement?.paused;
-  }
-
-  private initElement() {
-    const templateInstance = this.options.templateInstance;
-    this.videoElement = templateInstance.videoElement;
-    this.videoMaskElement = templateInstance.videoMaskElement;
+    const videoElement = this.options?.templateInstance.videoElement;
+    return videoElement?.paused;
   }
 
   private initPlayer() {
-    const { customType } = this.options;
-    const { videoElement } = this;
+    const { customType } = this.options ?? {};
+    const { videoElement } = this.options?.templateInstance ?? {};
     const videoItem = this.getVideoItem();
 
     if (!isUndef(videoElement) && videoItem) {
@@ -48,9 +36,10 @@ class VideoPlayer {
   }
 
   private getVideoItem() {
-    const { videoList } = this.options;
+    const { videoList } = this.options ?? {};
     const { currentIndex } = this;
     if (
+      isArray(videoList) &&
       videoList.length !== 0 &&
       currentIndex < videoList.length &&
       currentIndex >= 0
@@ -61,7 +50,7 @@ class VideoPlayer {
   }
 
   private initMaskListener() {
-    const videoMaskElement = this.videoMaskElement;
+    const videoMaskElement = this.options?.templateInstance.videoMaskElement;
     this.eventManager?.addEventListener({
       element: videoMaskElement,
       eventName: "click",
@@ -82,18 +71,19 @@ class VideoPlayer {
   }
 
   private pauseVideo() {
-    this.videoElement?.pause();
+    const videoElement = this.options?.templateInstance.videoElement;
+    videoElement?.pause();
   }
 
   private playVideo() {
-    this.videoElement?.play();
+    const videoElement = this.options?.templateInstance.videoElement;
+    videoElement?.play();
   }
 
   private resetData() {
-    this.videoElement = null;
-    this.videoMaskElement = null;
     this.currentIndex = 0;
     this.eventManager = null;
+    this.options = null;
   }
 
   destroy() {

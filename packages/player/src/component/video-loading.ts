@@ -1,39 +1,27 @@
 import { EventManager, isUndef } from "@media/utils";
 import { VideoReadyState } from "../config/enum";
-import {
-  ComponentOptions,
-  HtmlElementProp,
-  HTMLVideoElementProp
-} from "../types";
+import { ComponentOptions } from "../types";
 
 class VideoLoading {
-  private options: ComponentOptions;
-  private videoElement: HTMLVideoElementProp;
-  private loadingWrapperElement: HtmlElementProp;
+  private options: ComponentOptions | null;
   private eventManager: EventManager | null;
   constructor(options: ComponentOptions) {
     this.options = options;
-    this.initElement();
     this.initVar();
     this.initVideoListener();
   }
 
   private get videoReadyState() {
-    return this.videoElement?.readyState ?? -1;
+    const videoElement = this.options?.templateInstance.videoElement;
+    return videoElement?.readyState ?? -1;
   }
 
   private initVar() {
     this.eventManager = new EventManager();
   }
 
-  private initElement() {
-    const templateInstance = this.options.templateInstance;
-    this.videoElement = templateInstance.videoElement;
-    this.loadingWrapperElement = templateInstance.loadingWrapperElement;
-  }
-
   private initVideoListener() {
-    const videoElement = this.videoElement;
+    const videoElement = this.options?.templateInstance.videoElement;
     this.eventManager?.addEventListener({
       element: videoElement,
       eventName: "waiting",
@@ -56,23 +44,24 @@ class VideoLoading {
   }
 
   private showLoading() {
-    const loadingWrapperElement = this.loadingWrapperElement;
+    const loadingWrapperElement =
+      this.options?.templateInstance.loadingWrapperElement;
     if (!isUndef(loadingWrapperElement)) {
       loadingWrapperElement.style.display = "flex";
     }
   }
 
   private hideLoading() {
-    const loadingWrapperElement = this.loadingWrapperElement;
+    const loadingWrapperElement =
+      this.options?.templateInstance.loadingWrapperElement;
     if (!isUndef(loadingWrapperElement)) {
       loadingWrapperElement.style.display = "";
     }
   }
 
   resetData() {
-    this.videoElement = null;
-    this.loadingWrapperElement = null;
     this.eventManager = null;
+    this.options = null;
   }
 
   destroy() {

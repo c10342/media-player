@@ -5,19 +5,15 @@ import {
   EventManager,
   isUndef
 } from "@media/utils";
-import { ComponentOptions, HtmlElementProp } from "../types";
+import { ComponentOptions } from "../types";
 import { WEBFULLSCREENCLASSNAME, ESCKEYCODE } from "../config/constant";
 
 class VideoFullscreen {
-  private options: ComponentOptions;
-  private fullscreenBrowserElement: HtmlElementProp;
-  private fullscreenWebElement: HtmlElementProp;
+  private options: ComponentOptions | null;
   private isWebFullscreen = false;
   private eventManager: EventManager | null;
-  private containerElement: HtmlElementProp;
   constructor(options: ComponentOptions) {
     this.options = options;
-    this.initElement();
     this.initVar();
     this.initListener();
     this.initGlobalListener();
@@ -27,21 +23,16 @@ class VideoFullscreen {
     this.eventManager = new EventManager();
   }
 
-  private initElement() {
-    const templateInstance = this.options.templateInstance;
-    this.fullscreenBrowserElement = templateInstance.fullscreenBrowserElement;
-    this.fullscreenWebElement = templateInstance.fullscreenWebElement;
-    this.containerElement = templateInstance.containerElement;
-  }
-
   private initListener() {
+    const { fullscreenWebElement, fullscreenBrowserElement } =
+      this.options?.templateInstance ?? {};
     this.eventManager?.addEventListener({
-      element: this.fullscreenWebElement,
+      element: fullscreenWebElement,
       eventName: "click",
       handler: this.onWebFullscreen.bind(this)
     });
     this.eventManager?.addEventListener({
-      element: this.fullscreenBrowserElement,
+      element: fullscreenBrowserElement,
       eventName: "click",
       handler: this.onBrowserFullscreen.bind(this)
     });
@@ -70,7 +61,7 @@ class VideoFullscreen {
     if (this.isWebFullscreen) {
       this.exitWebFullscreen();
     }
-    const containerElement = this.containerElement;
+    const containerElement = this.options?.templateInstance.containerElement;
     if (!isUndef(containerElement)) {
       if (!isBrowserFullscreen()) {
         enterBrowserFullScreen(containerElement);
@@ -82,7 +73,7 @@ class VideoFullscreen {
 
   private exitWebFullscreen() {
     this.isWebFullscreen = false;
-    const containerElement = this.containerElement;
+    const containerElement = this.options?.templateInstance.containerElement;
     if (
       !isUndef(containerElement) &&
       containerElement.classList.contains(WEBFULLSCREENCLASSNAME)
@@ -93,7 +84,7 @@ class VideoFullscreen {
 
   private enterWebFullscreen() {
     this.isWebFullscreen = true;
-    const containerElement = this.containerElement;
+    const containerElement = this.options?.templateInstance.containerElement;
     if (
       !isUndef(containerElement) &&
       !containerElement.classList.contains(WEBFULLSCREENCLASSNAME)
@@ -109,10 +100,9 @@ class VideoFullscreen {
   }
 
   private resetData() {
-    this.fullscreenBrowserElement = null;
-    this.fullscreenWebElement = null;
     this.isWebFullscreen = false;
     this.eventManager = null;
+    this.options = null;
   }
 
   destroy() {

@@ -1,29 +1,17 @@
 import { EventManager, isUndef } from "@media/utils";
-import {
-  ComponentOptions,
-  HtmlElementProp,
-  HTMLVideoElementProp
-} from "../types";
+import { ComponentOptions } from "../types";
 import Drag from "../js/drag";
 import { VolumeButtonIcon } from "../config/enum";
 
 class VideoVolume {
-  private options: ComponentOptions;
+  private options: ComponentOptions | null;
   private eventManager: EventManager | null;
-  private volumeMaskElement: HtmlElementProp;
-  private volumeBallElement: HtmlElementProp;
-  private volumeButtonElement: HtmlElementProp;
-  private volumeProcessElement: HtmlElementProp;
-  private volumeContainerElement: HtmlElementProp;
-  private videoElement: HTMLVideoElementProp;
-  private volumeAnimationElement: HtmlElementProp;
   private dragInstance: Drag | null;
   private prevVolume = 1;
   private isMove = false;
   private isEnter = false;
   constructor(options: ComponentOptions) {
     this.options = options;
-    this.initElement();
     this.initVar();
     this.initVolumeProgress();
     this.initDrag();
@@ -32,18 +20,8 @@ class VideoVolume {
   }
 
   private get volume() {
-    return this.videoElement?.volume ?? 1;
-  }
-
-  private initElement() {
-    const templateInstance = this.options.templateInstance;
-    this.volumeMaskElement = templateInstance.volumeMaskElement;
-    this.volumeBallElement = templateInstance.volumeBallElement;
-    this.volumeButtonElement = templateInstance.volumeButtonElement;
-    this.videoElement = templateInstance.videoElement;
-    this.volumeProcessElement = templateInstance.volumeProcessElement;
-    this.volumeContainerElement = templateInstance.volumeContainerElement;
-    this.volumeAnimationElement = templateInstance.volumeAnimationElement;
+    const videoElement = this.options?.templateInstance.videoElement;
+    return videoElement?.volume ?? 1;
   }
 
   private initVar() {
@@ -51,49 +29,49 @@ class VideoVolume {
   }
 
   private initDrag() {
-    this.dragInstance = new Drag({
-      dragElement: this.volumeBallElement,
-      wrapperElement: this.volumeMaskElement
-    });
-    this.dragInstance.$on("mousemove", (percent: number) => {
-      this.setVolume(percent);
-      this.isMove = true;
-      this.toggleAnimation();
-    });
-    this.dragInstance.$on("click", (percent: number) => {
-      this.setPrevVolume(percent);
-      this.setVolume(percent);
-    });
-    this.dragInstance.$on("mouseup", (percent: number) => {
-      this.setPrevVolume(percent);
-      this.isMove = false;
-      this.toggleAnimation();
-    });
+    const { volumeMaskElement, volumeBallElement } =
+      this.options?.templateInstance ?? {};
+    if (!isUndef(volumeMaskElement) && !isUndef(volumeBallElement)) {
+      this.dragInstance = new Drag({
+        dragElement: volumeBallElement,
+        wrapperElement: volumeMaskElement
+      });
+      this.dragInstance.$on("mousemove", (percent: number) => {
+        this.setVolume(percent);
+        this.isMove = true;
+        this.toggleAnimation();
+      });
+      this.dragInstance.$on("click", (percent: number) => {
+        this.setPrevVolume(percent);
+        this.setVolume(percent);
+      });
+      this.dragInstance.$on("mouseup", (percent: number) => {
+        this.setPrevVolume(percent);
+        this.isMove = false;
+        this.toggleAnimation();
+      });
+    }
   }
 
   private initVolumeListener() {
-    const volumeButtonElement = this.volumeButtonElement;
-    if (!isUndef(volumeButtonElement)) {
-      this.eventManager?.addEventListener({
-        element: volumeButtonElement,
-        eventName: "click",
-        handler: this.onVolumeButtonClick.bind(this)
-      });
-    }
+    const { volumeButtonElement, volumeContainerElement } =
+      this.options?.templateInstance ?? {};
+    this.eventManager?.addEventListener({
+      element: volumeButtonElement,
+      eventName: "click",
+      handler: this.onVolumeButtonClick.bind(this)
+    });
 
-    const volumeContainerElement = this.volumeContainerElement;
-    if (!isUndef(volumeContainerElement)) {
-      this.eventManager?.addEventListener({
-        element: volumeContainerElement,
-        eventName: "mouseenter",
-        handler: this.onMouseenter.bind(this)
-      });
-      this.eventManager?.addEventListener({
-        element: volumeContainerElement,
-        eventName: "mouseleave",
-        handler: this.onMouseleave.bind(this)
-      });
-    }
+    this.eventManager?.addEventListener({
+      element: volumeContainerElement,
+      eventName: "mouseenter",
+      handler: this.onMouseenter.bind(this)
+    });
+    this.eventManager?.addEventListener({
+      element: volumeContainerElement,
+      eventName: "mouseleave",
+      handler: this.onMouseleave.bind(this)
+    });
   }
 
   private initVolumeProgress() {
@@ -102,14 +80,13 @@ class VideoVolume {
   }
 
   private initVideoListener() {
-    const videoElement = this.videoElement;
-    if (!isUndef(videoElement)) {
-      this.eventManager?.addEventListener({
-        element: videoElement,
-        eventName: "volumechange",
-        handler: this.onVideoVolumechange.bind(this)
-      });
-    }
+    const videoElement = this.options?.templateInstance.videoElement;
+
+    this.eventManager?.addEventListener({
+      element: videoElement,
+      eventName: "volumechange",
+      handler: this.onVideoVolumechange.bind(this)
+    });
   }
 
   private onVolumeButtonClick() {
@@ -135,7 +112,8 @@ class VideoVolume {
   }
 
   private toggleAnimation() {
-    const volumeAnimationElement = this.volumeAnimationElement;
+    const volumeAnimationElement =
+      this.options?.templateInstance.volumeAnimationElement;
     if (isUndef(volumeAnimationElement)) {
       return;
     }
@@ -147,14 +125,15 @@ class VideoVolume {
   }
 
   setVolume(volume: number) {
-    const videoElement = this.videoElement;
+    const videoElement = this.options?.templateInstance.videoElement;
     if (!isUndef(videoElement)) {
       videoElement.volume = volume;
     }
   }
 
   private setProgressWidth(volume: number) {
-    const volumeProcessElement = this.volumeProcessElement;
+    const volumeProcessElement =
+      this.options?.templateInstance.volumeProcessElement;
     if (!isUndef(volumeProcessElement)) {
       volumeProcessElement.style.width = `${volume * 100}%`;
     }
@@ -167,8 +146,9 @@ class VideoVolume {
   }
 
   private showMuteIcon() {
-    const volumeButtonElement = this.volumeButtonElement;
-    if (volumeButtonElement) {
+    const volumeButtonElement =
+      this.options?.templateInstance.volumeButtonElement;
+    if (!isUndef(volumeButtonElement)) {
       if (volumeButtonElement.classList.contains(VolumeButtonIcon.volume)) {
         volumeButtonElement.classList.remove(VolumeButtonIcon.volume);
       }
@@ -179,8 +159,9 @@ class VideoVolume {
   }
 
   private showVolumeIcon() {
-    const volumeButtonElement = this.volumeButtonElement;
-    if (volumeButtonElement) {
+    const volumeButtonElement =
+      this.options?.templateInstance.volumeButtonElement;
+    if (!isUndef(volumeButtonElement)) {
       if (volumeButtonElement.classList.contains(VolumeButtonIcon.mute)) {
         volumeButtonElement.classList.remove(VolumeButtonIcon.mute);
       }
@@ -198,14 +179,8 @@ class VideoVolume {
 
   private resetData() {
     this.eventManager = null;
-    this.volumeMaskElement = null;
-    this.volumeBallElement = null;
-    this.volumeButtonElement = null;
-    this.volumeProcessElement = null;
-    this.volumeContainerElement = null;
-    this.videoElement = null;
-    this.volumeAnimationElement = null;
     this.dragInstance = null;
+    this.options = null;
   }
 
   destroy() {

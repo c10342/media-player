@@ -9,8 +9,9 @@ import VideoProgress from "./component/video-progress";
 import VideoFullscreen from "./component/video-fullscreen";
 import VideoLoading from "./component/video-loading";
 import VideoVolume from "./component/video-volume";
+import EventEmit from "./js/event-emit";
 
-class Player {
+class Player extends EventEmit {
   private options: PlayerOptions;
   private templateInstance: Template | null;
   private videoPlayerInstance: VideoPlayer | null;
@@ -21,6 +22,7 @@ class Player {
   private videoLoadingInstance: VideoLoading | null;
   private videoVolumeInstance: VideoVolume | null;
   constructor(options: PlayerOptions) {
+    super();
     this.options = options;
     this.initParams();
     this.initTemplate();
@@ -123,6 +125,7 @@ class Player {
   }
 
   destroy() {
+    this.$emit("destroy");
     this.videoPlayerInstance?.destroy();
     this.playButtonInstance?.destroy();
     this.videoTimeInstance?.destroy();
