@@ -16,6 +16,8 @@ const player = new VideoPlayer({
       url: "https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4"
     }
   ]
+  // autoplay: true,
+  // mute:true
   // customType(videoElement, videoObj) {
   //   const hls = new Hls();
   //   hls.loadSource(videoObj.url);
@@ -23,8 +25,8 @@ const player = new VideoPlayer({
   // }
 });
 
-const destroyButton = document.querySelector(".destroy");
+// const destroyButton = document.querySelector(".destroy");
 
-destroyButton?.addEventListener("click", function () {
-  player.destroy();
-});
+// destroyButton?.addEventListener("click", function () {
+//   player.destroy();
+// });
