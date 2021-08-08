@@ -22,3 +22,9 @@ const player = new VideoPlayer({
   //   hls.attachMedia(videoElement);
   // }
 });
+
+const destroyButton = document.querySelector(".destroy");
+
+destroyButton?.addEventListener("click", function () {
+  player.destroy();
+});
