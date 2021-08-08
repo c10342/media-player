@@ -1,5 +1,6 @@
 import { EventManager, isUndef } from "@media/utils";
 import { VideoReadyState } from "../config/enum";
+import { CustomEvents } from "../js/event";
 import { ComponentOptions } from "../types";
 
 class VideoLoading {
@@ -9,10 +10,11 @@ class VideoLoading {
     this.options = options;
     this.initVar();
     this.initVideoListener();
+    this.initListener();
   }
 
   private get videoReadyState() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     return videoElement?.readyState ?? -1;
   }
 
@@ -21,7 +23,7 @@ class VideoLoading {
   }
 
   private initVideoListener() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     this.eventManager?.addEventListener({
       element: videoElement,
       eventName: "waiting",
@@ -32,6 +34,10 @@ class VideoLoading {
       eventName: "canplay",
       handler: this.onCanplay.bind(this)
     });
+  }
+
+  private initListener() {
+    this.options?.instance.$on(CustomEvents.DESTROY, () => this.destroy());
   }
 
   private onVideoWaiting() {
@@ -45,7 +51,7 @@ class VideoLoading {
 
   private showLoading() {
     const loadingWrapperElement =
-      this.options?.templateInstance.loadingWrapperElement;
+      this.options?.templateInstance?.loadingWrapperElement;
     if (!isUndef(loadingWrapperElement)) {
       loadingWrapperElement.style.display = "flex";
     }
@@ -53,20 +59,14 @@ class VideoLoading {
 
   private hideLoading() {
     const loadingWrapperElement =
-      this.options?.templateInstance.loadingWrapperElement;
+      this.options?.templateInstance?.loadingWrapperElement;
     if (!isUndef(loadingWrapperElement)) {
       loadingWrapperElement.style.display = "";
     }
   }
 
-  resetData() {
-    this.eventManager = null;
-    this.options = null;
-  }
-
   destroy() {
     this.eventManager?.removeEventListener();
-    this.resetData();
   }
 }
 

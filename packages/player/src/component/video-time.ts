@@ -1,4 +1,5 @@
 import { EventManager, isUndef, secondToTime } from "@media/utils";
+import { CustomEvents } from "../js/event";
 import { ComponentOptions } from "../types";
 
 class VideoTime {
@@ -9,6 +10,7 @@ class VideoTime {
     this.options = options;
     this.initVar();
     this.initVideoListener();
+    this.initListener();
   }
 
   private initVar() {
@@ -16,7 +18,7 @@ class VideoTime {
   }
 
   private initVideoListener() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
 
     this.eventManager?.addEventListener({
       element: videoElement,
@@ -30,14 +32,18 @@ class VideoTime {
     });
   }
 
+  private initListener() {
+    this.options?.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+  }
+
   private onVideoLoadedmetadata() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     const duration = videoElement?.duration || 0;
     this.setTotalTime(duration);
   }
 
   private onVideoTimeupdate() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     const currentTime = videoElement?.currentTime || 0;
 
     const intCurrentTime = Math.floor(currentTime);
@@ -53,7 +59,7 @@ class VideoTime {
   }
 
   private setTotalTime(duration: number) {
-    const totalTimeElement = this.options?.templateInstance.totalTimeElement;
+    const totalTimeElement = this.options?.templateInstance?.totalTimeElement;
     if (!isUndef(totalTimeElement)) {
       totalTimeElement.innerHTML = secondToTime(duration);
     }
@@ -61,21 +67,14 @@ class VideoTime {
 
   private setCurrentTime(currentTime: number) {
     const currentTimeElement =
-      this.options?.templateInstance.currentTimeElement;
+      this.options?.templateInstance?.currentTimeElement;
     if (!isUndef(currentTimeElement)) {
       currentTimeElement.innerHTML = secondToTime(currentTime);
     }
   }
 
-  private resetData() {
-    this.currentTime = 0;
-    this.eventManager = null;
-    this.options = null;
-  }
-
   destroy() {
     this.eventManager?.removeEventListener();
-    this.resetData();
   }
 }
 

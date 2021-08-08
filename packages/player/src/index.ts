@@ -1,7 +1,7 @@
 import "./style/index.scss";
 import Template from "./js/template";
 import { PlayerOptions } from "./types";
-import { isString, isUndef } from "@media/utils";
+import { isString } from "@media/utils";
 import VideoPlayer from "./component/video-player";
 import VideoPlayButton from "./component/video-play-button";
 import VideoTime from "./component/video-time";
@@ -10,6 +10,7 @@ import VideoFullscreen from "./component/video-fullscreen";
 import VideoLoading from "./component/video-loading";
 import VideoVolume from "./component/video-volume";
 import EventEmit from "./js/event-emit";
+import { CustomEvents } from "./js/event";
 
 class Player extends EventEmit {
   private options: PlayerOptions;
@@ -51,66 +52,59 @@ class Player extends EventEmit {
   }
 
   private initVideoPlayer() {
-    if (!isUndef(this.templateInstance)) {
-      this.videoPlayerInstance = new VideoPlayer({
-        ...this.options,
-        templateInstance: this.templateInstance
-      });
-    }
+    this.videoPlayerInstance = new VideoPlayer({
+      ...this.options,
+      templateInstance: this.templateInstance,
+      instance: this
+    });
   }
 
   private initVideoPlayButton() {
-    if (!isUndef(this.templateInstance)) {
-      this.playButtonInstance = new VideoPlayButton({
-        ...this.options,
-        templateInstance: this.templateInstance
-      });
-    }
+    this.playButtonInstance = new VideoPlayButton({
+      ...this.options,
+      templateInstance: this.templateInstance,
+      instance: this
+    });
   }
 
   private initVideoTime() {
-    if (!isUndef(this.templateInstance)) {
-      this.videoTimeInstance = new VideoTime({
-        ...this.options,
-        templateInstance: this.templateInstance
-      });
-    }
+    this.videoTimeInstance = new VideoTime({
+      ...this.options,
+      templateInstance: this.templateInstance,
+      instance: this
+    });
   }
 
   private initVideoProgress() {
-    if (!isUndef(this.templateInstance)) {
-      this.videoProgressInstance = new VideoProgress({
-        ...this.options,
-        templateInstance: this.templateInstance
-      });
-    }
+    this.videoProgressInstance = new VideoProgress({
+      ...this.options,
+      templateInstance: this.templateInstance,
+      instance: this
+    });
   }
 
   private initVideoFullscreen() {
-    if (!isUndef(this.templateInstance)) {
-      this.videoFullscreenInstance = new VideoFullscreen({
-        ...this.options,
-        templateInstance: this.templateInstance
-      });
-    }
+    this.videoFullscreenInstance = new VideoFullscreen({
+      ...this.options,
+      templateInstance: this.templateInstance,
+      instance: this
+    });
   }
 
   private initVideoLoading() {
-    if (!isUndef(this.templateInstance)) {
-      this.videoLoadingInstance = new VideoLoading({
-        ...this.options,
-        templateInstance: this.templateInstance
-      });
-    }
+    this.videoLoadingInstance = new VideoLoading({
+      ...this.options,
+      templateInstance: this.templateInstance,
+      instance: this
+    });
   }
 
   private initVideoVolume() {
-    if (!isUndef(this.templateInstance)) {
-      this.videoVolumeInstance = new VideoVolume({
-        ...this.options,
-        templateInstance: this.templateInstance
-      });
-    }
+    this.videoVolumeInstance = new VideoVolume({
+      ...this.options,
+      templateInstance: this.templateInstance,
+      instance: this
+    });
   }
 
   private resetData() {
@@ -125,15 +119,7 @@ class Player extends EventEmit {
   }
 
   destroy() {
-    this.$emit("destroy");
-    this.videoPlayerInstance?.destroy();
-    this.playButtonInstance?.destroy();
-    this.videoTimeInstance?.destroy();
-    this.videoProgressInstance?.destroy();
-    this.videoFullscreenInstance?.destroy();
-    this.videoLoadingInstance?.destroy();
-    this.videoVolumeInstance?.destroy();
-    this.templateInstance?.destroy();
+    this.$emit(CustomEvents.DESTROY);
     this.resetData();
   }
 }

@@ -2,6 +2,7 @@ import { EventManager, isUndef } from "@media/utils";
 import { ComponentOptions } from "../types";
 
 import { PlayButtonIcon } from "../config/enum";
+import { CustomEvents } from "../js/event";
 
 class VideoPlayButton {
   private options: ComponentOptions | null;
@@ -11,18 +12,19 @@ class VideoPlayButton {
     this.initVar();
     this.initVideoListener();
     this.initPlayButtonListener();
+    this.initListener();
   }
 
   private initVar() {
     this.eventManager = new EventManager();
   }
   private get paused() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     return videoElement?.paused;
   }
 
   private initVideoListener() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     this.eventManager?.addEventListener({
       element: videoElement,
       eventName: "play",
@@ -36,12 +38,16 @@ class VideoPlayButton {
   }
 
   private initPlayButtonListener() {
-    const playElement = this.options?.templateInstance.playElement;
+    const playElement = this.options?.templateInstance?.playElement;
     this.eventManager?.addEventListener({
       element: playElement,
       eventName: "click",
       handler: this.onPlayButtonClick.bind(this)
     });
+  }
+
+  private initListener() {
+    this.options?.instance.$on(CustomEvents.DESTROY, () => this.destroy());
   }
 
   private onVideoPlay() {
@@ -65,17 +71,17 @@ class VideoPlayButton {
   }
 
   private pauseVideo() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     videoElement?.pause();
   }
 
   private playVideo() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     videoElement?.play();
   }
 
   private showPlayIcon() {
-    const playElement = this.options?.templateInstance.playElement;
+    const playElement = this.options?.templateInstance?.playElement;
     if (!isUndef(playElement)) {
       if (playElement.classList.contains(PlayButtonIcon.Pause)) {
         playElement.classList.remove(PlayButtonIcon.Pause);
@@ -85,7 +91,7 @@ class VideoPlayButton {
   }
 
   private showPauseIcon() {
-    const playElement = this.options?.templateInstance.playElement;
+    const playElement = this.options?.templateInstance?.playElement;
     if (!isUndef(playElement)) {
       if (playElement.classList.contains(PlayButtonIcon.Play)) {
         playElement.classList.remove(PlayButtonIcon.Play);
@@ -94,14 +100,8 @@ class VideoPlayButton {
     }
   }
 
-  private resetData() {
-    this.eventManager = null;
-    this.options = null;
-  }
-
   destroy() {
     this.eventManager?.removeEventListener();
-    this.resetData();
   }
 }
 

@@ -1,4 +1,5 @@
 import { EventManager, isArray, isFunction, isUndef } from "@media/utils";
+import { CustomEvents } from "../js/event";
 import { ComponentOptions } from "../types";
 
 class VideoPlayer {
@@ -10,6 +11,7 @@ class VideoPlayer {
     this.initVar();
     this.initPlayer();
     this.initMaskListener();
+    this.inisListener();
   }
 
   private initVar() {
@@ -17,7 +19,7 @@ class VideoPlayer {
   }
 
   private get paused() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     return videoElement?.paused;
   }
 
@@ -32,6 +34,17 @@ class VideoPlayer {
       } else {
         videoElement.src = videoItem.url;
       }
+    }
+  }
+
+  private inisListener() {
+    this.options?.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+  }
+
+  private destroyPlayer() {
+    const videoElement = this.options?.templateInstance?.videoElement;
+    if (!isUndef(videoElement)) {
+      videoElement.src = "";
     }
   }
 
@@ -50,7 +63,7 @@ class VideoPlayer {
   }
 
   private initMaskListener() {
-    const videoMaskElement = this.options?.templateInstance.videoMaskElement;
+    const videoMaskElement = this.options?.templateInstance?.videoMaskElement;
     this.eventManager?.addEventListener({
       element: videoMaskElement,
       eventName: "click",
@@ -71,24 +84,18 @@ class VideoPlayer {
   }
 
   private pauseVideo() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     videoElement?.pause();
   }
 
   private playVideo() {
-    const videoElement = this.options?.templateInstance.videoElement;
+    const videoElement = this.options?.templateInstance?.videoElement;
     videoElement?.play();
-  }
-
-  private resetData() {
-    this.currentIndex = 0;
-    this.eventManager = null;
-    this.options = null;
   }
 
   destroy() {
     this.eventManager?.removeEventListener();
-    this.resetData();
+    this.destroyPlayer();
   }
 }
 

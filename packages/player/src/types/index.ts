@@ -1,3 +1,4 @@
+import Player from "../index";
 import Template from "../js/template";
 
 export type VideoListItem = { label: string; url: string };
@@ -22,5 +23,6 @@ export interface AnimationClassName {
 }
 
 export interface ComponentOptions extends PlayerOptions {
-  templateInstance: Template;
+  templateInstance: Template | null;
+  instance: Player;
 }
