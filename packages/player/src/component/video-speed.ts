@@ -12,6 +12,8 @@ class VideoSpeed {
   private options: OptionsParams;
   private eventManager: EventManager;
   private currentIndex = 0;
+  private taskList: Array<Function> = [];
+  private isSwitchDefinition = false;
   constructor(options: OptionsParams) {
     this.options = options;
     this.initVar();
@@ -22,13 +24,24 @@ class VideoSpeed {
     this.initVideoListener();
     this.initListener();
   }
+  private get playbackRate() {
+    const videoElement = this.options.templateInstance.videoElement;
+    if (!isUndef(videoElement)) {
+      return videoElement.playbackRate;
+    }
+    return null;
+  }
 
   private initVar() {
     this.eventManager = new EventManager();
   }
 
   private initListener() {
-    this.options.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    const instance = this.options.instance;
+    instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    instance.$on(CustomEvents.SWITCH_DEFINITION_START, () =>
+      this.onBeforeSwitchDefinition()
+    );
   }
 
   private initSpeedListener() {
@@ -56,12 +69,20 @@ class VideoSpeed {
       eventName: "ratechange",
       handler: this.onVideoRatechange.bind(this)
     });
+    this.eventManager.addEventListener({
+      element: videoElement,
+      eventName: "canplay",
+      handler: this.onVideoCanplay.bind(this)
+    });
   }
 
   private onVideoRatechange() {
-    const videoElement = this.options.templateInstance.videoElement;
-    if (!isUndef(videoElement)) {
-      const playbackRate = videoElement.playbackRate;
+    if (this.isSwitchDefinition) {
+      // 防止切换清晰度的时候底部的标签会发生变化
+      return;
+    }
+    const playbackRate = this.playbackRate;
+    if (!isUndef(playbackRate)) {
       const speedList = this.options.speedList;
       const index = speedList.findIndex(
         (speed) => speed.value === playbackRate
@@ -75,6 +96,10 @@ class VideoSpeed {
     }
   }
 
+  private onVideoCanplay() {
+    this.runTask();
+  }
+
   private onSpeedWrapperClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     let index = target.dataset?.index ?? -1;
@@ -83,6 +108,17 @@ class VideoSpeed {
       const speedList = this.options.speedList;
       const speed = speedList[index];
       this.setPlaybackRate(speed.value);
+    }
+  }
+
+  private onBeforeSwitchDefinition() {
+    const playbackRate = this.playbackRate;
+    this.isSwitchDefinition = true;
+    if (!isUndef(playbackRate)) {
+      this.taskList.push(() => {
+        this.isSwitchDefinition = false;
+        this.setPlaybackRate(playbackRate);
+      });
     }
   }
 
@@ -165,6 +201,13 @@ class VideoSpeed {
           callback(element, i);
         }
       }
+    }
+  }
+
+  private runTask() {
+    if (this.taskList.length > 0) {
+      this.taskList.forEach((task) => task());
+      this.taskList = [];
     }
   }
 

@@ -6,6 +6,8 @@ class VideoTime {
   private options: ComponentOptions;
   private eventManager: EventManager;
   private currentTime = 0;
+  private taskList: Array<Function> = [];
+  private isSwitchDefinition = false;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
@@ -30,11 +32,19 @@ class VideoTime {
       eventName: "timeupdate",
       handler: this.onVideoTimeupdate.bind(this)
     });
+    this.eventManager.addEventListener({
+      element: videoElement,
+      eventName: "canplay",
+      handler: this.onVideoCanplay.bind(this)
+    });
   }
 
   private initListener() {
     const instance = this.options.instance;
     instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    instance.$on(CustomEvents.SWITCH_DEFINITION_START, () =>
+      this.onBeforeSwitchDefinition()
+    );
   }
 
   private onVideoLoadedmetadata() {
@@ -44,6 +54,9 @@ class VideoTime {
   }
 
   private onVideoTimeupdate() {
+    if (this.isSwitchDefinition) {
+      return;
+    }
     const videoElement = this.options.templateInstance.videoElement;
     const currentTime = videoElement?.currentTime || 0;
 
@@ -58,6 +71,10 @@ class VideoTime {
     this.setCurrentTime(currentTime);
   }
 
+  private onVideoCanplay() {
+    this.runTask();
+  }
+
   private setTotalTime(duration: number) {
     const totalTimeElement = this.options.templateInstance.totalTimeElement;
     if (!isUndef(totalTimeElement)) {
@@ -69,6 +86,20 @@ class VideoTime {
     const currentTimeElement = this.options.templateInstance.currentTimeElement;
     if (!isUndef(currentTimeElement)) {
       currentTimeElement.innerHTML = secondToTime(currentTime);
+    }
+  }
+
+  private onBeforeSwitchDefinition() {
+    this.isSwitchDefinition = true;
+    this.taskList.push(() => {
+      this.isSwitchDefinition = false;
+    });
+  }
+
+  private runTask() {
+    if (this.taskList.length > 0) {
+      this.taskList.forEach((task) => task());
+      this.taskList = [];
     }
   }
 

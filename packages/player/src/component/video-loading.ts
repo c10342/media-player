@@ -37,7 +37,11 @@ class VideoLoading {
   }
 
   private initListener() {
-    this.options.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    const instance = this.options.instance;
+    instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    instance.$on(CustomEvents.SWITCH_DEFINITION_START, () =>
+      this.onBeforeSwitchDefinition()
+    );
   }
 
   private onVideoWaiting() {
@@ -47,6 +51,10 @@ class VideoLoading {
   }
   private onCanplay() {
     this.hideLoading();
+  }
+
+  onBeforeSwitchDefinition() {
+    this.showLoading();
   }
 
   private showLoading() {

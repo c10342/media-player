@@ -53,10 +53,10 @@ class VideoPlayer {
   private initVideoEvents() {
     const videoElement = this.options.templateInstance.videoElement;
     for (const key in VideoEvents) {
-      // const eventName = VideoEvents[key] as any;
-      // videoElement?.addEventListener(eventName, (event) => {
-      //   this.options.instance.$emit(eventName, event);
-      // });
+      const eventName = (VideoEvents as any)[key];
+      videoElement?.addEventListener(eventName, (event) => {
+        this.options.instance.$emit(eventName, event);
+      });
     }
   }
 
@@ -125,6 +125,18 @@ class VideoPlayer {
   }
 
   private switchDefinition() {
+    this.options.instance.$emit(CustomEvents.SWITCH_DEFINITION_START);
+    this.addTaskBeforeSwitchDefinition();
+    this.pauseVideo();
+    const imageSrc = this.getVideoImage();
+    if (!isUndef(imageSrc)) {
+      this.showImage(imageSrc);
+    }
+    this.initPlayer();
+    this.options.instance.$emit(CustomEvents.SWITCH_DEFINITION_END);
+  }
+
+  private addTaskBeforeSwitchDefinition() {
     const prevPaused = this.paused;
     const prevTime =
       this.options.templateInstance.videoElement?.currentTime ?? 0;
@@ -137,12 +149,6 @@ class VideoPlayer {
       }
       this.hideImage();
     });
-    this.pauseVideo();
-    const imageSrc = this.getVideoImage();
-    if (!isUndef(imageSrc)) {
-      this.showImage(imageSrc);
-    }
-    this.initPlayer();
   }
 
   private getVideoImage() {
