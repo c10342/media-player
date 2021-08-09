@@ -20,6 +20,10 @@ export type HtmlElementProp = HTMLElement | null;
 
 export type HTMLVideoElementProp = HTMLVideoElement | null;
 
+export type NodeListElement = NodeListOf<Element> | null;
+
+export type HTMLImageElementProp = HTMLImageElement | null;
+
 export interface AnimationClassName {
   enter: string;
   "enter-to": string;

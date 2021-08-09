@@ -1,19 +1,21 @@
-import { EventManager, isFunction, isUndef } from "@media/utils";
+import { EventManager, isFunction, isUndef, logError } from "@media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
 import { CustomEvents } from "../js/event";
 import { ComponentOptions, VideoListItem } from "../types";
-import { videoEvents } from "../js/event";
+import { VideoEvents } from "../js/event";
 
 class VideoPlayer {
   private options: ComponentOptions;
   private currentIndex = 0;
   private eventManager: EventManager;
+  private taskList: Array<Function> = [];
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
     this.initCurrentIndex();
     this.setCurrentInfo(this.currentIndex);
     this.initPlayer();
+    this.initVideoEvents();
     this.initDefinitionListener();
     this.initMaskListener();
     this.initListener();
@@ -45,20 +47,22 @@ class VideoPlayer {
       } else {
         videoElement.src = videoItem.url;
       }
-      this.initVideoEvents(videoElement);
     }
   }
 
-  private initVideoEvents(videoElement: HTMLVideoElement) {
-    videoEvents.forEach((eventName) => {
-      videoElement.addEventListener(eventName, (event) => {
-        this.options.instance.$emit(eventName, event);
-      });
-    });
+  private initVideoEvents() {
+    const videoElement = this.options.templateInstance.videoElement;
+    for (const key in VideoEvents) {
+      // const eventName = VideoEvents[key] as any;
+      // videoElement?.addEventListener(eventName, (event) => {
+      //   this.options.instance.$emit(eventName, event);
+      // });
+    }
   }
 
   private initListener() {
     this.options.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    this.options.instance.$on(VideoEvents.CANPLAY, () => this.onVideoCanplay());
   }
 
   private initCurrentIndex() {
@@ -121,7 +125,72 @@ class VideoPlayer {
   }
 
   private switchDefinition() {
-    // todo
+    const prevPaused = this.paused;
+    const prevTime =
+      this.options.templateInstance.videoElement?.currentTime ?? 0;
+    this.taskList.push(() => {
+      if (!prevPaused) {
+        this.playVideo();
+      }
+      if (prevTime) {
+        this.seekVideo(prevTime);
+      }
+      this.hideImage();
+    });
+    this.pauseVideo();
+    const imageSrc = this.getVideoImage();
+    if (!isUndef(imageSrc)) {
+      this.showImage(imageSrc);
+    }
+    this.initPlayer();
+  }
+
+  private getVideoImage() {
+    const videoElement = this.options.templateInstance.videoElement;
+    if (!isUndef(videoElement)) {
+      try {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const videoInfo = this.getVideoInfo(videoElement);
+        canvas.width = videoInfo.width;
+        canvas.height = videoInfo.height;
+        ctx?.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+        return canvas.toDataURL() || null;
+      } catch (error) {
+        logError(error);
+        return null;
+      }
+    }
+    return null;
+  }
+
+  private getVideoInfo(videoElement: HTMLVideoElement) {
+    const videoRatio = videoElement.videoWidth / videoElement.videoHeight;
+    let width = videoElement.offsetWidth;
+    let height = videoElement.offsetHeight;
+    const elementRatio = width / height;
+    if (elementRatio > videoRatio) width = height * videoRatio;
+    else height = width / videoRatio;
+    return {
+      width: width,
+      height: height
+    };
+  }
+
+  private showImage(imageSrc: string) {
+    const videoShotElement = this.options.templateInstance.videoShotElement;
+    if (!isUndef(videoShotElement)) {
+      videoShotElement.src = imageSrc;
+      videoShotElement.style.display = "block";
+    }
+  }
+
+  private hideImage() {
+    const videoShotElement = this.options.templateInstance.videoShotElement;
+    if (!isUndef(videoShotElement)) {
+      videoShotElement.src = "";
+      videoShotElement.style.display = "";
+    }
   }
 
   private togglePlay() {
@@ -135,6 +204,13 @@ class VideoPlayer {
   private pauseVideo() {
     const videoElement = this.options.templateInstance.videoElement;
     videoElement?.pause();
+  }
+
+  private seekVideo(time: number) {
+    const videoElement = this.options.templateInstance.videoElement;
+    if (!isUndef(videoElement)) {
+      videoElement.currentTime = time;
+    }
   }
 
   private playVideo() {
@@ -179,12 +255,6 @@ class VideoPlayer {
     }
   }
 
-  private delAllElementActive() {
-    this.handelDefinitionItemsElement((element) => {
-      this.delElementActive(element);
-    });
-  }
-
   private addElementActive(element: Element) {
     if (!element.classList.contains(LISTACTIVECLASSNAME)) {
       element.classList.add(LISTACTIVECLASSNAME);
@@ -204,6 +274,17 @@ class VideoPlayer {
           callback(element, i);
         }
       }
+    }
+  }
+
+  private onVideoCanplay() {
+    this.runTask();
+  }
+
+  private runTask() {
+    if (this.taskList.length > 0) {
+      this.taskList.forEach((task) => task());
+      this.taskList = [];
     }
   }
 

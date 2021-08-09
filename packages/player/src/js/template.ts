@@ -3,7 +3,9 @@ import templateTpl from "../template/layout.art";
 
 import {
   HtmlElementProp,
+  HTMLImageElementProp,
   HTMLVideoElementProp,
+  NodeListElement,
   PlayerOptions
 } from "../types/index";
 
@@ -60,13 +62,15 @@ class Template {
 
   speedLabelElement: HtmlElementProp;
 
-  speedItemsElement: NodeListOf<Element> | null;
+  speedItemsElement: NodeListElement;
 
   definitionWrapperElement: HtmlElementProp;
 
   definitionLabelElement: HtmlElementProp;
 
-  definitionItemsElement: NodeListOf<Element> | null;
+  definitionItemsElement: NodeListElement;
+
+  videoShotElement: HTMLImageElementProp;
 
   constructor(options: OptionsParams) {
     this.options = options;
@@ -117,6 +121,7 @@ class Template {
     this.definitionItemsElement = el.querySelectorAll(
       ".player-definition-item"
     );
+    this.videoShotElement = el.querySelector(".player-video-shot");
   }
 
   destroy() {
