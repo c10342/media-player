@@ -1,7 +1,7 @@
 import "./style/index.scss";
 import Template from "./js/template";
 import { PlayerOptions } from "./types";
-import { isString } from "@media/utils";
+import { isArray, isString, isUndef } from "@media/utils";
 import VideoPlayer from "./component/video-player";
 import VideoPlayButton from "./component/video-play-button";
 import VideoTime from "./component/video-time";
@@ -9,6 +9,7 @@ import VideoProgress from "./component/video-progress";
 import VideoFullscreen from "./component/video-fullscreen";
 import VideoLoading from "./component/video-loading";
 import VideoVolume from "./component/video-volume";
+import VideoSpeed from "./component/video-speed";
 import EventEmit from "./js/event-emit";
 import { CustomEvents } from "./js/event";
 
@@ -22,10 +23,12 @@ class Player extends EventEmit {
   private videoFullscreenInstance: VideoFullscreen | null;
   private videoLoadingInstance: VideoLoading | null;
   private videoVolumeInstance: VideoVolume | null;
+  private videoSpeedInstance: VideoSpeed | null;
   constructor(options: PlayerOptions) {
     super();
     this.options = options;
     this.initParams();
+    this.checkParams();
     this.initTemplate();
     this.initVideoPlayer();
     this.initVideoPlayButton();
@@ -34,6 +37,7 @@ class Player extends EventEmit {
     this.initVideoFullscreen();
     this.initVideoLoading();
     this.initVideoVolume();
+    this.initVideoSpeed();
   }
 
   private initParams() {
@@ -47,64 +51,116 @@ class Player extends EventEmit {
     this.options.el = el;
   }
 
+  private checkParams() {
+    const videoList = this.options.videoList;
+    if (isUndef(videoList)) {
+      throw new TypeError("videoList 不能为空");
+    }
+    if (!isArray(videoList)) {
+      throw new TypeError("videoList 必须是一个数组");
+    }
+    if (videoList.length === 0) {
+      throw new TypeError("videoList 长度需要大于0");
+    }
+  }
+
   private initTemplate() {
-    this.templateInstance = new Template(this.options);
+    this.templateInstance = new Template({
+      ...this.options,
+      instance: this
+    });
   }
 
   private initVideoPlayer() {
-    this.videoPlayerInstance = new VideoPlayer({
-      ...this.options,
-      templateInstance: this.templateInstance,
-      instance: this
-    });
+    const templateInstance = this.templateInstance;
+    if (!isUndef(templateInstance)) {
+      this.videoPlayerInstance = new VideoPlayer({
+        ...this.options,
+        templateInstance,
+        instance: this
+      });
+    }
   }
 
   private initVideoPlayButton() {
-    this.playButtonInstance = new VideoPlayButton({
-      ...this.options,
-      templateInstance: this.templateInstance,
-      instance: this
-    });
+    const templateInstance = this.templateInstance;
+    if (!isUndef(templateInstance)) {
+      this.playButtonInstance = new VideoPlayButton({
+        ...this.options,
+        templateInstance,
+        instance: this
+      });
+    }
   }
 
   private initVideoTime() {
-    this.videoTimeInstance = new VideoTime({
-      ...this.options,
-      templateInstance: this.templateInstance,
-      instance: this
-    });
+    const templateInstance = this.templateInstance;
+    if (!isUndef(templateInstance)) {
+      this.videoTimeInstance = new VideoTime({
+        ...this.options,
+        templateInstance,
+        instance: this
+      });
+    }
   }
 
   private initVideoProgress() {
-    this.videoProgressInstance = new VideoProgress({
-      ...this.options,
-      templateInstance: this.templateInstance,
-      instance: this
-    });
+    const templateInstance = this.templateInstance;
+    if (!isUndef(templateInstance)) {
+      this.videoProgressInstance = new VideoProgress({
+        ...this.options,
+        templateInstance,
+        instance: this
+      });
+    }
   }
 
   private initVideoFullscreen() {
-    this.videoFullscreenInstance = new VideoFullscreen({
-      ...this.options,
-      templateInstance: this.templateInstance,
-      instance: this
-    });
+    const templateInstance = this.templateInstance;
+    if (!isUndef(templateInstance)) {
+      this.videoFullscreenInstance = new VideoFullscreen({
+        ...this.options,
+        templateInstance,
+        instance: this
+      });
+    }
   }
 
   private initVideoLoading() {
-    this.videoLoadingInstance = new VideoLoading({
-      ...this.options,
-      templateInstance: this.templateInstance,
-      instance: this
-    });
+    const templateInstance = this.templateInstance;
+    if (!isUndef(templateInstance)) {
+      this.videoLoadingInstance = new VideoLoading({
+        ...this.options,
+        templateInstance,
+        instance: this
+      });
+    }
   }
 
   private initVideoVolume() {
-    this.videoVolumeInstance = new VideoVolume({
-      ...this.options,
-      templateInstance: this.templateInstance,
-      instance: this
-    });
+    const templateInstance = this.templateInstance;
+    if (!isUndef(templateInstance)) {
+      this.videoVolumeInstance = new VideoVolume({
+        ...this.options,
+        templateInstance,
+        instance: this
+      });
+    }
+  }
+
+  private initVideoSpeed() {
+    const speedList = this.options.speedList;
+    if (isArray(speedList) && speedList.length > 0) {
+      const templateInstance = this.templateInstance;
+      if (!isUndef(templateInstance)) {
+        this.videoSpeedInstance = new VideoSpeed({
+          ...this.options,
+          speedList,
+          templateInstance,
+          instance: this
+        });
+      }
+    }
   }
 
   private resetData() {
@@ -116,6 +172,7 @@ class Player extends EventEmit {
     this.videoLoadingInstance = null;
     this.videoVolumeInstance = null;
     this.templateInstance = null;
+    this.videoSpeedInstance = null;
   }
 
   destroy() {

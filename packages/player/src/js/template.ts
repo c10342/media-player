@@ -1,3 +1,4 @@
+import Player from "..";
 import templateTpl from "../template/layout.art";
 
 import {
@@ -6,8 +7,12 @@ import {
   PlayerOptions
 } from "../types/index";
 
+interface OptionsParams extends PlayerOptions {
+  instance: Player;
+}
+
 class Template {
-  private options: PlayerOptions;
+  private options: OptionsParams;
 
   containerElement: HtmlElementProp;
 
@@ -51,10 +56,22 @@ class Template {
 
   volumeAnimationElement: HtmlElementProp;
 
-  constructor(options: PlayerOptions) {
+  speedWrapperElement: HtmlElementProp;
+
+  speedLabelElement: HtmlElementProp;
+
+  speedItemsElement: NodeListOf<Element> | null;
+
+  definitionWrapperElement: HtmlElementProp;
+
+  definitionLabelElement: HtmlElementProp;
+
+  definitionItemsElement: NodeListOf<Element> | null;
+
+  constructor(options: OptionsParams) {
     this.options = options;
     this.initTemplate();
-    this.initDom();
+    this.initElement();
   }
 
   private initTemplate() {
@@ -65,7 +82,7 @@ class Template {
     el.innerHTML = html;
   }
 
-  private initDom() {
+  private initElement() {
     const el = this.options.el as HTMLElement;
     this.containerElement = el.querySelector(".player-container");
     this.videoElement = el.querySelector(".player-video");
@@ -90,6 +107,16 @@ class Template {
     this.volumeProcessElement = el.querySelector(".player-volume-process");
     this.volumeContainerElement = el.querySelector(".player-volume-container");
     this.volumeAnimationElement = el.querySelector(".player-volume-animation");
+    this.speedWrapperElement = el.querySelector(".player-speed-wrapper");
+    this.speedLabelElement = el.querySelector(".player-speed-label");
+    this.speedItemsElement = el.querySelectorAll(".player-speed-item");
+    this.definitionWrapperElement = el.querySelector(
+      ".player-definition-wrapper"
+    );
+    this.definitionLabelElement = el.querySelector(".player-definition-label");
+    this.definitionItemsElement = el.querySelectorAll(
+      ".player-definition-item"
+    );
   }
 
   destroy() {

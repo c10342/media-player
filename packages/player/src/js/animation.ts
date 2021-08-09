@@ -9,12 +9,12 @@ import {
 } from "./utils";
 
 class AnimationHelper extends EventEmit {
-  private className: AnimationClassName | null;
+  private className: AnimationClassName;
   private element: HtmlElementProp;
   private isShow: boolean;
   private originalDisplay: string;
   private originalClassName: string;
-  private eventManager: EventManager | null;
+  private eventManager: EventManager;
   constructor(element: HTMLElement, animationName: string) {
     super();
     this.initVar(element, animationName);
@@ -36,12 +36,12 @@ class AnimationHelper extends EventEmit {
     this.originalClassName = this.element.className;
   }
   private initListener() {
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: this.element,
       eventName: "transitionend",
       handler: this.onAnimationend.bind(this)
     });
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: this.element,
       eventName: "animationend",
       handler: this.onAnimationend.bind(this)
@@ -70,7 +70,7 @@ class AnimationHelper extends EventEmit {
           // 设置enter过度的类名，注意不要遗漏掉原来已经有的类名
           element.className = setClassName(
             originalClassName,
-            this.className?.enter ?? ""
+            this.className.enter
           );
           // 发射事件
           this.$emit("enter");
@@ -82,7 +82,7 @@ class AnimationHelper extends EventEmit {
           // 设置enter-to过度的类名
           element.className = setClassName(
             originalClassName,
-            this.className ? this.className["enter-to"] : ""
+            this.className["enter-to"]
           );
         }
       });
@@ -101,7 +101,7 @@ class AnimationHelper extends EventEmit {
         if (this.isHideStatus) {
           element.className = setClassName(
             originalClassName,
-            this.className?.leave ?? ""
+            this.className.leave
           );
           this.$emit("leave");
         }
@@ -111,7 +111,7 @@ class AnimationHelper extends EventEmit {
         if (this.isHideStatus) {
           element.className = setClassName(
             originalClassName,
-            this.className ? this.className["leave-to"] : ""
+            this.className["leave-to"]
           );
         }
       });
@@ -149,18 +149,8 @@ class AnimationHelper extends EventEmit {
     return this.isShow === true;
   }
 
-  private resetData() {
-    this.className = null;
-    this.element = null;
-    this.isShow = false;
-    this.originalDisplay = "";
-    this.originalClassName = "";
-    this.eventManager = null;
-  }
-
   destroy() {
-    this.eventManager?.removeEventListener();
-    this.resetData();
+    this.eventManager.removeEventListener();
   }
 }
 

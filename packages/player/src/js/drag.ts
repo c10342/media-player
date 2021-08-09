@@ -17,12 +17,12 @@ type MouseFunction = (event: MouseEvent) => void;
 
 class Drag extends EventEmit {
   private isMousedown = false;
-  private _onMousemove: MouseFunction | null;
-  private _onMouseup: MouseFunction | null;
+  private _onMousemove: MouseFunction;
+  private _onMouseup: MouseFunction;
   private percent = 0;
-  private eventManager: EventManager | null;
+  private eventManager: EventManager;
   private wrapperInfo: WrapperInfo | null;
-  private options: DragOptions | null;
+  private options: DragOptions;
 
   constructor(options: DragOptions) {
     super();
@@ -55,19 +55,19 @@ class Drag extends EventEmit {
     const dragElement = this.options?.dragElement;
     const wrapperElement = this.options?.wrapperElement;
     if (!isUndef(dragElement)) {
-      this.eventManager?.addEventListener({
+      this.eventManager.addEventListener({
         element: dragElement,
         eventName: "mousedown",
         handler: this.onMousedown.bind(this)
       });
-      this.eventManager?.addEventListener({
+      this.eventManager.addEventListener({
         element: dragElement,
         eventName: "click",
         handler: this.onDragElementClick.bind(this)
       });
     }
     if (!isUndef(wrapperElement)) {
-      this.eventManager?.addEventListener({
+      this.eventManager.addEventListener({
         element: wrapperElement,
         eventName: "click",
         handler: this.onWrapperElementClick.bind(this)
@@ -134,19 +134,9 @@ class Drag extends EventEmit {
     this.$emit("mouseup", this.percent);
   }
 
-  private resetData() {
-    this.isMousedown = false;
-    this._onMousemove = null;
-    this._onMouseup = null;
-    this.percent = 0;
-    this.options = null;
-    this.eventManager = null;
-  }
-
   destroy() {
-    this.eventManager?.removeEventListener();
+    this.eventManager.removeEventListener();
     this.removeEventListener();
-    this.resetData();
   }
 }
 

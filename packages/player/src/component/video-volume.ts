@@ -5,9 +5,9 @@ import { VolumeButtonIcon } from "../config/enum";
 import { CustomEvents } from "../js/event";
 
 class VideoVolume {
-  private options: ComponentOptions | null;
-  private eventManager: EventManager | null;
-  private dragInstance: Drag | null;
+  private options: ComponentOptions;
+  private eventManager: EventManager;
+  private dragInstance: Drag;
   private prevVolume = 1;
   private isMove = false;
   private isEnter = false;
@@ -23,7 +23,7 @@ class VideoVolume {
   }
 
   private get volume() {
-    const videoElement = this.options?.templateInstance?.videoElement;
+    const videoElement = this.options.templateInstance.videoElement;
     return videoElement?.volume ?? 1;
   }
 
@@ -32,15 +32,15 @@ class VideoVolume {
   }
 
   private initAutoplay() {
-    const { autoplay, mute } = this.options ?? {};
-    if (autoplay && mute) {
+    const { autoplay, muted } = this.options;
+    if (autoplay && muted) {
       this.setVolume(0);
     }
   }
 
   private initDrag() {
     const { volumeMaskElement, volumeBallElement } =
-      this.options?.templateInstance ?? {};
+      this.options.templateInstance;
     if (!isUndef(volumeMaskElement) && !isUndef(volumeBallElement)) {
       this.dragInstance = new Drag({
         dragElement: volumeBallElement,
@@ -65,19 +65,19 @@ class VideoVolume {
 
   private initVolumeListener() {
     const { volumeButtonElement, volumeContainerElement } =
-      this.options?.templateInstance ?? {};
-    this.eventManager?.addEventListener({
+      this.options.templateInstance;
+    this.eventManager.addEventListener({
       element: volumeButtonElement,
       eventName: "click",
       handler: this.onVolumeButtonClick.bind(this)
     });
 
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: volumeContainerElement,
       eventName: "mouseenter",
       handler: this.onMouseenter.bind(this)
     });
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: volumeContainerElement,
       eventName: "mouseleave",
       handler: this.onMouseleave.bind(this)
@@ -90,9 +90,9 @@ class VideoVolume {
   }
 
   private initVideoListener() {
-    const videoElement = this.options?.templateInstance?.videoElement;
+    const videoElement = this.options.templateInstance.videoElement;
 
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: videoElement,
       eventName: "volumechange",
       handler: this.onVideoVolumechange.bind(this)
@@ -100,7 +100,8 @@ class VideoVolume {
   }
 
   private initListener() {
-    this.options?.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    const instance = this.options.instance;
+    instance.$on(CustomEvents.DESTROY, () => this.destroy());
   }
 
   private onVolumeButtonClick() {
@@ -127,7 +128,7 @@ class VideoVolume {
 
   private toggleAnimation() {
     const volumeAnimationElement =
-      this.options?.templateInstance?.volumeAnimationElement;
+      this.options.templateInstance.volumeAnimationElement;
     if (isUndef(volumeAnimationElement)) {
       return;
     }
@@ -139,7 +140,7 @@ class VideoVolume {
   }
 
   setVolume(volume: number) {
-    const videoElement = this.options?.templateInstance?.videoElement;
+    const videoElement = this.options.templateInstance.videoElement;
     if (!isUndef(videoElement)) {
       videoElement.volume = volume;
     }
@@ -147,7 +148,7 @@ class VideoVolume {
 
   private setProgressWidth(volume: number) {
     const volumeProcessElement =
-      this.options?.templateInstance?.volumeProcessElement;
+      this.options.templateInstance.volumeProcessElement;
     if (!isUndef(volumeProcessElement)) {
       volumeProcessElement.style.width = `${volume * 100}%`;
     }
@@ -161,7 +162,7 @@ class VideoVolume {
 
   private showMuteIcon() {
     const volumeButtonElement =
-      this.options?.templateInstance?.volumeButtonElement;
+      this.options.templateInstance.volumeButtonElement;
     if (!isUndef(volumeButtonElement)) {
       if (volumeButtonElement.classList.contains(VolumeButtonIcon.volume)) {
         volumeButtonElement.classList.remove(VolumeButtonIcon.volume);
@@ -174,7 +175,7 @@ class VideoVolume {
 
   private showVolumeIcon() {
     const volumeButtonElement =
-      this.options?.templateInstance?.volumeButtonElement;
+      this.options.templateInstance.volumeButtonElement;
     if (!isUndef(volumeButtonElement)) {
       if (volumeButtonElement.classList.contains(VolumeButtonIcon.mute)) {
         volumeButtonElement.classList.remove(VolumeButtonIcon.mute);
@@ -192,8 +193,8 @@ class VideoVolume {
   }
 
   destroy() {
-    this.eventManager?.removeEventListener();
-    this.dragInstance?.destroy();
+    this.eventManager.removeEventListener();
+    this.dragInstance.destroy();
   }
 }
 

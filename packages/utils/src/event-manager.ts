@@ -35,6 +35,16 @@ class EventManager {
     });
     this.eventList = [];
   }
+
+  removeElementEventListener(element: HTMLElement | null) {
+    const length = this.eventList.length;
+    for (let i = length - 1; i >= 0; i--) {
+      const eventItem = this.eventList[i];
+      if (eventItem.element === element) {
+        this.eventList.splice(i, 1);
+      }
+    }
+  }
 }
 
 export default EventManager;

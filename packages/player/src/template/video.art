@@ -1,0 +1,2 @@
+
+  <video class="player-video" {{if autoplay}} autoplay {{/if}}></video>

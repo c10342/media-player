@@ -7,7 +7,7 @@ import AnimationHelper from "../js/animation";
 import { CustomEvents } from "../js/event";
 
 class VideoProgress {
-  private options: ComponentOptions | null;
+  private options: ComponentOptions;
   private currentTime = 0;
   private totalTime = 0;
   private dragInstance: Drag | null;
@@ -15,7 +15,7 @@ class VideoProgress {
   private timeAnimationHelperInstance: AnimationHelper | null;
   private processMaskInfo: { left: number; width: number } | null;
   private isMousedown = false;
-  private eventManager: EventManager | null;
+  private eventManager: EventManager;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
@@ -28,7 +28,7 @@ class VideoProgress {
 
   private initVar() {
     const clientRect =
-      this.options?.templateInstance?.progressMaskElement?.getBoundingClientRect();
+      this.options.templateInstance.progressMaskElement?.getBoundingClientRect();
     this.processMaskInfo = {
       left: clientRect?.left || 0,
       width: clientRect?.width || 0
@@ -37,24 +37,24 @@ class VideoProgress {
   }
 
   private initVideoListener() {
-    const videoElement = this.options?.templateInstance?.videoElement;
+    const videoElement = this.options.templateInstance.videoElement;
 
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: videoElement,
       eventName: "timeupdate",
       handler: this.onVideoTimeupdate.bind(this)
     });
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: videoElement,
       eventName: "loadedmetadata",
       handler: this.onVideoLoadedmetadata.bind(this)
     });
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: videoElement,
       eventName: "progress",
       handler: this.onVideoProgress.bind(this)
     });
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: videoElement,
       eventName: "seeked",
       handler: this.onVideoSeeked.bind(this)
@@ -63,7 +63,7 @@ class VideoProgress {
 
   private initDrag() {
     const { progressMaskElement, progressBallElement } =
-      this.options?.templateInstance ?? {};
+      this.options.templateInstance;
     if (!isUndef(progressMaskElement) && !isUndef(progressBallElement)) {
       this.dragInstance = new Drag({
         dragElement: progressBallElement,
@@ -75,7 +75,7 @@ class VideoProgress {
 
   private initAnimationHelper() {
     const { progressBallElement, processTimeElement } =
-      this.options?.templateInstance ?? {};
+      this.options.templateInstance;
 
     if (!isUndef(progressBallElement)) {
       this.ballAnimationHelperInstance = new AnimationHelper(
@@ -110,13 +110,13 @@ class VideoProgress {
 
   private initProgressListener() {
     const progressMaskElement =
-      this.options?.templateInstance?.progressMaskElement;
-    this.eventManager?.addEventListener({
+      this.options.templateInstance.progressMaskElement;
+    this.eventManager.addEventListener({
       element: progressMaskElement,
       eventName: "mousemove",
       handler: this.onMaskMousemove.bind(this)
     });
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: progressMaskElement,
       eventName: "mouseleave",
       handler: this.onMaskMouseleave.bind(this)
@@ -124,7 +124,7 @@ class VideoProgress {
   }
 
   private initListener() {
-    this.options?.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    this.options.instance.$on(CustomEvents.DESTROY, () => this.destroy());
   }
 
   private onMaskMousemove(event: MouseEvent) {
@@ -138,12 +138,12 @@ class VideoProgress {
   }
 
   private onVideoLoadedmetadata() {
-    const videoElement = this.options?.templateInstance?.videoElement;
+    const videoElement = this.options.templateInstance.videoElement;
     this.totalTime = videoElement?.duration || 0;
   }
 
   private onVideoTimeupdate() {
-    const videoElement = this.options?.templateInstance?.videoElement;
+    const videoElement = this.options.templateInstance.videoElement;
     const currentTime = videoElement?.currentTime || 0;
 
     const intCurrentTime = Math.floor(currentTime);
@@ -160,9 +160,10 @@ class VideoProgress {
   }
 
   private onVideoProgress() {
-    const videoElement = this.options?.templateInstance?.videoElement;
+    const videoElement = this.options.templateInstance.videoElement;
     if (!isUndef(videoElement) && videoElement.buffered?.length !== 0) {
       const preloadTime = videoElement.buffered.end(0) || 0;
+
       this.setLoadedProgress(preloadTime);
     }
   }
@@ -172,16 +173,14 @@ class VideoProgress {
   }
 
   private setPlayedProgressByPercent(percent: number) {
-    const videoPlayedElement =
-      this.options?.templateInstance?.videoPlayedElement;
+    const videoPlayedElement = this.options.templateInstance.videoPlayedElement;
     if (!isUndef(videoPlayedElement)) {
       videoPlayedElement.style.width = `${percent * 100}%`;
     }
   }
 
   private setPlayedProgress() {
-    const videoPlayedElement =
-      this.options?.templateInstance?.videoPlayedElement;
+    const videoPlayedElement = this.options.templateInstance.videoPlayedElement;
     if (!isUndef(videoPlayedElement)) {
       const totalTime = this.totalTime;
       const currentTime = this.currentTime;
@@ -194,10 +193,10 @@ class VideoProgress {
   }
 
   private setLoadedProgress(preloadTime: number) {
-    const videoLoadedElement =
-      this.options?.templateInstance?.videoLoadedElement;
+    const videoLoadedElement = this.options.templateInstance.videoLoadedElement;
     if (!isUndef(videoLoadedElement)) {
       const totalTime = this.totalTime;
+
       if (totalTime > 0) {
         let percent = preloadTime / totalTime;
         percent = checkData(percent, 0, 1);
@@ -207,8 +206,7 @@ class VideoProgress {
   }
 
   private setTransitionDuration(duration?: number) {
-    const videoPlayedElement =
-      this.options?.templateInstance?.videoPlayedElement;
+    const videoPlayedElement = this.options.templateInstance.videoPlayedElement;
     if (!isUndef(videoPlayedElement)) {
       if (isNumber(duration)) {
         videoPlayedElement.style.transitionDuration = `${duration}ms`;
@@ -225,15 +223,14 @@ class VideoProgress {
   }
 
   private videoSeek(time: number) {
-    const videoElement = this.options?.templateInstance?.videoElement;
+    const videoElement = this.options.templateInstance.videoElement;
     if (!isUndef(videoElement)) {
       videoElement.currentTime = time;
     }
   }
 
   private showProcessTime(event: MouseEvent) {
-    const processTimeElement =
-      this.options?.templateInstance?.processTimeElement;
+    const processTimeElement = this.options.templateInstance.processTimeElement;
     if (!isUndef(processTimeElement) && !isUndef(this.processMaskInfo)) {
       const { left, width } = this.processMaskInfo;
       let offsetX = event.pageX - left;
@@ -253,7 +250,7 @@ class VideoProgress {
     this.dragInstance?.destroy();
     this.ballAnimationHelperInstance?.destroy();
     this.timeAnimationHelperInstance?.destroy();
-    this.eventManager?.removeEventListener();
+    this.eventManager.removeEventListener();
   }
 }
 

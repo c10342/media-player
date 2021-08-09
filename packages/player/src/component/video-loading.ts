@@ -4,8 +4,8 @@ import { CustomEvents } from "../js/event";
 import { ComponentOptions } from "../types";
 
 class VideoLoading {
-  private options: ComponentOptions | null;
-  private eventManager: EventManager | null;
+  private options: ComponentOptions;
+  private eventManager: EventManager;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
@@ -14,7 +14,7 @@ class VideoLoading {
   }
 
   private get videoReadyState() {
-    const videoElement = this.options?.templateInstance?.videoElement;
+    const videoElement = this.options.templateInstance.videoElement;
     return videoElement?.readyState ?? -1;
   }
 
@@ -23,13 +23,13 @@ class VideoLoading {
   }
 
   private initVideoListener() {
-    const videoElement = this.options?.templateInstance?.videoElement;
-    this.eventManager?.addEventListener({
+    const videoElement = this.options.templateInstance.videoElement;
+    this.eventManager.addEventListener({
       element: videoElement,
       eventName: "waiting",
       handler: this.onVideoWaiting.bind(this)
     });
-    this.eventManager?.addEventListener({
+    this.eventManager.addEventListener({
       element: videoElement,
       eventName: "canplay",
       handler: this.onCanplay.bind(this)
@@ -37,7 +37,7 @@ class VideoLoading {
   }
 
   private initListener() {
-    this.options?.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    this.options.instance.$on(CustomEvents.DESTROY, () => this.destroy());
   }
 
   private onVideoWaiting() {
@@ -51,7 +51,7 @@ class VideoLoading {
 
   private showLoading() {
     const loadingWrapperElement =
-      this.options?.templateInstance?.loadingWrapperElement;
+      this.options.templateInstance.loadingWrapperElement;
     if (!isUndef(loadingWrapperElement)) {
       loadingWrapperElement.style.display = "flex";
     }
@@ -59,14 +59,14 @@ class VideoLoading {
 
   private hideLoading() {
     const loadingWrapperElement =
-      this.options?.templateInstance?.loadingWrapperElement;
+      this.options.templateInstance.loadingWrapperElement;
     if (!isUndef(loadingWrapperElement)) {
       loadingWrapperElement.style.display = "";
     }
   }
 
   destroy() {
-    this.eventManager?.removeEventListener();
+    this.eventManager.removeEventListener();
   }
 }
 

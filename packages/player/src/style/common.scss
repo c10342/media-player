@@ -64,6 +64,10 @@
   }
 }
 
+.player-common-active-item {
+  color: $main-color;
+}
+
 .player-common-list-label {
   @include player-one-line();
 

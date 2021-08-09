@@ -1,13 +1,15 @@
-  <div class="player-common-list-container">
-    <ul class="player-common-list-wrapper">
-      <li class="player-common-list-item">
-        高清
-      </li>
-      <li class="player-common-list-item">
-        客户
-      </li>
-    </ul>
-    <span class="player-common-list-label">
-    标清
-    </span>
-  </div>
+{{if videoList && videoList.length>0}}
+<div class="player-common-list-container">
+  {{if videoList.length>1}}
+  <ul class="player-common-list-wrapper player-definition-wrapper">
+    {{each videoList}}
+    <li class="player-common-list-item player-definition-item" data-index="{{ $index }}">
+      {{ $value.label }}
+    </li>
+    {{/each}}
+  </ul>
+  {{/if}}
+  <span class="player-common-list-label player-definition-label">
+  </span>
+</div>
+{{/if}}
