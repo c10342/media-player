@@ -1,5 +1,7 @@
 import VideoPlayer from "@media/player";
 import "./index.scss";
+
+VideoPlayer.setLang("en");
 // import Hls from "hls.js";
 
 // console.log(a);
