@@ -1,8 +1,9 @@
 import { EventManager, isUndef } from "@media/utils";
 import { ComponentOptions } from "../types";
 import Drag from "../js/drag";
-import { VolumeButtonIcon } from "../config/enum";
+import { VolumeButtonIconEnum } from "../config/enum";
 import { CustomEvents, VideoEvents } from "../js/event";
+import { t } from "../locale";
 
 class VideoVolume {
   private options: ComponentOptions;
@@ -132,7 +133,10 @@ class VideoVolume {
 
   private setTip() {
     const instance = this.options.instance;
-    instance.$emit(CustomEvents.TIP, `音量${Math.round(this.volume * 100)}%`);
+    instance.$emit(
+      CustomEvents.TIP,
+      t("volume", { volume: `${Math.round(this.volume * 100)}%` })
+    );
   }
 
   private setVolume(volume: number) {
@@ -160,11 +164,11 @@ class VideoVolume {
     const volumeButtonElement =
       this.options.templateInstance.volumeButtonElement;
     if (!isUndef(volumeButtonElement)) {
-      if (volumeButtonElement.classList.contains(VolumeButtonIcon.volume)) {
-        volumeButtonElement.classList.remove(VolumeButtonIcon.volume);
+      if (volumeButtonElement.classList.contains(VolumeButtonIconEnum.volume)) {
+        volumeButtonElement.classList.remove(VolumeButtonIconEnum.volume);
       }
-      if (!volumeButtonElement.classList.contains(VolumeButtonIcon.mute)) {
-        volumeButtonElement.classList.add(VolumeButtonIcon.mute);
+      if (!volumeButtonElement.classList.contains(VolumeButtonIconEnum.mute)) {
+        volumeButtonElement.classList.add(VolumeButtonIconEnum.mute);
       }
     }
   }
@@ -173,11 +177,13 @@ class VideoVolume {
     const volumeButtonElement =
       this.options.templateInstance.volumeButtonElement;
     if (!isUndef(volumeButtonElement)) {
-      if (volumeButtonElement.classList.contains(VolumeButtonIcon.mute)) {
-        volumeButtonElement.classList.remove(VolumeButtonIcon.mute);
+      if (volumeButtonElement.classList.contains(VolumeButtonIconEnum.mute)) {
+        volumeButtonElement.classList.remove(VolumeButtonIconEnum.mute);
       }
-      if (!volumeButtonElement.classList.contains(VolumeButtonIcon.volume)) {
-        volumeButtonElement.classList.add(VolumeButtonIcon.volume);
+      if (
+        !volumeButtonElement.classList.contains(VolumeButtonIconEnum.volume)
+      ) {
+        volumeButtonElement.classList.add(VolumeButtonIconEnum.volume);
       }
     }
   }

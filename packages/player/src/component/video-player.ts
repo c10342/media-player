@@ -4,6 +4,7 @@ import { CustomEvents } from "../js/event";
 import { ComponentOptions, VideoListItem } from "../types";
 import { VideoEvents } from "../js/event";
 import videoTpl from "../template/video.art";
+import { t } from "../locale";
 
 class VideoPlayer {
   private options: ComponentOptions;
@@ -156,6 +157,7 @@ class VideoPlayer {
       this.options.instance.$once(VideoEvents.CANPLAY, () => {
         containerElement?.removeChild(prevVideoElement);
         instance.$emit(CustomEvents.SWITCH_DEFINITION_END, videoItem);
+        this.setTip(t("switch", { quality: videoItem?.label }));
       });
     }
   }
@@ -235,6 +237,11 @@ class VideoPlayer {
         }
       }
     }
+  }
+
+  private setTip(tip: string) {
+    const instance = this.options.instance;
+    instance.$emit(CustomEvents.TIP, tip);
   }
 
   destroy() {

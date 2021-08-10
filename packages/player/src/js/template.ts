@@ -1,4 +1,5 @@
 import Player from "..";
+import { t } from "../locale";
 import templateTpl from "../template/layout.art";
 
 import {
@@ -82,7 +83,8 @@ class Template {
   private initTemplate() {
     const el = this.options.el as HTMLElement;
     const html = templateTpl({
-      ...this.options
+      ...this.options,
+      liveTip: t("live")
     });
     el.innerHTML = html;
   }

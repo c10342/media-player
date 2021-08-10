@@ -1,7 +1,7 @@
 import { EventManager, isUndef } from "@media/utils";
 import { ComponentOptions } from "../types";
 
-import { PlayButtonIcon } from "../config/enum";
+import { PlayButtonIconEnum } from "../config/enum";
 import { CustomEvents, VideoEvents } from "../js/event";
 
 class VideoPlayButton {
@@ -71,20 +71,20 @@ class VideoPlayButton {
   private showPlayIcon() {
     const playElement = this.options.templateInstance.playElement;
     if (!isUndef(playElement)) {
-      if (playElement.classList.contains(PlayButtonIcon.Pause)) {
-        playElement.classList.remove(PlayButtonIcon.Pause);
+      if (playElement.classList.contains(PlayButtonIconEnum.Pause)) {
+        playElement.classList.remove(PlayButtonIconEnum.Pause);
       }
-      playElement.classList.add(PlayButtonIcon.Play);
+      playElement.classList.add(PlayButtonIconEnum.Play);
     }
   }
 
   private showPauseIcon() {
     const playElement = this.options.templateInstance.playElement;
     if (!isUndef(playElement)) {
-      if (playElement.classList.contains(PlayButtonIcon.Play)) {
-        playElement.classList.remove(PlayButtonIcon.Play);
+      if (playElement.classList.contains(PlayButtonIconEnum.Play)) {
+        playElement.classList.remove(PlayButtonIconEnum.Play);
       }
-      playElement.classList.add(PlayButtonIcon.Pause);
+      playElement.classList.add(PlayButtonIconEnum.Pause);
     }
   }
 

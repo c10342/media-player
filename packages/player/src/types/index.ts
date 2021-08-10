@@ -36,3 +36,7 @@ export interface ComponentOptions extends PlayerOptions {
   templateInstance: Template;
   instance: Player;
 }
+
+export interface LangOptions {
+  [key: string]: string;
+}

@@ -3,6 +3,7 @@ import { checkData } from "../js/utils";
 import { ComponentOptions } from "../types";
 import Drag from "../js/drag";
 import { CustomEvents, VideoEvents } from "../js/event";
+import { t } from "../locale";
 
 class VideoProgress {
   private options: ComponentOptions;
@@ -184,9 +185,9 @@ class VideoProgress {
     offsetTime = Math.round(offsetTime);
     let tip = "";
     if (offsetTime > 0) {
-      tip = `前进${offsetTime}秒`;
+      tip = t("fastForward", { time: offsetTime });
     } else {
-      tip = `后退${-offsetTime}秒`;
+      tip = t("goBack", { time: -offsetTime });
     }
     this.options.instance.$emit(CustomEvents.TIP, tip);
   }

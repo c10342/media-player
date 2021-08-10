@@ -59,10 +59,10 @@ class VideoSpeed {
         (speed) => speed.value === playbackRate
       );
       if (index === -1) {
-        this.setCurrentLabel(`${playbackRate}x`);
+        this.setCurrentLabel({ label: `${playbackRate}x`, tip: true });
         this.delAllElementActive();
       } else {
-        this.setCurrentInfo(index);
+        this.setCurrentInfo(index, true);
       }
     }
   }
@@ -93,23 +93,32 @@ class VideoSpeed {
     }
   }
 
-  private setCurrentInfo(index: number) {
+  private setCurrentInfo(index: number, tip?: boolean) {
     this.setCurrentIndex(index);
-    this.setCurrentLabel();
+    this.setCurrentLabel({ tip });
   }
 
-  private setCurrentLabel(label?: string) {
+  private setCurrentLabel(options: { label?: string; tip?: boolean }) {
+    const { label, tip } = options;
     const speedLabelElement = this.options.templateInstance.speedLabelElement;
     if (!isUndef(speedLabelElement)) {
       if (!isUndef(label)) {
         speedLabelElement.innerHTML = label;
+        tip && this.setTip(label);
         return;
       }
       const speedList = this.options.speedList;
       if (speedList.length > 0) {
-        speedLabelElement.innerHTML = speedList[this.currentIndex].label;
+        const text = speedList[this.currentIndex].label;
+        speedLabelElement.innerHTML = text;
+        tip && this.setTip(text);
       }
     }
+  }
+
+  private setTip(tip: string) {
+    const instance = this.options.instance;
+    instance.$emit(CustomEvents.TIP, tip);
   }
 
   private setPlaybackRate(playbackRate: number) {

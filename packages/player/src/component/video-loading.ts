@@ -1,5 +1,5 @@
 import { EventManager, isUndef } from "@media/utils";
-import { VideoReadyState } from "../config/enum";
+import { VideoReadyStateEnum } from "../config/enum";
 import { CustomEvents, VideoEvents } from "../js/event";
 import { ComponentOptions } from "../types";
 
@@ -33,7 +33,7 @@ class VideoLoading {
   }
 
   private onVideoWaiting() {
-    if (this.videoReadyState !== VideoReadyState.complete) {
+    if (this.videoReadyState !== VideoReadyStateEnum.complete) {
       this.showLoading();
     }
   }

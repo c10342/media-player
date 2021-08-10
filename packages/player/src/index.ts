@@ -1,6 +1,6 @@
 import "./style/index.scss";
 import Template from "./js/template";
-import { PlayerOptions } from "./types";
+import { LangOptions, PlayerOptions } from "./types";
 import { isArray, isString, isUndef } from "@media/utils";
 import VideoPlayer from "./component/video-player";
 import VideoPlayButton from "./component/video-play-button";
@@ -11,14 +11,31 @@ import VideoLoading from "./component/video-loading";
 import VideoVolume from "./component/video-volume";
 import VideoSpeed from "./component/video-speed";
 import VideoTip from "./component/video-tip";
+import VideoControls from "./component/video-controls";
 import EventEmit from "./js/event-emit";
 import { CustomEvents } from "./js/event";
+import i18n from "./locale";
 
 const defaultOptions = {
   live: false
 };
 
 class Player extends EventEmit {
+  static useLang(lang: LangOptions) {
+    i18n.use(lang);
+    return Player;
+  }
+
+  static setLang(lang: string) {
+    i18n.setLang(lang);
+    return Player;
+  }
+
+  static setI18n(fn: Function) {
+    i18n.i18n(fn);
+    return Player;
+  }
+
   private options: PlayerOptions;
   private templateInstance: Template | null;
   private videoPlayerInstance: VideoPlayer | null;
@@ -30,6 +47,7 @@ class Player extends EventEmit {
   private videoVolumeInstance: VideoVolume | null;
   private videoSpeedInstance: VideoSpeed | null;
   private videoTipInstance: VideoTip | null;
+  private videoControlsInstance: VideoControls | null;
   constructor(options: PlayerOptions) {
     super();
     this.options = { ...defaultOptions, ...options };
@@ -45,6 +63,7 @@ class Player extends EventEmit {
     this.initVideoLoading();
     this.initVideoVolume();
     this.initVideoSpeed();
+    this.initVideoControls();
   }
 
   get isLive() {
@@ -182,6 +201,17 @@ class Player extends EventEmit {
           instance: this
         });
       }
+    }
+  }
+
+  private initVideoControls() {
+    const templateInstance = this.templateInstance;
+    if (!isUndef(templateInstance)) {
+      this.videoControlsInstance = new VideoControls({
+        ...this.options,
+        templateInstance,
+        instance: this
+      });
     }
   }
 
