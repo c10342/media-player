@@ -44,6 +44,7 @@ const player = new VideoPlayer({
       value: 1.5
     }
   ]
+  // live:true
   // autoplay: true,
   // muted:true
   // customType(videoElement, videoObj) {
