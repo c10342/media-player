@@ -1,24 +1,3 @@
-.player-scale-enter-active,
-.player-scale-leave-active {
-  transition-timing-function: ease;
-  transition-duration: 500ms;
-  transition-property: transform;
-}
-
-.player-scale-enter,
-.player-scale-leave-to {
-  transform: scale(0);
-}
-
-.player-fade-enter-active,
-.player-fade-leave-active {
-  transition: opacity 500ms ease;
-}
-
-.player-fade-enter,
-.player-fade-leave-to {
-  opacity: 0;
-}
 
 .player-strect-enter-active,
 .player-strect-leave-active {

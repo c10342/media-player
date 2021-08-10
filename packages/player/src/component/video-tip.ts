@@ -34,7 +34,7 @@ class VideoTip {
     const tipElement = this.options.templateInstance.tipElement;
     if (!isUndef(tipElement)) {
       tipElement.innerHTML = tip;
-      tipElement.style.opacity = "0.8";
+      tipElement.style.opacity = "1";
     }
   }
 

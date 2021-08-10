@@ -91,7 +91,7 @@ class VideoVolume {
   private initListener() {
     const instance = this.options.instance;
     instance.$on(CustomEvents.DESTROY, () => this.destroy());
-    instance.$on(VideoEvents.VOLUMECHANGE, () => this.onVideoVolumechange());
+    instance.$on(VideoEvents.VOLUMECHANGE, this.onVideoVolumechange.bind(this));
   }
 
   private onVolumeButtonClick() {
@@ -104,6 +104,7 @@ class VideoVolume {
 
   private onVideoVolumechange() {
     this.setProgressWidth(this.volume);
+    this.setTip();
   }
 
   private onMouseenter() {
@@ -129,7 +130,12 @@ class VideoVolume {
     }
   }
 
-  setVolume(volume: number) {
+  private setTip() {
+    const instance = this.options.instance;
+    instance.$emit(CustomEvents.TIP, `音量${Math.round(this.volume * 100)}%`);
+  }
+
+  private setVolume(volume: number) {
     const videoElement = this.options.templateInstance.videoElement;
     if (!isUndef(videoElement)) {
       videoElement.volume = volume;

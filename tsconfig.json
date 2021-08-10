@@ -20,7 +20,8 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": false,
       "typeRoots": ["node_modules/@types"],
-      "allowJs": true
+      "allowJs": true,
+      "resolveJsonModule":true
     },
     "exclude": [
       "node_modules"

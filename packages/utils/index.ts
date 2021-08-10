@@ -4,3 +4,4 @@ export * from "./src/log";
 export { default as secondToTime } from "./src/secondToTime";
 export { default as userSelect } from "./src/user-select";
 export { default as EventManager } from "./src/event-manager";
+export { default as formatLangTemplate } from "./src/format-lang-template";

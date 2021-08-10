@@ -1,9 +1,7 @@
 import { EventManager, isNumber, isUndef, secondToTime } from "@media/utils";
 import { checkData } from "../js/utils";
 import { ComponentOptions } from "../types";
-
 import Drag from "../js/drag";
-import AnimationHelper from "../js/animation";
 import { CustomEvents, VideoEvents } from "../js/event";
 
 class VideoProgress {
@@ -11,8 +9,6 @@ class VideoProgress {
   private currentTime = 0;
   private totalTime = 0;
   private dragInstance: Drag | null;
-  private ballAnimationHelperInstance: AnimationHelper | null;
-  private timeAnimationHelperInstance: AnimationHelper | null;
   private processMaskInfo: { left: number; width: number } | null;
   private isMousedown = false;
   private eventManager: EventManager;
@@ -20,7 +16,6 @@ class VideoProgress {
     this.options = options;
     this.initVar();
     this.initDrag();
-    this.initAnimationHelper();
     this.initProgressListener();
     this.initListener();
   }
@@ -44,24 +39,6 @@ class VideoProgress {
         wrapperElement: progressMaskElement
       });
       this.initDragListener();
-    }
-  }
-
-  private initAnimationHelper() {
-    const { progressBallElement, processTimeElement } =
-      this.options.templateInstance;
-
-    if (!isUndef(progressBallElement)) {
-      this.ballAnimationHelperInstance = new AnimationHelper(
-        progressBallElement,
-        "player-scale"
-      );
-    }
-    if (!isUndef(processTimeElement)) {
-      this.timeAnimationHelperInstance = new AnimationHelper(
-        processTimeElement,
-        "player-fade"
-      );
     }
   }
 
@@ -110,12 +87,9 @@ class VideoProgress {
   }
 
   private onMaskMousemove(event: MouseEvent) {
-    this.ballAnimationHelperInstance?.show();
-
     this.showProcessTime(event);
   }
   private onMaskMouseleave() {
-    this.ballAnimationHelperInstance?.hide();
     this.hideProcessTime();
   }
 
@@ -207,8 +181,8 @@ class VideoProgress {
   }
 
   private setTip(offsetTime: number) {
-    let tip = "";
     offsetTime = Math.round(offsetTime);
+    let tip = "";
     if (offsetTime > 0) {
       tip = `前进${offsetTime}秒`;
     } else {
@@ -233,18 +207,19 @@ class VideoProgress {
       processTimeElement.style.left = `${offsetX}px`;
       const time = this.totalTime * (offsetX / width);
       processTimeElement.innerHTML = secondToTime(time);
-      this.timeAnimationHelperInstance?.show();
+      processTimeElement.style.opacity = "1";
     }
   }
 
   private hideProcessTime() {
-    this.timeAnimationHelperInstance?.hide();
+    const processTimeElement = this.options.templateInstance.processTimeElement;
+    if (processTimeElement) {
+      processTimeElement.style.opacity = "";
+    }
   }
 
   destroy() {
     this.dragInstance?.destroy();
-    this.ballAnimationHelperInstance?.destroy();
-    this.timeAnimationHelperInstance?.destroy();
     this.eventManager.removeEventListener();
   }
 }

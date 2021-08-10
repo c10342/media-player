@@ -132,9 +132,10 @@ class VideoPlayer {
       const videoItem = this.getVideoItem();
       instance.$emit(CustomEvents.SWITCH_DEFINITION_START, videoItem);
       const prevStatus = {
-        currentTime: prevVideoElement?.currentTime ?? 0,
-        paused: prevVideoElement?.paused ?? true,
-        playbackRate: prevVideoElement?.playbackRate ?? 1
+        currentTime: prevVideoElement.currentTime,
+        paused: prevVideoElement.paused,
+        playbackRate: prevVideoElement.playbackRate,
+        volume: prevVideoElement.volume
       };
       const videoHtml = videoTpl({
         ...this.options
@@ -147,6 +148,7 @@ class VideoPlayer {
       containerElement?.insertBefore(nextVideoElement, prevVideoElement);
       this.initESM(nextVideoElement, videoItem);
       nextVideoElement.currentTime = prevStatus.currentTime;
+      nextVideoElement.volume = prevStatus.volume;
       nextVideoElement.playbackRate = prevStatus.playbackRate;
       if (!prevStatus.paused) {
         nextVideoElement.play();

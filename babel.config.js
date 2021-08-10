@@ -5,9 +5,7 @@ module.exports = {
       {
         useBuiltIns: "usage",
         corejs: 3,
-        targets: {
-          ie: "10"
-        }
+        targets:"> 1%,last 2 versions,not dead"
       }
     ]
   ],
