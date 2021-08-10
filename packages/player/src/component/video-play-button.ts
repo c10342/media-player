@@ -2,7 +2,7 @@ import { EventManager, isUndef } from "@media/utils";
 import { ComponentOptions } from "../types";
 
 import { PlayButtonIcon } from "../config/enum";
-import { CustomEvents } from "../js/event";
+import { CustomEvents, VideoEvents } from "../js/event";
 
 class VideoPlayButton {
   private options: ComponentOptions;
@@ -10,7 +10,6 @@ class VideoPlayButton {
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
-    this.initVideoListener();
     this.initPlayButtonListener();
     this.initListener();
   }
@@ -23,20 +22,6 @@ class VideoPlayButton {
     return videoElement?.paused;
   }
 
-  private initVideoListener() {
-    const videoElement = this.options.templateInstance.videoElement;
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "play",
-      handler: this.onVideoPlay.bind(this)
-    });
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "pause",
-      handler: this.onVideoPause.bind(this)
-    });
-  }
-
   private initPlayButtonListener() {
     const playElement = this.options.templateInstance.playElement;
     this.eventManager.addEventListener({
@@ -47,7 +32,10 @@ class VideoPlayButton {
   }
 
   private initListener() {
-    this.options.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    const instance = this.options.instance;
+    instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    instance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
+    instance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
   }
 
   private onVideoPlay() {

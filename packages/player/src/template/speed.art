@@ -1,4 +1,4 @@
-{{if speedList && speedList.length>0}}
+{{if !live && speedList && speedList.length>0}}
 <div class="player-common-list-container">
   <ul class="player-common-list-wrapper player-speed-wrapper">
     {{each speedList}}

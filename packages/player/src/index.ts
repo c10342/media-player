@@ -10,8 +10,13 @@ import VideoFullscreen from "./component/video-fullscreen";
 import VideoLoading from "./component/video-loading";
 import VideoVolume from "./component/video-volume";
 import VideoSpeed from "./component/video-speed";
+import VideoTip from "./component/video-tip";
 import EventEmit from "./js/event-emit";
 import { CustomEvents } from "./js/event";
+
+const defaultOptions = {
+  live: false
+};
 
 class Player extends EventEmit {
   private options: PlayerOptions;
@@ -24,12 +29,14 @@ class Player extends EventEmit {
   private videoLoadingInstance: VideoLoading | null;
   private videoVolumeInstance: VideoVolume | null;
   private videoSpeedInstance: VideoSpeed | null;
+  private videoTipInstance: VideoTip | null;
   constructor(options: PlayerOptions) {
     super();
-    this.options = options;
+    this.options = { ...defaultOptions, ...options };
     this.initParams();
     this.checkParams();
     this.initTemplate();
+    this.initVideoTip();
     this.initVideoPlayer();
     this.initVideoPlayButton();
     this.initVideoTime();
@@ -38,6 +45,10 @@ class Player extends EventEmit {
     this.initVideoLoading();
     this.initVideoVolume();
     this.initVideoSpeed();
+  }
+
+  get isLive() {
+    return this.options.live;
   }
 
   private initParams() {
@@ -71,6 +82,17 @@ class Player extends EventEmit {
     });
   }
 
+  private initVideoTip() {
+    const templateInstance = this.templateInstance;
+    if (!isUndef(templateInstance)) {
+      this.videoTipInstance = new VideoTip({
+        ...this.options,
+        templateInstance,
+        instance: this
+      });
+    }
+  }
+
   private initVideoPlayer() {
     const templateInstance = this.templateInstance;
     if (!isUndef(templateInstance)) {
@@ -95,7 +117,7 @@ class Player extends EventEmit {
 
   private initVideoTime() {
     const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
+    if (!isUndef(templateInstance) && !this.isLive) {
       this.videoTimeInstance = new VideoTime({
         ...this.options,
         templateInstance,
@@ -106,7 +128,7 @@ class Player extends EventEmit {
 
   private initVideoProgress() {
     const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
+    if (!isUndef(templateInstance) && !this.isLive) {
       this.videoProgressInstance = new VideoProgress({
         ...this.options,
         templateInstance,
@@ -150,7 +172,7 @@ class Player extends EventEmit {
 
   private initVideoSpeed() {
     const speedList = this.options.speedList;
-    if (isArray(speedList) && speedList.length > 0) {
+    if (!this.isLive && isArray(speedList) && speedList.length > 0) {
       const templateInstance = this.templateInstance;
       if (!isUndef(templateInstance)) {
         this.videoSpeedInstance = new VideoSpeed({

@@ -1,7 +1,8 @@
 export enum CustomEvents {
   DESTROY = "destroy",
   SWITCH_DEFINITION_START = "switch_definition_start",
-  SWITCH_DEFINITION_END = "switch_definition_end"
+  SWITCH_DEFINITION_END = "switch_definition_end",
+  TIP = "tip"
 }
 
 export enum VideoEvents {

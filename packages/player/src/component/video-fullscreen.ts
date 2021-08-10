@@ -41,7 +41,7 @@ class VideoFullscreen {
   }
 
   private initListener() {
-    this.options.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    this.options.instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
   }
 
   private initGlobalListener() {

@@ -1,14 +1,14 @@
-import { EventManager, isFunction, isUndef, logError } from "@media/utils";
+import { EventManager, isFunction, isUndef } from "@media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
 import { CustomEvents } from "../js/event";
 import { ComponentOptions, VideoListItem } from "../types";
 import { VideoEvents } from "../js/event";
+import videoTpl from "../template/video.art";
 
 class VideoPlayer {
   private options: ComponentOptions;
   private currentIndex = 0;
   private eventManager: EventManager;
-  private taskList: Array<Function> = [];
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
@@ -47,11 +47,11 @@ class VideoPlayer {
       } else {
         videoElement.src = videoItem.url;
       }
+      this.initVideoEvents(videoElement);
     }
   }
 
-  private initVideoEvents() {
-    const videoElement = this.options.templateInstance.videoElement;
+  private initVideoEvents(videoElement?: HTMLVideoElement) {
     for (const key in VideoEvents) {
       const eventName = (VideoEvents as any)[key];
       videoElement?.addEventListener(eventName, (event) => {
@@ -61,8 +61,8 @@ class VideoPlayer {
   }
 
   private initListener() {
-    this.options.instance.$on(CustomEvents.DESTROY, () => this.destroy());
-    this.options.instance.$on(VideoEvents.CANPLAY, () => this.onVideoCanplay());
+    const instance = this.options.instance;
+    instance.$on(CustomEvents.DESTROY, () => this.destroy());
   }
 
   private initCurrentIndex() {
@@ -125,77 +125,36 @@ class VideoPlayer {
   }
 
   private switchDefinition() {
-    this.options.instance.$emit(CustomEvents.SWITCH_DEFINITION_START);
-    this.addTaskBeforeSwitchDefinition();
-    this.pauseVideo();
-    const imageSrc = this.getVideoImage();
-    if (!isUndef(imageSrc)) {
-      this.showImage(imageSrc);
-    }
-    this.initPlayer();
-    this.options.instance.$emit(CustomEvents.SWITCH_DEFINITION_END);
-  }
-
-  private addTaskBeforeSwitchDefinition() {
-    const prevPaused = this.paused;
-    const prevTime =
-      this.options.templateInstance.videoElement?.currentTime ?? 0;
-    this.taskList.push(() => {
-      if (!prevPaused) {
-        this.playVideo();
+    const { videoElement: prevVideoElement, containerElement } =
+      this.options.templateInstance;
+    const instance = this.options.instance;
+    if (!isUndef(prevVideoElement)) {
+      const videoItem = this.getVideoItem();
+      instance.$emit(CustomEvents.SWITCH_DEFINITION_START, videoItem);
+      const prevStatus = {
+        currentTime: prevVideoElement?.currentTime ?? 0,
+        paused: prevVideoElement?.paused ?? true,
+        playbackRate: prevVideoElement?.playbackRate ?? 1
+      };
+      const videoHtml = videoTpl({
+        ...this.options
+      });
+      const nextVideoElement = new DOMParser().parseFromString(
+        videoHtml,
+        "text/html"
+      ).body.firstChild as HTMLVideoElement;
+      prevVideoElement.pause();
+      containerElement?.insertBefore(nextVideoElement, prevVideoElement);
+      this.initESM(nextVideoElement, videoItem);
+      nextVideoElement.currentTime = prevStatus.currentTime;
+      nextVideoElement.playbackRate = prevStatus.playbackRate;
+      if (!prevStatus.paused) {
+        nextVideoElement.play();
       }
-      if (prevTime) {
-        this.seekVideo(prevTime);
-      }
-      this.hideImage();
-    });
-  }
-
-  private getVideoImage() {
-    const videoElement = this.options.templateInstance.videoElement;
-    if (!isUndef(videoElement)) {
-      try {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        const videoInfo = this.getVideoInfo(videoElement);
-        canvas.width = videoInfo.width;
-        canvas.height = videoInfo.height;
-        ctx?.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-        return canvas.toDataURL() || null;
-      } catch (error) {
-        logError(error);
-        return null;
-      }
-    }
-    return null;
-  }
-
-  private getVideoInfo(videoElement: HTMLVideoElement) {
-    const videoRatio = videoElement.videoWidth / videoElement.videoHeight;
-    let width = videoElement.offsetWidth;
-    let height = videoElement.offsetHeight;
-    const elementRatio = width / height;
-    if (elementRatio > videoRatio) width = height * videoRatio;
-    else height = width / videoRatio;
-    return {
-      width: width,
-      height: height
-    };
-  }
-
-  private showImage(imageSrc: string) {
-    const videoShotElement = this.options.templateInstance.videoShotElement;
-    if (!isUndef(videoShotElement)) {
-      videoShotElement.src = imageSrc;
-      videoShotElement.style.display = "block";
-    }
-  }
-
-  private hideImage() {
-    const videoShotElement = this.options.templateInstance.videoShotElement;
-    if (!isUndef(videoShotElement)) {
-      videoShotElement.src = "";
-      videoShotElement.style.display = "";
+      this.options.instance.$once(VideoEvents.CANPLAY, () => {
+        containerElement?.removeChild(prevVideoElement);
+        instance.$emit(CustomEvents.SWITCH_DEFINITION_END, videoItem);
+      });
     }
   }
 
@@ -210,13 +169,6 @@ class VideoPlayer {
   private pauseVideo() {
     const videoElement = this.options.templateInstance.videoElement;
     videoElement?.pause();
-  }
-
-  private seekVideo(time: number) {
-    const videoElement = this.options.templateInstance.videoElement;
-    if (!isUndef(videoElement)) {
-      videoElement.currentTime = time;
-    }
   }
 
   private playVideo() {
@@ -280,17 +232,6 @@ class VideoPlayer {
           callback(element, i);
         }
       }
-    }
-  }
-
-  private onVideoCanplay() {
-    this.runTask();
-  }
-
-  private runTask() {
-    if (this.taskList.length > 0) {
-      this.taskList.forEach((task) => task());
-      this.taskList = [];
     }
   }
 

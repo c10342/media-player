@@ -4,7 +4,7 @@ import { ComponentOptions } from "../types";
 
 import Drag from "../js/drag";
 import AnimationHelper from "../js/animation";
-import { CustomEvents } from "../js/event";
+import { CustomEvents, VideoEvents } from "../js/event";
 
 class VideoProgress {
   private options: ComponentOptions;
@@ -19,7 +19,6 @@ class VideoProgress {
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
-    this.initVideoListener();
     this.initDrag();
     this.initAnimationHelper();
     this.initProgressListener();
@@ -34,31 +33,6 @@ class VideoProgress {
       width: clientRect?.width || 0
     };
     this.eventManager = new EventManager();
-  }
-
-  private initVideoListener() {
-    const videoElement = this.options.templateInstance.videoElement;
-
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "timeupdate",
-      handler: this.onVideoTimeupdate.bind(this)
-    });
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "loadedmetadata",
-      handler: this.onVideoLoadedmetadata.bind(this)
-    });
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "progress",
-      handler: this.onVideoProgress.bind(this)
-    });
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "seeked",
-      handler: this.onVideoSeeked.bind(this)
-    });
   }
 
   private initDrag() {
@@ -124,7 +98,15 @@ class VideoProgress {
   }
 
   private initListener() {
-    this.options.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    const instance = this.options.instance;
+    instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    instance.$on(VideoEvents.TIMEUPDATE, this.onVideoTimeupdate.bind(this));
+    instance.$on(
+      VideoEvents.LOADEDMETADATA,
+      this.onVideoLoadedmetadata.bind(this)
+    );
+    instance.$on(VideoEvents.PROGRESS, this.onVideoProgress.bind(this));
+    instance.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
   }
 
   private onMaskMousemove(event: MouseEvent) {
@@ -137,14 +119,14 @@ class VideoProgress {
     this.hideProcessTime();
   }
 
-  private onVideoLoadedmetadata() {
-    const videoElement = this.options.templateInstance.videoElement;
-    this.totalTime = videoElement?.duration || 0;
+  private onVideoLoadedmetadata(event: Event) {
+    const videoElement = event.target as HTMLVideoElement;
+    this.totalTime = videoElement.duration ?? 0;
   }
 
-  private onVideoTimeupdate() {
-    const videoElement = this.options.templateInstance.videoElement;
-    const currentTime = videoElement?.currentTime || 0;
+  private onVideoTimeupdate(event: Event) {
+    const videoElement = event.target as HTMLVideoElement;
+    const currentTime = videoElement.currentTime ?? 0;
 
     const intCurrentTime = Math.floor(currentTime);
     const intPrevTime = Math.floor(this.currentTime);
@@ -159,9 +141,9 @@ class VideoProgress {
     }
   }
 
-  private onVideoProgress() {
-    const videoElement = this.options.templateInstance.videoElement;
-    if (!isUndef(videoElement) && videoElement.buffered?.length !== 0) {
+  private onVideoProgress(event: Event) {
+    const videoElement = event.target as HTMLVideoElement;
+    if (videoElement.buffered?.length !== 0) {
       const preloadTime = videoElement.buffered.end(0) || 0;
 
       this.setLoadedProgress(preloadTime);
@@ -219,7 +201,20 @@ class VideoProgress {
   private seekByPercent(percent: number) {
     percent = checkData(percent, 0, 1);
     const time = this.totalTime * percent;
+    const offsetTime = time - this.currentTime;
+    this.setTip(offsetTime);
     this.videoSeek(time);
+  }
+
+  private setTip(offsetTime: number) {
+    let tip = "";
+    offsetTime = Math.round(offsetTime);
+    if (offsetTime > 0) {
+      tip = `前进${offsetTime}秒`;
+    } else {
+      tip = `后退${-offsetTime}秒`;
+    }
+    this.options.instance.$emit(CustomEvents.TIP, tip);
   }
 
   private videoSeek(time: number) {

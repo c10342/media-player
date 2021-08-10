@@ -1,6 +1,6 @@
 import { EventManager, isFunction, isUndef } from "@media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
-import { CustomEvents } from "../js/event";
+import { CustomEvents, VideoEvents } from "../js/event";
 import { checkData } from "../js/utils";
 import { ComponentOptions, SpeedItem } from "../types";
 
@@ -12,8 +12,6 @@ class VideoSpeed {
   private options: OptionsParams;
   private eventManager: EventManager;
   private currentIndex = 0;
-  private taskList: Array<Function> = [];
-  private isSwitchDefinition = false;
   constructor(options: OptionsParams) {
     this.options = options;
     this.initVar();
@@ -21,15 +19,7 @@ class VideoSpeed {
     this.setCurrentInfo(this.currentIndex);
     this.initDefaultRate();
     this.initSpeedListener();
-    this.initVideoListener();
     this.initListener();
-  }
-  private get playbackRate() {
-    const videoElement = this.options.templateInstance.videoElement;
-    if (!isUndef(videoElement)) {
-      return videoElement.playbackRate;
-    }
-    return null;
   }
 
   private initVar() {
@@ -39,9 +29,7 @@ class VideoSpeed {
   private initListener() {
     const instance = this.options.instance;
     instance.$on(CustomEvents.DESTROY, () => this.destroy());
-    instance.$on(CustomEvents.SWITCH_DEFINITION_START, () =>
-      this.onBeforeSwitchDefinition()
-    );
+    instance.$on(VideoEvents.RATECHANGE, this.onVideoRatechange.bind(this));
   }
 
   private initSpeedListener() {
@@ -62,26 +50,9 @@ class VideoSpeed {
     }
   }
 
-  private initVideoListener() {
-    const videoElement = this.options.templateInstance.videoElement;
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "ratechange",
-      handler: this.onVideoRatechange.bind(this)
-    });
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "canplay",
-      handler: this.onVideoCanplay.bind(this)
-    });
-  }
-
-  private onVideoRatechange() {
-    if (this.isSwitchDefinition) {
-      // 防止切换清晰度的时候底部的标签会发生变化
-      return;
-    }
-    const playbackRate = this.playbackRate;
+  private onVideoRatechange(event: Event) {
+    const target = event.target as HTMLVideoElement;
+    const playbackRate = target.playbackRate;
     if (!isUndef(playbackRate)) {
       const speedList = this.options.speedList;
       const index = speedList.findIndex(
@@ -96,10 +67,6 @@ class VideoSpeed {
     }
   }
 
-  private onVideoCanplay() {
-    this.runTask();
-  }
-
   private onSpeedWrapperClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     let index = target.dataset?.index ?? -1;
@@ -108,17 +75,6 @@ class VideoSpeed {
       const speedList = this.options.speedList;
       const speed = speedList[index];
       this.setPlaybackRate(speed.value);
-    }
-  }
-
-  private onBeforeSwitchDefinition() {
-    const playbackRate = this.playbackRate;
-    this.isSwitchDefinition = true;
-    if (!isUndef(playbackRate)) {
-      this.taskList.push(() => {
-        this.isSwitchDefinition = false;
-        this.setPlaybackRate(playbackRate);
-      });
     }
   }
 
@@ -201,13 +157,6 @@ class VideoSpeed {
           callback(element, i);
         }
       }
-    }
-  }
-
-  private runTask() {
-    if (this.taskList.length > 0) {
-      this.taskList.forEach((task) => task());
-      this.taskList = [];
     }
   }
 

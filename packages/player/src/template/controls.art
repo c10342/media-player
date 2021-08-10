@@ -4,11 +4,8 @@
     {{ include './progress.art' }}
     <span class="player-icon-play player-icon-item player-status-button"></span>
     {{ include './volume.art' }}
-    <span class="player-time-tip">
-    <span class='player-currentTime'>00:00</span>
-    <span>/</span>
-    <span class='player-totalTime'>00:00</span>
-    </span>
+    {{ include './time.art' }}
+    {{ include './live.art' }}
     <div class="player-controls-right">
     {{ include './speed.art' }}
     {{ include './definition.art' }}

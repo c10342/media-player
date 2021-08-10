@@ -1,6 +1,6 @@
 import { EventManager, isUndef } from "@media/utils";
 import { VideoReadyState } from "../config/enum";
-import { CustomEvents } from "../js/event";
+import { CustomEvents, VideoEvents } from "../js/event";
 import { ComponentOptions } from "../types";
 
 class VideoLoading {
@@ -9,7 +9,6 @@ class VideoLoading {
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
-    this.initVideoListener();
     this.initListener();
   }
 
@@ -22,26 +21,15 @@ class VideoLoading {
     this.eventManager = new EventManager();
   }
 
-  private initVideoListener() {
-    const videoElement = this.options.templateInstance.videoElement;
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "waiting",
-      handler: this.onVideoWaiting.bind(this)
-    });
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "canplay",
-      handler: this.onCanplay.bind(this)
-    });
-  }
-
   private initListener() {
     const instance = this.options.instance;
-    instance.$on(CustomEvents.DESTROY, () => this.destroy());
-    instance.$on(CustomEvents.SWITCH_DEFINITION_START, () =>
-      this.onBeforeSwitchDefinition()
+    instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    instance.$on(
+      CustomEvents.SWITCH_DEFINITION_START,
+      this.onBeforeSwitchDefinition.bind(this)
     );
+    instance.$on(VideoEvents.WAITING, this.onVideoWaiting.bind(this));
+    instance.$on(VideoEvents.CANPLAY, this.onVideoCanplay.bind(this));
   }
 
   private onVideoWaiting() {
@@ -49,7 +37,9 @@ class VideoLoading {
       this.showLoading();
     }
   }
-  private onCanplay() {
+  private onVideoCanplay() {
+    console.log("onVideoCanplay");
+
     this.hideLoading();
   }
 

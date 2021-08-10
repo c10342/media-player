@@ -3,11 +3,11 @@ import templateTpl from "../template/layout.art";
 
 import {
   HtmlElementProp,
-  HTMLImageElementProp,
   HTMLVideoElementProp,
   NodeListElement,
   PlayerOptions
 } from "../types/index";
+import { CustomEvents } from "./event";
 
 interface OptionsParams extends PlayerOptions {
   instance: Player;
@@ -70,12 +70,13 @@ class Template {
 
   definitionItemsElement: NodeListElement;
 
-  videoShotElement: HTMLImageElementProp;
+  tipElement: HtmlElementProp;
 
   constructor(options: OptionsParams) {
     this.options = options;
     this.initTemplate();
     this.initElement();
+    this.initListener();
   }
 
   private initTemplate() {
@@ -121,7 +122,20 @@ class Template {
     this.definitionItemsElement = el.querySelectorAll(
       ".player-definition-item"
     );
-    this.videoShotElement = el.querySelector(".player-video-shot");
+    this.tipElement = el.querySelector(".player-tip");
+  }
+
+  private initListener() {
+    const instance = this.options.instance;
+    instance.$on(
+      CustomEvents.SWITCH_DEFINITION_END,
+      this.onElementReload.bind(this)
+    );
+  }
+
+  private onElementReload() {
+    const el = this.options.el as HTMLElement;
+    this.videoElement = el.querySelector(".player-video");
   }
 
   destroy() {

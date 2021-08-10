@@ -2,7 +2,7 @@ import { EventManager, isUndef } from "@media/utils";
 import { ComponentOptions } from "../types";
 import Drag from "../js/drag";
 import { VolumeButtonIcon } from "../config/enum";
-import { CustomEvents } from "../js/event";
+import { CustomEvents, VideoEvents } from "../js/event";
 
 class VideoVolume {
   private options: ComponentOptions;
@@ -17,7 +17,6 @@ class VideoVolume {
     this.initAutoplay();
     this.initVolumeProgress();
     this.initDrag();
-    this.initVideoListener();
     this.initVolumeListener();
     this.initListener();
   }
@@ -89,19 +88,10 @@ class VideoVolume {
     this.setProgressWidth(this.volume);
   }
 
-  private initVideoListener() {
-    const videoElement = this.options.templateInstance.videoElement;
-
-    this.eventManager.addEventListener({
-      element: videoElement,
-      eventName: "volumechange",
-      handler: this.onVideoVolumechange.bind(this)
-    });
-  }
-
   private initListener() {
     const instance = this.options.instance;
     instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    instance.$on(VideoEvents.VOLUMECHANGE, () => this.onVideoVolumechange());
   }
 
   private onVolumeButtonClick() {

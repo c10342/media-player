@@ -1,0 +1,8 @@
+
+{{if !live}}
+    <span class="player-time-tip">
+    <span class='player-currentTime'>00:00</span>
+    <span>/</span>
+    <span class='player-totalTime'>00:00</span>
+    </span>
+{{/if}}

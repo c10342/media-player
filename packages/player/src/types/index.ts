@@ -14,6 +14,7 @@ export interface PlayerOptions {
   autoplay?: boolean;
   muted?: boolean;
   speedList?: Array<SpeedItem>;
+  live?: boolean;
 }
 
 export type HtmlElementProp = HTMLElement | null;
