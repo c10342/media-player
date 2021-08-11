@@ -1,6 +1,7 @@
 
 {{if !live}}
 <div class='player-process-container'>
+<div class='player-process-content'>
   <div class="player-process-mask">
     <span class="player-process-time">00:00</span>
     <div class="player-process-wrapper">
@@ -10,5 +11,6 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 {{/if}}

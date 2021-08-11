@@ -181,7 +181,7 @@ class MediaPlayer {
     };
   }
 
-  applyPlugins() {
+  private applyPlugins() {
     const el = (this.options.el as HTMLElement).querySelector(
       ".player-container"
     );
