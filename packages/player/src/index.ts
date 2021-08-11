@@ -1,30 +1,19 @@
 import "./style/index.scss";
-import Template from "./js/template";
+import Player from "./constructor";
 import { LangOptions, PlayerOptions } from "./types";
-import { isArray, isString, isUndef } from "@media/utils";
-import VideoPlayer from "./component/video-player";
-import VideoPlayButton from "./component/video-play-button";
-import VideoTime from "./component/video-time";
-import VideoProgress from "./component/video-progress";
-import VideoFullscreen from "./component/video-fullscreen";
-import VideoLoading from "./component/video-loading";
-import VideoVolume from "./component/video-volume";
-import VideoSpeed from "./component/video-speed";
-import VideoTip from "./component/video-tip";
-import VideoControls from "./component/video-controls";
-import EventEmit from "./js/event-emit";
-import { CustomEvents } from "./js/event";
-import ShortcutKey from "./js/shortcut-key";
 import i18n from "./locale";
-import { checkData } from "./js/utils";
-import { FullScreenTypeEnum } from "./config/enum";
+import { isArray, isString, isUndef, logWarn } from "@media/utils";
+
+function getPluginName(ctor: any) {
+  return ctor.pluginName || ctor.name;
+}
 
 const defaultOptions = {
   live: false,
   hotkey: true
 };
 
-class Player extends EventEmit {
+class MediaPlayer {
   static useLang(lang: LangOptions) {
     i18n.use(lang);
     return Player;
@@ -40,40 +29,43 @@ class Player extends EventEmit {
     return Player;
   }
 
+  // 插件列表
+  static pluginsList: Array<Function> = [];
+  // 注册插件
+  static use(ctor: Function) {
+    const installed = MediaPlayer.pluginsList.some((plugin) => {
+      return getPluginName(plugin) === getPluginName(ctor);
+    });
+    if (installed) {
+      logWarn("插件已经被安装了");
+      return MediaPlayer;
+    }
+    MediaPlayer.pluginsList.push(ctor);
+
+    return MediaPlayer;
+  }
+
+  // 往原型上拓展方法或属性
+  static extend(obj: Record<string, any>) {
+    Object.keys(obj).forEach((key) => {
+      (MediaPlayer as any).prototype[key] = obj[key];
+    });
+    return MediaPlayer;
+  }
+
   private options: PlayerOptions;
-  private templateInstance: Template | null;
-  private videoPlayerInstance: VideoPlayer | null;
-  private playButtonInstance: VideoPlayButton | null;
-  private videoTimeInstance: VideoTime | null;
-  private videoProgressInstance: VideoProgress | null;
-  private videoFullscreenInstance: VideoFullscreen | null;
-  private videoLoadingInstance: VideoLoading | null;
-  private videoVolumeInstance: VideoVolume | null;
-  private videoSpeedInstance: VideoSpeed | null;
-  private videoTipInstance: VideoTip | null;
-  private videoControlsInstance: VideoControls | null;
-  private shortcutKeyInstance: ShortcutKey | null;
+  private playerInstance: Player | null;
+  plugins: Record<string, any> = {};
   constructor(options: PlayerOptions) {
-    super();
     this.options = { ...defaultOptions, ...options };
     this.initParams();
     this.checkParams();
-    this.initTemplate();
-    this.initVideoTip();
-    this.initVideoPlayer();
-    this.initVideoPlayButton();
-    this.initVideoTime();
-    this.initVideoProgress();
-    this.initVideoFullscreen();
-    this.initVideoLoading();
-    this.initVideoVolume();
-    this.initVideoSpeed();
-    this.initVideoControls();
-    this.initShortcutKey();
+    this.initPlayer();
+    this.applyPlugins();
   }
 
-  get isLive() {
-    return this.options.live;
+  private initPlayer() {
+    this.playerInstance = new Player(this.options);
   }
 
   private initParams() {
@@ -100,244 +92,110 @@ class Player extends EventEmit {
     }
   }
 
-  private initTemplate() {
-    this.templateInstance = new Template({
-      ...this.options,
-      instance: this
-    });
+  $on(eventName: string, handler: Function) {
+    this.playerInstance?.$on(eventName, handler);
+    return this;
   }
-
-  private initVideoTip() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoTipInstance = new VideoTip({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
+  $emit(eventName: string, data?: any) {
+    this.playerInstance?.$emit(eventName, data);
+    return this;
   }
-
-  private initVideoPlayer() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoPlayerInstance = new VideoPlayer({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
+  $once(eventName: string, handler: Function) {
+    this.playerInstance?.$once(eventName, handler);
+    return this;
   }
-
-  private initVideoPlayButton() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.playButtonInstance = new VideoPlayButton({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
-  }
-
-  private initVideoTime() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance) && !this.isLive) {
-      this.videoTimeInstance = new VideoTime({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
-  }
-
-  private initVideoProgress() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance) && !this.isLive) {
-      this.videoProgressInstance = new VideoProgress({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
-  }
-
-  private initVideoFullscreen() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoFullscreenInstance = new VideoFullscreen({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
-  }
-
-  private initVideoLoading() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoLoadingInstance = new VideoLoading({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
-  }
-
-  private initVideoVolume() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoVolumeInstance = new VideoVolume({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
-  }
-
-  private initVideoSpeed() {
-    const speedList = this.options.speedList;
-    if (!this.isLive && isArray(speedList) && speedList.length > 0) {
-      const templateInstance = this.templateInstance;
-      if (!isUndef(templateInstance)) {
-        this.videoSpeedInstance = new VideoSpeed({
-          ...this.options,
-          speedList,
-          templateInstance,
-          instance: this
-        });
-      }
-    }
-  }
-
-  private initVideoControls() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoControlsInstance = new VideoControls({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
-  }
-
-  private initShortcutKey() {
-    const templateInstance = this.templateInstance;
-    const { hotkey } = this.options;
-    if (!isUndef(templateInstance) && hotkey) {
-      this.shortcutKeyInstance = new ShortcutKey({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
-  }
-
-  private resetData() {
-    this.videoPlayerInstance = null;
-    this.playButtonInstance = null;
-    this.videoTimeInstance = null;
-    this.videoProgressInstance = null;
-    this.videoFullscreenInstance = null;
-    this.videoLoadingInstance = null;
-    this.videoVolumeInstance = null;
-    this.templateInstance = null;
-    this.videoSpeedInstance = null;
+  $off(eventName: string, handler?: Function) {
+    this.playerInstance?.$off(eventName, handler);
+    return this;
   }
 
   play() {
-    this.videoElement?.play();
+    this.playerInstance?.play();
+    return this;
   }
 
   pause() {
-    this.videoElement?.pause();
+    this.playerInstance?.pause();
+    return this;
   }
 
   seek(time: number) {
-    if (!this.isLive) {
-      const videoElement = this.videoElement;
-      if (!isUndef(time) && !isUndef(videoElement)) {
-        videoElement.currentTime = time;
-      }
-    }
+    this.playerInstance?.seek(time);
+    return this;
   }
 
   setNotice(text: string, time?: number) {
-    this.videoTipInstance?.setNotice(text, time);
+    this.playerInstance?.setNotice(text, time);
+    return this;
   }
 
   switchDefinition(index: number) {
-    this.videoPlayerInstance?.switchDefinition(index);
+    this.playerInstance?.switchDefinition(index);
+    return this;
   }
 
   setSpeed(playbackRate: number) {
-    const videoElement = this.videoElement;
-    if (!isUndef(videoElement)) {
-      playbackRate = checkData(playbackRate, 0, 2);
-      videoElement.playbackRate = playbackRate;
-    }
+    this.playerInstance?.setSpeed(playbackRate);
+    return this;
   }
 
   setVolume(volume: number) {
-    const videoElement = this.videoElement;
-    if (!isUndef(videoElement)) {
-      volume = checkData(volume, 0, 1);
-      videoElement.volume = volume;
-    }
+    this.playerInstance?.setVolume(volume);
+    return this;
   }
 
   toggle() {
-    if (this.paused) {
-      this.play();
-    } else {
-      this.pause();
-    }
+    this.playerInstance?.toggle();
+    return this;
   }
 
   get videoElement() {
-    return this.templateInstance?.videoElement;
+    return this.playerInstance?.videoElement;
   }
 
   get paused() {
-    return this.videoElement?.paused;
+    return this.playerInstance?.paused;
   }
 
   get currentTime() {
-    return this.videoElement?.currentTime ?? 0;
+    return this.playerInstance?.currentTime;
   }
 
   get duration() {
-    return this.videoElement?.duration ?? 0;
+    return this.playerInstance?.duration;
   }
 
   get volume() {
-    return this.videoElement?.volume ?? 1;
+    return this.playerInstance?.volume;
   }
 
   // 全屏
   get fullScreen() {
     return {
       request: (type: string) => {
-        if (type === FullScreenTypeEnum.web) {
-          this.videoFullscreenInstance?.enterWebFullscreen();
-        } else if (type === FullScreenTypeEnum.browser) {
-          this.videoFullscreenInstance?.enterBrowserFullScreen();
-        }
+        this.playerInstance?.fullScreen.request(type);
       },
       cancel: (type: string) => {
-        if (type === FullScreenTypeEnum.web) {
-          this.videoFullscreenInstance?.exitWebFullscreen();
-        } else if (type === FullScreenTypeEnum.browser) {
-          this.videoFullscreenInstance?.exitBrowserFullscreen();
-        }
+        this.playerInstance?.fullScreen.cancel(type);
       }
     };
   }
 
+  applyPlugins() {
+    const el = (this.options.el as HTMLElement).querySelector(
+      ".player-container"
+    );
+    MediaPlayer.pluginsList.forEach((Ctor: any) => {
+      const instance = new Ctor(el, this, MediaPlayer);
+      const pluginName = getPluginName(Ctor);
+      this.plugins[pluginName] = instance;
+    });
+  }
+
   destroy() {
-    this.$emit(CustomEvents.DESTROY);
-    this.resetData();
+    this.playerInstance?.destroy();
+    this.playerInstance = null;
   }
 }
 
-export default Player;
+export default MediaPlayer;

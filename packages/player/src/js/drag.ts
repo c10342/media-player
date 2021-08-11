@@ -37,9 +37,9 @@ class Drag extends EventEmit {
     this.eventManager = new EventManager();
   }
   private getWrapperInfo(): WrapperInfo {
-    if (this.wrapperInfo) {
-      return this.wrapperInfo;
-    }
+    // if (this.wrapperInfo) {
+    //   return this.wrapperInfo;
+    // }
     this.wrapperInfo = { left: 0, width: 0 };
     const wrapperElement = this.options?.wrapperElement;
     if (wrapperElement) {

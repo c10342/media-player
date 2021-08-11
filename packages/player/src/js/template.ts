@@ -1,4 +1,4 @@
-import Player from "..";
+import Player from "../constructor";
 import { t } from "../locale";
 import templateTpl from "../template/layout.art";
 

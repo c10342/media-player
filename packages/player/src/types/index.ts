@@ -1,4 +1,4 @@
-import Player from "../index";
+import Player from "../constructor";
 import Template from "../js/template";
 
 export type VideoListItem = { label: string; url: string; default?: boolean };

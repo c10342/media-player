@@ -9,7 +9,6 @@ class VideoProgress {
   private options: ComponentOptions;
   private currentTime = 0;
   private dragInstance: Drag | null;
-  private processMaskInfo: { left: number; width: number } | null;
   private isMousedown = false;
   private eventManager: EventManager;
   constructor(options: ComponentOptions) {
@@ -25,13 +24,16 @@ class VideoProgress {
   }
 
   private initVar() {
+    this.eventManager = new EventManager();
+  }
+
+  private getProcessMaskInfo() {
     const clientRect =
       this.options.templateInstance.progressMaskElement?.getBoundingClientRect();
-    this.processMaskInfo = {
+    return {
       left: clientRect?.left || 0,
       width: clientRect?.width || 0
     };
-    this.eventManager = new EventManager();
   }
 
   private initDrag() {
@@ -187,8 +189,8 @@ class VideoProgress {
 
   private showProcessTime(event: MouseEvent) {
     const processTimeElement = this.options.templateInstance.processTimeElement;
-    if (!isUndef(processTimeElement) && !isUndef(this.processMaskInfo)) {
-      const { left, width } = this.processMaskInfo;
+    if (!isUndef(processTimeElement)) {
+      const { left, width } = this.getProcessMaskInfo();
       let offsetX = event.pageX - left;
       offsetX = checkData(offsetX, 0, width);
       processTimeElement.style.left = `${offsetX}px`;
