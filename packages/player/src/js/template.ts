@@ -73,6 +73,8 @@ class Template {
 
   tipElement: HtmlElementProp;
 
+  controlsElement: HtmlElementProp;
+
   constructor(options: OptionsParams) {
     this.options = options;
     this.initTemplate();
@@ -125,6 +127,7 @@ class Template {
       ".player-definition-item"
     );
     this.tipElement = el.querySelector(".player-tip");
+    this.controlsElement = el.querySelector(".player-controls");
   }
 
   private initListener() {
@@ -140,8 +143,40 @@ class Template {
     this.videoElement = el.querySelector(".player-video");
   }
 
+  private resetData() {
+    this.containerElement = null;
+    this.playElement = null;
+    this.videoElement = null;
+    this.currentTimeElement = null;
+    this.totalTimeElement = null;
+    this.videoLoadedElement = null;
+    this.videoPlayedElement = null;
+    this.progressMaskElement = null;
+    this.progressBallElement = null;
+    this.videoMaskElement = null;
+    this.fullscreenBrowserElement = null;
+    this.fullscreenWebElement = null;
+    this.loadingWrapperElement = null;
+    this.processTimeElement = null;
+    this.volumeMaskElement = null;
+    this.volumeBallElement = null;
+    this.volumeButtonElement = null;
+    this.volumeWrapperElement = null;
+    this.volumeProcessElement = null;
+    this.volumeContainerElement = null;
+    this.volumeAnimationElement = null;
+    this.speedWrapperElement = null;
+    this.speedLabelElement = null;
+    this.speedItemsElement = null;
+    this.definitionWrapperElement = null;
+    this.definitionLabelElement = null;
+    this.definitionItemsElement = null;
+    this.tipElement = null;
+    this.controlsElement = null;
+  }
+
   destroy() {
-    // todo
+    this.resetData();
   }
 }
 

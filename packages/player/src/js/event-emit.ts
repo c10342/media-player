@@ -57,6 +57,10 @@ class EventEmit {
     }
     return this;
   }
+
+  protected clear() {
+    this.eventMap = {};
+  }
 }
 
 export default EventEmit;

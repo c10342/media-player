@@ -2,7 +2,12 @@ export enum CustomEvents {
   DESTROY = "destroy",
   SWITCH_DEFINITION_START = "switch_definition_start",
   SWITCH_DEFINITION_END = "switch_definition_end",
-  TIP = "tip"
+  ENTER_BROWSER_SCREEN = "enter_browser_screen",
+  EXIT_BROWSER_SCREEN = "exit_browser_screen",
+  ENTER_WEB_SCREEN = "enter_web_screen",
+  EXIT_WEB_SCREEN = "exit_web_screen",
+  SHOW_CONTROLS = "show_controls",
+  HIDE_CONTROLS = "hide_controls"
 }
 
 export enum VideoEvents {

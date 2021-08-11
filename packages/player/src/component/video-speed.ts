@@ -1,7 +1,6 @@
 import { EventManager, isFunction, isUndef } from "@media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
-import { CustomEvents, VideoEvents } from "../js/event";
-import { checkData } from "../js/utils";
+import { CustomEvents } from "../js/event";
 import { ComponentOptions, SpeedItem } from "../types";
 
 interface OptionsParams extends ComponentOptions {
@@ -16,10 +15,13 @@ class VideoSpeed {
     this.options = options;
     this.initVar();
     this.initCurrentIndex();
-    this.setCurrentInfo(this.currentIndex);
     this.initDefaultRate();
     this.initSpeedListener();
     this.initListener();
+  }
+
+  private get instance() {
+    return this.options.instance;
   }
 
   private initVar() {
@@ -27,9 +29,7 @@ class VideoSpeed {
   }
 
   private initListener() {
-    const instance = this.options.instance;
-    instance.$on(CustomEvents.DESTROY, () => this.destroy());
-    instance.$on(VideoEvents.RATECHANGE, this.onVideoRatechange.bind(this));
+    this.instance.$on(CustomEvents.DESTROY, () => this.destroy());
   }
 
   private initSpeedListener() {
@@ -46,24 +46,7 @@ class VideoSpeed {
     const speedList = this.options.speedList;
     const index = speedList.findIndex((speed) => speed.default);
     if (index > -1) {
-      this.currentIndex = index;
-    }
-  }
-
-  private onVideoRatechange(event: Event) {
-    const target = event.target as HTMLVideoElement;
-    const playbackRate = target.playbackRate;
-    if (!isUndef(playbackRate)) {
-      const speedList = this.options.speedList;
-      const index = speedList.findIndex(
-        (speed) => speed.value === playbackRate
-      );
-      if (index === -1) {
-        this.setCurrentLabel({ label: `${playbackRate}x`, tip: true });
-        this.delAllElementActive();
-      } else {
-        this.setCurrentInfo(index, true);
-      }
+      this.setCurrentInfo(index);
     }
   }
 
@@ -74,7 +57,9 @@ class VideoSpeed {
     if (index !== -1 && index !== this.currentIndex) {
       const speedList = this.options.speedList;
       const speed = speedList[index];
-      this.setPlaybackRate(speed.value);
+      this.instance.setSpeed(speed.value);
+      this.instance.setNotice(speed.label);
+      this.setCurrentInfo(index);
     }
   }
 
@@ -93,46 +78,26 @@ class VideoSpeed {
     }
   }
 
-  private setCurrentInfo(index: number, tip?: boolean) {
+  private setCurrentInfo(index: number) {
     this.setCurrentIndex(index);
-    this.setCurrentLabel({ tip });
+    this.setCurrentLabel();
   }
 
-  private setCurrentLabel(options: { label?: string; tip?: boolean }) {
-    const { label, tip } = options;
+  private setCurrentLabel() {
     const speedLabelElement = this.options.templateInstance.speedLabelElement;
     if (!isUndef(speedLabelElement)) {
-      if (!isUndef(label)) {
-        speedLabelElement.innerHTML = label;
-        tip && this.setTip(label);
-        return;
-      }
       const speedList = this.options.speedList;
       if (speedList.length > 0) {
         const text = speedList[this.currentIndex].label;
         speedLabelElement.innerHTML = text;
-        tip && this.setTip(text);
       }
-    }
-  }
-
-  private setTip(tip: string) {
-    const instance = this.options.instance;
-    instance.$emit(CustomEvents.TIP, tip);
-  }
-
-  private setPlaybackRate(playbackRate: number) {
-    const videoElement = this.options.templateInstance.videoElement;
-    if (!isUndef(videoElement)) {
-      playbackRate = checkData(playbackRate, 0, 2);
-      videoElement.playbackRate = playbackRate;
     }
   }
 
   private initDefaultRate() {
     const speedList = this.options.speedList;
     if (speedList.length > 0) {
-      this.setPlaybackRate(speedList[this.currentIndex].value);
+      this.instance.setSpeed(speedList[this.currentIndex].value);
     }
   }
 
@@ -141,13 +106,6 @@ class VideoSpeed {
       element.classList.remove(LISTACTIVECLASSNAME);
     }
   }
-
-  private delAllElementActive() {
-    this.handelSpeedItemsElement((element) => {
-      this.delElementActive(element);
-    });
-  }
-
   private addElementActive(element: Element) {
     if (!element.classList.contains(LISTACTIVECLASSNAME)) {
       element.classList.add(LISTACTIVECLASSNAME);

@@ -15,6 +15,8 @@ export interface PlayerOptions {
   muted?: boolean;
   speedList?: Array<SpeedItem>;
   live?: boolean;
+  hotkey?: boolean;
+  [key: string]: any;
 }
 
 export type HtmlElementProp = HTMLElement | null;

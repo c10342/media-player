@@ -8,13 +8,12 @@ import { t } from "../locale";
 
 class VideoPlayer {
   private options: ComponentOptions;
-  private currentIndex = 0;
+  private currentIndex = -1;
   private eventManager: EventManager;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
-    this.initCurrentIndex();
-    this.setCurrentInfo(this.currentIndex);
+    this.setCurrentIndex(this.getDefaultIndex());
     this.initPlayer();
     this.initVideoEvents();
     this.initDefinitionListener();
@@ -22,23 +21,22 @@ class VideoPlayer {
     this.initListener();
   }
 
+  private get instance() {
+    return this.options.instance;
+  }
+
   private initVar() {
     this.eventManager = new EventManager();
   }
 
-  private get paused() {
-    const videoElement = this.options.templateInstance.videoElement;
-    return videoElement?.paused;
-  }
-
   private initPlayer() {
-    const { videoElement } = this.options.templateInstance;
+    const videoElement = this.instance.videoElement;
     const videoItem = this.getVideoItem();
     this.initESM(videoElement, videoItem);
   }
 
   private initESM(
-    videoElement: HTMLVideoElement | null,
+    videoElement: HTMLVideoElement | null | undefined,
     videoItem: VideoListItem | null
   ) {
     if (!isUndef(videoElement) && videoItem) {
@@ -56,24 +54,25 @@ class VideoPlayer {
     for (const key in VideoEvents) {
       const eventName = (VideoEvents as any)[key];
       videoElement?.addEventListener(eventName, (event) => {
-        this.options.instance.$emit(eventName, event);
+        this.instance.$emit(eventName, event);
       });
     }
   }
 
   private initListener() {
-    const instance = this.options.instance;
-    instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    this.instance.$on(CustomEvents.DESTROY, () => this.destroy());
   }
 
-  private initCurrentIndex() {
+  private getDefaultIndex() {
     const videoList = this.options.videoList;
     if (videoList.length > 0) {
       const index = videoList.findIndex((video) => video.default);
       if (index > -1) {
-        this.currentIndex = index;
+        return index;
       }
+      return 0;
     }
+    return -1;
   }
 
   private initDefinitionListener() {
@@ -87,7 +86,7 @@ class VideoPlayer {
   }
 
   private destroyPlayer() {
-    const videoElement = this.options.templateInstance.videoElement;
+    const videoElement = this.instance.videoElement;
     if (!isUndef(videoElement)) {
       videoElement.src = "";
     }
@@ -112,23 +111,35 @@ class VideoPlayer {
   }
 
   private onVideoMaskClick() {
-    this.togglePlay();
+    this.instance.toggle();
   }
 
   private onWrapperClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     let index = target.dataset?.index ?? -1;
     index = Number(index);
-    if (index !== -1 && index !== this.currentIndex) {
-      this.setCurrentInfo(index);
-      this.switchDefinition();
+    this.switchDefinition(index);
+  }
+
+  private isCanSwitchQuality(index: number) {
+    if (index < 0 || index > this.options.videoList.length - 1) {
+      this.instance.setNotice(t("invalidDefinition"));
+      return false;
+    }
+    return true;
+  }
+
+  switchDefinition(index: number) {
+    if (index !== this.currentIndex && this.isCanSwitchQuality(index)) {
+      this.setCurrentIndex(index);
+      this.switchVideo();
     }
   }
 
-  private switchDefinition() {
+  private switchVideo() {
     const { videoElement: prevVideoElement, containerElement } =
       this.options.templateInstance;
-    const instance = this.options.instance;
+    const instance = this.instance;
     if (!isUndef(prevVideoElement)) {
       const videoItem = this.getVideoItem();
       instance.$emit(CustomEvents.SWITCH_DEFINITION_START, videoItem);
@@ -154,42 +165,22 @@ class VideoPlayer {
       if (!prevStatus.paused) {
         nextVideoElement.play();
       }
-      this.options.instance.$once(VideoEvents.CANPLAY, () => {
+      instance.$once(VideoEvents.CANPLAY, () => {
         containerElement?.removeChild(prevVideoElement);
         instance.$emit(CustomEvents.SWITCH_DEFINITION_END, videoItem);
-        this.setTip(t("switch", { quality: videoItem?.label }));
+        this.instance.setNotice(t("switch", { quality: videoItem?.label }));
       });
     }
   }
 
-  private togglePlay() {
-    if (this.paused) {
-      this.playVideo();
-    } else {
-      this.pauseVideo();
-    }
-  }
-
-  private pauseVideo() {
-    const videoElement = this.options.templateInstance.videoElement;
-    videoElement?.pause();
-  }
-
-  private playVideo() {
-    const videoElement = this.options.templateInstance.videoElement;
-    videoElement?.play();
-  }
-
-  private setCurrentInfo(index: number) {
-    this.setCurrentIndex(index);
-    this.setCurrentLabel();
-  }
-
   private setCurrentIndex(index: number) {
-    this.currentIndex = index;
-    this.handelDefinitionItemsElement((element, i) => {
-      this.setElementActive(element, i === index);
-    });
+    if (index !== this.currentIndex && this.isCanSwitchQuality(index)) {
+      this.currentIndex = index;
+      this.handelDefinitionItemsElement((element, i) => {
+        this.setElementActive(element, i === index);
+      });
+      this.setCurrentLabel();
+    }
   }
 
   private setCurrentLabel() {
@@ -237,11 +228,6 @@ class VideoPlayer {
         }
       }
     }
-  }
-
-  private setTip(tip: string) {
-    const instance = this.options.instance;
-    instance.$emit(CustomEvents.TIP, tip);
   }
 
   destroy() {

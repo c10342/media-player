@@ -12,8 +12,12 @@ class VideoLoading {
     this.initListener();
   }
 
+  private get instance() {
+    return this.options.instance;
+  }
+
   private get videoReadyState() {
-    const videoElement = this.options.templateInstance.videoElement;
+    const videoElement = this.instance.videoElement;
     return videoElement?.readyState ?? -1;
   }
 
@@ -22,7 +26,7 @@ class VideoLoading {
   }
 
   private initListener() {
-    const instance = this.options.instance;
+    const instance = this.instance;
     instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
     instance.$on(
       CustomEvents.SWITCH_DEFINITION_START,
@@ -38,12 +42,10 @@ class VideoLoading {
     }
   }
   private onVideoCanplay() {
-    console.log("onVideoCanplay");
-
     this.hideLoading();
   }
 
-  onBeforeSwitchDefinition() {
+  private onBeforeSwitchDefinition() {
     this.showLoading();
   }
 

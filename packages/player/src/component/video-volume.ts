@@ -22,9 +22,8 @@ class VideoVolume {
     this.initListener();
   }
 
-  private get volume() {
-    const videoElement = this.options.templateInstance.videoElement;
-    return videoElement?.volume ?? 1;
+  get instance() {
+    return this.options.instance;
   }
 
   private initVar() {
@@ -34,7 +33,7 @@ class VideoVolume {
   private initAutoplay() {
     const { autoplay, muted } = this.options;
     if (autoplay && muted) {
-      this.setVolume(0);
+      this.instance.setVolume(0);
     }
   }
 
@@ -47,18 +46,21 @@ class VideoVolume {
         wrapperElement: volumeMaskElement
       });
       this.dragInstance.$on("mousemove", (percent: number) => {
-        this.setVolume(percent);
+        this.instance.setVolume(percent);
         this.isMove = true;
         this.toggleAnimation();
+        this.setNotice();
       });
       this.dragInstance.$on("click", (percent: number) => {
         this.setPrevVolume(percent);
-        this.setVolume(percent);
+        this.instance.setVolume(percent);
+        this.setNotice();
       });
       this.dragInstance.$on("mouseup", (percent: number) => {
         this.setPrevVolume(percent);
         this.isMove = false;
         this.toggleAnimation();
+        this.setNotice();
       });
     }
   }
@@ -85,8 +87,8 @@ class VideoVolume {
   }
 
   private initVolumeProgress() {
-    this.prevVolume = this.volume || 1;
-    this.setProgressWidth(this.volume);
+    this.prevVolume = this.instance.volume || 1;
+    this.setProgressWidth(this.instance.volume);
   }
 
   private initListener() {
@@ -96,16 +98,16 @@ class VideoVolume {
   }
 
   private onVolumeButtonClick() {
-    if (this.volume === 0) {
-      this.setVolume(this.prevVolume);
+    if (this.instance.volume === 0) {
+      this.instance.setVolume(this.prevVolume);
     } else {
-      this.setVolume(0);
+      this.instance.setVolume(0);
     }
+    this.setNotice();
   }
 
   private onVideoVolumechange() {
-    this.setProgressWidth(this.volume);
-    this.setTip();
+    this.setProgressWidth(this.instance.volume);
   }
 
   private onMouseenter() {
@@ -131,19 +133,10 @@ class VideoVolume {
     }
   }
 
-  private setTip() {
-    const instance = this.options.instance;
-    instance.$emit(
-      CustomEvents.TIP,
-      t("volume", { volume: `${Math.round(this.volume * 100)}%` })
+  private setNotice() {
+    this.instance.setNotice(
+      t("volume", { volume: `${Math.round(this.instance.volume * 100)}%` })
     );
-  }
-
-  private setVolume(volume: number) {
-    const videoElement = this.options.templateInstance.videoElement;
-    if (!isUndef(videoElement)) {
-      videoElement.volume = volume;
-    }
   }
 
   private setProgressWidth(volume: number) {

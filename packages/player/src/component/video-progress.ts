@@ -8,7 +8,6 @@ import { t } from "../locale";
 class VideoProgress {
   private options: ComponentOptions;
   private currentTime = 0;
-  private totalTime = 0;
   private dragInstance: Drag | null;
   private processMaskInfo: { left: number; width: number } | null;
   private isMousedown = false;
@@ -19,6 +18,10 @@ class VideoProgress {
     this.initDrag();
     this.initProgressListener();
     this.initListener();
+  }
+
+  private get instance() {
+    return this.options.instance;
   }
 
   private initVar() {
@@ -76,13 +79,9 @@ class VideoProgress {
   }
 
   private initListener() {
-    const instance = this.options.instance;
+    const instance = this.instance;
     instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
     instance.$on(VideoEvents.TIMEUPDATE, this.onVideoTimeupdate.bind(this));
-    instance.$on(
-      VideoEvents.LOADEDMETADATA,
-      this.onVideoLoadedmetadata.bind(this)
-    );
     instance.$on(VideoEvents.PROGRESS, this.onVideoProgress.bind(this));
     instance.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
   }
@@ -92,11 +91,6 @@ class VideoProgress {
   }
   private onMaskMouseleave() {
     this.hideProcessTime();
-  }
-
-  private onVideoLoadedmetadata(event: Event) {
-    const videoElement = event.target as HTMLVideoElement;
-    this.totalTime = videoElement.duration ?? 0;
   }
 
   private onVideoTimeupdate(event: Event) {
@@ -120,7 +114,6 @@ class VideoProgress {
     const videoElement = event.target as HTMLVideoElement;
     if (videoElement.buffered?.length !== 0) {
       const preloadTime = videoElement.buffered.end(0) || 0;
-
       this.setLoadedProgress(preloadTime);
     }
   }
@@ -139,10 +132,10 @@ class VideoProgress {
   private setPlayedProgress() {
     const videoPlayedElement = this.options.templateInstance.videoPlayedElement;
     if (!isUndef(videoPlayedElement)) {
-      const totalTime = this.totalTime;
+      const duration = this.instance.duration;
       const currentTime = this.currentTime;
-      if (totalTime > 0 && currentTime > 0) {
-        let percent = currentTime / totalTime;
+      if (duration > 0 && currentTime > 0) {
+        let percent = currentTime / duration;
         percent = checkData(percent, 0, 1);
         videoPlayedElement.style.width = `${percent * 100}%`;
       }
@@ -152,10 +145,10 @@ class VideoProgress {
   private setLoadedProgress(preloadTime: number) {
     const videoLoadedElement = this.options.templateInstance.videoLoadedElement;
     if (!isUndef(videoLoadedElement)) {
-      const totalTime = this.totalTime;
+      const duration = this.instance.duration;
 
-      if (totalTime > 0) {
-        let percent = preloadTime / totalTime;
+      if (duration > 0) {
+        let percent = preloadTime / duration;
         percent = checkData(percent, 0, 1);
         videoLoadedElement.style.width = `${percent * 100}%`;
       }
@@ -175,10 +168,10 @@ class VideoProgress {
 
   private seekByPercent(percent: number) {
     percent = checkData(percent, 0, 1);
-    const time = this.totalTime * percent;
+    const time = this.instance.duration * percent;
     const offsetTime = time - this.currentTime;
     this.setTip(offsetTime);
-    this.videoSeek(time);
+    this.instance.seek(time);
   }
 
   private setTip(offsetTime: number) {
@@ -189,14 +182,7 @@ class VideoProgress {
     } else {
       tip = t("goBack", { time: -offsetTime });
     }
-    this.options.instance.$emit(CustomEvents.TIP, tip);
-  }
-
-  private videoSeek(time: number) {
-    const videoElement = this.options.templateInstance.videoElement;
-    if (!isUndef(videoElement)) {
-      videoElement.currentTime = time;
-    }
+    this.instance.setNotice(tip);
   }
 
   private showProcessTime(event: MouseEvent) {
@@ -206,7 +192,7 @@ class VideoProgress {
       let offsetX = event.pageX - left;
       offsetX = checkData(offsetX, 0, width);
       processTimeElement.style.left = `${offsetX}px`;
-      const time = this.totalTime * (offsetX / width);
+      const time = this.instance.duration * (offsetX / width);
       processTimeElement.innerHTML = secondToTime(time);
       processTimeElement.style.opacity = "1";
     }

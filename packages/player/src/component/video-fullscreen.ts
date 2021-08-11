@@ -22,6 +22,10 @@ class VideoFullscreen {
     this.initListener();
   }
 
+  private get instance() {
+    return this.options.instance;
+  }
+
   private initVar() {
     this.eventManager = new EventManager();
   }
@@ -42,7 +46,7 @@ class VideoFullscreen {
   }
 
   private initListener() {
-    this.options.instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    this.instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
   }
 
   private initGlobalListener() {
@@ -65,20 +69,35 @@ class VideoFullscreen {
   }
 
   private onBrowserFullscreen() {
+    if (!isBrowserFullscreen()) {
+      this.enterBrowserFullScreen();
+    } else {
+      this.exitBrowserFullscreen();
+    }
+  }
+
+  enterBrowserFullScreen() {
     if (this.isWebFullscreen) {
       this.exitWebFullscreen();
     }
     const containerElement = this.options.templateInstance.containerElement;
-    if (!isUndef(containerElement)) {
-      if (!isBrowserFullscreen()) {
-        enterBrowserFullScreen(containerElement);
-      } else {
-        exitBrowserFullscreen();
-      }
+    if (!isUndef(containerElement) && !isBrowserFullscreen()) {
+      enterBrowserFullScreen(containerElement);
+      this.instance.$emit(CustomEvents.ENTER_BROWSER_SCREEN);
     }
   }
 
-  private exitWebFullscreen() {
+  exitBrowserFullscreen() {
+    if (this.isWebFullscreen) {
+      this.exitWebFullscreen();
+    }
+    if (isBrowserFullscreen()) {
+      exitBrowserFullscreen();
+      this.instance.$emit(CustomEvents.EXIT_BROWSER_SCREEN);
+    }
+  }
+
+  exitWebFullscreen() {
     this.isWebFullscreen = false;
     const containerElement = this.options.templateInstance.containerElement;
     if (
@@ -86,10 +105,11 @@ class VideoFullscreen {
       containerElement.classList.contains(WEBFULLSCREENCLASSNAME)
     ) {
       containerElement.classList.remove(WEBFULLSCREENCLASSNAME);
+      this.instance.$emit(CustomEvents.EXIT_WEB_SCREEN);
     }
   }
 
-  private enterWebFullscreen() {
+  enterWebFullscreen() {
     this.isWebFullscreen = true;
     const containerElement = this.options.templateInstance.containerElement;
     if (
@@ -97,6 +117,7 @@ class VideoFullscreen {
       !containerElement.classList.contains(WEBFULLSCREENCLASSNAME)
     ) {
       containerElement.classList.add(WEBFULLSCREENCLASSNAME);
+      this.instance.$emit(CustomEvents.ENTER_WEB_SCREEN);
     }
   }
 

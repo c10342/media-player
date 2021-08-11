@@ -4,5 +4,6 @@
     "goBack": "Go back {time} s",
     "fastForward": "Fast forward {time} s",
     "volume": "volume {volume}",
-    "switch": "Switch {quality}"
+    "switch": "Switch {quality}",
+    "invalidDefinition":"Invalid Definition"
 }

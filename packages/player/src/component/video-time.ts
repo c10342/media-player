@@ -10,13 +10,19 @@ class VideoTime {
     this.initListener();
   }
 
+  private get instance() {
+    return this.options.instance;
+  }
+
   private initListener() {
-    const instance = this.options.instance;
-    instance.$on(
+    this.instance.$on(
       VideoEvents.LOADEDMETADATA,
       this.onVideoLoadedmetadata.bind(this)
     );
-    instance.$on(VideoEvents.TIMEUPDATE, this.onVideoTimeupdate.bind(this));
+    this.instance.$on(
+      VideoEvents.TIMEUPDATE,
+      this.onVideoTimeupdate.bind(this)
+    );
   }
 
   private onVideoLoadedmetadata(event: Event) {
@@ -39,10 +45,6 @@ class VideoTime {
 
     this.setCurrentTime(currentTime);
   }
-
-  // private onVideoCanplay() {
-  //   this.runTask();
-  // }
 
   private setTotalTime(duration: number) {
     const totalTimeElement = this.options.templateInstance.totalTimeElement;

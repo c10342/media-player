@@ -14,12 +14,12 @@ class VideoPlayButton {
     this.initListener();
   }
 
+  private get instance() {
+    return this.options.instance;
+  }
+
   private initVar() {
     this.eventManager = new EventManager();
-  }
-  private get paused() {
-    const videoElement = this.options.templateInstance.videoElement;
-    return videoElement?.paused;
   }
 
   private initPlayButtonListener() {
@@ -32,7 +32,7 @@ class VideoPlayButton {
   }
 
   private initListener() {
-    const instance = this.options.instance;
+    const instance = this.instance;
     instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
     instance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
     instance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
@@ -48,24 +48,7 @@ class VideoPlayButton {
 
   private onPlayButtonClick(event: MouseEvent) {
     event.stopPropagation();
-    this.togglePlay();
-  }
-  private togglePlay() {
-    if (this.paused) {
-      this.playVideo();
-    } else {
-      this.pauseVideo();
-    }
-  }
-
-  private pauseVideo() {
-    const videoElement = this.options.templateInstance.videoElement;
-    videoElement?.pause();
-  }
-
-  private playVideo() {
-    const videoElement = this.options.templateInstance.videoElement;
-    videoElement?.play();
+    this.instance.toggle();
   }
 
   private showPlayIcon() {

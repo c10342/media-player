@@ -1,18 +1,28 @@
-import { EventManager } from "@media/utils";
-import { CanFocusTagEnum, KeyCodeEnum } from "../config/enum";
+import { EventManager, isFunction, isUndef } from "@media/utils";
+import { CustomEvents, VideoEvents } from "../js/event";
 import { ComponentOptions } from "../types";
 
 class VideoControls {
   private options: ComponentOptions;
   private eventManager: EventManager;
-  private focus = false;
+  private isEnter = false;
+  private timer: number | null;
   constructor(options: ComponentOptions) {
     this.options = options;
-    this.initVer();
+    this.initVar();
     this.initWrapperListener();
+    this.initListener();
   }
 
-  private initVer() {
+  private get instance() {
+    return this.options.instance;
+  }
+
+  private get paused() {
+    return this.options.templateInstance.videoElement?.paused;
+  }
+
+  private initVar() {
     this.eventManager = new EventManager();
   }
 
@@ -20,36 +30,77 @@ class VideoControls {
     const containerElement = this.options.templateInstance.containerElement;
     this.eventManager.addEventListener({
       element: containerElement,
-      eventName: "click",
-      handler: () => {
-        this.focus = true;
-      }
+      eventName: "mouseenter",
+      handler: this.onMouseenter.bind(this)
     });
     this.eventManager.addEventListener({
-      element: document,
-      eventName: "click",
-      handler: () => {
-        this.focus = false;
-      }
-    });
-    this.eventManager.addEventListener({
-      element: document,
-      eventName: "keyup",
-      handler: this.onKeyup.bind(this)
+      element: containerElement,
+      eventName: "mouseleave",
+      handler: this.onMouseleave.bind(this)
     });
   }
 
-  private onKeyup(event: KeyboardEvent) {
-    console.log();
+  private initListener() {
+    this.instance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
+    this.instance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
+    this.instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+  }
 
-    const activeTag: any = document?.activeElement?.tagName.toUpperCase();
-    const flag = Object.values(CanFocusTagEnum).includes(activeTag);
+  private onMouseenter() {
+    this.isEnter = true;
+    this.showControls();
+  }
 
-    const contenteditable =
-      document?.activeElement?.getAttribute("contenteditable");
-    if (this.focus && event.keyCode === KeyCodeEnum.space && flag) {
-      console.log(activeTag, contenteditable);
+  private onMouseleave() {
+    this.isEnter = false;
+    this.hideControls();
+  }
+
+  private onVideoPlay() {
+    this.hideControls();
+  }
+
+  private onVideoPause() {
+    this.showControls();
+  }
+
+  private showControls() {
+    if (this.paused || this.isEnter) {
+      this.handleElement((element) => {
+        element.style.transform = "";
+        this.instance.$emit(CustomEvents.SHOW_CONTROLS);
+      });
     }
+  }
+
+  private hideControls() {
+    this.destroyTimer();
+    this.timer = window.setTimeout(() => {
+      if (!this.paused && !this.isEnter) {
+        this.handleElement((element) => {
+          element.style.transform = "translateY(100%)";
+          this.instance.$emit(CustomEvents.HIDE_CONTROLS);
+        });
+      }
+    }, 4000);
+  }
+
+  private handleElement(callback: (element: HTMLElement) => void) {
+    const controlsElement = this.options.templateInstance.controlsElement;
+    if (!isUndef(controlsElement) && isFunction(callback)) {
+      callback(controlsElement);
+    }
+  }
+
+  private destroyTimer() {
+    if (!isUndef(this.timer)) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+  }
+
+  destroy() {
+    this.eventManager.removeEventListener();
   }
 }
 

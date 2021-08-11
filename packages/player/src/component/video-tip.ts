@@ -1,5 +1,4 @@
 import { isUndef } from "@media/utils";
-import { CustomEvents } from "../js/event";
 import { ComponentOptions } from "../types";
 
 class VideoTip {
@@ -7,20 +6,14 @@ class VideoTip {
   private timer: number | null;
   constructor(options: ComponentOptions) {
     this.options = options;
-    this.initListener();
   }
 
-  private initListener() {
-    const instance = this.options.instance;
-    instance.$on(CustomEvents.TIP, this.onTip.bind(this));
-  }
-
-  private onTip(tip: string) {
+  setNotice(notice: string, time?: number) {
     this.destroyTimer();
-    this.showTip(tip);
+    this.showTip(notice);
     this.timer = window.setTimeout(() => {
       this.hideTip();
-    }, 4000);
+    }, time || 2000);
   }
 
   private destroyTimer() {

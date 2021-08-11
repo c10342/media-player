@@ -1,14 +1,4 @@
 
-.player-strect-enter-active,
-.player-strect-leave-active {
-  transition: width 500ms ease;
-}
-
-.player-strect-enter,
-.player-strect-leave-to {
-  width: 0 !important;
-}
-
 .player-fullscreen {
   position: fixed;
   top: 0;

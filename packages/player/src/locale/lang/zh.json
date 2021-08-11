@@ -3,5 +3,6 @@
     "goBack": "快退{time}秒",
     "fastForward": "快进{time}秒",
     "volume": "音量{volume}",
-    "switch": "已经切换至{quality}"
+    "switch": "已经切换至{quality}",
+    "invalidDefinition":"无效清晰度"
 }

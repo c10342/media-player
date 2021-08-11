@@ -14,10 +14,14 @@ import VideoTip from "./component/video-tip";
 import VideoControls from "./component/video-controls";
 import EventEmit from "./js/event-emit";
 import { CustomEvents } from "./js/event";
+import ShortcutKey from "./js/shortcut-key";
 import i18n from "./locale";
+import { checkData } from "./js/utils";
+import { FullScreenTypeEnum } from "./config/enum";
 
 const defaultOptions = {
-  live: false
+  live: false,
+  hotkey: true
 };
 
 class Player extends EventEmit {
@@ -48,6 +52,7 @@ class Player extends EventEmit {
   private videoSpeedInstance: VideoSpeed | null;
   private videoTipInstance: VideoTip | null;
   private videoControlsInstance: VideoControls | null;
+  private shortcutKeyInstance: ShortcutKey | null;
   constructor(options: PlayerOptions) {
     super();
     this.options = { ...defaultOptions, ...options };
@@ -64,6 +69,7 @@ class Player extends EventEmit {
     this.initVideoVolume();
     this.initVideoSpeed();
     this.initVideoControls();
+    this.initShortcutKey();
   }
 
   get isLive() {
@@ -215,6 +221,18 @@ class Player extends EventEmit {
     }
   }
 
+  private initShortcutKey() {
+    const templateInstance = this.templateInstance;
+    const { hotkey } = this.options;
+    if (!isUndef(templateInstance) && hotkey) {
+      this.shortcutKeyInstance = new ShortcutKey({
+        ...this.options,
+        templateInstance,
+        instance: this
+      });
+    }
+  }
+
   private resetData() {
     this.videoPlayerInstance = null;
     this.playButtonInstance = null;
@@ -225,6 +243,95 @@ class Player extends EventEmit {
     this.videoVolumeInstance = null;
     this.templateInstance = null;
     this.videoSpeedInstance = null;
+  }
+
+  play() {
+    this.videoElement?.play();
+  }
+
+  pause() {
+    this.videoElement?.pause();
+  }
+
+  seek(time: number) {
+    if (!this.isLive) {
+      const videoElement = this.videoElement;
+      if (!isUndef(time) && !isUndef(videoElement)) {
+        videoElement.currentTime = time;
+      }
+    }
+  }
+
+  setNotice(text: string, time?: number) {
+    this.videoTipInstance?.setNotice(text, time);
+  }
+
+  switchDefinition(index: number) {
+    this.videoPlayerInstance?.switchDefinition(index);
+  }
+
+  setSpeed(playbackRate: number) {
+    const videoElement = this.videoElement;
+    if (!isUndef(videoElement)) {
+      playbackRate = checkData(playbackRate, 0, 2);
+      videoElement.playbackRate = playbackRate;
+    }
+  }
+
+  setVolume(volume: number) {
+    const videoElement = this.videoElement;
+    if (!isUndef(videoElement)) {
+      volume = checkData(volume, 0, 1);
+      videoElement.volume = volume;
+    }
+  }
+
+  toggle() {
+    if (this.paused) {
+      this.play();
+    } else {
+      this.pause();
+    }
+  }
+
+  get videoElement() {
+    return this.templateInstance?.videoElement;
+  }
+
+  get paused() {
+    return this.videoElement?.paused;
+  }
+
+  get currentTime() {
+    return this.videoElement?.currentTime ?? 0;
+  }
+
+  get duration() {
+    return this.videoElement?.duration ?? 0;
+  }
+
+  get volume() {
+    return this.videoElement?.volume ?? 1;
+  }
+
+  // 全屏
+  get fullScreen() {
+    return {
+      request: (type: string) => {
+        if (type === FullScreenTypeEnum.web) {
+          this.videoFullscreenInstance?.enterWebFullscreen();
+        } else if (type === FullScreenTypeEnum.browser) {
+          this.videoFullscreenInstance?.enterBrowserFullScreen();
+        }
+      },
+      cancel: (type: string) => {
+        if (type === FullScreenTypeEnum.web) {
+          this.videoFullscreenInstance?.exitWebFullscreen();
+        } else if (type === FullScreenTypeEnum.browser) {
+          this.videoFullscreenInstance?.exitBrowserFullscreen();
+        }
+      }
+    };
   }
 
   destroy() {
