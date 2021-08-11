@@ -1,0 +1,8 @@
+{{each highlightList}}
+<span
+  style="left: {{ ( $value.time / totalTime ) * 100 }}%;"
+  class="highlight-point"
+>
+  <span class="highlight-point-tip">{{ $value.text }}</span>
+</span>
+{{/each}}

@@ -1,0 +1,32 @@
+.highlight-point {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 10px;
+  cursor: pointer;
+  background-color: #ff5622;
+  transform: translateY(-50%);
+
+  &:hover {
+    .highlight-point-tip {
+      display: block;
+    }
+  }
+}
+
+.highlight-point-tip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  box-sizing: border-box;
+  display: none;
+  padding: 5px 7px;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  transform: translate(-50%, -100%);
+}
