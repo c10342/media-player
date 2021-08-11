@@ -1,10 +1,27 @@
 import VideoPlayer from "@media/player";
+import Highlight from "@media/highlight";
+VideoPlayer.use(Highlight);
 import "./index.scss";
 
 // VideoPlayer.setLang("en");
 // import Hls from "hls.js";
 
 // console.log(a);
+
+const highlightList = [
+  {
+    time: 20,
+    text: "这是第 20 秒"
+  },
+  {
+    time: 60,
+    text: "这是第 60 秒"
+  },
+  {
+    time: 100,
+    text: "这是第 100 秒"
+  }
+];
 
 const player = new VideoPlayer({
   el: ".container",
@@ -45,7 +62,12 @@ const player = new VideoPlayer({
       label: "1.5x",
       value: 1.5
     }
-  ]
+  ],
+  highlightOptions: {
+    jump: true,
+    showTip: true
+    // list:highlightList
+  }
   // hotkey:true
   // live:true
   // autoplay: true,
@@ -57,11 +79,16 @@ const player = new VideoPlayer({
   // }
 });
 
+(player as any).setHighlight(highlightList);
+
 player.$on("play", () => {
   console.log("play");
 });
 player.$on("ratechange", () => {
   console.log("ratechange");
+});
+player.$on("highlight-click", (item: any) => {
+  console.log(item);
 });
 
 document.querySelector(".play")?.addEventListener("click", function () {
