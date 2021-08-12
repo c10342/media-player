@@ -37,15 +37,15 @@ const player = new VideoPlayer({
     }
     // {
     //   label: "标清",
-    //   url: "http://192.168.35.204/upload/video/2082/1_2082.mp4"
+    //   url: "https://api.dogecloud.com/player/get.m3u8?vcode=5ac682e6f8231991&userId=17&ext=.m3u8"
     // },
     // {
     //   label: "高清",
-    //   url: "http://192.168.35.204/upload/video/2082/2_2082.mp4"
+    //   url: "https://api.dogecloud.com/player/get.m3u8?vcode=5ac682e6f8231991&userId=17&ext=.m3u8"
     // },
     // {
     //   label: "超清",
-    //   url: "http://192.168.35.204/upload/video/2082/3_2082.mp4"
+    //   url: "https://api.dogecloud.com/player/get.m3u8?vcode=5ac682e6f8231991&userId=17&ext=.m3u8"
     // }
   ],
   speedList: [
