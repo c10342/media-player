@@ -188,14 +188,16 @@ class VideoProgress {
 
   // 根据百分比跳转到指定时间
   private seekByPercent(percent: number) {
-    percent = checkData(percent, 0, 1);
-    // 时间点
-    const time = this.instance.duration * percent;
-    // 计算前进或者后退了多少秒
-    const offsetTime = time - this.currentTime;
-    this.setTip(offsetTime);
-    // 跳转
-    this.instance.seek(time);
+    if (this.instance.duration > 0) {
+      percent = checkData(percent, 0, 1);
+      // 时间点
+      const time = this.instance.duration * percent;
+      // 计算前进或者后退了多少秒
+      const offsetTime = time - this.currentTime;
+      this.setTip(offsetTime);
+      // 跳转
+      this.instance.seek(time);
+    }
   }
   // 显示通知
   private setTip(offsetTime: number) {
