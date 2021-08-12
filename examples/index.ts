@@ -1,12 +1,12 @@
 import VideoPlayer from "@media/player";
 import Highlight from "@media/highlight";
+import Screenshot from "@media/screenshot";
 VideoPlayer.use(Highlight);
+// VideoPlayer.use(Screenshot);
 import "./index.scss";
 
 // VideoPlayer.setLang("en");
 // import Hls from "hls.js";
-
-// console.log(a);
 
 const highlightList = [
   {
@@ -63,10 +63,17 @@ const player = new VideoPlayer({
       value: 1.5
     }
   ],
+  plugins: [Screenshot],
   highlightOptions: {
     jump: true,
-    showTip: true
-    // list:highlightList
+    showTip: true,
+    list: highlightList
+  },
+  screenshotOptions: {
+    // 是否开启功能
+    open: true,
+    // 点击后自动下载,默认true，你可以设置为false，然后通过事件监听来自定义点击之后的操作
+    download: true
   }
   // hotkey:true
   // live:true
@@ -79,7 +86,7 @@ const player = new VideoPlayer({
   // }
 });
 
-(player as any).setHighlight(highlightList);
+// (player as any).setHighlight(highlightList);
 
 player.$on("play", () => {
   console.log("play");
@@ -90,7 +97,6 @@ player.$on("ratechange", () => {
 player.$on("highlight-click", (item: any) => {
   console.log(item);
 });
-
 document.querySelector(".play")?.addEventListener("click", function () {
   player.play();
 });
@@ -137,5 +143,7 @@ document.querySelector(".paused")?.addEventListener("click", function () {
 });
 
 document.querySelector(".destroy")?.addEventListener("click", function () {
-  player.destroy();
+  // player.destroy();
+  // (player as any).destroyHighlight()
+  (player as any).screenshot();
 });
