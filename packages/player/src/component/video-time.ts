@@ -28,14 +28,14 @@ class VideoTime {
   // video标签获取媒体数据事件
   private onVideoLoadedmetadata(event: Event) {
     const videoElement = event.target as HTMLVideoElement;
-    const duration = videoElement.duration ?? 0;
+    const duration = videoElement.duration || 0;
     // 设置总时长
     this.setTotalTime(duration);
   }
   // video标签正在播放事件
   private onVideoTimeupdate(event: Event) {
     const videoElement = event.target as HTMLVideoElement;
-    const currentTime = videoElement.currentTime ?? 0;
+    const currentTime = videoElement.currentTime || 0;
 
     const intCurrentTime = Math.floor(currentTime);
     const intPrevTime = Math.floor(this.currentTime);

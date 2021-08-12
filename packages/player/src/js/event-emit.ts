@@ -16,7 +16,7 @@ class EventEmit {
   }
   // 发射事件
   $emit(eventName: string, data?: any) {
-    const eventList = this.eventMap[eventName] ?? [];
+    const eventList = this.eventMap[eventName] || [];
     const length = eventList.length;
     if (length > 0) {
       // 从最后一个开始执行，防止数组塌陷

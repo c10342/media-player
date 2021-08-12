@@ -113,7 +113,7 @@ class VideoProgress {
   // 视频正在播放
   private onVideoTimeupdate(event: Event) {
     const videoElement = event.target as HTMLVideoElement;
-    const currentTime = videoElement.currentTime ?? 0;
+    const currentTime = videoElement.currentTime || 0;
 
     const intCurrentTime = Math.floor(currentTime);
     const intPrevTime = Math.floor(this.currentTime);

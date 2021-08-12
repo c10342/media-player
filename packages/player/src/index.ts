@@ -218,8 +218,8 @@ class MediaPlayer {
     );
     // 合并全局插件和局部插件
     const plugins = getPluginsList(
-      MediaPlayer.pluginsList ?? [],
-      this.options.plugins ?? []
+      MediaPlayer.pluginsList || [],
+      this.options.plugins || []
     );
     plugins.forEach((Ctor: any) => {
       const instance = new Ctor(el, this, MediaPlayer);
