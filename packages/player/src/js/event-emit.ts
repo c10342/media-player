@@ -14,7 +14,7 @@ class EventEmit {
     this.eventMap[eventName].push(handler);
     return this;
   }
-
+  // 发射事件
   $emit(eventName: string, data?: any) {
     const eventList = this.eventMap[eventName] ?? [];
     const length = eventList.length;
@@ -57,7 +57,7 @@ class EventEmit {
     }
     return this;
   }
-
+  // 移除所有事件
   protected clear() {
     this.eventMap = {};
   }

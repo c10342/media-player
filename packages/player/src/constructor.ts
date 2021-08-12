@@ -33,23 +33,32 @@ class Player extends EventEmit {
   private shortcutKeyInstance: ShortcutKey | null;
   constructor(options: PlayerOptions) {
     super();
+    // 参数
     this.options = options;
+    // 初始化模板，dom那些
     this.initTemplate();
+    // 控制条上放的提示组件
     this.initVideoTip();
+    // 初始化video相关东西
     this.initVideoPlayer();
+    // 初始化控制条控制播放/暂停的组件
     this.initVideoPlayButton();
+    // 初始化时间（当前时间/总时间），即音量控制组件右边那个东西
     this.initVideoTime();
+    // 初始化进度条组件
     this.initVideoProgress();
+    // 初始化全屏组件
     this.initVideoFullscreen();
+    // 初始化loading组件
     this.initVideoLoading();
+    // 初始化音量控制组件
     this.initVideoVolume();
+    // 初始化倍数组件
     this.initVideoSpeed();
+    // 初始化控制条组件
     this.initVideoControls();
+    // 初始化快捷键
     this.initShortcutKey();
-  }
-
-  get isLive() {
-    return this.options.live;
   }
 
   private initTemplate() {
@@ -94,7 +103,7 @@ class Player extends EventEmit {
 
   private initVideoTime() {
     const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance) && !this.isLive) {
+    if (!isUndef(templateInstance) && !this.options.live) {
       this.videoTimeInstance = new VideoTime({
         ...this.options,
         templateInstance,
@@ -105,7 +114,7 @@ class Player extends EventEmit {
 
   private initVideoProgress() {
     const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance) && !this.isLive) {
+    if (!isUndef(templateInstance) && !this.options.live) {
       this.videoProgressInstance = new VideoProgress({
         ...this.options,
         templateInstance,
@@ -149,7 +158,7 @@ class Player extends EventEmit {
 
   private initVideoSpeed() {
     const speedList = this.options.speedList;
-    if (!this.isLive && isArray(speedList) && speedList.length > 0) {
+    if (!this.options.live && isArray(speedList) && speedList.length > 0) {
       const templateInstance = this.templateInstance;
       if (!isUndef(templateInstance)) {
         this.videoSpeedInstance = new VideoSpeed({
@@ -185,6 +194,7 @@ class Player extends EventEmit {
     }
   }
 
+  // 销毁的时候需要把这些实例都设置成null，防止内存泄露
   private resetData() {
     this.videoPlayerInstance = null;
     this.playButtonInstance = null;
@@ -197,38 +207,39 @@ class Player extends EventEmit {
     this.videoSpeedInstance = null;
   }
 
+  // 移除元素
   private removeElement() {
     const containerElement = this.templateInstance?.containerElement;
     if (!isUndef(containerElement)) {
       (this.options.el as HTMLElement).removeChild(containerElement);
     }
   }
-
+  // 播放
   play() {
     this.videoElement?.play();
   }
-
+  // 暂停
   pause() {
     this.videoElement?.pause();
   }
-
+  // 跳转时间点
   seek(time: number) {
-    if (!this.isLive) {
+    if (!this.options.live) {
       const videoElement = this.videoElement;
       if (!isUndef(time) && !isUndef(videoElement)) {
         videoElement.currentTime = time;
       }
     }
   }
-
+  // 设置提示
   setNotice(text: string, time?: number) {
     this.videoTipInstance?.setNotice(text, time);
   }
-
+  // 切换清晰度
   switchDefinition(index: number) {
     this.videoPlayerInstance?.switchDefinition(index);
   }
-
+  // 设置视频播放倍数
   setSpeed(playbackRate: number) {
     const videoElement = this.videoElement;
     if (!isUndef(videoElement)) {
@@ -236,7 +247,7 @@ class Player extends EventEmit {
       videoElement.playbackRate = playbackRate;
     }
   }
-
+  // 设置视频播放音量
   setVolume(volume: number) {
     const videoElement = this.videoElement;
     if (!isUndef(videoElement)) {
@@ -244,7 +255,7 @@ class Player extends EventEmit {
       videoElement.volume = volume;
     }
   }
-
+  // 切换视频播放状态
   toggle() {
     if (this.paused) {
       this.play();
@@ -252,23 +263,23 @@ class Player extends EventEmit {
       this.pause();
     }
   }
-
+  // video标签
   get videoElement() {
     return this.templateInstance?.videoElement;
   }
-
+  // 视频是否处于暂停
   get paused() {
     return this.videoElement?.paused;
   }
-
+  // 视频当前时间
   get currentTime() {
     return this.videoElement?.currentTime ?? 0;
   }
-
+  // 视频总时间
   get duration() {
     return this.videoElement?.duration ?? 0;
   }
-
+  // 音量
   get volume() {
     return this.videoElement?.volume ?? 1;
   }
@@ -292,11 +303,15 @@ class Player extends EventEmit {
       }
     };
   }
-
+  // 销毁播放器
   destroy() {
+    // 广播destroy事件，让各组件内部自行处理
     this.$emit(CustomEvents.DESTROY);
+    // 移除所有事件
     this.clear();
+    // 移除元素
     this.removeElement();
+    // 重置所有数据
     this.resetData();
   }
 }

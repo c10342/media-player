@@ -10,11 +10,14 @@ interface OptionsParams extends ComponentOptions {
 class VideoSpeed {
   private options: OptionsParams;
   private eventManager: EventManager;
+  // 倍数索引，当前是那个倍数
   private currentIndex = 0;
   constructor(options: OptionsParams) {
     this.options = options;
     this.initVar();
+    // 初始化索引，即是那个倍数
     this.initCurrentIndex();
+    // 设置video标签倍数
     this.initDefaultRate();
     this.initSpeedListener();
     this.initListener();
@@ -42,6 +45,7 @@ class VideoSpeed {
     });
   }
 
+  // 找出默认的倍数，default，然后设置
   private initCurrentIndex() {
     const speedList = this.options.speedList;
     const index = speedList.findIndex((speed) => speed.default);
@@ -49,27 +53,32 @@ class VideoSpeed {
       this.setCurrentInfo(index);
     }
   }
-
+  // 点击倍数事件处理
   private onSpeedWrapperClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     let index = target.dataset?.index ?? -1;
     index = Number(index);
     if (index !== -1 && index !== this.currentIndex) {
+      // 找到对应的倍数
       const speedList = this.options.speedList;
       const speed = speedList[index];
+      // 设置倍数
       this.instance.setSpeed(speed.value);
+      // 显示通知
       this.instance.setNotice(speed.label);
+      // 设置索引信息
       this.setCurrentInfo(index);
     }
   }
-
+  // 设置索引
   private setCurrentIndex(index: number) {
     this.currentIndex = index;
+    // 设置高亮的元素
     this.handelSpeedItemsElement((element, i) => {
       this.setElementActive(element, i === index);
     });
   }
-
+  // 切换元素的活跃类名
   private setElementActive(element: Element, isActive: boolean) {
     if (isActive) {
       this.addElementActive(element);
@@ -82,7 +91,7 @@ class VideoSpeed {
     this.setCurrentIndex(index);
     this.setCurrentLabel();
   }
-
+  // 设置标签文本
   private setCurrentLabel() {
     const speedLabelElement = this.options.templateInstance.speedLabelElement;
     if (!isUndef(speedLabelElement)) {
@@ -93,25 +102,26 @@ class VideoSpeed {
       }
     }
   }
-
+  // 一开始的时候初始化倍数
   private initDefaultRate() {
     const speedList = this.options.speedList;
     if (speedList.length > 0) {
       this.instance.setSpeed(speedList[this.currentIndex].value);
     }
   }
-
+  // 删除元素的活跃类名
   private delElementActive(element: Element) {
     if (element.classList.contains(LISTACTIVECLASSNAME)) {
       element.classList.remove(LISTACTIVECLASSNAME);
     }
   }
+  // 添加元素的活跃类名
   private addElementActive(element: Element) {
     if (!element.classList.contains(LISTACTIVECLASSNAME)) {
       element.classList.add(LISTACTIVECLASSNAME);
     }
   }
-
+  // 统一在这里进行元素判空，然后执行回调
   private handelSpeedItemsElement(
     callback: (element: Element, index: number) => void
   ) {
@@ -127,7 +137,7 @@ class VideoSpeed {
     }
   }
 
-  destroy() {
+  private destroy() {
     this.eventManager.removeEventListener();
   }
 }

@@ -1,3 +1,4 @@
+// 播放器自定义事件
 export enum CustomEvents {
   DESTROY = "destroy",
   SWITCH_DEFINITION_START = "switch_definition_start",
@@ -10,6 +11,7 @@ export enum CustomEvents {
   HIDE_CONTROLS = "hide_controls"
 }
 
+// video标签事件
 export enum VideoEvents {
   ABORT = "abort",
   CANPLAY = "canplay",

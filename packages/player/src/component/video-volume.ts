@@ -15,9 +15,13 @@ class VideoVolume {
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
-    this.initAutoplay();
+    // 处理静音自动播放
+    this.initMuted();
+    // 初始化音量进度条
     this.initVolumeProgress();
+    // 初始化拖拽事件
     this.initDrag();
+    // 初始化事件监听
     this.initVolumeListener();
     this.initListener();
   }
@@ -30,13 +34,14 @@ class VideoVolume {
     this.eventManager = new EventManager();
   }
 
-  private initAutoplay() {
-    const { autoplay, muted } = this.options;
-    if (autoplay && muted) {
+  private initMuted() {
+    // 静音
+    const { muted } = this.options;
+    if (muted) {
       this.instance.setVolume(0);
     }
   }
-
+  // 初始化拖拽事件
   private initDrag() {
     const { volumeMaskElement, volumeBallElement } =
       this.options.templateInstance;
@@ -46,20 +51,27 @@ class VideoVolume {
         wrapperElement: volumeMaskElement
       });
       this.dragInstance.$on("mousemove", (percent: number) => {
+        // 拖拽过程中实时设置音量
         this.instance.setVolume(percent);
         this.isMove = true;
+        // 执行动画
         this.toggleAnimation();
+        // 设置通知
         this.setNotice();
       });
       this.dragInstance.$on("click", (percent: number) => {
+        // 点击的时候保存旧的音量,方便点击静音图标，切换到上一次的音量
         this.setPrevVolume(percent);
         this.instance.setVolume(percent);
         this.setNotice();
       });
       this.dragInstance.$on("mouseup", (percent: number) => {
+        // 鼠标抬起的时候也保存旧的音量
         this.setPrevVolume(percent);
         this.isMove = false;
+        // 执行动画
         this.toggleAnimation();
+        // 显示提示
         this.setNotice();
       });
     }
@@ -68,12 +80,14 @@ class VideoVolume {
   private initVolumeListener() {
     const { volumeButtonElement, volumeContainerElement } =
       this.options.templateInstance;
+    // 音量图标
     this.eventManager.addEventListener({
       element: volumeButtonElement,
       eventName: "click",
       handler: this.onVolumeButtonClick.bind(this)
     });
 
+    // 音量容器
     this.eventManager.addEventListener({
       element: volumeContainerElement,
       eventName: "mouseenter",
@@ -86,6 +100,7 @@ class VideoVolume {
     });
   }
 
+  // 初始化音量进度条长度
   private initVolumeProgress() {
     this.prevVolume = this.instance.volume || 1;
     this.setProgressWidth(this.instance.volume);
@@ -96,25 +111,28 @@ class VideoVolume {
     instance.$on(CustomEvents.DESTROY, () => this.destroy());
     instance.$on(VideoEvents.VOLUMECHANGE, this.onVideoVolumechange.bind(this));
   }
-
+  // 点击音量图标
   private onVolumeButtonClick() {
     if (this.instance.volume === 0) {
+      // 静音->上一次保存的音量
       this.instance.setVolume(this.prevVolume);
     } else {
+      // 非静音->静音
       this.instance.setVolume(0);
     }
     this.setNotice();
   }
-
+  // 音量发生变化事件
   private onVideoVolumechange() {
     this.setProgressWidth(this.instance.volume);
   }
-
+  // 鼠标进入音量容器
   private onMouseenter() {
     this.isEnter = true;
+    // 切换动画
     this.toggleAnimation();
   }
-
+  // 鼠标离开银两容器
   private onMouseleave() {
     this.isEnter = false;
     this.toggleAnimation();
@@ -126,25 +144,28 @@ class VideoVolume {
     if (isUndef(volumeAnimationElement)) {
       return;
     }
+    // 鼠标进入音量容器或者正在拖拽时，需要显示容器
     if (this.isEnter || this.isMove) {
       volumeAnimationElement.style.width = "70px";
     } else {
       volumeAnimationElement.style.width = "";
     }
   }
-
+  // 设置通知提示
   private setNotice() {
     this.instance.setNotice(
       t("volume", { volume: `${Math.round(this.instance.volume * 100)}%` })
     );
   }
 
+  // 设置音量长度
   private setProgressWidth(volume: number) {
     const volumeProcessElement =
       this.options.templateInstance.volumeProcessElement;
     if (!isUndef(volumeProcessElement)) {
       volumeProcessElement.style.width = `${volume * 100}%`;
     }
+    // 静音需要显示静音图标
     if (volume === 0) {
       //   静音
       this.showMuteIcon();
@@ -152,7 +173,7 @@ class VideoVolume {
       this.showVolumeIcon();
     }
   }
-
+  // 显示静音图标
   private showMuteIcon() {
     const volumeButtonElement =
       this.options.templateInstance.volumeButtonElement;
@@ -165,7 +186,7 @@ class VideoVolume {
       }
     }
   }
-
+  // 显示非静音图标
   private showVolumeIcon() {
     const volumeButtonElement =
       this.options.templateInstance.volumeButtonElement;
@@ -180,14 +201,14 @@ class VideoVolume {
       }
     }
   }
-
+  // 保存上一次的音量
   private setPrevVolume(volume: number) {
     if (volume !== 0) {
       this.prevVolume = volume;
     }
   }
 
-  destroy() {
+  private destroy() {
     this.eventManager.removeEventListener();
     this.dragInstance.destroy();
   }

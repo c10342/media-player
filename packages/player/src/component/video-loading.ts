@@ -16,6 +16,7 @@ class VideoLoading {
     return this.options.instance;
   }
 
+  // 视频状态，4表示可以了
   private get videoReadyState() {
     const videoElement = this.instance.videoElement;
     return videoElement?.readyState ?? -1;
@@ -28,6 +29,7 @@ class VideoLoading {
   private initListener() {
     const instance = this.instance;
     instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    // 切换清晰度前
     instance.$on(
       CustomEvents.SWITCH_DEFINITION_START,
       this.onBeforeSwitchDefinition.bind(this)
@@ -36,19 +38,23 @@ class VideoLoading {
     instance.$on(VideoEvents.CANPLAY, this.onVideoCanplay.bind(this));
   }
 
+  // 视频缓冲事件
   private onVideoWaiting() {
     if (this.videoReadyState !== VideoReadyStateEnum.complete) {
+      // 显示loading
       this.showLoading();
     }
   }
+
+  // 视频可播放事件
   private onVideoCanplay() {
     this.hideLoading();
   }
-
+  // 切换清晰度的时候也要显示loading
   private onBeforeSwitchDefinition() {
     this.showLoading();
   }
-
+  // 显示loading
   private showLoading() {
     const loadingWrapperElement =
       this.options.templateInstance.loadingWrapperElement;
@@ -56,7 +62,7 @@ class VideoLoading {
       loadingWrapperElement.style.display = "flex";
     }
   }
-
+  // 隐藏loading
   private hideLoading() {
     const loadingWrapperElement =
       this.options.templateInstance.loadingWrapperElement;
@@ -65,7 +71,7 @@ class VideoLoading {
     }
   }
 
-  destroy() {
+  private destroy() {
     this.eventManager.removeEventListener();
   }
 }

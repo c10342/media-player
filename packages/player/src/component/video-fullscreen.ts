@@ -17,7 +17,9 @@ class VideoFullscreen {
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
+    // 全屏图标事件监听
     this.initButtonListener();
+    // 全局事件
     this.initGlobalListener();
     this.initListener();
   }
@@ -33,11 +35,13 @@ class VideoFullscreen {
   private initButtonListener() {
     const { fullscreenWebElement, fullscreenBrowserElement } =
       this.options.templateInstance;
+    // 网页全屏
     this.eventManager.addEventListener({
       element: fullscreenWebElement,
       eventName: "click",
       handler: this.onWebFullscreen.bind(this)
     });
+    // 浏览器全屏
     this.eventManager.addEventListener({
       element: fullscreenBrowserElement,
       eventName: "click",
@@ -49,6 +53,7 @@ class VideoFullscreen {
     this.instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
   }
 
+  // 监听全局事件
   private initGlobalListener() {
     this.eventManager.addEventListener({
       element: document,
@@ -57,6 +62,7 @@ class VideoFullscreen {
     });
   }
 
+  // 网页全屏事件处理
   private onWebFullscreen() {
     if (isBrowserFullscreen()) {
       exitBrowserFullscreen();
@@ -67,7 +73,7 @@ class VideoFullscreen {
       this.enterWebFullscreen();
     }
   }
-
+  // 浏览器全屏事件处理
   private onBrowserFullscreen() {
     if (!isBrowserFullscreen()) {
       this.enterBrowserFullScreen();
@@ -75,9 +81,10 @@ class VideoFullscreen {
       this.exitBrowserFullscreen();
     }
   }
-
+  // 进入浏览器全屏
   enterBrowserFullScreen() {
     if (this.isWebFullscreen) {
+      // 如果是浏览器全屏需要先退出
       this.exitWebFullscreen();
     }
     const containerElement = this.options.templateInstance.containerElement;
@@ -86,9 +93,10 @@ class VideoFullscreen {
       this.instance.$emit(CustomEvents.ENTER_BROWSER_SCREEN);
     }
   }
-
+  // 退出浏览器全屏
   exitBrowserFullscreen() {
     if (this.isWebFullscreen) {
+      // 如果是浏览器全屏需要先退出
       this.exitWebFullscreen();
     }
     if (isBrowserFullscreen()) {
@@ -96,7 +104,7 @@ class VideoFullscreen {
       this.instance.$emit(CustomEvents.EXIT_BROWSER_SCREEN);
     }
   }
-
+  // 退出网页全屏
   exitWebFullscreen() {
     this.isWebFullscreen = false;
     const containerElement = this.options.templateInstance.containerElement;
@@ -108,7 +116,7 @@ class VideoFullscreen {
       this.instance.$emit(CustomEvents.EXIT_WEB_SCREEN);
     }
   }
-
+  // 进入网页全屏
   enterWebFullscreen() {
     this.isWebFullscreen = true;
     const containerElement = this.options.templateInstance.containerElement;
@@ -122,12 +130,13 @@ class VideoFullscreen {
   }
 
   private onKeypress(event: KeyboardEvent) {
+    // 按下esc键，键盘左上角
     if (event.keyCode === KeyCodeEnum.esc && this.isWebFullscreen) {
       this.exitWebFullscreen();
     }
   }
 
-  destroy() {
+  private destroy() {
     this.eventManager.removeEventListener();
   }
 }

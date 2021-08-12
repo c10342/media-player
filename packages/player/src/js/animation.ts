@@ -23,6 +23,7 @@ class AnimationHelper extends EventEmit {
   private initVar(element: HTMLElement, animationName: string) {
     // 根据动画名得到不同状态所对应的css类名
     this.className = getAnimationClassName(animationName);
+    // 事件管理器
     this.eventManager = new EventManager();
     // 获取进行过渡动画的元素
     this.element = element;
@@ -36,11 +37,13 @@ class AnimationHelper extends EventEmit {
     this.originalClassName = this.element.className;
   }
   private initListener() {
+    // 监听过渡动画结束
     this.eventManager.addEventListener({
       element: this.element,
       eventName: "transitionend",
       handler: this.onAnimationend.bind(this)
     });
+    // 接听动画结束
     this.eventManager.addEventListener({
       element: this.element,
       eventName: "animationend",
@@ -150,6 +153,7 @@ class AnimationHelper extends EventEmit {
   }
 
   destroy() {
+    // 销毁的时候取消事件监听
     this.eventManager.removeEventListener();
   }
 }

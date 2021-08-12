@@ -77,8 +77,11 @@ class Template {
 
   constructor(options: OptionsParams) {
     this.options = options;
+    // 初始化模板，插入元素
     this.initTemplate();
+    // 获取所需要的元素，统一在这里获取，到时候也方便修改
     this.initElement();
+    // 初始化事件监听
     this.initListener();
   }
 
@@ -132,6 +135,7 @@ class Template {
 
   private initListener() {
     const instance = this.options.instance;
+    // 切换清晰度结束事件
     instance.$on(
       CustomEvents.SWITCH_DEFINITION_END,
       this.onElementReload.bind(this)
@@ -139,6 +143,7 @@ class Template {
   }
 
   private onElementReload() {
+    // 切换清晰度结束后需要刷新video标签元素
     const el = this.options.el as HTMLElement;
     this.videoElement = el.querySelector(".player-video");
   }
@@ -176,6 +181,7 @@ class Template {
   }
 
   destroy() {
+    // 销毁的时候重置所有元素，防止移除元素之后保存其引用
     this.resetData();
   }
 }

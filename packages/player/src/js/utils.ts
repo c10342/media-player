@@ -1,5 +1,6 @@
 import { AnimationClassName } from "../types";
 
+// 检查数据是否越界
 export function checkData(data: number, min: number, max: number) {
   if (data > max) {
     return max;
@@ -19,7 +20,7 @@ export function getAnimationClassName(name: string): AnimationClassName {
   };
 }
 
-// 获取样式
+// 获取元素样式
 export function getElementStyle(element: HTMLElement, styleName: any) {
   if (styleName) {
     return document.defaultView?.getComputedStyle(element, null)[styleName];

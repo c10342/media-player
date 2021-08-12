@@ -26,7 +26,7 @@ export enum CanFocusTagEnum {
   textarea = "TEXTAREA"
 }
 
-// 键盘
+// 键盘keycode值
 export enum KeyCodeEnum {
   esc = 27,
   space = 32,
@@ -36,6 +36,7 @@ export enum KeyCodeEnum {
   down = 40
 }
 
+// 全屏类型
 export enum FullScreenTypeEnum {
   web = "web",
   browser = "browser"
