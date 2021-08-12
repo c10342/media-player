@@ -1,4 +1,4 @@
-import ponintListTpl from "./template/point-list.art";
+import pointListTpl from "./template/point-list.art";
 import "./style/index.scss";
 import { EventManager, isArray } from "@media/utils";
 import { HighlightList, HighlightOptions } from "./types";
@@ -19,11 +19,11 @@ class Highlight {
   private Player: any;
   // 是否正在加载标志位
   private load = true;
-  // 高亮的dom元素
+  // 提示点的dom元素
   private element: HTMLElement | null;
   // 事件管理器
   private eventManager: EventManager | null;
-  // 高亮参数
+  // 提示点参数
   private options: HighlightOptions;
 
   constructor(el: HTMLElement, instance: any, Player: any) {
@@ -31,14 +31,15 @@ class Highlight {
     this.el = el;
     this.instance = instance;
     this.Player = Player;
-    // 获取高亮列表，开发者可以通过options传进来
+    // 合并默认参数
     const options = this.instance.options?.highlightOptions ?? {};
     this.options = { ...defaultOptions, ...options };
     this.initVar();
-    // 往播放器构造函数中挂在方法
+    // 往播放器实例中挂在方法
     this.extendMethods();
     // 开始初始化
     this.init();
+    // 销毁
     this.instance.$on("destroy", () => {
       this.destroyHighlight();
     });
@@ -53,17 +54,17 @@ class Highlight {
   }
 
   private extendMethods() {
-    this.Player.extend({
-      // 设置高亮列表
+    this.instance.extend({
+      // 设置提示点列表
       setHighlight: (list: HighlightList) => this.setHighlight(list),
-      // 销毁高亮列表
+      // 销毁提示点列表
       destroyHighlight: () => this.destroyHighlight()
     });
   }
 
   // 初始化
   private init() {
-    // 高亮需要获取总时长，计算出高亮点的位置
+    // 提示点需要获取总时长，计算出提示点的位置
     if (this.duration && this.duration > 0) {
       // 总时长存在并且大于0，说明视频已经加载好了
       this.load = true;
@@ -77,7 +78,7 @@ class Highlight {
     }
   }
 
-  // 设置高亮列表
+  // 设置提示点列表
   setHighlight(list: HighlightList) {
     this.options.list = list;
     this.initElement();
@@ -86,27 +87,29 @@ class Highlight {
   initElement() {
     const highlightList = this.options.list;
     if (!this.load || !isArray(highlightList) || highlightList.length === 0) {
-      // 视频没加载完成或者高亮列表为空不做任何操作
+      // 视频没加载完成或者提示点列表为空不做任何操作
       return;
     }
     // 为防止重复设置,每次设置需要销毁上一次的
     this.destroyHighlight();
     // 找到进度条的dom元素
     const progressBar = this.el.querySelector(".player-process-content");
-    // 开始渲染高亮列表
+    // 开始渲染提示点列表
     const div = document.createElement("div");
-    div.innerHTML = ponintListTpl({
+    div.innerHTML = pointListTpl({
       highlightList,
       duration: this.duration
     });
-    // 保存渲染出来的高亮列表
+    // 保存渲染出来的提示点元素
     this.element = div;
     // 插入到进度条中
     progressBar?.appendChild(div);
+    // 事件监听
     this.initListener();
   }
 
   initListener() {
+    // 事件委托，不要去监听单个元素的
     this.eventManager?.addEventListener({
       element: this.element,
       eventName: "click",
@@ -123,19 +126,23 @@ class Highlight {
     const target = event.target as HTMLElement;
     const dataset = target.dataset;
     if (dataset && dataset.index) {
+      // 点击的是提示点
       const highlightList = this.options.list as HighlightList;
       const item = highlightList[dataset.index as any];
       if (jump) {
+        // 跳转
         this.instance.seek(item.time);
       }
       if (showTip) {
+        // 显示提示
         this.instance.setNotice(item.text);
       }
+      // 发射自定义事件
       this.instance.$emit("highlight-click", item);
     }
   }
 
-  // 销毁高亮列表
+  // 销毁提示点列表
   destroyHighlight() {
     this.removeListener();
     if (this.element) {
