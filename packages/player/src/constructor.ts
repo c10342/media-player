@@ -273,11 +273,11 @@ class Player extends EventEmit {
   }
   // 视频当前时间
   get currentTime() {
-    return this.videoElement?.currentTime ?? 0;
+    return this.videoElement?.currentTime || 0;
   }
   // 视频总时间
   get duration() {
-    return this.videoElement?.duration ?? 0;
+    return this.videoElement?.duration || 0;
   }
   // 音量
   get volume() {
