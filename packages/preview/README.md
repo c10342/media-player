@@ -10,7 +10,7 @@ npm i @media/preview
 
 ```javascript
 import VideoPlayer from "@media/player";
-import preview from "@media/preview";
+import Preview from "@media/preview";
 VideoPlayer.use(Preview);
 ```
 
@@ -78,7 +78,7 @@ const player = new VideoPlayer({
 
 - `player.setBarView(barPreviewUrl:string)` : 设置进度条预览
 
-- `player.destroyPreview()` : 销毁进度条预览
+- `player.destroyBarView()` : 销毁进度条预览
 
 ## list 格式
 
