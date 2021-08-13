@@ -1,7 +1,9 @@
 import VideoPlayer from "@media/player";
 import Highlight from "@media/highlight";
 import Screenshot from "@media/screenshot";
+import Preview from "@media/preview";
 VideoPlayer.use(Highlight);
+VideoPlayer.use(Preview);
 // VideoPlayer.use(Screenshot);
 import "./index.scss";
 
@@ -20,6 +22,17 @@ const highlightList = [
   {
     time: 100,
     text: "这是第 100 秒"
+  }
+];
+
+const previewList = [
+  {
+    time: 40,
+    url: "http://192.168.35.224/statics/images/default/default-cover-live.png"
+  },
+  {
+    time: 80,
+    url: "http://192.168.35.224/statics/images/default/default-cover-live.png"
   }
 ];
 
@@ -74,6 +87,10 @@ const player = new VideoPlayer({
     open: true,
     // 点击后自动下载,默认true，你可以设置为false，然后通过事件监听来自定义点击之后的操作
     download: true
+  },
+  previewOptions: {
+    list: previewList,
+    barPreviewUrl: "https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg"
   }
   // hotkey:true
   // live:true
@@ -96,6 +113,16 @@ player.$on("ratechange", () => {
 });
 player.$on("highlight-click", (item: any) => {
   console.log(item);
+});
+player.$on("preview-click", (item: any) => {
+  console.log(item);
+});
+
+document.querySelector(".setoptions")?.addEventListener("click", () => {
+  (player as any).setPreview(previewList);
+});
+document.querySelector(".destroyoptions")?.addEventListener("click", () => {
+  (player as any).destroyPreview();
 });
 document.querySelector(".play")?.addEventListener("click", function () {
   player.play();
