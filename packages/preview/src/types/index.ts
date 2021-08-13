@@ -3,6 +3,8 @@ export type PreviewListItem = {
   time: number;
   // 图片地址
   url: string;
+  // alt属性
+  alt?: string;
   // 其他数据
   [key: string]: any;
 };
@@ -10,7 +12,7 @@ export type PreviewListItem = {
 export type PreviewList = Array<PreviewListItem>;
 
 export interface PreviewOptions {
-  // 提示点列表
+  // 预览点列表
   list?: PreviewList;
   barPreviewUrl?: string;
 }

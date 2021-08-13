@@ -20,13 +20,15 @@ class Preview {
   private Player: any;
   // 是否正在加载标志位
   private load = true;
-  // 提示点的dom元素
+  // 预览点的dom元素
   private element: HTMLElement | null;
   // 事件管理器
   private eventManager: EventManager | null;
   // 参数
   private options: PreviewOptions;
+  // 进度条预览图片元素
   private barViewElement: HTMLElement | null;
+  // 进度条容器
   private progressElement: HTMLElement | null;
 
   constructor(el: HTMLElement, instance: any, Player: any) {
@@ -37,7 +39,7 @@ class Preview {
     // 参数
     const options = this.instance.options?.previewOptions ?? {};
     this.options = { ...defaultOptions, ...options };
-    this.initVar();
+    this.eventManager = new EventManager();
     // 往播放器实例中挂在方法
     this.extendMethods();
     // 开始初始化
@@ -45,11 +47,8 @@ class Preview {
     // 销毁
     this.instance.$on("destroy", () => {
       this.destroyPreview();
+      this.destroyBarView();
     });
-  }
-
-  private initVar() {
-    this.eventManager = new EventManager();
   }
 
   private get duration() {
@@ -61,7 +60,11 @@ class Preview {
       // 设置预览点列表
       setPreview: (list: PreviewList) => this.setPreview(list),
       // 销毁预览点列表
-      destroyPreview: () => this.destroyPreview()
+      destroyPreview: () => this.destroyPreview(),
+      // 设置进度条预览
+      setBarView: (barPreviewUrl: string) => this.setBarView(barPreviewUrl),
+      // 销毁进度条预览
+      destroyBarView: () => this.destroyBarView()
     });
   }
 
@@ -90,7 +93,7 @@ class Preview {
       return;
     }
     // 为防止重复设置,每次设置需要销毁上一次的
-    this.destroyPreview();
+    this.removePreviewElementAndListener();
     // 找到进度条的dom元素
     const progressBar = this.el.querySelector(".player-process-mask");
     // 开始渲染预览点列表
@@ -166,10 +169,6 @@ class Preview {
     });
   }
 
-  private removeListener() {
-    this.eventManager?.removeEventListener();
-  }
-
   private onClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     const dataset = target.dataset;
@@ -182,15 +181,20 @@ class Preview {
     }
   }
 
+  // 初始化进度条的图片预览
   private initBarView() {
     const barPreviewUrl = this.options.barPreviewUrl;
     if (!isUndef(barPreviewUrl)) {
+      // 创建一个div出来，图片使用背景图
       const div = this.createBarViewWrapper();
+      // 找到进度条容器
       this.progressElement = this.el.querySelector(
         ".player-process-content"
       ) as HTMLElement;
+      // 插入到容器中
       this.progressElement?.appendChild(div);
       this.barViewElement = div;
+      // 监听移动事件
       this.eventManager?.addEventListener({
         element: this.progressElement,
         eventName: "mousemove",
@@ -199,6 +203,7 @@ class Preview {
     }
   }
 
+  // 创建一个进度条预览的div出来
   private createBarViewWrapper() {
     const videoElement = this.instance.videoElement;
     const height =
@@ -211,24 +216,58 @@ class Preview {
     return div;
   }
 
+  // 鼠标移动事件
   private onMousemove(event: MouseEvent) {
-    if (this.barViewElement && this.progressElement) {
+    if (!isUndef(this.barViewElement) && !isUndef(this.progressElement)) {
       const clientRect = this.progressElement.getBoundingClientRect();
+      // 鼠标距离左边最小的距离
       const minLeft = barViewImageWidth / 2;
+      // 鼠标距离最左边的最大距离
       const maxLeft =
         clientRect.right - this.el.getBoundingClientRect().left - minLeft;
+      // 鼠标距离容器左边的距离
       const left = event.pageX - clientRect.left;
+      // 设置图片的位置
       this.barViewElement.style.left = `${
         checkData(left, minLeft, maxLeft) - minLeft
       }px`;
-      // const time = this.instance.duration * (checkData(left,0,clientRect.width) / clientRect.width);
-      const aa = Math.ceil(
+      // 找到第几张背景图
+      const indexPic = Math.floor(
         (checkData(left, 0, clientRect.width) / clientRect.width) * 100
       );
+      // 改变背景图的位置
       this.barViewElement.style.backgroundPosition = `-${
-        aa * barViewImageWidth
+        indexPic * barViewImageWidth
       }px 0`;
     }
+  }
+
+  private removeBarViewElementAndListener() {
+    this.eventManager?.removeElementEventListener(this.progressElement);
+    if (this.barViewElement) {
+      this.barViewElement.parentNode?.removeChild(this.barViewElement);
+      this.barViewElement = null;
+    }
+  }
+
+  private removePreviewElementAndListener() {
+    this.eventManager?.removeElementEventListener(this.element);
+    if (this.element) {
+      this.element.parentNode?.removeChild(this.element);
+      this.element = null;
+    }
+  }
+
+  // 设置进度条预览
+  setBarView(barPreviewUrl: string) {
+    this.options.barPreviewUrl = barPreviewUrl;
+    this.initBarView();
+  }
+
+  // 销毁进度条预览
+  destroyBarView() {
+    this.options.barPreviewUrl = undefined;
+    this.removeBarViewElementAndListener();
   }
 
   // 设置预览点列表
@@ -239,11 +278,8 @@ class Preview {
 
   // 销毁预览点列表
   destroyPreview() {
-    this.removeListener();
-    if (this.element) {
-      this.element.parentNode?.removeChild(this.element);
-      this.element = null;
-    }
+    this.options.list = [];
+    this.removePreviewElementAndListener();
   }
 }
 

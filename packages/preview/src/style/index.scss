@@ -41,10 +41,18 @@
   transform: translate(-50%, -100%);
 }
 
+.player-process-content {
+  &:hover {
+    .preview-bar-image {
+      display: block;
+    }
+  }
+}
+
 .preview-bar-image {
   position: absolute;
   top: 2px;
   left: 0;
-  z-index: 11;
+  display: none;
   transform: translateY(-100%);
 }
