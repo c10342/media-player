@@ -192,7 +192,7 @@ player.fullScreen.cancel("browser");
 构造器函数（类）会接受到三个参数：
 
 - el：整个播放器的dom元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`
-- instance：播放器实例，即`new VideoPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往事例中挂载其他属性或者方法
+- instance：播放器实例，即`new VideoPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往实例中挂载其他属性或者方法
 - VideoPlayer：播放器的构造函数，你可以往他的`prototype`原型上添加属性或者方法。但是需要注意的时，当播放器被`new`了多次之后，后面添加属性或者方法会覆盖掉前面的。所以这个参数很少会被用到
 
 插件代码示例：
