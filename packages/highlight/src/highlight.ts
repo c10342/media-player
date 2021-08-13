@@ -78,12 +78,6 @@ class Highlight {
     }
   }
 
-  // 设置提示点列表
-  setHighlight(list: HighlightList) {
-    this.options.list = list;
-    this.initElement();
-  }
-
   private initElement() {
     const highlightList = this.options.list;
     if (!this.load || !isArray(highlightList) || highlightList.length === 0) {
@@ -91,7 +85,7 @@ class Highlight {
       return;
     }
     // 为防止重复设置,每次设置需要销毁上一次的
-    this.destroyHighlight();
+    this.removeElementAndListener();
     // 找到进度条的dom元素
     const progressBar = this.el.querySelector(".player-process-content");
     // 开始渲染提示点列表
@@ -169,18 +163,17 @@ class Highlight {
     });
   }
 
-  private removeListener() {
-    this.eventManager?.removeEventListener();
-  }
-
   private onClick(event: MouseEvent) {
     const { jump, showTip } = this.options;
     const target = event.target as HTMLElement;
     const dataset = target.dataset;
+
     if (dataset && dataset.index) {
       // 点击的是提示点
       const highlightList = this.options.list as HighlightList;
       const item = highlightList[dataset.index as any];
+      console.log(item, dataset.index);
+
       if (jump) {
         // 跳转
         this.instance.seek(item.time);
@@ -194,13 +187,24 @@ class Highlight {
     }
   }
 
-  // 销毁提示点列表
-  destroyHighlight() {
-    this.removeListener();
+  private removeElementAndListener() {
+    this.eventManager?.removeEventListener();
     if (this.element) {
       this.element.parentNode?.removeChild(this.element);
       this.element = null;
     }
+  }
+
+  // 设置提示点列表
+  setHighlight(list: HighlightList) {
+    this.options.list = list;
+    this.initElement();
+  }
+
+  // 销毁提示点列表
+  destroyHighlight() {
+    this.options.list = [];
+    this.removeElementAndListener();
   }
 }
 

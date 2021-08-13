@@ -69,6 +69,6 @@ player.$on("highlight-click", (item) => {
 
 | 字段 | 说明     | 类型    |
 | ---- | -------- | ------- |
-| time | 时间点   | boolean |
+| time | 时间点   | number |
 | text | 显示文本 | string  |
 
