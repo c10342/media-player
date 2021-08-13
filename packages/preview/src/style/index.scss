@@ -1,0 +1,50 @@
+.preview-container {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+
+  &:hover {
+    .preview-point {
+      width: 8px;
+      height: 6px;
+    }
+
+    .preview-image {
+      opacity: 1;
+    }
+  }
+}
+
+.preview-point {
+  width: 6px;
+  height: 3px;
+  background-color: #2097fd;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.preview-image {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  box-sizing: border-box;
+  width: 128px;
+  height: 72px;
+  pointer-events: none;
+  border-radius: 2px;
+  opacity: 0;
+  transform: translate(-50%, -100%);
+}
+
+.preview-bar-image {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  z-index: 11;
+  transform: translateY(-100%);
+}
