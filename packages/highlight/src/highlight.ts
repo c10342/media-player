@@ -1,6 +1,6 @@
 import pointListTpl from "./template/point-list.art";
 import "./style/index.scss";
-import { EventManager, isArray } from "@media/utils";
+import { EventManager, isArray, isUndef } from "@media/utils";
 import { HighlightList, HighlightOptions } from "./types";
 
 const defaultOptions = {
@@ -45,7 +45,7 @@ class Highlight {
     });
   }
 
-  initVar() {
+  private initVar() {
     this.eventManager = new EventManager();
   }
 
@@ -84,7 +84,7 @@ class Highlight {
     this.initElement();
   }
 
-  initElement() {
+  private initElement() {
     const highlightList = this.options.list;
     if (!this.load || !isArray(highlightList) || highlightList.length === 0) {
       // 视频没加载完成或者提示点列表为空不做任何操作
@@ -106,9 +106,61 @@ class Highlight {
     progressBar?.appendChild(div);
     // 事件监听
     this.initListener();
+    // 调整位置，有些在最右边或者最左边的可能会被隐藏掉
+    this.adjustPosition();
+  }
+  // 调整位置
+  private adjustPosition() {
+    const pointListElement = this.element?.querySelectorAll(
+      ".highlight-point-tip"
+    );
+    const { left, right } = this.el.getBoundingClientRect();
+    if (!isUndef(pointListElement)) {
+      this.adjustLeft(pointListElement, left);
+      this.adjustRight(pointListElement, right);
+    }
   }
 
-  initListener() {
+  // 调整左边的距离
+  private adjustLeft(pointListElement: NodeListOf<Element>, left: number) {
+    const length = pointListElement.length;
+    for (let i = 0; i < length; i++) {
+      const element = pointListElement[i] as HTMLElement;
+      const clientRect = element.getBoundingClientRect();
+      if (left > clientRect.left) {
+        // 容器距离页面左边的距离大于元素距离页面左边的距离，说明元素被遮挡住了，需要调整一下
+        const parentLeft =
+          element.parentElement?.getBoundingClientRect().left ?? 0;
+        const offsetLeft = parentLeft - left;
+        element.style.left = `${-offsetLeft}px`;
+        element.style.transform = "translate(0,-100%)";
+      } else {
+        // 找到一个不被遮挡的元素就不用遍历后面的了
+        break;
+      }
+    }
+  }
+
+  // 调整右边距离
+  private adjustRight(pointListElement: NodeListOf<Element>, right: number) {
+    const length = pointListElement.length;
+    for (let i = length - 1; i >= 0; i--) {
+      const element = pointListElement[i] as HTMLElement;
+      const clientRect = element.getBoundingClientRect();
+      if (right < clientRect.right) {
+        const parentRight =
+          element.parentElement?.getBoundingClientRect().right ?? 0;
+        const offsetRight = right - parentRight;
+        element.style.left = `${offsetRight}px`;
+        element.style.transform = "translate(-100%,-100%)";
+      } else {
+        // 找到一个不被遮挡的元素就不用遍历前面的了
+        break;
+      }
+    }
+  }
+
+  private initListener() {
     // 事件委托，不要去监听单个元素的
     this.eventManager?.addEventListener({
       element: this.element,
@@ -117,11 +169,11 @@ class Highlight {
     });
   }
 
-  removeListener() {
+  private removeListener() {
     this.eventManager?.removeEventListener();
   }
 
-  onClick(event: MouseEvent) {
+  private onClick(event: MouseEvent) {
     const { jump, showTip } = this.options;
     const target = event.target as HTMLElement;
     const dataset = target.dataset;

@@ -1,9 +1,7 @@
 {{each highlightList}}
-<span
-  style="left: {{ ( $value.time / duration ) * 100 }}%;"
-  class="highlight-point"
-  data-index='{{$index}}'
->
-  <span class="highlight-point-tip">{{ $value.text }}</span>
+<span class='highlight-container'  style="left: {{ ( $value.time / duration ) * 100 }}%;" data-index='{{$index}}'>
+<span class="highlight-point"></span>
+<span class="highlight-point-tip">{{ $value.text }}</span>
 </span>
+
 {{/each}}
