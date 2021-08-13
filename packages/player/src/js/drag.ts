@@ -1,7 +1,12 @@
-import { EventManager, isFunction, isUndef, userSelect } from "@media/utils";
+import {
+  EventManager,
+  isFunction,
+  isUndef,
+  userSelect,
+  checkData
+} from "@media/utils";
 import { HtmlElementProp } from "../types";
 import EventEmit from "./event-emit";
-import { checkData } from "./utils";
 
 interface DragOptions {
   dragElement: HtmlElementProp;

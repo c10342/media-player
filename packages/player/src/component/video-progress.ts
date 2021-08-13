@@ -1,5 +1,10 @@
-import { EventManager, isNumber, isUndef, secondToTime } from "@media/utils";
-import { checkData } from "../js/utils";
+import {
+  EventManager,
+  isNumber,
+  isUndef,
+  secondToTime,
+  checkData
+} from "@media/utils";
 import { ComponentOptions } from "../types";
 import Drag from "../js/drag";
 import { CustomEvents, VideoEvents } from "../js/event";

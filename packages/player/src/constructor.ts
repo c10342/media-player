@@ -1,6 +1,6 @@
 import Template from "./js/template";
 import { PlayerOptions } from "./types";
-import { isArray, isString, isUndef } from "@media/utils";
+import { isArray, isUndef, checkData } from "@media/utils";
 import VideoPlayer from "./component/video-player";
 import VideoPlayButton from "./component/video-play-button";
 import VideoTime from "./component/video-time";
@@ -14,7 +14,6 @@ import VideoControls from "./component/video-controls";
 import EventEmit from "./js/event-emit";
 import { CustomEvents } from "./js/event";
 import ShortcutKey from "./js/shortcut-key";
-import { checkData } from "./js/utils";
 import { FullScreenTypeEnum } from "./config/enum";
 
 class Player extends EventEmit {
