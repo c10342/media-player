@@ -2,6 +2,8 @@ import "./style/index.scss";
 import { EventManager, isUndef, logError } from "@media/utils";
 import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
+import { ClassNameEnum, CustomEvents, PlayerEvents } from "./config/enum";
+import { downloadPicName } from "./config/constant";
 
 const defaultOptions = {
   open: true,
@@ -45,7 +47,7 @@ class Screenshot {
       // 初始化dom
       this.initElement();
       // 销毁
-      this.instance.$on("destroy", () => {
+      this.instance.$on(PlayerEvents.DESTROY, () => {
         this.destroy();
       });
     }
@@ -65,8 +67,7 @@ class Screenshot {
   // 渲染小图标
   private initElement() {
     const span = document.createElement("span");
-    span.className =
-      "screenshot-icon-screenshot player-icon-item screenshot-icon-item";
+    span.className = ClassNameEnum.ICON;
     const parentNode = this.el.querySelector(".player-controls-right");
     parentNode?.insertBefore(span, parentNode?.firstElementChild);
     this.element = span;
@@ -89,7 +90,7 @@ class Screenshot {
   private onClick() {
     const imageSrc = this.getVideoImage();
     // 广播事件
-    this.instance.$emit("screenshot", imageSrc);
+    this.instance.$emit(CustomEvents.SCREENSHOT, imageSrc);
     if (this.options.download && !isUndef(imageSrc)) {
       // 下载图片
       this.downloadImage(imageSrc);
@@ -97,7 +98,7 @@ class Screenshot {
   }
 
   private downloadImage(imageSrc: string) {
-    downloadBase64("screenshot.png", imageSrc);
+    downloadBase64(this.options.picName || downloadPicName, imageSrc);
   }
 
   private getVideoImage() {
