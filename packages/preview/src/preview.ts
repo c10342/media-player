@@ -37,12 +37,6 @@ class Preview {
   // 进度条容器
   private progressElement: HTMLElement | null;
 
-  // 进度条容器信息
-  private progressInfo: ProgressInfo;
-
-  // 播放器容器信息
-  private containerInfo: { left: number };
-
   constructor(el: HTMLElement, instance: any, Player: any) {
     // 保存一下播放器给来的参数
     this.el = el;
@@ -81,10 +75,6 @@ class Preview {
     this.instance.$on("destroy", () => {
       this.destroyPreview();
       this.destroyBarView();
-    });
-    this.instance.$on("resize", () => {
-      this.adjustPosition();
-      this.getInfo();
     });
   }
   // 初始化
@@ -213,7 +203,6 @@ class Preview {
       // 插入到容器中
       this.progressElement?.appendChild(div);
       this.barViewElement = div;
-      this.getInfo();
       // 监听移动事件
       this.eventManager?.addEventListener({
         element: this.progressElement,
@@ -239,8 +228,8 @@ class Preview {
   // 鼠标移动事件
   private onMousemove(event: MouseEvent) {
     if (!isUndef(this.barViewElement) && !isUndef(this.progressElement)) {
-      const progressInfo = this.progressInfo;
-      const containerInfo = this.containerInfo;
+      const progressInfo = this.progressElement.getBoundingClientRect();
+      const containerInfo = this.el.getBoundingClientRect();
       // 鼠标距离左边最小的距离
       const minLeft = barViewImageWidth / 2;
       // 鼠标距离最左边的最大距离
@@ -259,21 +248,6 @@ class Preview {
       this.barViewElement.style.backgroundPosition = `-${
         indexPic * barViewImageWidth
       }px 0`;
-    }
-  }
-
-  private getInfo() {
-    if (!isUndef(this.options.barPreviewUrl)) {
-      const progressClientRect = this.progressElement?.getBoundingClientRect();
-      this.progressInfo = {
-        left: progressClientRect?.left || 0,
-        width: progressClientRect?.width || 0,
-        right: progressClientRect?.right || 0
-      };
-      const containerClientRect = this.el.getBoundingClientRect();
-      this.containerInfo = {
-        left: containerClientRect.left
-      };
     }
   }
 
