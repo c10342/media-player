@@ -2,6 +2,7 @@ import VideoPlayer from "@media/player";
 import Highlight from "@media/highlight";
 import Screenshot from "@media/screenshot";
 import Preview from "@media/preview";
+import Zoom from "@media/zoom";
 VideoPlayer.use(Highlight);
 VideoPlayer.use(Preview);
 // VideoPlayer.use(Screenshot);
@@ -80,7 +81,7 @@ const player = new VideoPlayer({
       value: 1.5
     }
   ],
-  plugins: [Screenshot],
+  plugins: [Screenshot, Zoom],
   highlightOptions: {
     jump: true,
     showTip: true,
