@@ -2,6 +2,7 @@ import pointListTpl from "./template/point-list.art";
 import "./style/index.scss";
 import { EventManager, isArray, isUndef } from "@media/utils";
 import { HighlightList, HighlightOptions } from "./types";
+import { CustomEvents, PlayerEvents } from "./config/enum";
 
 const defaultOptions = {
   jump: true,
@@ -61,7 +62,7 @@ class Highlight {
 
   private initInstanceListener() {
     // 销毁
-    this.instance.$on("destroy", () => {
+    this.instance.$on(PlayerEvents.DESTROY, () => {
       this.destroyHighlight();
     });
   }
@@ -75,7 +76,7 @@ class Highlight {
       this.initElement();
     } else {
       // 获取不到总时长说明视频没有加载完成，需要等待加载完成在执行下一步操作
-      this.instance.$once("loadedmetadata", () => {
+      this.instance.$once(PlayerEvents.LOADEDMETADATA, () => {
         this.load = true;
         this.initElement();
       });
@@ -176,7 +177,6 @@ class Highlight {
       // 点击的是提示点
       const highlightList = this.options.list as HighlightList;
       const item = highlightList[dataset.index as any];
-      console.log(item, dataset.index);
 
       if (jump) {
         // 跳转
@@ -187,7 +187,7 @@ class Highlight {
         this.instance.setNotice(item.text);
       }
       // 发射自定义事件
-      this.instance.$emit("highlight-click", item);
+      this.instance.$emit(CustomEvents.HIGHLIGHTCLICK, item);
     }
   }
 
