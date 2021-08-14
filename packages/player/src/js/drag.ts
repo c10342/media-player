@@ -11,6 +11,8 @@ import EventEmit from "./event-emit";
 interface DragOptions {
   dragElement: HtmlElementProp;
   wrapperElement: HtmlElementProp;
+  // 是否节流
+  throttle?: boolean;
 }
 
 interface WrapperInfo {
@@ -19,6 +21,10 @@ interface WrapperInfo {
 }
 
 type MouseFunction = (event: MouseEvent) => void;
+
+const defaultOptions = {
+  throttle: true
+};
 
 class Drag extends EventEmit {
   // 鼠标是否按下
@@ -33,14 +39,17 @@ class Drag extends EventEmit {
   private eventManager: EventManager;
   // 参数
   private options: DragOptions;
+  // 容器信息
+  private wrapperInfo: WrapperInfo;
 
   constructor(options: DragOptions) {
     super();
-    this.options = options;
+    this.options = { ...defaultOptions, ...options };
     // 初始化所需要的变量和数据
     this.initVar();
+    this.getWrapperInfo();
     // 初始化拖拽行为
-    this.init();
+    this.initDrag();
   }
 
   private initVar() {
@@ -48,7 +57,7 @@ class Drag extends EventEmit {
     this._onMouseup = this.onMouseup.bind(this);
     this.eventManager = new EventManager();
   }
-  private getWrapperInfo(): WrapperInfo {
+  private getWrapperInfo() {
     let wrapperInfo = { left: 0, width: 0 };
     const wrapperElement = this.options?.wrapperElement;
     if (wrapperElement) {
@@ -58,9 +67,9 @@ class Drag extends EventEmit {
         width: clientRect.width
       };
     }
-    return wrapperInfo;
+    this.wrapperInfo = wrapperInfo;
   }
-  private init() {
+  private initDrag() {
     // 进行拖拽的元素
     const dragElement = this.options?.dragElement;
     // 在那个容器上面进行拖拽
@@ -95,8 +104,12 @@ class Drag extends EventEmit {
   // 拖拽容器的点击事件
   private onWrapperElementClick(event: MouseEvent) {
     event.stopPropagation();
+    if (!this.options.throttle) {
+      this.getWrapperInfo();
+    }
     // 获取容器的宽度和记录页面左边的距离
-    const { left, width } = this.getWrapperInfo();
+    const { left, width } = this.wrapperInfo;
+
     // 获取鼠标点击的位置
     const clientX = event.clientX;
     // 拿到点击的位置距离容器左边的距离
@@ -137,8 +150,11 @@ class Drag extends EventEmit {
       // 一定要鼠标按下才能开始移动
       return;
     }
+    if (!this.options.throttle) {
+      this.getWrapperInfo();
+    }
     // 获取拖拽容器相关信息
-    const { left, width } = this.getWrapperInfo();
+    const { left, width } = this.wrapperInfo;
 
     //   计算移动距离
     let offsetX = event.pageX - left;
@@ -157,6 +173,11 @@ class Drag extends EventEmit {
     this.isMousedown = false;
     this.removeEventListener();
     this.$emit("mouseup", this.percent);
+  }
+
+  // 尺寸发生变化需要重新获取一下数据
+  reload() {
+    this.getWrapperInfo();
   }
 
   destroy() {

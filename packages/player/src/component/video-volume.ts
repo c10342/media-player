@@ -48,7 +48,8 @@ class VideoVolume {
     if (!isUndef(volumeMaskElement) && !isUndef(volumeBallElement)) {
       this.dragInstance = new Drag({
         dragElement: volumeBallElement,
-        wrapperElement: volumeMaskElement
+        wrapperElement: volumeMaskElement,
+        throttle: false
       });
       this.dragInstance.$on("mousemove", (percent: number) => {
         // 拖拽过程中实时设置音量

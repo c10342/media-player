@@ -1,3 +1,4 @@
+import { debounce, isUndef } from "@media/utils";
 import Player from "../constructor";
 import { t } from "../locale";
 import templateTpl from "../template/layout.art";
@@ -75,6 +76,9 @@ class Template {
 
   controlsElement: HtmlElementProp;
 
+  // dom观察实例
+  observer: ResizeObserver | null;
+
   constructor(options: OptionsParams) {
     this.options = options;
     // 初始化模板，插入元素
@@ -83,6 +87,8 @@ class Template {
     this.initElement();
     // 初始化事件监听
     this.initListener();
+    // 监听dom变化
+    this.initResize();
   }
 
   private initTemplate() {
@@ -142,6 +148,18 @@ class Template {
     );
   }
 
+  private initResize() {
+    if (!isUndef(this.containerElement)) {
+      this.observer = new ResizeObserver(
+        debounce(() => {
+          this.options.instance.$emit(CustomEvents.RESIZE);
+        }, 300)
+      );
+      // 以上述配置开始观察目标节点
+      this.observer.observe(this.containerElement);
+    }
+  }
+
   private onElementReload() {
     // 切换清晰度结束后需要刷新video标签元素
     const el = this.options.el as HTMLElement;
@@ -181,6 +199,8 @@ class Template {
   }
 
   destroy() {
+    this.observer?.disconnect();
+    this.observer = null;
     // 销毁的时候重置所有元素，防止移除元素之后保存其引用
     this.resetData();
   }

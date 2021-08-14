@@ -8,7 +8,8 @@ export enum CustomEvents {
   ENTER_WEB_SCREEN = "enter_web_screen",
   EXIT_WEB_SCREEN = "exit_web_screen",
   SHOW_CONTROLS = "show_controls",
-  HIDE_CONTROLS = "hide_controls"
+  HIDE_CONTROLS = "hide_controls",
+  RESIZE = "resize"
 }
 
 // video标签事件

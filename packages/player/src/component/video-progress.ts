@@ -15,10 +15,12 @@ class VideoProgress {
   private currentTime = 0;
   private dragInstance: Drag | null;
   private isMousedown = false;
+  private processMaskInfo: { left: number; width: number };
   private eventManager: EventManager;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
+    this.getProcessMaskInfo();
     // 初始化拖拽事件
     this.initDrag();
     // 初始化进度条事件
@@ -38,7 +40,7 @@ class VideoProgress {
   private getProcessMaskInfo() {
     const clientRect =
       this.options.templateInstance.progressMaskElement?.getBoundingClientRect();
-    return {
+    this.processMaskInfo = {
       left: clientRect?.left || 0,
       width: clientRect?.width || 0
     };
@@ -103,6 +105,7 @@ class VideoProgress {
     instance.$on(VideoEvents.TIMEUPDATE, this.onVideoTimeupdate.bind(this));
     instance.$on(VideoEvents.PROGRESS, this.onVideoProgress.bind(this));
     instance.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
+    instance.$on(CustomEvents.RESIZE, this.onResize.bind(this));
   }
 
   // 鼠标进入进度条容器
@@ -219,7 +222,7 @@ class VideoProgress {
   private showProcessTime(event: MouseEvent) {
     const processTimeElement = this.options.templateInstance.processTimeElement;
     if (!isUndef(processTimeElement)) {
-      const { left, width } = this.getProcessMaskInfo();
+      const { left, width } = this.processMaskInfo;
       let offsetX = event.pageX - left;
       offsetX = checkData(offsetX, 0, width);
       processTimeElement.style.left = `${offsetX}px`;
@@ -234,6 +237,13 @@ class VideoProgress {
     if (processTimeElement) {
       processTimeElement.style.opacity = "";
     }
+  }
+
+  // 尺寸发生变化
+  private onResize() {
+    // 需要刷新一下数据
+    this.dragInstance?.reload();
+    this.getProcessMaskInfo();
   }
 
   private destroy() {
