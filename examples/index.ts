@@ -12,6 +12,10 @@ import "./index.scss";
 
 const highlightList = [
   {
+    time: 0,
+    text: "这是第 20 秒"
+  },
+  {
     time: 20,
     text: "这是第 20 秒"
   },
@@ -25,16 +29,16 @@ const highlightList = [
   }
 ];
 
-const previewList = [
-  {
-    time: 40,
-    url: "http://192.168.35.224/statics/images/default/default-cover-live.png"
-  },
-  {
-    time: 80,
-    url: "http://192.168.35.224/statics/images/default/default-cover-live.png"
-  }
-];
+// const previewList = [
+//   {
+//     time: 40,
+//     url: "http://xxx/demo.png"
+//   },
+//   {
+//     time: 80,
+//     url: "http://xxx/demo.png"
+//   }
+// ];
 
 const player = new VideoPlayer({
   el: ".container",
@@ -89,7 +93,7 @@ const player = new VideoPlayer({
     download: true
   },
   previewOptions: {
-    list: previewList,
+    // list: previewList,
     barPreviewUrl: "https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg"
   }
   // hotkey:true
