@@ -1,0 +1,24 @@
+{
+  "name": "@media/zoom",
+  "version": "0.0.0",
+  "description": "zoom",
+  "main": "dist/index.js",
+  "doc": "index.ts",
+  "typings": "types/index.d.ts",
+  "keywords": [
+    "zoom"
+  ],
+  "homepage": "https://github.com/c10342/video-player",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c10342/video-player"
+  },
+  "author": "c10342",
+  "license": "MIT",
+  "dependencies": {
+    "@media/utils": "^0.0.0"
+  }
+}
