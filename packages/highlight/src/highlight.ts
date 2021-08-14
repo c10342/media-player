@@ -39,10 +39,7 @@ class Highlight {
     this.extendMethods();
     // 开始初始化
     this.init();
-    // 销毁
-    this.instance.$on("destroy", () => {
-      this.destroyHighlight();
-    });
+    this.initInstanceListener();
   }
 
   private initVar() {
@@ -59,6 +56,16 @@ class Highlight {
       setHighlight: (list: HighlightList) => this.setHighlight(list),
       // 销毁提示点列表
       destroyHighlight: () => this.destroyHighlight()
+    });
+  }
+
+  private initInstanceListener() {
+    // 销毁
+    this.instance.$on("destroy", () => {
+      this.destroyHighlight();
+    });
+    this.instance.$on("resize", () => {
+      this.adjustPosition();
     });
   }
 
