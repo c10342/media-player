@@ -7,3 +7,5 @@ export { default as EventManager } from "./src/event-manager";
 export { default as formatLangTemplate } from "./src/format-lang-template";
 export { default as checkData } from "./src/checkData";
 export { default as debounce } from "./src/debounce";
+export { default as EventEmit } from "./src/event-emit";
+export { default as Drag } from "./src/drag";
