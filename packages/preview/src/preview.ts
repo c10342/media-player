@@ -9,6 +9,12 @@ const defaultOptions = {
 
 const barViewImageWidth = 160;
 
+interface ProgressInfo {
+  width: number;
+  left: number;
+  right: number;
+}
+
 class Preview {
   // 插件名称.
   static pluginName = "Preview";
@@ -31,6 +37,12 @@ class Preview {
   // 进度条容器
   private progressElement: HTMLElement | null;
 
+  // 进度条容器信息
+  private progressInfo: ProgressInfo;
+
+  // 播放器容器信息
+  private containerInfo: { left: number };
+
   constructor(el: HTMLElement, instance: any, Player: any) {
     // 保存一下播放器给来的参数
     this.el = el;
@@ -44,11 +56,7 @@ class Preview {
     this.extendMethods();
     // 开始初始化
     this.initList();
-    // 销毁
-    this.instance.$on("destroy", () => {
-      this.destroyPreview();
-      this.destroyBarView();
-    });
+    this.initInstanceListener();
   }
 
   private get duration() {
@@ -68,6 +76,17 @@ class Preview {
     });
   }
 
+  private initInstanceListener() {
+    // 销毁
+    this.instance.$on("destroy", () => {
+      this.destroyPreview();
+      this.destroyBarView();
+    });
+    this.instance.$on("resize", () => {
+      this.adjustPosition();
+      this.getInfo();
+    });
+  }
   // 初始化
   private initList() {
     // 预览点需要获取总时长，计算出预览点的位置
@@ -194,6 +213,7 @@ class Preview {
       // 插入到容器中
       this.progressElement?.appendChild(div);
       this.barViewElement = div;
+      this.getInfo();
       // 监听移动事件
       this.eventManager?.addEventListener({
         element: this.progressElement,
@@ -219,26 +239,41 @@ class Preview {
   // 鼠标移动事件
   private onMousemove(event: MouseEvent) {
     if (!isUndef(this.barViewElement) && !isUndef(this.progressElement)) {
-      const clientRect = this.progressElement.getBoundingClientRect();
+      const progressInfo = this.progressInfo;
+      const containerInfo = this.containerInfo;
       // 鼠标距离左边最小的距离
       const minLeft = barViewImageWidth / 2;
       // 鼠标距离最左边的最大距离
-      const maxLeft =
-        clientRect.right - this.el.getBoundingClientRect().left - minLeft;
+      const maxLeft = progressInfo.right - containerInfo.left - minLeft;
       // 鼠标距离容器左边的距离
-      const left = event.pageX - clientRect.left;
+      const left = event.pageX - progressInfo.left;
       // 设置图片的位置
       this.barViewElement.style.left = `${
         checkData(left, minLeft, maxLeft) - minLeft
       }px`;
       // 找到第几张背景图
       const indexPic = Math.floor(
-        (checkData(left, 0, clientRect.width) / clientRect.width) * 100
+        (checkData(left, 0, progressInfo.width) / progressInfo.width) * 100
       );
       // 改变背景图的位置
       this.barViewElement.style.backgroundPosition = `-${
         indexPic * barViewImageWidth
       }px 0`;
+    }
+  }
+
+  private getInfo() {
+    if (!isUndef(this.options.barPreviewUrl)) {
+      const progressClientRect = this.progressElement?.getBoundingClientRect();
+      this.progressInfo = {
+        left: progressClientRect?.left || 0,
+        width: progressClientRect?.width || 0,
+        right: progressClientRect?.right || 0
+      };
+      const containerClientRect = this.el.getBoundingClientRect();
+      this.containerInfo = {
+        left: containerClientRect.left
+      };
     }
   }
 
