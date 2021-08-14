@@ -1,6 +1,5 @@
-import { EventManager, isUndef } from "@media/utils";
+import { EventManager, isUndef, EventEmit } from "@media/utils";
 import { AnimationClassName, HtmlElementProp } from "../types";
-import EventEmit from "./event-emit";
 import {
   getAnimationClassName,
   getElementStyle,

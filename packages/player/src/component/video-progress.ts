@@ -3,10 +3,10 @@ import {
   isNumber,
   isUndef,
   secondToTime,
-  checkData
+  checkData,
+  Drag
 } from "@media/utils";
-import { ComponentOptions } from "../types";
-import Drag from "../js/drag";
+import { ComponentOptions, DragDataInfo } from "../types";
 import { CustomEvents, VideoEvents } from "../js/event";
 import { t } from "../locale";
 
@@ -15,12 +15,10 @@ class VideoProgress {
   private currentTime = 0;
   private dragInstance: Drag | null;
   private isMousedown = false;
-  private processMaskInfo: { left: number; width: number };
   private eventManager: EventManager;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
-    this.getProcessMaskInfo();
     // 初始化拖拽事件
     this.initDrag();
     // 初始化进度条事件
@@ -40,7 +38,7 @@ class VideoProgress {
   private getProcessMaskInfo() {
     const clientRect =
       this.options.templateInstance.progressMaskElement?.getBoundingClientRect();
-    this.processMaskInfo = {
+    return {
       left: clientRect?.left || 0,
       width: clientRect?.width || 0
     };
@@ -60,9 +58,9 @@ class VideoProgress {
 
   private initDragListener() {
     // 鼠标移动
-    this.dragInstance?.$on("mousemove", (percent: number) => {
+    this.dragInstance?.$on("mousemove", (data: DragDataInfo) => {
       // 设置进度条
-      this.setPlayedProgressByPercent(percent);
+      this.setPlayedProgressByPercent(data.percentX);
     });
     // 鼠标按下
     this.dragInstance?.$on("mousedown", () => {
@@ -71,16 +69,16 @@ class VideoProgress {
       this.setTransitionDuration(0);
     });
     // 鼠标抬起
-    this.dragInstance?.$on("mouseup", (percent: number) => {
+    this.dragInstance?.$on("mouseup", (data: DragDataInfo) => {
       // 回复过度动画
       this.setTransitionDuration();
       // 跳转到时间
-      this.seekByPercent(percent);
+      this.seekByPercent(data.percentX);
     });
     // 点击事件
-    this.dragInstance?.$on("click", (percent: number) => {
+    this.dragInstance?.$on("click", (data: DragDataInfo) => {
       // 跳转时间
-      this.seekByPercent(percent);
+      this.seekByPercent(data.percentX);
     });
   }
 
@@ -105,7 +103,6 @@ class VideoProgress {
     instance.$on(VideoEvents.TIMEUPDATE, this.onVideoTimeupdate.bind(this));
     instance.$on(VideoEvents.PROGRESS, this.onVideoProgress.bind(this));
     instance.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
-    instance.$on(CustomEvents.RESIZE, this.onResize.bind(this));
   }
 
   // 鼠标进入进度条容器
@@ -222,7 +219,7 @@ class VideoProgress {
   private showProcessTime(event: MouseEvent) {
     const processTimeElement = this.options.templateInstance.processTimeElement;
     if (!isUndef(processTimeElement)) {
-      const { left, width } = this.processMaskInfo;
+      const { left, width } = this.getProcessMaskInfo();
       let offsetX = event.pageX - left;
       offsetX = checkData(offsetX, 0, width);
       processTimeElement.style.left = `${offsetX}px`;
@@ -237,13 +234,6 @@ class VideoProgress {
     if (processTimeElement) {
       processTimeElement.style.opacity = "";
     }
-  }
-
-  // 尺寸发生变化
-  private onResize() {
-    // 需要刷新一下数据
-    this.dragInstance?.reload();
-    this.getProcessMaskInfo();
   }
 
   private destroy() {

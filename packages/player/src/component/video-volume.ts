@@ -1,6 +1,5 @@
-import { EventManager, isUndef } from "@media/utils";
-import { ComponentOptions } from "../types";
-import Drag from "../js/drag";
+import { EventManager, isUndef, Drag } from "@media/utils";
+import { ComponentOptions, DragDataInfo } from "../types";
 import { VolumeButtonIconEnum } from "../config/enum";
 import { CustomEvents, VideoEvents } from "../js/event";
 import { t } from "../locale";
@@ -48,27 +47,26 @@ class VideoVolume {
     if (!isUndef(volumeMaskElement) && !isUndef(volumeBallElement)) {
       this.dragInstance = new Drag({
         dragElement: volumeBallElement,
-        wrapperElement: volumeMaskElement,
-        throttle: false
+        wrapperElement: volumeMaskElement
       });
-      this.dragInstance.$on("mousemove", (percent: number) => {
+      this.dragInstance.$on("mousemove", (data: DragDataInfo) => {
         // 拖拽过程中实时设置音量
-        this.instance.setVolume(percent);
+        this.instance.setVolume(data.percentX);
         this.isMove = true;
         // 执行动画
         this.toggleAnimation();
         // 设置通知
         this.setNotice();
       });
-      this.dragInstance.$on("click", (percent: number) => {
+      this.dragInstance.$on("click", (data: DragDataInfo) => {
         // 点击的时候保存旧的音量,方便点击静音图标，切换到上一次的音量
-        this.setPrevVolume(percent);
-        this.instance.setVolume(percent);
+        this.setPrevVolume(data.percentX);
+        this.instance.setVolume(data.percentX);
         this.setNotice();
       });
-      this.dragInstance.$on("mouseup", (percent: number) => {
+      this.dragInstance.$on("mouseup", (data: DragDataInfo) => {
         // 鼠标抬起的时候也保存旧的音量
-        this.setPrevVolume(percent);
+        this.setPrevVolume(data.percentX);
         this.isMove = false;
         // 执行动画
         this.toggleAnimation();

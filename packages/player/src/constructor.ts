@@ -1,6 +1,6 @@
 import Template from "./js/template";
 import { PlayerOptions } from "./types";
-import { isArray, isUndef, checkData } from "@media/utils";
+import { isArray, isUndef, checkData, EventEmit } from "@media/utils";
 import VideoPlayer from "./component/video-player";
 import VideoPlayButton from "./component/video-play-button";
 import VideoTime from "./component/video-time";
@@ -11,7 +11,6 @@ import VideoVolume from "./component/video-volume";
 import VideoSpeed from "./component/video-speed";
 import VideoTip from "./component/video-tip";
 import VideoControls from "./component/video-controls";
-import EventEmit from "./js/event-emit";
 import { CustomEvents } from "./js/event";
 import ShortcutKey from "./js/shortcut-key";
 import { FullScreenTypeEnum } from "./config/enum";

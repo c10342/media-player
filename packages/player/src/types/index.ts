@@ -62,3 +62,10 @@ export interface LangOptions {
 
 // 插件类型
 export type PluginsType = Array<Function>;
+
+export interface DragDataInfo {
+  offsetX: number;
+  offsetY: number;
+  percentX: number;
+  percentY: number;
+}
