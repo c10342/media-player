@@ -2,6 +2,7 @@ import pointListTpl from "./template/preview-list.art";
 import "./style/index.scss";
 import { EventManager, isArray, isUndef, checkData } from "@media/utils";
 import { PreviewList, PreviewOptions } from "./types";
+import { ClassNameEnum, CustomEvents, PlayerEvents } from "./config/enum";
 
 const defaultOptions = {
   barPreview: false
@@ -72,7 +73,7 @@ class Preview {
 
   private initInstanceListener() {
     // 销毁
-    this.instance.$on("destroy", () => {
+    this.instance.$on(PlayerEvents.DESTROY, () => {
       this.destroyPreview();
       this.destroyBarView();
     });
@@ -87,7 +88,7 @@ class Preview {
       this.initBarView();
     } else {
       // 获取不到总时长说明视频没有加载完成，需要等待加载完成在执行下一步操作
-      this.instance.$once("loadedmetadata", () => {
+      this.instance.$once(PlayerEvents.LOADEDMETADATA, () => {
         this.load = true;
         this.initElement();
         this.initBarView();
@@ -186,7 +187,7 @@ class Preview {
       const previewList = this.options.list as PreviewList;
       const item = previewList[dataset.index as any];
       // 发射自定义事件
-      this.instance.$emit("preview-click", item);
+      this.instance.$emit(CustomEvents.PREVIEWCLICK, item);
     }
   }
 
@@ -218,7 +219,7 @@ class Preview {
     const height =
       (videoElement.videoHeight / videoElement.videoWidth) * barViewImageWidth;
     const div = document.createElement("div");
-    div.className = "preview-bar-image";
+    div.className = ClassNameEnum.PREVIEWBARIMAGE;
     div.style.backgroundImage = `url("${this.options.barPreviewUrl}")`;
     div.style.width = `${barViewImageWidth}px`;
     div.style.height = `${height}px`;
