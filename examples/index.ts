@@ -96,6 +96,12 @@ const player = new VideoPlayer({
   previewOptions: {
     // list: previewList,
     barPreviewUrl: "https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg"
+  },
+  zoomOptions: {
+    // y:false,
+    // open:false,
+    minWidth: 300,
+    minHeight: 300
   }
   // hotkey:true
   // live:true
@@ -175,7 +181,7 @@ document.querySelector(".paused")?.addEventListener("click", function () {
 });
 
 document.querySelector(".destroy")?.addEventListener("click", function () {
-  // player.destroy();
+  player.destroy();
   // (player as any).destroyHighlight()
-  (player as any).screenshot();
+  // (player as any).screenshot();
 });
