@@ -64,9 +64,6 @@ class Highlight {
     this.instance.$on("destroy", () => {
       this.destroyHighlight();
     });
-    this.instance.$on("resize", () => {
-      this.adjustPosition();
-    });
   }
 
   // 初始化
