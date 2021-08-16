@@ -3,10 +3,13 @@ import Highlight from "@media/highlight";
 import Screenshot from "@media/screenshot";
 import Preview from "@media/preview";
 import Zoom from "@media/zoom";
+import Danmaku from "@media/danmaku";
 VideoPlayer.use(Highlight);
 VideoPlayer.use(Preview);
 // VideoPlayer.use(Screenshot);
 import "./index.scss";
+
+import DanmukuTest from "./danmaku";
 
 // VideoPlayer.setLang("en");
 // import Hls from "hls.js";
@@ -81,7 +84,7 @@ const player = new VideoPlayer({
       value: 1.5
     }
   ],
-  plugins: [Screenshot, Zoom],
+  plugins: [Screenshot, Zoom, Danmaku],
   highlightOptions: {
     jump: true,
     showTip: true,
@@ -102,6 +105,10 @@ const player = new VideoPlayer({
     // open:false,
     minWidth: 300,
     minHeight: 300
+  },
+  danmakuOptions: {
+    fontColors: ["blue", "red", "green", "#000"],
+    fontSizes: [16, 18, 20, 22, 24, 26, 28]
   }
   // hotkey:true
   // live:true
@@ -185,3 +192,5 @@ document.querySelector(".destroy")?.addEventListener("click", function () {
   // (player as any).destroyHighlight()
   // (player as any).screenshot();
 });
+
+DanmukuTest(player);
