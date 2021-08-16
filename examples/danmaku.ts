@@ -49,17 +49,16 @@ export default function DanmukuTest(player: any) {
   pauseElement?.addEventListener("click", () => {
     player.pause();
   });
-  // jiasuElement?.addEventListener("click", () => {
-  //   console.log('加速');
-  //   percent -= 0.1
-  //   player.setSpeed(percent)
-
-  // });
-  // jiansuElement?.addEventListener("click", () => {
-  //   console.log('减速');
-  //   percent += 0.1
-  //   player.setSpeed(percent)
-  // });
+  jiasuElement?.addEventListener("click", () => {
+    console.log("加速");
+    percent -= 0.3;
+    player.setSpeed(percent);
+  });
+  jiansuElement?.addEventListener("click", () => {
+    console.log("减速");
+    percent += 0.3;
+    player.setSpeed(percent);
+  });
 
   function getRandomItem(list: any) {
     const index = Math.floor(Math.random() * list.length);
