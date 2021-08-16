@@ -1,0 +1,24 @@
+{
+  "name": "@media/danmaku",
+  "version": "0.0.0",
+  "description": "danmaku",
+  "main": "dist/index.js",
+  "doc": "index.ts",
+  "typings": "types/index.d.ts",
+  "keywords": [
+    "danmaku"
+  ],
+  "homepage": "https://github.com/c10342/video-player",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c10342/video-player"
+  },
+  "author": "c10342",
+  "license": "MIT",
+  "dependencies": {
+    "@media/utils": "^0.0.0"
+  }
+}

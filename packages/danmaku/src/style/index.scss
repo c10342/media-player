@@ -1,0 +1,19 @@
+.danmaku-item {
+  position: absolute;
+  left: 100%;
+  white-space: nowrap;
+
+  /* 提前告知浏览器那些属性会变化，提高性能 */
+  will-change: transform;
+  pointer-events: none;
+}
+
+.danmaku-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
