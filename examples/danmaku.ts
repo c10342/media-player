@@ -3,6 +3,8 @@ const buttonElement = document.querySelector(".send-button");
 const moreElement = document.querySelector(".more-button");
 const pauseElement = document.querySelector(".pause-button");
 const playElement = document.querySelector(".play-button");
+const jiasuElement = document.querySelector(".jiasu-button");
+const jiansuElement = document.querySelector(".jiansu-button");
 
 const messages = [
   "坚决同时打赢疫情防控和经济社会发展“两大战役”",
@@ -34,6 +36,8 @@ export default function DanmukuTest(player: any) {
     }
   });
 
+  let percent = 1;
+
   buttonElement?.addEventListener("click", () => {
     sendDanmu();
   });
@@ -43,10 +47,19 @@ export default function DanmukuTest(player: any) {
   });
 
   pauseElement?.addEventListener("click", () => {
-    console.log(111);
-
     player.pause();
   });
+  // jiasuElement?.addEventListener("click", () => {
+  //   console.log('加速');
+  //   percent -= 0.1
+  //   player.setSpeed(percent)
+
+  // });
+  // jiansuElement?.addEventListener("click", () => {
+  //   console.log('减速');
+  //   percent += 0.1
+  //   player.setSpeed(percent)
+  // });
 
   function getRandomItem(list: any) {
     const index = Math.floor(Math.random() * list.length);

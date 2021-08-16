@@ -107,7 +107,7 @@ const player = new VideoPlayer({
     minHeight: 300
   },
   danmakuOptions: {
-    fontColors: ["blue", "red", "green", "#000"],
+    fontColors: ["blue", "red", "green", "#fff", "yellow"],
     fontSizes: [16, 18, 20, 22, 24, 26, 28]
   }
   // hotkey:true
