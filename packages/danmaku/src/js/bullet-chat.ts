@@ -60,6 +60,7 @@ class BulletChat {
   private _paused = false;
   //   同时渲染多少条
   private _maxAmountPerRender = 0;
+  private _speedPercent = 1;
   constructor(options: BulletChatOptions) {
     this.options = { ...defaultOptions, ...options };
     this.resize();
@@ -143,6 +144,13 @@ class BulletChat {
     if (!this._renderTimer) {
       this._render();
     }
+  }
+
+  setSpeed(percent: number) {
+    if (percent <= 0) {
+      return;
+    }
+    this._speedPercent = percent;
   }
 
   _clearRenderTimer() {
@@ -347,14 +355,15 @@ class BulletChat {
       data.width = node.offsetWidth;
       // 弹幕的需要移动的距离
       data.totalDistance = data.width + this._totalWidth;
+      const defaultTime = Math.floor(
+        data.totalDistance *
+          (this.options.speedArg as number) *
+          (Math.random() * 0.3 + 0.7)
+      );
+
       // 弹幕移动时间
-      data.rollTime =
-        data.rollTime ||
-        Math.floor(
-          data.totalDistance *
-            (this.options.speedArg as number) *
-            (Math.random() * 0.3 + 0.7)
-        );
+      data.rollTime = (data.rollTime || defaultTime) * this._speedPercent;
+
       // 弹幕的移动速度
       data.rollSpeed = data.totalDistance / data.rollTime;
     }

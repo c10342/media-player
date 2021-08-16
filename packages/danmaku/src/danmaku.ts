@@ -2,6 +2,7 @@ import { isUndef } from "@media/utils";
 import { PlayerEvents } from "./config/enum";
 import BulletChat from "./js/bullet-chat";
 import { DanmakuOptions, PushData } from "./types";
+import settingTpl from "./template/setting.art";
 import "./style/index.scss";
 
 class Danmaku {
@@ -19,6 +20,7 @@ class Danmaku {
     this.options = options;
     this._initElement();
     this._initDanmaku();
+    this._initSetting();
     this._extendMethods();
     this._initListener();
   }
@@ -51,7 +53,9 @@ class Danmaku {
       // 容器发生变化
       resize: () => this._bulletChat?.resize(),
       // 清屏
-      clearScreen: () => this._bulletChat?.clearScreen()
+      clearScreen: () => this._bulletChat?.clearScreen(),
+      // 设置速度
+      setSpeed: (percent: number) => this._bulletChat?.setSpeed(percent)
     });
   }
 
@@ -59,6 +63,13 @@ class Danmaku {
     this._instance.$on(PlayerEvents.DESTROY, () => {
       this._destroy();
     });
+  }
+
+  private _initSetting() {
+    const div = document.createElement("div");
+    div.innerHTML = settingTpl();
+    const parentNode = this._el.querySelector(".player-controls-right");
+    parentNode?.insertBefore(div, parentNode?.firstElementChild);
   }
 
   private _destroy() {
