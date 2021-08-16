@@ -17,7 +17,7 @@ const player = new VideoPlayer({
   // ...
   danmakuOptions: {
     // 弹幕字体颜色，随机
-    fontColors: ["blue", "red", "green", "#000"],
+    fontColors: ["blue", "red", "green", "#fff"],
     // 弹幕字体大小随机
     fontSizes: [16, 18, 20, 22, 24, 26, 28]
   }
@@ -56,4 +56,4 @@ const player = new VideoPlayer({
 | text      | 弹幕文本     | string |
 | fontSize  | 字体大小     | number |
 | fontColor | 字体颜色     | string |
-| rollTime  | 弹幕移动时间 | number |
+| rollTime  | 弹幕移动时间，单位秒 | number |
