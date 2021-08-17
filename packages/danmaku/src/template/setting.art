@@ -1,1 +1,44 @@
-<span class='player-icon-item danmaku-icon-setting danmaku-icon-item'></span>
+<span class="player-icon-item danmaku-icon-setting danmaku-icon-item"></span>
+<div class="danmaku-float-container">
+  <div class="danmaku-setting-area">
+    <div class="danmaku-setting-label">显示区域</div>
+    <div class="danmaku-area">
+        <span class="danmaku-area-span danmaku-radio-checked" data-position="all">
+          <span class="danmaku-radio"></span>
+          <span>全屏</span>
+        </span>
+        <span class="danmaku-area-span" data-position="top">
+          <span class="danmaku-radio"></span>
+          <span>顶部</span>
+        </span>
+        <span class="danmaku-area-span" data-position="bottom">
+          <span class="danmaku-radio"></span>
+          <span>底部</span>
+        </span>
+    </div>
+  </div>
+  <div class="danmaku-setting-item">
+    <span class="danmaku-setting-label">暂停弹幕</span>
+    <div class="danmaku-setting-text danmaku-setting-close danmaku-pause-label"></div>
+  </div>
+  <div class="danmaku-setting-item">
+    <span class="danmaku-setting-label">显示弹幕</span>
+    <div class="danmaku-setting-text danmaku-setting-open danmaku-show-label"></div>
+  </div>
+  <div class="danmaku-setting-item">
+    <span class="danmaku-setting-label">透明度</span>
+    <div class="danmaku-progress danmu-opacity-wrapper">
+      <div class="danmaku-played danmu-opacity-progress">
+        <span class="danmaku-ball danmu-opacity-ball"></span>
+      </div>
+    </div>
+  </div>
+  <div class="danmaku-setting-item">
+    <span class="danmaku-setting-label">弹幕速度</span>
+    <div class="danmaku-progress">
+      <div class="danmaku-played">
+        <span class="danmaku-ball"></span>
+      </div>
+    </div>
+  </div>
+</div>

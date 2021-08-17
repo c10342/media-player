@@ -60,6 +60,8 @@ class BulletChat {
   private _paused = false;
   //   同时渲染多少条
   private _maxAmountPerRender = 0;
+  // 是否关闭弹幕
+  private _isClose = false;
   private _speedPercent = 1;
   constructor(options: BulletChatOptions) {
     this.options = { ...defaultOptions, ...options };
@@ -79,12 +81,24 @@ class BulletChat {
 
   // 清除所有弹幕
   clearScreen() {
+    this._clearRenderTimer();
     this._clearDanmakuNodes();
     this._resetTracks();
+    //   启动定时器
+    if (
+      !this._renderTimer &&
+      this._paused === false &&
+      this._queue.length > 0
+    ) {
+      this._render();
+    }
   }
 
   // 添加弹幕数据到队列
   add(data: string | PushData | Array<PushData>) {
+    if (this._isClose) {
+      return;
+    }
     if (isString(data)) {
       data = [
         {
@@ -146,6 +160,23 @@ class BulletChat {
     }
   }
 
+  // 关闭弹幕
+  close() {
+    // 标志位
+    this._isClose = true;
+    // 清屏
+    this.clearScreen();
+    // 清除定时器
+    this._clearRenderTimer();
+    // 清除消息数据
+    this._clearQueue();
+  }
+
+  // 开启弹幕
+  open() {
+    this._isClose = false;
+  }
+
   setSpeed(percent: number) {
     if (percent <= 0) {
       return;
@@ -160,9 +191,14 @@ class BulletChat {
     }
   }
 
+  _clearQueue() {
+    this._queue = [];
+  }
+
   // 循环遍历弹幕节点
   _eachDanmakuNode(callback: Function) {
     const children = this.options.container.querySelectorAll(".danmaku-item");
+
     const length = children.length;
     for (let i = 0; i < length; i++) {
       const child = children[i] as HTMLElement;
@@ -407,6 +443,12 @@ class BulletChat {
       // 如果已经没有数据，就不再轮询了，等有数据时（add 方法中）再开启轮询
       this._renderTimer = null;
     }
+  }
+
+  destroy() {
+    this._clearRenderTimer();
+    this._clearQueue();
+    this.clearScreen();
   }
 }
 
