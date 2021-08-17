@@ -43,21 +43,21 @@ export default function DanmukuTest(player: any) {
   });
 
   playElement?.addEventListener("click", () => {
-    player.play();
+    player.danmaku.play();
   });
 
   pauseElement?.addEventListener("click", () => {
-    player.pause();
+    player.danmaku.pause();
   });
   jiasuElement?.addEventListener("click", () => {
     console.log("加速");
     percent -= 0.3;
-    player.setSpeed(percent);
+    player.danmaku.setSpeed(percent);
   });
   jiansuElement?.addEventListener("click", () => {
     console.log("减速");
     percent += 0.3;
-    player.setSpeed(percent);
+    player.danmaku.setSpeed(percent);
   });
 
   function getRandomItem(list: any) {
@@ -77,14 +77,14 @@ export default function DanmukuTest(player: any) {
         text: getRandomItem(messages)
       });
     }
-    player.send(message);
+    player.danmaku.send(message);
   });
 
   function sendDanmu() {
     if (!inputElement?.value) {
       return;
     }
-    player.send({
+    player.danmaku.send({
       text: inputElement.value
     });
   }
