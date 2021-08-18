@@ -3,6 +3,7 @@ import Player from "./constructor";
 import { LangOptions, PlayerOptions, PluginsType } from "./types";
 import i18n from "./locale";
 import { isArray, isString, isUndef, logWarn } from "@media/utils";
+import { LangTypeEnum } from "./config/enum";
 
 function getPluginName(ctor: any) {
   return ctor.pluginName || ctor.name;
@@ -31,14 +32,16 @@ const defaultOptions = {
 };
 
 class MediaPlayer {
+  static lang = LangTypeEnum.zh;
   // 自定义语言包
   static useLang(lang: LangOptions) {
     i18n.use(lang);
     return Player;
   }
   // 设置中英文，zh/en
-  static setLang(lang: string) {
+  static setLang(lang: LangTypeEnum) {
     i18n.setLang(lang);
+    MediaPlayer.lang = lang;
     return Player;
   }
   // 自定义i18n处理函数
