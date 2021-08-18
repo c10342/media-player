@@ -10,8 +10,9 @@ VideoPlayer.use(Preview);
 import "./index.scss";
 
 import DanmukuTest from "./danmaku";
+// import { LangTypeEnum } from "@media/utils";
 
-// VideoPlayer.setLang("en");
+// VideoPlayer.setLang(LangTypeEnum.en);
 // import Hls from "hls.js";
 
 const highlightList = [
