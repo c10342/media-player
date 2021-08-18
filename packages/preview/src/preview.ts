@@ -10,6 +10,7 @@ import {
 } from "@media/utils";
 import { PreviewList, PreviewOptions } from "./types";
 import { ClassNameEnum, CustomEvents } from "./config/enum";
+import VideoPlayer from "@media/player";
 
 const defaultOptions = {
   barPreview: false
@@ -29,7 +30,7 @@ class Preview {
   // 播放器的dom
   private el: HTMLElement;
   // 播放器实例
-  private instance: any;
+  private instance: VideoPlayer;
   // 播放器构造函数
   private Player: any;
   // 是否正在加载标志位
@@ -45,7 +46,7 @@ class Preview {
   // 进度条容器
   private progressElement: HTMLElement | null;
 
-  constructor(el: HTMLElement, instance: any, Player: any) {
+  constructor(el: HTMLElement, instance: VideoPlayer, Player: any) {
     // 保存一下播放器给来的参数
     this.el = el;
     this.instance = instance;
@@ -224,7 +225,8 @@ class Preview {
   private createBarViewWrapper() {
     const videoElement = this.instance.videoElement;
     const height =
-      (videoElement.videoHeight / videoElement.videoWidth) * barViewImageWidth;
+      (videoElement!.videoHeight / videoElement!.videoWidth) *
+      barViewImageWidth;
     const div = document.createElement("div");
     div.className = ClassNameEnum.PREVIEWBARIMAGE;
     div.style.backgroundImage = `url("${this.options.barPreviewUrl}")`;

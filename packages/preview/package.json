@@ -19,6 +19,7 @@
   "author": "c10342",
   "license": "MIT",
   "dependencies": {
-    "@media/utils": "^0.0.0"
+    "@media/utils": "^0.0.0",
+    "@media/player": "^0.0.0"
   }
 }
