@@ -194,6 +194,7 @@
 .danmaku-area-span {
   flex: 1;
   text-align: center;
+  white-space: nowrap;
   cursor: pointer;
 
   >span {

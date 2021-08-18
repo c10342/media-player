@@ -8,6 +8,7 @@ import BulletChat from "./js/bullet-chat";
 import { DanmakuOptions, PushData } from "./types";
 import settingTpl from "./template/setting.art";
 import "./style/index.scss";
+import { setLang, t } from "./locale";
 
 interface DataInfo {
   offsetX: number;
@@ -58,11 +59,12 @@ class Danmaku {
   private _danmakuAreaWrapperElement: HtmlElementProp;
   private _danmakuAreaPosition = DanmakuAreaEnum.all;
 
-  constructor(el: HTMLElement, instance: any) {
+  constructor(el: HTMLElement, instance: any, Player: any) {
     this._el = el;
     this._instance = instance;
     const options = instance.options?.danmakuOptions ?? {};
     this.options = options;
+    this._initLang(Player);
     // 初始化变量
     this._initVar();
     // 生成dom元素
@@ -87,6 +89,10 @@ class Danmaku {
     this._initListener();
   }
 
+  private _initLang(Player: any) {
+    setLang(Player.lang);
+  }
+
   private _initVar() {
     this._eventManager = new EventManager();
   }
@@ -102,45 +108,46 @@ class Danmaku {
     settingDiv.innerHTML = settingTpl({
       areaList: [
         {
-          label: "全屏",
+          label: t("full"),
           position: "all",
           checked: true
         },
         {
-          label: "顶部",
+          label: t("top"),
           position: "top"
         },
         {
-          label: "底部",
+          label: t("bottom"),
           position: "bottom"
         }
       ],
       switchList: [
         {
-          label: "暂停弹幕",
+          label: t("pause"),
           className: "danmaku-pause-label",
           open: false
         },
         {
-          label: "显示弹幕",
+          label: t("show"),
           className: "danmaku-show-label",
           open: true
         }
       ],
       progressList: [
         {
-          label: "透明度",
+          label: t("opacity"),
           wrapperClassName: "danmu-opacity-wrapper",
           progressClassName: "danmu-opacity-progress",
           ballClassName: "danmu-opacity-ball"
         },
         {
-          label: "弹幕速度",
+          label: t("speed"),
           wrapperClassName: "danmu-speed-wrapper",
           progressClassName: "danmu-speed-progress",
           ballClassName: "danmu-speed-ball"
         }
-      ]
+      ],
+      showArea: t("showArea")
     });
     const parentNode = this._el.querySelector(".player-controls-right");
     parentNode?.insertBefore(settingDiv, parentNode?.firstElementChild);

@@ -1,7 +1,7 @@
 <span class="player-icon-item danmaku-icon-setting danmaku-icon-item"></span>
 <div class="danmaku-float-container">
   <div class="danmaku-setting-area">
-    <div class="danmaku-setting-label">显示区域</div>
+    <div class="danmaku-setting-label">{{showArea}}</div>
     <div class="danmaku-area">
       {{each areaList}}
       <span
