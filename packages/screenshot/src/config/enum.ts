@@ -1,7 +1,3 @@
-export enum PlayerEvents {
-  DESTROY = "destroy"
-}
-
 export enum ClassNameEnum {
   ICON = "screenshot-icon-screenshot player-icon-item screenshot-icon-item"
 }

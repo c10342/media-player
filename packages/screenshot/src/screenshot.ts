@@ -1,8 +1,8 @@
 import "./style/index.scss";
-import { EventManager, isUndef, logError } from "@media/utils";
+import { EventManager, isUndef, logError, PlayerEvents } from "@media/utils";
 import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
-import { ClassNameEnum, CustomEvents, PlayerEvents } from "./config/enum";
+import { ClassNameEnum, CustomEvents } from "./config/enum";
 import { downloadPicName } from "./config/constant";
 
 const defaultOptions = {
