@@ -1,8 +1,14 @@
 import pointListTpl from "./template/point-list.art";
 import "./style/index.scss";
-import { EventManager, isArray, isUndef } from "@media/utils";
+import {
+  EventManager,
+  isArray,
+  isUndef,
+  VideoEvents,
+  PlayerEvents
+} from "@media/utils";
 import { HighlightList, HighlightOptions } from "./types";
-import { CustomEvents, PlayerEvents } from "./config/enum";
+import { CustomEvents } from "./config/enum";
 
 const defaultOptions = {
   jump: true,
@@ -76,7 +82,7 @@ class Highlight {
       this.initElement();
     } else {
       // 获取不到总时长说明视频没有加载完成，需要等待加载完成在执行下一步操作
-      this.instance.$once(PlayerEvents.LOADEDMETADATA, () => {
+      this.instance.$once(VideoEvents.LOADEDMETADATA, () => {
         this.load = true;
         this.initElement();
       });
