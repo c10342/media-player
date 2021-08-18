@@ -9,6 +9,7 @@ import { DanmakuOptions, PushData } from "./types";
 import settingTpl from "./template/setting.art";
 import "./style/index.scss";
 import { setLang, t } from "./locale";
+import VideoPlayer from "@media/player";
 
 interface DataInfo {
   offsetX: number;
@@ -24,7 +25,7 @@ class Danmaku {
   // 播放器的dom
   private _el: HTMLElement;
   // 播放器实例
-  private _instance: any;
+  private _instance: VideoPlayer;
   private _eventManager: EventManager | null;
   // 弹幕类
   private _bulletChat: BulletChat | null;
@@ -59,7 +60,7 @@ class Danmaku {
   private _danmakuAreaWrapperElement: HtmlElementProp;
   private _danmakuAreaPosition = DanmakuAreaEnum.all;
 
-  constructor(el: HTMLElement, instance: any, Player: any) {
+  constructor(el: HTMLElement, instance: VideoPlayer, Player: any) {
     this._el = el;
     this._instance = instance;
     const options = instance.options?.danmakuOptions ?? {};
