@@ -12,7 +12,3 @@ export enum CursorEnum {
 export enum CustomEvents {
   ZOOM = "zoom"
 }
-
-export enum PlayerEvents {
-  DESTROY = "destroy"
-}
