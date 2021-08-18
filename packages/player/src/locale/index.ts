@@ -2,13 +2,13 @@ import {
   formatLangTemplate,
   isFunction,
   isPlainObject,
-  isUndef
+  isUndef,
+  LangTypeEnum
 } from "@media/utils";
 
 import zhLang from "./lang/zh.json";
 
 import enLang from "./lang/en.json";
-import { LangTypeEnum } from "../config/enum";
 import { LangOptions } from "../types";
 
 let lang: LangOptions = zhLang;

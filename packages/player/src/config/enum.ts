@@ -14,12 +14,6 @@ export enum VideoReadyStateEnum {
   complete = 4
 }
 
-// 语言
-export enum LangTypeEnum {
-  zh = "zh",
-  en = "en"
-}
-
 // 可获取焦点的dom元素
 export enum CanFocusTagEnum {
   input = "INPUT",

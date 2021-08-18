@@ -2,8 +2,13 @@ import "./style/index.scss";
 import Player from "./constructor";
 import { LangOptions, PlayerOptions, PluginsType } from "./types";
 import i18n from "./locale";
-import { isArray, isString, isUndef, logWarn } from "@media/utils";
-import { LangTypeEnum } from "./config/enum";
+import {
+  isArray,
+  isString,
+  isUndef,
+  LangTypeEnum,
+  logWarn
+} from "@media/utils";
 
 function getPluginName(ctor: any) {
   return ctor.pluginName || ctor.name;
