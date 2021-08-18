@@ -84,7 +84,7 @@ class MediaPlayer {
     return this;
   }
 
-  private options: PlayerOptions;
+  options: PlayerOptions;
   // 实例
   private playerInstance: Player | null;
   // 存储插件实例
