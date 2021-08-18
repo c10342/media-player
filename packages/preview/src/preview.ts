@@ -1,8 +1,15 @@
 import pointListTpl from "./template/preview-list.art";
 import "./style/index.scss";
-import { EventManager, isArray, isUndef, checkData } from "@media/utils";
+import {
+  EventManager,
+  isArray,
+  isUndef,
+  checkData,
+  PlayerEvents,
+  VideoEvents
+} from "@media/utils";
 import { PreviewList, PreviewOptions } from "./types";
-import { ClassNameEnum, CustomEvents, PlayerEvents } from "./config/enum";
+import { ClassNameEnum, CustomEvents } from "./config/enum";
 
 const defaultOptions = {
   barPreview: false
@@ -88,7 +95,7 @@ class Preview {
       this.initBarView();
     } else {
       // 获取不到总时长说明视频没有加载完成，需要等待加载完成在执行下一步操作
-      this.instance.$once(PlayerEvents.LOADEDMETADATA, () => {
+      this.instance.$once(VideoEvents.LOADEDMETADATA, () => {
         this.load = true;
         this.initElement();
         this.initBarView();
