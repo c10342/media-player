@@ -9,6 +9,7 @@ import {
 } from "@media/utils";
 import { HighlightList, HighlightOptions } from "./types";
 import { CustomEvents } from "./config/enum";
+import VideoPlayer from "@media/player";
 
 const defaultOptions = {
   jump: true,
@@ -21,7 +22,7 @@ class Highlight {
   // 播放器的dom
   private el: HTMLElement;
   // 播放器实例
-  private instance: any;
+  private instance: VideoPlayer;
   // 播放器构造函数
   private Player: any;
   // 是否正在加载标志位
@@ -33,7 +34,7 @@ class Highlight {
   // 提示点参数
   private options: HighlightOptions;
 
-  constructor(el: HTMLElement, instance: any, Player: any) {
+  constructor(el: HTMLElement, instance: VideoPlayer, Player: any) {
     // 保存一下播放器给来的参数
     this.el = el;
     this.instance = instance;
