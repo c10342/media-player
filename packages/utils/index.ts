@@ -2,6 +2,7 @@ export * from "./src/is";
 export * from "./src/fullscreen";
 export * from "./src/log";
 export * from "./src/enums";
+export * from "./src/event";
 export { default as secondToTime } from "./src/secondToTime";
 export { default as userSelect } from "./src/user-select";
 export { default as EventManager } from "./src/event-manager";
