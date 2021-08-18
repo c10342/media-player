@@ -1,7 +1,12 @@
-import { EventManager, isUndef, Drag } from "@media/utils";
+import {
+  EventManager,
+  isUndef,
+  Drag,
+  PlayerEvents,
+  VideoEvents
+} from "@media/utils";
 import { ComponentOptions, DragDataInfo } from "../types";
 import { VolumeButtonIconEnum } from "../config/enum";
-import { CustomEvents, VideoEvents } from "../js/event";
 import { t } from "../locale";
 
 class VideoVolume {
@@ -107,7 +112,7 @@ class VideoVolume {
 
   private initListener() {
     const instance = this.options.instance;
-    instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    instance.$on(PlayerEvents.DESTROY, () => this.destroy());
     instance.$on(VideoEvents.VOLUMECHANGE, this.onVideoVolumechange.bind(this));
   }
   // 点击音量图标

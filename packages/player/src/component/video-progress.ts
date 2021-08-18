@@ -4,10 +4,11 @@ import {
   isUndef,
   secondToTime,
   checkData,
-  Drag
+  Drag,
+  PlayerEvents,
+  VideoEvents
 } from "@media/utils";
 import { ComponentOptions, DragDataInfo } from "../types";
-import { CustomEvents, VideoEvents } from "../js/event";
 import { t } from "../locale";
 
 class VideoProgress {
@@ -99,7 +100,7 @@ class VideoProgress {
 
   private initListener() {
     const instance = this.instance;
-    instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
     instance.$on(VideoEvents.TIMEUPDATE, this.onVideoTimeupdate.bind(this));
     instance.$on(VideoEvents.PROGRESS, this.onVideoProgress.bind(this));
     instance.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));

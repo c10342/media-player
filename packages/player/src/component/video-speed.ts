@@ -1,6 +1,5 @@
-import { EventManager, isFunction, isUndef } from "@media/utils";
+import { EventManager, isFunction, isUndef, PlayerEvents } from "@media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
-import { CustomEvents } from "../js/event";
 import { ComponentOptions, SpeedItem } from "../types";
 
 interface OptionsParams extends ComponentOptions {
@@ -32,7 +31,7 @@ class VideoSpeed {
   }
 
   private initListener() {
-    this.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    this.instance.$on(PlayerEvents.DESTROY, () => this.destroy());
   }
 
   private initSpeedListener() {

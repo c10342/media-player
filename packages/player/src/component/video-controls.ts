@@ -1,5 +1,10 @@
-import { EventManager, isFunction, isUndef } from "@media/utils";
-import { CustomEvents, VideoEvents } from "../js/event";
+import {
+  EventManager,
+  isFunction,
+  isUndef,
+  PlayerEvents,
+  VideoEvents
+} from "@media/utils";
 import { ComponentOptions } from "../types";
 
 class VideoControls {
@@ -45,7 +50,7 @@ class VideoControls {
   private initListener() {
     this.instance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
     this.instance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
-    this.instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    this.instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
   }
 
   // 鼠标进入容器事件处理
@@ -72,7 +77,7 @@ class VideoControls {
     if (this.paused || this.isEnter) {
       this.handleElement((element) => {
         element.style.transform = "";
-        this.instance.$emit(CustomEvents.SHOW_CONTROLS);
+        this.instance.$emit(PlayerEvents.SHOW_CONTROLS);
       });
     }
   }
@@ -85,7 +90,7 @@ class VideoControls {
       if (!this.paused && !this.isEnter) {
         this.handleElement((element) => {
           element.style.transform = "translateY(100%)";
-          this.instance.$emit(CustomEvents.HIDE_CONTROLS);
+          this.instance.$emit(PlayerEvents.HIDE_CONTROLS);
         });
       }
     }, 4000);

@@ -1,8 +1,7 @@
-import { EventManager, isUndef } from "@media/utils";
+import { EventManager, isUndef, PlayerEvents, VideoEvents } from "@media/utils";
 import { ComponentOptions } from "../types";
 
 import { PlayButtonIconEnum } from "../config/enum";
-import { CustomEvents, VideoEvents } from "../js/event";
 
 class VideoPlayButton {
   private options: ComponentOptions;
@@ -33,7 +32,7 @@ class VideoPlayButton {
 
   private initListener() {
     const instance = this.instance;
-    instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
     instance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
     instance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
   }

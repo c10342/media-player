@@ -1,5 +1,4 @@
-import { isUndef } from "@media/utils";
-import { CustomEvents } from "../js/event";
+import { isUndef, PlayerEvents } from "@media/utils";
 import { ComponentOptions } from "../types";
 
 class VideoTip {
@@ -8,7 +7,7 @@ class VideoTip {
   private timer: number | null;
   constructor(options: ComponentOptions) {
     this.options = options;
-    this.options.instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    this.options.instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
   }
   // 设置通知
   setNotice(notice: string, time?: number) {

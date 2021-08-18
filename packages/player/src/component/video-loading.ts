@@ -1,6 +1,5 @@
-import { EventManager, isUndef } from "@media/utils";
+import { EventManager, isUndef, PlayerEvents, VideoEvents } from "@media/utils";
 import { VideoReadyStateEnum } from "../config/enum";
-import { CustomEvents, VideoEvents } from "../js/event";
 import { ComponentOptions } from "../types";
 
 class VideoLoading {
@@ -28,10 +27,10 @@ class VideoLoading {
 
   private initListener() {
     const instance = this.instance;
-    instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
     // 切换清晰度前
     instance.$on(
-      CustomEvents.SWITCH_DEFINITION_START,
+      PlayerEvents.SWITCH_DEFINITION_START,
       this.onBeforeSwitchDefinition.bind(this)
     );
     instance.$on(VideoEvents.WAITING, this.onVideoWaiting.bind(this));

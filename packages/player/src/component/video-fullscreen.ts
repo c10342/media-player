@@ -3,11 +3,11 @@ import {
   exitBrowserFullscreen,
   isBrowserFullscreen,
   EventManager,
-  isUndef
+  isUndef,
+  PlayerEvents
 } from "@media/utils";
 import { ComponentOptions } from "../types";
 import { WEBFULLSCREENCLASSNAME } from "../config/constant";
-import { CustomEvents } from "../js/event";
 import { KeyCodeEnum } from "../config/enum";
 
 class VideoFullscreen {
@@ -50,7 +50,7 @@ class VideoFullscreen {
   }
 
   private initListener() {
-    this.instance.$on(CustomEvents.DESTROY, this.destroy.bind(this));
+    this.instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
   }
 
   // 监听全局事件
@@ -90,7 +90,7 @@ class VideoFullscreen {
     const containerElement = this.options.templateInstance.containerElement;
     if (!isUndef(containerElement) && !isBrowserFullscreen()) {
       enterBrowserFullScreen(containerElement);
-      this.instance.$emit(CustomEvents.ENTER_BROWSER_SCREEN);
+      this.instance.$emit(PlayerEvents.ENTER_BROWSER_SCREEN);
     }
   }
   // 退出浏览器全屏
@@ -101,7 +101,7 @@ class VideoFullscreen {
     }
     if (isBrowserFullscreen()) {
       exitBrowserFullscreen();
-      this.instance.$emit(CustomEvents.EXIT_BROWSER_SCREEN);
+      this.instance.$emit(PlayerEvents.EXIT_BROWSER_SCREEN);
     }
   }
   // 退出网页全屏
@@ -113,7 +113,7 @@ class VideoFullscreen {
       containerElement.classList.contains(WEBFULLSCREENCLASSNAME)
     ) {
       containerElement.classList.remove(WEBFULLSCREENCLASSNAME);
-      this.instance.$emit(CustomEvents.EXIT_WEB_SCREEN);
+      this.instance.$emit(PlayerEvents.EXIT_WEB_SCREEN);
     }
   }
   // 进入网页全屏
@@ -125,7 +125,7 @@ class VideoFullscreen {
       !containerElement.classList.contains(WEBFULLSCREENCLASSNAME)
     ) {
       containerElement.classList.add(WEBFULLSCREENCLASSNAME);
-      this.instance.$emit(CustomEvents.ENTER_WEB_SCREEN);
+      this.instance.$emit(PlayerEvents.ENTER_WEB_SCREEN);
     }
   }
 

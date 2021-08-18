@@ -1,6 +1,5 @@
-import { EventManager, isFunction, isUndef } from "@media/utils";
+import { EventManager, isFunction, isUndef, PlayerEvents } from "@media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
-import { CustomEvents } from "../js/event";
 import { ComponentOptions, VideoListItem } from "../types";
 import { VideoEvents } from "../js/event";
 import videoTpl from "../template/video.art";
@@ -70,7 +69,7 @@ class VideoPlayer {
   }
 
   private initListener() {
-    this.instance.$on(CustomEvents.DESTROY, () => this.destroy());
+    this.instance.$on(PlayerEvents.DESTROY, () => this.destroy());
   }
 
   // 获取默认播放的视频，有default的就是默认得了
@@ -161,7 +160,7 @@ class VideoPlayer {
       // 获取视频播放地址
       const videoItem = this.getVideoItem();
       // 清晰度切换前
-      instance.$emit(CustomEvents.SWITCH_DEFINITION_START, videoItem);
+      instance.$emit(PlayerEvents.SWITCH_DEFINITION_START, videoItem);
       // video原来的状态
       const prevStatus = {
         currentTime: prevVideoElement.currentTime,
@@ -196,7 +195,7 @@ class VideoPlayer {
         // 这个时候说明新的video标签已经准备好了，可以移除旧的video标签了，这样子就可以完美解决切换清晰度闪屏的问题了
         containerElement?.removeChild(prevVideoElement);
         // 清晰度切换完毕
-        instance.$emit(CustomEvents.SWITCH_DEFINITION_END, videoItem);
+        instance.$emit(PlayerEvents.SWITCH_DEFINITION_END, videoItem);
         // 设置通知
         this.instance.setNotice(t("switch", { quality: videoItem?.label }));
       });
