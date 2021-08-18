@@ -41,7 +41,9 @@ const player = new VideoPlayer({
 - `player.play()`：开始弹幕
 - `player.pause()`：暂停弹幕
 - `player.resize()`：容器发生变化时调用
-- `player.clearScreen()`清屏，移除所有弹幕
+- `player.clearScreen()`：清屏，移除所有弹幕
+- `player.close()`：关闭弹幕
+- `player.clearScreen()`：打开弹幕
 
 ## message 格式
 
