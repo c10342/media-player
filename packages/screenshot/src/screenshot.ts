@@ -4,6 +4,7 @@ import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
 import { ClassNameEnum, CustomEvents } from "./config/enum";
 import { downloadPicName } from "./config/constant";
+import VideoPlayer from "@media/player";
 
 const defaultOptions = {
   open: true,
@@ -16,7 +17,7 @@ class Screenshot {
   // 播放器的dom
   private el: HTMLElement;
   // 播放器实例
-  private instance: any;
+  private instance: VideoPlayer;
   // 播放器构造函数
   private Player: any;
   // dom元素
@@ -26,7 +27,7 @@ class Screenshot {
   // 参数
   private options: ScreenshotOptions;
 
-  constructor(el: HTMLElement, instance: any, Player: any) {
+  constructor(el: HTMLElement, instance: VideoPlayer, Player: any) {
     // 保存一下播放器给来的参数
     this.el = el;
     this.instance = instance;
