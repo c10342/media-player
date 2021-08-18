@@ -1,7 +1,12 @@
-import { EventManager, isFunction, isUndef, PlayerEvents } from "@media/utils";
+import {
+  EventManager,
+  isFunction,
+  isUndef,
+  PlayerEvents,
+  VideoEvents
+} from "@media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
 import { ComponentOptions, VideoListItem } from "../types";
-import { VideoEvents } from "../js/event";
 import videoTpl from "../template/video.art";
 import { t } from "../locale";
 

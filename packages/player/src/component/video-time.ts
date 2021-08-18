@@ -1,5 +1,5 @@
-import { isUndef, secondToTime } from "@media/utils";
-import { VideoEvents } from "../js/event";
+import { isUndef, secondToTime, VideoEvents } from "@media/utils";
+
 import { ComponentOptions } from "../types";
 
 class VideoTime {
