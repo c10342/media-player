@@ -3,42 +3,33 @@
   <div class="danmaku-setting-area">
     <div class="danmaku-setting-label">显示区域</div>
     <div class="danmaku-area">
-        <span class="danmaku-area-span danmaku-radio-checked" data-position="all">
-          <span class="danmaku-radio"></span>
-          <span>全屏</span>
-        </span>
-        <span class="danmaku-area-span" data-position="top">
-          <span class="danmaku-radio"></span>
-          <span>顶部</span>
-        </span>
-        <span class="danmaku-area-span" data-position="bottom">
-          <span class="danmaku-radio"></span>
-          <span>底部</span>
-        </span>
+      {{each areaList}}
+      <span
+        class="danmaku-area-span {{if $value.checked}}danmaku-radio-checked{{/if}}"
+        data-position="{{ $value.position }}"
+      >
+        <span class="danmaku-radio"></span>
+        <span>{{ $value.label }}</span>
+      </span>
+      {{/each}}
     </div>
   </div>
+  {{each switchList}}
   <div class="danmaku-setting-item">
-    <span class="danmaku-setting-label">暂停弹幕</span>
-    <div class="danmaku-setting-text danmaku-setting-close danmaku-pause-label"></div>
+    <span class="danmaku-setting-label">{{$value.label}}</span>
+    <div
+      class="danmaku-setting-text {{if $value.open}}danmaku-setting-open{{/if}} {{if !$value.open}}danmaku-setting-close{{/if}} {{$value.className}}"
+    ></div>
   </div>
-  <div class="danmaku-setting-item">
-    <span class="danmaku-setting-label">显示弹幕</span>
-    <div class="danmaku-setting-text danmaku-setting-open danmaku-show-label"></div>
-  </div>
-  <div class="danmaku-setting-item">
-    <span class="danmaku-setting-label">透明度</span>
-    <div class="danmaku-progress danmu-opacity-wrapper">
-      <div class="danmaku-played danmu-opacity-progress">
-        <span class="danmaku-ball danmu-opacity-ball"></span>
+  {{/each}}
+  {{each progressList}}
+   <div class="danmaku-setting-item">
+    <span class="danmaku-setting-label">{{$value.label}}</span>
+    <div class="danmaku-progress {{$value.wrapperClassName}}">
+      <div class="danmaku-played {{$value.progressClassName}}">
+        <span class="danmaku-ball {{$value.ballClassName}}"></span>
       </div>
     </div>
   </div>
-  <div class="danmaku-setting-item">
-    <span class="danmaku-setting-label">弹幕速度</span>
-    <div class="danmaku-progress">
-      <div class="danmaku-played">
-        <span class="danmaku-ball"></span>
-      </div>
-    </div>
-  </div>
+  {{/each}}
 </div>

@@ -40,6 +40,12 @@ class Danmaku {
   // 透明度小球
   private _opacityDragInstance: Drag | null;
 
+  // 弹幕速度相关
+  private _speedWrapperElement: HtmlElementProp;
+  private _speedProgressElement: HtmlElementProp;
+  private _speedBallElement: HtmlElementProp;
+  private _speedDragInstance: Drag | null;
+
   // 显示或者隐藏弹幕相关
   private _showLabelElement: HtmlElementProp;
   private _isShowDanmaku = true;
@@ -69,6 +75,8 @@ class Danmaku {
     this._extendMethods();
     // 初始化弹幕透明度
     this._initOpacitySetting();
+    // 初始化弹幕速度
+    this._initSpeedSetting();
     // 初始化显示/隐藏弹幕
     this._initShowOrHideSetting();
     // 初始化开始/暂停弹幕
@@ -91,7 +99,49 @@ class Danmaku {
 
     const settingDiv = document.createElement("div");
     settingDiv.className = "danmaku-setting-container";
-    settingDiv.innerHTML = settingTpl();
+    settingDiv.innerHTML = settingTpl({
+      areaList: [
+        {
+          label: "全屏",
+          position: "all",
+          checked: true
+        },
+        {
+          label: "顶部",
+          position: "top"
+        },
+        {
+          label: "底部",
+          position: "bottom"
+        }
+      ],
+      switchList: [
+        {
+          label: "暂停弹幕",
+          className: "danmaku-pause-label",
+          open: false
+        },
+        {
+          label: "显示弹幕",
+          className: "danmaku-show-label",
+          open: true
+        }
+      ],
+      progressList: [
+        {
+          label: "透明度",
+          wrapperClassName: "danmu-opacity-wrapper",
+          progressClassName: "danmu-opacity-progress",
+          ballClassName: "danmu-opacity-ball"
+        },
+        {
+          label: "弹幕速度",
+          wrapperClassName: "danmu-speed-wrapper",
+          progressClassName: "danmu-speed-progress",
+          ballClassName: "danmu-speed-ball"
+        }
+      ]
+    });
     const parentNode = this._el.querySelector(".player-controls-right");
     parentNode?.insertBefore(settingDiv, parentNode?.firstElementChild);
     this._settingWrapperElement = settingDiv;
@@ -170,6 +220,15 @@ class Danmaku {
     );
     this._danmakuAreaWrapperElement =
       this._settingWrapperElement?.querySelector(".danmaku-area");
+
+    this._speedWrapperElement = this._settingWrapperElement?.querySelector(
+      ".danmu-speed-wrapper"
+    );
+    this._speedProgressElement = this._settingWrapperElement?.querySelector(
+      ".danmu-speed-progress"
+    );
+    this._speedBallElement =
+      this._settingWrapperElement?.querySelector(".danmu-speed-ball");
   }
 
   private _initOpacitySetting() {
@@ -181,9 +240,27 @@ class Danmaku {
     this._opacityDragInstance.$on("click", this._setOpacity.bind(this));
   }
 
+  private _initSpeedSetting() {
+    this._speedDragInstance = new Drag({
+      wrapperElement: this._speedWrapperElement,
+      dragElement: this._speedBallElement
+    });
+    this._speedProgressElement!.style.width = "50%";
+    this._speedDragInstance.$on("mousemove", (event: DataInfo) => {
+      this._speedProgressElement!.style.width = `${event.percentX * 100}%`;
+    });
+    this._speedDragInstance.$on("mouseup", this._setSpeed.bind(this));
+    this._speedDragInstance.$on("click", this._setSpeed.bind(this));
+  }
+
   private _setOpacity(event: DataInfo) {
     this._opacityProgressElement!.style.width = `${event.percentX * 100}%`;
     this._danmakuWrapperElement!.style.opacity = `${event.percentX}`;
+  }
+
+  private _setSpeed(event: DataInfo) {
+    this._speedProgressElement!.style.width = `${event.percentX * 100}%`;
+    this._bulletChat?.setSpeed(event.percentX * 2);
   }
 
   private _initShowOrHideSetting() {
@@ -295,6 +372,7 @@ class Danmaku {
     this._opacityDragInstance?.destroy();
     this._bulletChat = null;
 
+    this._eventManager?.removeEventListener();
     this._eventManager?.removeEventListener();
   }
 }

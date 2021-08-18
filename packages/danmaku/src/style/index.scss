@@ -60,13 +60,13 @@
   position: absolute;
   top: 0;
   left: 50%;
+  display: none;
   width: 200px;
   padding: 5px 0;
   font-size: 13px;
   color: #fff;
   background-color: rgba(0, 0, 0, 0.4);
   transform: translate(-50%, -100%);
-  // display: none;
 }
 
 .danmaku-setting-item {
