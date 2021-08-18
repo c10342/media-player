@@ -37,10 +37,16 @@ const defaultOptions = {
 };
 
 class MediaPlayer {
+  // 默认语言
   static lang = LangTypeEnum.zh;
   // 自定义语言包
-  static useLang(lang: LangOptions) {
-    i18n.use(lang);
+  static langObject = {};
+  // 自定义i18n处理函数
+  static i18nFn = null;
+
+  // 自定义语言包
+  static useLang(langObject: LangOptions) {
+    i18n.use(langObject);
     return Player;
   }
   // 设置中英文，zh/en
@@ -50,8 +56,8 @@ class MediaPlayer {
     return Player;
   }
   // 自定义i18n处理函数
-  static setI18n(fn: Function) {
-    i18n.i18n(fn);
+  static setI18n(i18nFn: Function) {
+    i18n.i18n(i18nFn);
     return Player;
   }
 
