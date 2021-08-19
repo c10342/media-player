@@ -8,7 +8,3 @@ export enum CursorEnum {
   x = "e-resize",
   y = "n-resize"
 }
-
-export enum CustomEvents {
-  ZOOM = "zoom"
-}

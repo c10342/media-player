@@ -1,5 +1,6 @@
 import { isUndef, Drag, PlayerEvents } from "@media/utils";
-import { ClassNameEnum, CursorEnum, CustomEvents } from "./config/enum";
+import { ClassNameEnum, CursorEnum } from "./config/enum";
+import { ZoomEvents } from "./config/event";
 import "./style/index.scss";
 import { ZoomData, ZoomOptions } from "./types";
 
@@ -87,7 +88,7 @@ class Zoom {
       this.prevPosition = result;
       // 设置父容器的宽高
       this.setParentStyle(result);
-      this.instance.$emit(CustomEvents.ZOOM, result);
+      this.instance.$emit(ZoomEvents.ZOOM, result);
     }
   }
 
