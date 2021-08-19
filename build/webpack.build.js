@@ -12,6 +12,8 @@ const { getExternals, clean } = require("./utils.js");
 
 const root = path.resolve(__dirname, "../packages");
 
+const tempTypesDir = path.resolve(__dirname, "../temp_types");
+
 const resolve = (...args) => {
   return path.resolve(root, ...args);
 };
@@ -31,22 +33,41 @@ function createConfig(name) {
   return config;
 }
 
-const buildOne = async (name) => {
-  await clean(resolve(`./${name}/dist`));
-  const options = merge(baseConfig, createConfig(name));
-  webpack(options, (err, stats) => {
-    if (err || stats.hasErrors()) {
-      // 构建过程出错
-      console.log(stats.compilation.errors);
-      return;
-    }
-    console.log(name, "done");
+function buildOne(name) {
+  return new Promise(async (re, reject) => {
+    await clean(resolve(`./${name}/dist`));
+    await clean(resolve(`./${name}/types`));
+    const options = merge(baseConfig, createConfig(name));
+    webpack(options, (err, stats) => {
+      if (err || stats.hasErrors()) {
+        // 构建过程出错
+        console.log(stats.compilation.errors);
+        reject();
+        return;
+      }
+      console.log(name, "done");
+      re();
+    });
   });
-};
+}
 
-fs.readdirSync(root).forEach((name) => {
-  buildOne(name);
-});
-// buildOne();
+function moveDTS(name) {
+  fs.renameSync(
+    path.join(tempTypesDir, `./packages/${name}`),
+    resolve(`./${name}/types`)
+  );
+}
 
-// module.exports = options;
+async function build() {
+  const task = [];
+  const list = fs.readdirSync(root);
+  list.forEach((name) => {
+    task.push(buildOne(name));
+  });
+  await Promise.all(task);
+  list.forEach((name) => moveDTS(name));
+  await clean(tempTypesDir);
+  console.log("done");
+}
+
+build();
