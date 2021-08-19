@@ -96,8 +96,6 @@ class Danmaku {
     // 设置i18n处理函数
     i18n.i18n(Player.i18nFn);
     // 最后才设置自定义语言包，否则i18n.setLang会覆盖掉自定义语言包
-    console.log(Player.langObject.danmaku);
-
     i18n.use(Player.langObject.danmaku);
   }
 
