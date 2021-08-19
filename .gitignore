@@ -3,6 +3,7 @@ node_modules
 /**/dist
 /debug.log
 /coverage
+/temp_types
 package-lock.json
 
 
