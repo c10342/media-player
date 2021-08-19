@@ -1,5 +1,5 @@
 import "./style/index.scss";
-import Player from "./constructor";
+import PlayerConstructor from "./constructor";
 import { LangOptions, PlayerOptions, PluginsType } from "./types";
 import i18n from "./locale";
 import {
@@ -94,7 +94,7 @@ class MediaPlayer {
 
   options: PlayerOptions;
   // 实例
-  private playerInstance: Player | null;
+  private playerInstance: PlayerConstructor | null;
   // 存储插件实例
   plugins: Record<string, any> = {};
   constructor(options: PlayerOptions) {
@@ -110,7 +110,7 @@ class MediaPlayer {
   }
 
   private initPlayer() {
-    this.playerInstance = new Player(this.options);
+    this.playerInstance = new PlayerConstructor(this.options);
   }
 
   // 初始化相应的参数

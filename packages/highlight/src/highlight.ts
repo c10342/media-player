@@ -2,7 +2,7 @@ import pointListTpl from "./template/point-list.art";
 import "./style/index.scss";
 import { EventManager, isArray, isUndef } from "@media/utils";
 import { HighlightList, HighlightOptions } from "./types";
-import VideoPlayer, { PlayerEvents, VideoEvents } from "@media/player";
+import MediaPlayer, { PlayerEvents, VideoEvents } from "@media/player";
 import { HighlightEvents } from "./config/event";
 
 const defaultOptions = {
@@ -16,7 +16,7 @@ class Highlight {
   // 播放器的dom
   private el: HTMLElement;
   // 播放器实例
-  private instance: VideoPlayer;
+  private instance: MediaPlayer;
   // 播放器构造函数
   private Player: any;
   // 是否正在加载标志位
@@ -28,7 +28,7 @@ class Highlight {
   // 提示点参数
   private options: HighlightOptions;
 
-  constructor(el: HTMLElement, instance: VideoPlayer, Player: any) {
+  constructor(el: HTMLElement, instance: MediaPlayer, Player: any) {
     // 保存一下播放器给来的参数
     this.el = el;
     this.instance = instance;

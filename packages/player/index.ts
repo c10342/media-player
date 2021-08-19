@@ -1,5 +1,5 @@
-import VideoPlayer from "./src/index";
+import MediaPlayer from "./src/index";
 
-export default VideoPlayer;
+export default MediaPlayer;
 
 export * from "./src/config/event";

@@ -15,7 +15,7 @@ import ShortcutKey from "./js/shortcut-key";
 import { FullScreenTypeEnum } from "./config/enum";
 import { PlayerEvents } from "./config/event";
 
-class Player extends EventEmit {
+class PlayerConstructor extends EventEmit {
   private options: PlayerOptions;
   private templateInstance: Template | null;
   private videoPlayerInstance: VideoPlayer | null;
@@ -314,4 +314,4 @@ class Player extends EventEmit {
   }
 }
 
-export default Player;
+export default PlayerConstructor;

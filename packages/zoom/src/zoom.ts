@@ -1,4 +1,5 @@
-import { isUndef, Drag, PlayerEvents } from "@media/utils";
+import { PlayerEvents } from "@media/player";
+import { isUndef, Drag } from "@media/utils";
 import { ClassNameEnum, CursorEnum } from "./config/enum";
 import { ZoomEvents } from "./config/event";
 import "./style/index.scss";

@@ -3,7 +3,7 @@ import { EventManager, isUndef, logError } from "@media/utils";
 import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
 import { downloadPicName } from "./config/constant";
-import VideoPlayer, { PlayerEvents } from "@media/player";
+import MediaPlayer, { PlayerEvents } from "@media/player";
 import { ScreenshotEvents } from "./config/event";
 
 const defaultOptions = {
@@ -17,7 +17,7 @@ class Screenshot {
   // 播放器的dom
   private el: HTMLElement;
   // 播放器实例
-  private instance: VideoPlayer;
+  private instance: MediaPlayer;
   // 播放器构造函数
   private Player: any;
   // dom元素
@@ -27,7 +27,7 @@ class Screenshot {
   // 参数
   private options: ScreenshotOptions;
 
-  constructor(el: HTMLElement, instance: VideoPlayer, Player: any) {
+  constructor(el: HTMLElement, instance: MediaPlayer, Player: any) {
     // 保存一下播放器给来的参数
     this.el = el;
     this.instance = instance;
