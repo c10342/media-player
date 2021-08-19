@@ -9,11 +9,11 @@ npm i @media/zoom
 ## 初始化
 
 ```javascript
-import VideoPlayer from "@media/player";
+import MediaPlayer from "@media/player";
 import Zoom from "@media/zoom";
-VideoPlayer.use(Zoom);
+MediaPlayer.use(Zoom);
 
-const player = new VideoPlayer({
+const player = new MediaPlayer({
   // ...
   zoomOptions: {
     // 是否允许横向缩放，默认true

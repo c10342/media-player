@@ -9,9 +9,9 @@ npm i @media/preview
 ## 初始化
 
 ```javascript
-import VideoPlayer from "@media/player";
+import MediaPlayer from "@media/player";
 import Preview from "@media/preview";
-VideoPlayer.use(Preview);
+MediaPlayer.use(Preview);
 ```
 
 缩略图有 2 中形式，一种是通过列表传入对应时间点的缩略图，另一种是传入整个视频的缩略图地址（这种是可以查看任意时间点的缩略图，但是缩略图必须是完整的）
@@ -29,7 +29,7 @@ const previewList = [
     url: "http://xxx/demo2.png"
   }
 ];
-const player = new VideoPlayer({
+const player = new MediaPlayer({
   // ...
   previewOptions: {
     // 通过参数传入或者通过setPreview方法设置
@@ -47,7 +47,7 @@ player.$on("preview-click", (item: any) => {
 第二种：
 
 ```javascript
-const player = new VideoPlayer({
+const player = new MediaPlayer({
   // ...
   previewOptions: {
     // 通过参数传入或者通过setBarView方法设置

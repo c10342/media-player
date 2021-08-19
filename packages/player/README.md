@@ -9,9 +9,9 @@ npm i @media/player
 ## 初始化
 
 ```javascript
-import VideoPlayer from "@media/player";
+import MediaPlayer from "@media/player";
 
-const player = new VideoPlayer({
+const player = new MediaPlayer({
   // 容器
   el: ".container",
   // 视频列表
@@ -168,10 +168,10 @@ player.fullScreen.cancel("browser");
 
 静态方法
 
-- `VideoPlayer.useLang(lang:Object)` : 自定义语言包，会跟默认的语言包进行合并
+- `MediaPlayer.useLang(lang:Object)` : 自定义语言包，会跟默认的语言包进行合并
 
 ```javascript
-VideoPlayer.useLang({
+MediaPlayer.useLang({
   player: {
     live: "直播",
     goBack: "快退{time}秒",
@@ -184,11 +184,11 @@ VideoPlayer.useLang({
 });
 ```
 
-- `VideoPlayer.setLang(lang:string)` : 设置使用何种语言，zh/en，默认 zh
+- `MediaPlayer.setLang(lang:string)` : 设置使用何种语言，zh/en，默认 zh
 
-- `VideoPlayer.setI18n(fn: Function)` : 自定义 i18n 处理函数
+- `MediaPlayer.setI18n(fn: Function)` : 自定义 i18n 处理函数
 
-- `VideoPlayer.use(ctor: Function)` : 注册全局插件
+- `MediaPlayer.use(ctor: Function)` : 注册全局插件
 
 ## 插件
 
@@ -196,7 +196,7 @@ VideoPlayer.useLang({
 
 插件分为全局插件和局部插件，使用全局插件时，每个播放器实例都会具备全局插件的功能。使用局部插件时，只有当前播放器实例才会存在局部插件的功能。
 
-全局插件是通过`VideoPlayer.use(ctor: Function)`进行注册的
+全局插件是通过`MediaPlayer.use(ctor: Function)`进行注册的
 
 局部插件是通过 options 参数中的`plugins`字段进行注册的
 
@@ -205,8 +205,8 @@ VideoPlayer.useLang({
 构造器函数（类）会接受到三个参数：
 
 - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`
-- instance：播放器实例，即`new VideoPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往实例中挂载其他属性或者方法
-- VideoPlayer：播放器的构造函数，你可以往他的`prototype`原型上添加属性或者方法。但是需要注意的时，当播放器被`new`了多次之后，后面添加属性或者方法会覆盖掉前面的。所以这个参数很少会被用到
+- instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往实例中挂载其他属性或者方法
+- MediaPlayer：播放器的构造函数，你可以往他的`prototype`原型上添加属性或者方法。但是需要注意的时，当播放器被`new`了多次之后，后面添加属性或者方法会覆盖掉前面的。所以这个参数很少会被用到
 
 插件代码示例：
 
@@ -219,13 +219,13 @@ class Test {
 
   el = null;
   instance = null;
-  VideoPlayer = null;
+  MediaPlayer = null;
 
-  constructor(el, instance, VideoPlayer) {
+  constructor(el, instance, MediaPlayer) {
     // 保存接受到的三个参数
     this.el = el;
     this.instance = instance;
-    this.VideoPlayer = VideoPlayer;
+    this.MediaPlayer = MediaPlayer;
     // 往播放器实例中添加一个sleep方法
     instance.extend.extend({
       sleep() {
@@ -254,15 +254,15 @@ class Test {
 使用插件：
 
 ```javascript
-import VideoPlayer from "@media/player";
+import MediaPlayer from "@media/player";
 
 // 全局注册插件
-VideoPlayer.use(Test);
+MediaPlayer.use(Test);
 
-const player = new VideoPlayer({
+const player = new MediaPlayer({
   // ...
   // 或者通过局部注册
-  // plugins:[VideoPlayer]
+  // plugins:[MediaPlayer]
 });
 
 // Test插件发射出来的事件

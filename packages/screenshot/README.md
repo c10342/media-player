@@ -9,11 +9,11 @@ npm i @media/screenshot
 ## 初始化
 
 ```javascript
-import VideoPlayer from "@media/player";
+import MediaPlayer from "@media/player";
 import Screenshot from "@media/screenshot";
-VideoPlayer.use(Screenshot);
+MediaPlayer.use(Screenshot);
 
-const player = new VideoPlayer({
+const player = new MediaPlayer({
   // ...
   screenshotOptions: {
     // 是否开启功能，默认为true，如果是通过全局注册的插件，可通过该选项关闭功能
