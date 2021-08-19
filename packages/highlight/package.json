@@ -8,13 +8,13 @@
   "keywords": [
     "highlight"
   ],
-  "homepage": "https://github.com/c10342/video-player",
+  "homepage": "https://github.com/c10342/media-player",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/c10342/video-player"
+    "url": "https://github.com/c10342/media-player"
   },
   "author": "c10342",
   "license": "MIT",
