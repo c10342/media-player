@@ -57,7 +57,7 @@ export interface ComponentOptions extends PlayerOptions {
 
 // 语言
 export interface LangOptions {
-  [key: string]: string;
+  [key: string]: any;
 }
 
 // 插件类型

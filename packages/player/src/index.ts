@@ -42,23 +42,25 @@ class MediaPlayer {
   // 自定义语言包
   static langObject = {};
   // 自定义i18n处理函数
-  static i18nFn = null;
+  static i18nFn: Function | null = null;
 
   // 自定义语言包
   static useLang(langObject: LangOptions) {
-    i18n.use(langObject);
-    return Player;
+    i18n.use(langObject.player);
+    MediaPlayer.langObject = langObject;
+    return MediaPlayer;
   }
   // 设置中英文，zh/en
   static setLang(lang: LangTypeEnum) {
     i18n.setLang(lang);
     MediaPlayer.lang = lang;
-    return Player;
+    return MediaPlayer;
   }
   // 自定义i18n处理函数
   static setI18n(i18nFn: Function) {
     i18n.i18n(i18nFn);
-    return Player;
+    MediaPlayer.i18nFn = i18nFn;
+    return MediaPlayer;
   }
 
   // 全局插件列表
