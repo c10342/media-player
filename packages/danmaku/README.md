@@ -53,9 +53,26 @@ const player = new VideoPlayer({
 
 当参数是`Object`或者`Array`类型时，下列字段可选
 
-| 字段      | 说明         | 类型   |
-| --------- | ------------ | ------ |
-| text      | 弹幕文本     | string |
-| fontSize  | 字体大小     | number |
-| fontColor | 字体颜色     | string |
+| 字段      | 说明                 | 类型   |
+| --------- | -------------------- | ------ |
+| text      | 弹幕文本             | string |
+| fontSize  | 字体大小             | number |
+| fontColor | 字体颜色             | string |
 | rollTime  | 弹幕移动时间，单位秒 | number |
+
+## 自定义语言包
+
+```javascript
+VideoPlayer.useLang({
+  danmaku: {
+    full: "全屏",
+    top: "顶部",
+    bottom: "底部",
+    pause: "暂停弹幕",
+    show: "显示弹幕",
+    opacity: "透明度",
+    speed: "弹幕速度",
+    showArea: "显示区域"
+  }
+});
+```
