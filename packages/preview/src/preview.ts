@@ -1,16 +1,9 @@
 import pointListTpl from "./template/preview-list.art";
 import "./style/index.scss";
-import {
-  EventManager,
-  isArray,
-  isUndef,
-  checkData,
-  PlayerEvents,
-  VideoEvents
-} from "@media/utils";
+import { EventManager, isArray, isUndef, checkData } from "@media/utils";
 import { PreviewList, PreviewOptions } from "./types";
-import { ClassNameEnum, CustomEvents } from "./config/enum";
-import VideoPlayer from "@media/player";
+import VideoPlayer, { PlayerEvents, VideoEvents } from "@media/player";
+import { PreviewEvents } from "./config/event";
 
 const defaultOptions = {
   barPreview: false
@@ -195,7 +188,7 @@ class Preview {
       const previewList = this.options.list as PreviewList;
       const item = previewList[dataset.index as any];
       // 发射自定义事件
-      this.instance.$emit(CustomEvents.PREVIEWCLICK, item);
+      this.instance.$emit(PreviewEvents.PREVIEWCLICK, item);
     }
   }
 
@@ -228,7 +221,7 @@ class Preview {
       (videoElement!.videoHeight / videoElement!.videoWidth) *
       barViewImageWidth;
     const div = document.createElement("div");
-    div.className = ClassNameEnum.PREVIEWBARIMAGE;
+    div.className = "preview-bar-image";
     div.style.backgroundImage = `url("${this.options.barPreviewUrl}")`;
     div.style.width = `${barViewImageWidth}px`;
     div.style.height = `${height}px`;
