@@ -1,10 +1,10 @@
 import "./style/index.scss";
-import { EventManager, isUndef, logError, PlayerEvents } from "@media/utils";
+import { EventManager, isUndef, logError } from "@media/utils";
 import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
-import { ClassNameEnum, CustomEvents } from "./config/enum";
 import { downloadPicName } from "./config/constant";
-import VideoPlayer from "@media/player";
+import VideoPlayer, { PlayerEvents } from "@media/player";
+import { ScreenshotEvents } from "./config/event";
 
 const defaultOptions = {
   open: true,
@@ -68,7 +68,8 @@ class Screenshot {
   // 渲染小图标
   private initElement() {
     const span = document.createElement("span");
-    span.className = ClassNameEnum.ICON;
+    span.className =
+      "screenshot-icon-screenshot player-icon-item screenshot-icon-item";
     const parentNode = this.el.querySelector(".player-controls-right");
     parentNode?.insertBefore(span, parentNode?.firstElementChild);
     this.element = span;
@@ -91,7 +92,7 @@ class Screenshot {
   private onClick() {
     const imageSrc = this.getVideoImage();
     // 广播事件
-    this.instance.$emit(CustomEvents.SCREENSHOT, imageSrc);
+    this.instance.$emit(ScreenshotEvents.SCREENSHOT, imageSrc);
     if (this.options.download && !isUndef(imageSrc)) {
       // 下载图片
       this.downloadImage(imageSrc);
