@@ -15,7 +15,7 @@
       "strict": true,
       "preserveSymlinks": true,
       "declaration": true,
-      "declarationDir":"types",
+      "declarationDir":"temp_types",
       "allowSyntheticDefaultImports": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": false,
