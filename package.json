@@ -13,7 +13,7 @@
   "scripts": {
     "commit": "git cz",
     "dev": "webpack-dev-server --config ./build/webpack.examples.js",
-    "build:utils": "node ./build/webpack.utils.js",
+    "build": "node ./build/webpack.build.js",
     "lint-fix": "eslint --fix --ext .ts ./packages",
     "lint": "eslint --ext .ts ./packages",
     "lint-staged": "lint-staged --config lint-staged.config.js",
