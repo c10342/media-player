@@ -4,6 +4,7 @@ node_modules
 /debug.log
 /coverage
 /temp_types
+/packages/**/types
 package-lock.json
 
 
