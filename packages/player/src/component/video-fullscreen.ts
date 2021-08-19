@@ -3,12 +3,12 @@ import {
   exitBrowserFullscreen,
   isBrowserFullscreen,
   EventManager,
-  isUndef,
-  PlayerEvents
+  isUndef
 } from "@media/utils";
 import { ComponentOptions } from "../types";
 import { WEBFULLSCREENCLASSNAME } from "../config/constant";
 import { KeyCodeEnum } from "../config/enum";
+import { PlayerEvents } from "../config/event";
 
 class VideoFullscreen {
   private options: ComponentOptions;

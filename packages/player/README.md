@@ -32,17 +32,17 @@ const player = new VideoPlayer({
 
 ## 参数
 
-| 参数       | 说明                                               | 类型                 | 可选值 | 默认值 |
-| ---------- | -------------------------------------------------- | -------------------- | ------ | ------ |
-| el         | 播放容器                                           | string，HTMLElement   | —      | —      |
-| videoList  | 视频播放列表，格式见下方                           | Array | —      | —      |
-| speedList  | 倍数列表，可选，，格式见下方                       | Array     | —      | —      |
-| plugins    | 注册局部插件，可选                                 | Array      | —      | —      |
-| hotkey     | 是否开启热键（快捷键），可选                       | boolean              | —      | true   |
-| autoplay   | 是否自动播放，可选                                 | boolean              | —      | false  |
-| muted      | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean              | —      | false  |
-| customType | 自定义 esm，可选，，格式见下方                     | Function           | —      | —      |
-| live       | 是否为直播，可选                                   | boolean              | —      | false  |
+| 参数       | 说明                                               | 类型                | 可选值 | 默认值 |
+| ---------- | -------------------------------------------------- | ------------------- | ------ | ------ |
+| el         | 播放容器                                           | string，HTMLElement | —      | —      |
+| videoList  | 视频播放列表，格式见下方                           | Array               | —      | —      |
+| speedList  | 倍数列表，可选，，格式见下方                       | Array               | —      | —      |
+| plugins    | 注册局部插件，可选                                 | Array               | —      | —      |
+| hotkey     | 是否开启热键（快捷键），可选                       | boolean             | —      | true   |
+| autoplay   | 是否自动播放，可选                                 | boolean             | —      | false  |
+| muted      | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean             | —      | false  |
+| customType | 自定义 esm，可选，，格式见下方                     | Function            | —      | —      |
+| live       | 是否为直播，可选                                   | boolean             | —      | false  |
 
 ## videoList 格式
 
@@ -170,6 +170,20 @@ player.fullScreen.cancel("browser");
 
 - `VideoPlayer.useLang(lang:Object)` : 自定义语言包，会跟默认的语言包进行合并
 
+```javascript
+VideoPlayer.useLang({
+  player: {
+    live: "直播",
+    goBack: "快退{time}秒",
+    fastForward: "快进{time}秒",
+    volume: "音量{volume}",
+    switch: "已经切换至{quality}",
+    invalidDefinition: "无效清晰度"
+  }
+  // 其他插件语言包
+});
+```
+
 - `VideoPlayer.setLang(lang:string)` : 设置使用何种语言，zh/en，默认 zh
 
 - `VideoPlayer.setI18n(fn: Function)` : 自定义 i18n 处理函数
@@ -184,21 +198,19 @@ player.fullScreen.cancel("browser");
 
 全局插件是通过`VideoPlayer.use(ctor: Function)`进行注册的
 
-局部插件是通过options参数中的`plugins`字段进行注册的
-
+局部插件是通过 options 参数中的`plugins`字段进行注册的
 
 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性（不写就默认使用构造器的 name），这是为了外部可以通过`player.plugins[pluginName]`访问到插件实例
 
 构造器函数（类）会接受到三个参数：
 
-- el：整个播放器的dom元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`
+- el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`
 - instance：播放器实例，即`new VideoPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往实例中挂载其他属性或者方法
 - VideoPlayer：播放器的构造函数，你可以往他的`prototype`原型上添加属性或者方法。但是需要注意的时，当播放器被`new`了多次之后，后面添加属性或者方法会覆盖掉前面的。所以这个参数很少会被用到
 
 插件代码示例：
 
 Test 插件
-
 
 ```javascript
 class Test {
@@ -260,5 +272,5 @@ player.$on("test-click", () => {
 // Test插件在原型上面挂载的方法
 player.sleep();
 // 访问Test插件的实例
-player.plugins.Test
+player.plugins.Test;
 ```

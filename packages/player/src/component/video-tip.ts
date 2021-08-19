@@ -1,4 +1,5 @@
-import { isUndef, PlayerEvents } from "@media/utils";
+import { isUndef } from "@media/utils";
+import { PlayerEvents } from "../config/event";
 import { ComponentOptions } from "../types";
 
 class VideoTip {

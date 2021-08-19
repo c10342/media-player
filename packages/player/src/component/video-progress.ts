@@ -4,12 +4,11 @@ import {
   isUndef,
   secondToTime,
   checkData,
-  Drag,
-  PlayerEvents,
-  VideoEvents
+  Drag
 } from "@media/utils";
 import { ComponentOptions, DragDataInfo } from "../types";
 import { t } from "../locale";
+import { PlayerEvents, VideoEvents } from "../config/event";
 
 class VideoProgress {
   private options: ComponentOptions;

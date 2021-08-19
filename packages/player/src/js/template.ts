@@ -1,4 +1,3 @@
-import { PlayerEvents } from "@media/utils";
 import Player from "../constructor";
 import { t } from "../locale";
 import templateTpl from "../template/layout.art";
@@ -9,6 +8,7 @@ import {
   NodeListElement,
   PlayerOptions
 } from "../types/index";
+import { PlayerEvents } from "../config/event";
 
 interface OptionsParams extends PlayerOptions {
   instance: Player;

@@ -1,10 +1,5 @@
-import {
-  EventManager,
-  isFunction,
-  isUndef,
-  PlayerEvents,
-  VideoEvents
-} from "@media/utils";
+import { EventManager, isFunction, isUndef } from "@media/utils";
+import { PlayerEvents, VideoEvents } from "../config/event";
 import { ComponentOptions } from "../types";
 
 class VideoControls {

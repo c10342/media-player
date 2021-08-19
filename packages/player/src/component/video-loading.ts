@@ -1,5 +1,6 @@
-import { EventManager, isUndef, PlayerEvents, VideoEvents } from "@media/utils";
+import { EventManager, isUndef } from "@media/utils";
 import { VideoReadyStateEnum } from "../config/enum";
+import { PlayerEvents, VideoEvents } from "../config/event";
 import { ComponentOptions } from "../types";
 
 class VideoLoading {

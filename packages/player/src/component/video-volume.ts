@@ -1,13 +1,8 @@
-import {
-  EventManager,
-  isUndef,
-  Drag,
-  PlayerEvents,
-  VideoEvents
-} from "@media/utils";
+import { EventManager, isUndef, Drag } from "@media/utils";
 import { ComponentOptions, DragDataInfo } from "../types";
 import { VolumeButtonIconEnum } from "../config/enum";
 import { t } from "../locale";
+import { PlayerEvents, VideoEvents } from "../config/event";
 
 class VideoVolume {
   private options: ComponentOptions;

@@ -1,5 +1,6 @@
-import { EventManager, isFunction, isUndef, PlayerEvents } from "@media/utils";
+import { EventManager, isFunction, isUndef } from "@media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
+import { PlayerEvents } from "../config/event";
 import { ComponentOptions, SpeedItem } from "../types";
 
 interface OptionsParams extends ComponentOptions {

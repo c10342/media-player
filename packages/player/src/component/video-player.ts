@@ -1,14 +1,9 @@
-import {
-  EventManager,
-  isFunction,
-  isUndef,
-  PlayerEvents,
-  VideoEvents
-} from "@media/utils";
+import { EventManager, isFunction, isUndef } from "@media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
 import { ComponentOptions, VideoListItem } from "../types";
 import videoTpl from "../template/video.art";
 import { t } from "../locale";
+import { PlayerEvents, VideoEvents } from "../config/event";
 
 class VideoPlayer {
   private options: ComponentOptions;

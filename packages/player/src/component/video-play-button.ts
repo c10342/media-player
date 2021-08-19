@@ -1,7 +1,8 @@
-import { EventManager, isUndef, PlayerEvents, VideoEvents } from "@media/utils";
+import { EventManager, isUndef } from "@media/utils";
 import { ComponentOptions } from "../types";
 
 import { PlayButtonIconEnum } from "../config/enum";
+import { PlayerEvents, VideoEvents } from "../config/event";
 
 class VideoPlayButton {
   private options: ComponentOptions;
