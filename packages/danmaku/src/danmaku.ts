@@ -8,7 +8,7 @@ import BulletChat from "./js/bullet-chat";
 import { DanmakuOptions, PushData } from "./types";
 import settingTpl from "./template/setting.art";
 import "./style/index.scss";
-import { setLang, t } from "./locale";
+import i18n from "./locale";
 import VideoPlayer from "@media/player";
 
 interface DataInfo {
@@ -91,7 +91,14 @@ class Danmaku {
   }
 
   private _initLang(Player: any) {
-    setLang(Player.lang);
+    // 先设置中英文
+    i18n.setLang(Player.lang);
+    // 设置i18n处理函数
+    i18n.i18n(Player.i18nFn);
+    // 最后才设置自定义语言包，否则i18n.setLang会覆盖掉自定义语言包
+    console.log(Player.langObject.danmaku);
+
+    i18n.use(Player.langObject.danmaku);
   }
 
   private _initVar() {
@@ -109,46 +116,46 @@ class Danmaku {
     settingDiv.innerHTML = settingTpl({
       areaList: [
         {
-          label: t("full"),
+          label: i18n.t("full"),
           position: "all",
           checked: true
         },
         {
-          label: t("top"),
+          label: i18n.t("top"),
           position: "top"
         },
         {
-          label: t("bottom"),
+          label: i18n.t("bottom"),
           position: "bottom"
         }
       ],
       switchList: [
         {
-          label: t("pause"),
+          label: i18n.t("pause"),
           className: "danmaku-pause-label",
           open: false
         },
         {
-          label: t("show"),
+          label: i18n.t("show"),
           className: "danmaku-show-label",
           open: true
         }
       ],
       progressList: [
         {
-          label: t("opacity"),
+          label: i18n.t("opacity"),
           wrapperClassName: "danmu-opacity-wrapper",
           progressClassName: "danmu-opacity-progress",
           ballClassName: "danmu-opacity-ball"
         },
         {
-          label: t("speed"),
+          label: i18n.t("speed"),
           wrapperClassName: "danmu-speed-wrapper",
           progressClassName: "danmu-speed-progress",
           ballClassName: "danmu-speed-ball"
         }
       ],
-      showArea: t("showArea")
+      showArea: i18n.t("showArea")
     });
     const parentNode = this._el.querySelector(".player-controls-right");
     parentNode?.insertBefore(settingDiv, parentNode?.firstElementChild);
