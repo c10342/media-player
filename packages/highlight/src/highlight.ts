@@ -1,15 +1,9 @@
 import pointListTpl from "./template/point-list.art";
 import "./style/index.scss";
-import {
-  EventManager,
-  isArray,
-  isUndef,
-  VideoEvents,
-  PlayerEvents
-} from "@media/utils";
+import { EventManager, isArray, isUndef } from "@media/utils";
 import { HighlightList, HighlightOptions } from "./types";
-import { CustomEvents } from "./config/enum";
-import VideoPlayer from "@media/player";
+import VideoPlayer, { PlayerEvents, VideoEvents } from "@media/player";
+import { HighlightEvents } from "./config/event";
 
 const defaultOptions = {
   jump: true,
@@ -194,7 +188,7 @@ class Highlight {
         this.instance.setNotice(item.text);
       }
       // 发射自定义事件
-      this.instance.$emit(CustomEvents.HIGHLIGHTCLICK, item);
+      this.instance.$emit(HighlightEvents.HIGHLIGHTCLICK, item);
     }
   }
 
