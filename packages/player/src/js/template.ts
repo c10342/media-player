@@ -9,6 +9,7 @@ import {
   PlayerOptions
 } from "../types/index";
 import { PlayerEvents } from "../config/event";
+import { isUndef, debounce } from "@media/utils";
 
 interface OptionsParams extends PlayerOptions {
   instance: Player;
@@ -16,6 +17,8 @@ interface OptionsParams extends PlayerOptions {
 
 class Template {
   private options: OptionsParams;
+
+  private resizeObserver: ResizeObserver | null;
 
   containerElement: HtmlElementProp;
 
@@ -83,6 +86,7 @@ class Template {
     this.initElement();
     // 初始化事件监听
     this.initListener();
+    this.initResizeObserver();
   }
 
   private initTemplate() {
@@ -140,12 +144,25 @@ class Template {
       PlayerEvents.SWITCH_DEFINITION_END,
       this.onElementReload.bind(this)
     );
+    instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
   }
 
   private onElementReload() {
     // 切换清晰度结束后需要刷新video标签元素
     const el = this.options.el as HTMLElement;
     this.videoElement = el.querySelector(".player-video");
+  }
+
+  private initResizeObserver() {
+    if (!isUndef(this.containerElement)) {
+      this.resizeObserver = new ResizeObserver(
+        debounce((entries: ResizeObserverEntry[]) => {
+          const entrie = entries[0];
+          this.options.instance.$emit(PlayerEvents.RESIZE, entrie.contentRect);
+        }, 500)
+      );
+      this.resizeObserver.observe(this.containerElement);
+    }
   }
 
   private resetData() {
@@ -180,9 +197,11 @@ class Template {
     this.controlsElement = null;
   }
 
-  destroy() {
+  private destroy() {
     // 销毁的时候重置所有元素，防止移除元素之后保存其引用
-    this.resetData();
+    // this.resetData();
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = null;
   }
 }
 

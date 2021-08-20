@@ -1,5 +1,6 @@
 import { EventManager } from "@media/utils";
 import { CanFocusTagEnum, KeyCodeEnum } from "../config/enum";
+import { PlayerEvents } from "../config/event";
 import { ComponentOptions } from "../types";
 
 class ShortcutKey {
@@ -39,6 +40,8 @@ class ShortcutKey {
       eventName: "keyup",
       handler: this.onDocumentKeyup.bind(this)
     });
+    const instance = this.options.instance;
+    instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
   }
 
   // 点击播放器外的元素时吧标志位置为false
@@ -96,6 +99,10 @@ class ShortcutKey {
         this.instance.setVolume(this.instance.volume - 0.1);
         break;
     }
+  }
+
+  private destroy() {
+    this.eventManager.removeEventListener();
   }
 }
 
