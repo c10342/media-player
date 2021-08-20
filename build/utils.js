@@ -19,7 +19,7 @@ function getExternals(name) {
   const dep = {};
 
   [...new Set(externals)].forEach((key) => {
-    dep[key] = getExportName(key);
+    dep[key] = key;
   });
 
   return dep;
@@ -31,31 +31,7 @@ const clean = (cleanPath) => {
   });
 };
 
-const whiteList = ["multi-locale", "multi-utils"];
-
-function toHump(name) {
-  return name.replace(/-(\w)/g, function (all, letter) {
-    return letter.toUpperCase();
-  });
-}
-
-
-function getExportName(name){
-  const reg = /^@media\//
-  name = toHump(name)
-  const compName = name.replace(reg,'')
-  return 'Media'+firstCharUpper(compName)
-}
-
-function firstCharUpper(name){
-  return name.charAt(0).toUpperCase()+name.slice(1)
-}
-
 module.exports = {
   getExternals,
-  clean,
-  whiteList,
-  toHump,
-  getExportName,
-  firstCharUpper
+  clean
 };

@@ -8,7 +8,7 @@ const path = require("path");
 
 const fs = require("fs");
 
-const { getExternals, clean,firstCharUpper } = require("./utils.js");
+const { getExternals, clean } = require("./utils.js");
 
 const root = path.resolve(__dirname, "../packages");
 
@@ -27,9 +27,7 @@ function createConfig(name) {
     output: {
       path: resolve(`./${name}/dist`),
       filename: "index.js",
-      libraryTarget: "umd",
-      libraryExport: 'default',
-      library:`Media${firstCharUpper(name)}`
+      libraryTarget: "commonjs2"
     }
   };
   return config;
