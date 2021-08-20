@@ -19,7 +19,7 @@ function getExternals(name) {
   const dep = {};
 
   [...new Set(externals)].forEach((key) => {
-    dep[key] = key;
+    dep[key] = getExportName(key);
   });
 
   return dep;
@@ -39,9 +39,23 @@ function toHump(name) {
   });
 }
 
+
+function getExportName(name){
+  const reg = /^@media\//
+  name = toHump(name)
+  const compName = name.replace(reg,'')
+  return 'Media'+firstCharUpper(compName)
+}
+
+function firstCharUpper(name){
+  return name.charAt(0).toUpperCase()+name.slice(1)
+}
+
 module.exports = {
   getExternals,
   clean,
   whiteList,
-  toHump
+  toHump,
+  getExportName,
+  firstCharUpper
 };
