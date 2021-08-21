@@ -18,8 +18,6 @@ class Screenshot {
   private el: HTMLElement;
   // 播放器实例
   private instance: MediaPlayer;
-  // 播放器构造函数
-  private Player: any;
   // dom元素
   private element: HTMLElement | null;
   // 事件管理器
@@ -27,11 +25,10 @@ class Screenshot {
   // 参数
   private options: ScreenshotOptions;
 
-  constructor(el: HTMLElement, instance: MediaPlayer, Player: any) {
+  constructor(el: HTMLElement, instance: MediaPlayer) {
     // 保存一下播放器给来的参数
     this.el = el;
     this.instance = instance;
-    this.Player = Player;
     // 合并默认参数
     const options = this.instance.options?.screenshotOptions ?? {};
     this.options = { ...defaultOptions, ...options };

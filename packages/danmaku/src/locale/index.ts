@@ -47,8 +47,10 @@ export const use = function use(l: LangOptions) {
 };
 
 // 自定义i18n处理函数
-export const i18n = function i18n(fn: Function) {
-  i18nHandler = fn;
+export const i18n = function i18n(fn: Function | null) {
+  if (isFunction(fn)) {
+    i18nHandler = fn;
+  }
 };
 
 // 设置使用哪种语言

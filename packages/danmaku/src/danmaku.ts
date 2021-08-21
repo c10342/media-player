@@ -60,12 +60,12 @@ class Danmaku {
   private _danmakuAreaWrapperElement: HtmlElementProp;
   private _danmakuAreaPosition = DanmakuAreaEnum.all;
 
-  constructor(el: HTMLElement, instance: MediaPlayer, Player: any) {
+  constructor(el: HTMLElement, instance: MediaPlayer) {
     this._el = el;
     this._instance = instance;
     const options = instance.options?.danmakuOptions ?? {};
     this.options = options;
-    this._initLang(Player);
+    this._initLang();
     // 初始化变量
     this._initVar();
     // 生成dom元素
@@ -90,13 +90,13 @@ class Danmaku {
     this._initListener();
   }
 
-  private _initLang(Player: any) {
+  private _initLang() {
     // 先设置中英文
-    i18n.setLang(Player.lang);
+    i18n.setLang(MediaPlayer.lang);
     // 设置i18n处理函数
-    i18n.i18n(Player.i18nFn);
+    i18n.i18n(MediaPlayer.i18nFn);
     // 最后才设置自定义语言包，否则i18n.setLang会覆盖掉自定义语言包
-    i18n.use(Player.langObject.danmaku);
+    i18n.use((MediaPlayer.langObject as any).danmaku);
   }
 
   private _initVar() {

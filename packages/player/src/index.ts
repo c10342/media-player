@@ -40,7 +40,7 @@ class MediaPlayer {
   // 默认语言
   static lang = LangTypeEnum.zh;
   // 自定义语言包
-  static langObject = {};
+  static langObject: Record<string, any> = {};
   // 自定义i18n处理函数
   static i18nFn: Function | null = null;
 
@@ -238,7 +238,7 @@ class MediaPlayer {
       this.options.plugins || []
     );
     plugins.forEach((Ctor: any) => {
-      const instance = new Ctor(el, this, MediaPlayer);
+      const instance = new Ctor(el, this);
       const pluginName = getPluginName(Ctor);
       this.plugins[pluginName] = instance;
     });

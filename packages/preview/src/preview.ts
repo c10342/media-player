@@ -24,8 +24,6 @@ class Preview {
   private el: HTMLElement;
   // 播放器实例
   private instance: MediaPlayer;
-  // 播放器构造函数
-  private Player: any;
   // 是否正在加载标志位
   private load = true;
   // 预览点的dom元素
@@ -39,11 +37,10 @@ class Preview {
   // 进度条容器
   private progressElement: HTMLElement | null;
 
-  constructor(el: HTMLElement, instance: MediaPlayer, Player: any) {
+  constructor(el: HTMLElement, instance: MediaPlayer) {
     // 保存一下播放器给来的参数
     this.el = el;
     this.instance = instance;
-    this.Player = Player;
     // 参数
     const options = this.instance.options?.previewOptions ?? {};
     this.options = { ...defaultOptions, ...options };
