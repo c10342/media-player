@@ -36,7 +36,7 @@ const player = new MediaPlayer({
 | ---------- | -------------------------------------------------- | ------------------- | ------ | ------ |
 | el         | 播放容器                                           | string，HTMLElement | —      | —      |
 | videoList  | 视频播放列表，格式见下方                           | Array               | —      | —      |
-| speedList  | 倍数列表，可选，，格式见下方                       | Array               | —      | —      |
+| speedList  | 倍数列表，可选，格式见下方                       | Array               | —      | —      |
 | plugins    | 注册局部插件，可选                                 | Array               | —      | —      |
 | hotkey     | 是否开启热键（快捷键），可选                       | boolean             | —      | true   |
 | autoplay   | 是否自动播放，可选                                 | boolean             | —      | false  |
@@ -82,6 +82,7 @@ const player = new MediaPlayer({
 | exit_web_screen         | 网页退出全屏时触发   | —        |
 | show_controls           | 控制条显示时触发     | —        |
 | hide_controls           | 控制条隐藏时触发     | —        |
+| resize           | 播放器大小发生变化时触发     | —        |
 
 - 原生 video 标签事件
 
@@ -206,7 +207,6 @@ MediaPlayer.useLang({
 
 - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`
 - instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往实例中挂载其他属性或者方法
-- MediaPlayer：播放器的构造函数，你可以往他的`prototype`原型上添加属性或者方法。但是需要注意的时，当播放器被`new`了多次之后，后面添加属性或者方法会覆盖掉前面的。所以这个参数很少会被用到
 
 插件代码示例：
 
@@ -227,7 +227,7 @@ class Test {
     this.instance = instance;
     this.MediaPlayer = MediaPlayer;
     // 往播放器实例中添加一个sleep方法
-    instance.extend.extend({
+    instance.extend({
       sleep() {
         console.log("sleep");
       }
