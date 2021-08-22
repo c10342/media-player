@@ -39,7 +39,7 @@ const player = new MediaPlayer({
 | fontColors     | 弹幕字体颜色，随机，可选               | Array&lt;string&gt; | —      | —               |
 | fontSizes      | 弹幕字体大小，随机，可选               | Array&lt;number&gt; | —      | —               |
 
-## api
+## API
 
 - `player.danmaku.send(message)`：发送消息弹幕，message 格式见下方
 - `player.danmaku.play()`：开始弹幕
