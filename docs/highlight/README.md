@@ -49,11 +49,18 @@ player.$on("highlight-click", (item) => {
 
 ## highlightOptions 参数
 
-| 参数    | 说明                         | 类型    | 可选值 | 默认值 |
-| ------- | ---------------------------- | ------- | ------ | ------ |
+| 参数    | 说明                               | 类型    | 可选值 | 默认值 |
+| ------- | ---------------------------------- | ------- | ------ | ------ |
 | jump    | 点击是否跳转到提示点的时间点，可选 | boolean | —      | true   |
 | showTip | 是否显示点击的提示点的文本，可选   | boolean | —      | true   |
 | list    | 提示点列表，格式见下方，可选       | Array   | —      | —      |
+
+## list 参数格式
+
+| 字段 | 说明     | 类型   |
+| ---- | -------- | ------ |
+| time | 时间点   | number |
+| text | 显示文本 | string |
 
 ## 事件
 
@@ -66,11 +73,3 @@ player.$on("highlight-click", (item) => {
 - `player.highlight.set(list:Array)` : 设置提示点列表
 
 - `player.highlight.destroy()` : 销毁提示点
-
-## list 格式
-
-| 字段 | 说明     | 类型    |
-| ---- | -------- | ------- |
-| time | 时间点   | number |
-| text | 显示文本 | string  |
-

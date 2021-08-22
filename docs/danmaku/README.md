@@ -49,7 +49,7 @@ const player = new MediaPlayer({
 - `player.danmaku.close()`：关闭弹幕
 - `player.danmaku.open()`：打开弹幕
 
-## message 格式
+## message 参数格式
 
 - `player.danmaku.send('你好')`
 - `player.danmaku.send({text:'你好',fontColor:30})`
