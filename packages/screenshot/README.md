@@ -29,7 +29,7 @@ player.$on("screenshot", (imageBase64) => {
 });
 
 // 调用截图方法，请务必当open为true是才能使用该方法，false的是时候是不会往实例上面挂载该方法的
-player.screenshot();
+player.screenshot.snapshot();
 ```
 
 注意：该插件需要视频开启跨域功能，否则无法截图
@@ -50,4 +50,4 @@ player.screenshot();
 
 ## api
 
-- `player.screenshot()` : 调用截图方法，请务必当 open 为 true 是才能使用该方法
+- `player.screenshot.snapshot()` : 调用截图方法，请务必当 open 为 true 是才能使用该方法

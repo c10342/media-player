@@ -5,11 +5,14 @@ import { downloadBase64 } from "./js/utils";
 import { downloadPicName } from "./config/constant";
 import MediaPlayer, { PlayerEvents } from "@media/player";
 import { ScreenshotEvents } from "./config/event";
+import { initMethod } from "./js/init-methods";
 
 const defaultOptions = {
   open: true,
   download: true
 };
+
+initMethod(MediaPlayer);
 
 class Screenshot {
   // 插件名称.
@@ -40,8 +43,6 @@ class Screenshot {
     // 功能关闭的情况下不进行初始化
     if (this.options.open) {
       this.initVar();
-      // 给播放器实例扩展方法
-      this.extendMethods();
       // 初始化dom
       this.initElement();
       // 销毁
@@ -53,13 +54,6 @@ class Screenshot {
 
   private initVar() {
     this.eventManager = new EventManager();
-  }
-
-  // 扩展方法
-  private extendMethods() {
-    this.instance.extend({
-      screenshot: () => this.onClick()
-    });
   }
 
   // 渲染小图标
