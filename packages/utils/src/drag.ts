@@ -9,13 +9,6 @@ interface DragOptions {
   wrapperElement: HTMLElement | null | undefined;
 }
 
-interface WrapperInfo {
-  left: number;
-  width: number;
-  top: number;
-  height: number;
-}
-
 type MouseFunction = (event: MouseEvent) => void;
 
 interface DataInfo {
@@ -53,12 +46,21 @@ class Drag extends EventEmit {
   }
   private getWrapperInfo() {
     const wrapperElement = this.options?.wrapperElement;
-    const clientRect = wrapperElement?.getBoundingClientRect();
+
+    const pos = { left: 0, top: 0 };
+    let obj: any = wrapperElement;
+
+    while (obj) {
+      pos.left += obj.offsetLeft;
+      pos.top += obj.offsetTop;
+      obj = obj.offsetParent;
+    }
+
     return {
-      left: clientRect?.left || 0,
-      width: clientRect?.width || 0,
-      top: clientRect?.top || 0,
-      height: clientRect?.height || 0
+      left: pos.left,
+      top: pos.top,
+      width: wrapperElement?.offsetWidth || 0,
+      height: wrapperElement?.offsetHeight || 0
     };
   }
   private initDrag() {
@@ -147,6 +149,7 @@ class Drag extends EventEmit {
   private getInfo(event: MouseEvent): DataInfo {
     // 获取容器的宽度和记录页面左边的距离
     const { left, width, top, height } = this.getWrapperInfo();
+
     // 拿到点击的位置距离容器左边的距离
     const offsetX = event.pageX - left;
     const offsetY = event.pageY - top;
