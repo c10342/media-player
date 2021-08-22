@@ -77,6 +77,8 @@ class VideoProgress {
     });
     // 点击事件
     this.dragInstance?.$on("click", (data: DragDataInfo) => {
+      this.isMousedown = true;
+      this.setPlayedProgressByPercent(data.percentX);
       // 跳转时间
       this.seekByPercent(data.percentX);
     });
