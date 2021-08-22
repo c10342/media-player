@@ -1,5 +1,6 @@
 import { PlayerEvents } from "@media/player";
 import { isUndef, Drag } from "@media/utils";
+import { pluginName } from "./config/constant";
 import { ClassNameEnum, CursorEnum } from "./config/enum";
 import { ZoomEvents } from "./config/event";
 import "./style/index.scss";
@@ -14,7 +15,7 @@ const defaultOptions = {
 };
 class Zoom {
   // 插件名称.
-  static pluginName = "Zoom";
+  static pluginName = pluginName;
   // 播放器实例
   private instance: any;
   //   父级元素
