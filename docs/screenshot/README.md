@@ -1,5 +1,9 @@
 # 截图
 
+## 演示
+
+<screenshot-use />
+
 ## 安装
 
 ```bash
@@ -29,10 +33,12 @@ player.$on("screenshot", (imageBase64) => {
 });
 
 // 调用截图方法，请务必当open为true是才能使用该方法，false的是时候是不会往实例上面挂载该方法的
-player.screenshot();
+player.screenshot.snapshot();
 ```
 
-注意：该插件需要视频开启跨域功能，否则无法截图
+::: warning
+该插件需要视频开启跨域功能，否则无法截图
+:::
 
 ## screenshotOptions 参数
 
@@ -48,6 +54,6 @@ player.screenshot();
 | ---------- | -------------- | ----------- |
 | screenshot | 截图的时候触发 | base64 图片 |
 
-## api
+## API
 
-- `player.screenshot()` : 调用截图方法，请务必当 open 为 true 是才能使用该方法
+- `player.screenshot.snapshot()` : 调用截图方法，请务必当 open 为 true 是才能使用该方法
