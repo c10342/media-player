@@ -26,24 +26,22 @@ const player = new MediaPlayer({
     jump: true,
     // 显示点击的提示点的文本，默认true
     showTip: true
-    // 提示点列表，直接通过options参数传入，或者调用setHighlight()
+    // 提示点列表，直接通过options参数传入，或者调用set()
     list:highlightList
   }
 });
 
-// 或者通过 `player.setHighlight()` 设置。
-player.setHighlight(highlightList);
+// 或者通过 `player.highlight.set()` 设置。
+player.highlight.set(highlightList);
 
 // 销毁提示点
-player.destroyHighlight();
+player.highlight.destroy();
 
 // 监听提示点点击事件
 player.$on("highlight-click", (item) => {
   console.log(item);
 });
 ```
-
-注意：`setHighlight`，`destroyHighlight`是通过插件扩展出来的，如果没有使用`Highlight`这个插件，就不要用乱用这些方法！！！
 
 ## highlightOptions 参数
 
@@ -61,9 +59,9 @@ player.$on("highlight-click", (item) => {
 
 ## api
 
-- `player.setHighlight(list:Array)` : 设置提示点列表
+- `player.highlight.set(list:Array)` : 设置提示点列表
 
-- `player.destroyHighlight()` : 销毁提示点
+- `player.highlight.destroy()` : 销毁提示点
 
 ## list 格式
 

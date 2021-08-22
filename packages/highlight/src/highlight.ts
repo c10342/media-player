@@ -4,6 +4,10 @@ import { EventManager, isArray, isUndef } from "@media/utils";
 import { HighlightList, HighlightOptions } from "./types";
 import MediaPlayer, { PlayerEvents, VideoEvents } from "@media/player";
 import { HighlightEvents } from "./config/event";
+import { pluginName } from "./config/constant";
+import { initMethod } from "./js/init-methods";
+
+initMethod(MediaPlayer);
 
 const defaultOptions = {
   jump: true,
@@ -12,7 +16,7 @@ const defaultOptions = {
 
 class Highlight {
   // 插件名称.
-  static pluginName = "Highlight";
+  static pluginName = pluginName;
   // 播放器的dom
   private el: HTMLElement;
   // 播放器实例
@@ -34,8 +38,6 @@ class Highlight {
     const options = this.instance.options?.highlightOptions ?? {};
     this.options = { ...defaultOptions, ...options };
     this.initVar();
-    // 往播放器实例中挂在方法
-    this.extendMethods();
     // 开始初始化
     this.init();
     this.initInstanceListener();
@@ -47,15 +49,6 @@ class Highlight {
 
   private get duration() {
     return this.instance.duration;
-  }
-
-  private extendMethods() {
-    this.instance.extend({
-      // 设置提示点列表
-      setHighlight: (list: HighlightList) => this.setHighlight(list),
-      // 销毁提示点列表
-      destroyHighlight: () => this.destroyHighlight()
-    });
   }
 
   private initInstanceListener() {
