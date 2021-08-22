@@ -1,15 +1,13 @@
 import { Drag, EventManager, isUndef } from "@media/utils";
-import {
-  CheckboxClassNameEnum,
-  DanmakuAreaEnum,
-  PlayerEvents
-} from "./config/enum";
+import { CheckboxClassNameEnum, DanmakuAreaEnum } from "./config/enum";
 import BulletChat from "./js/bullet-chat";
-import { DanmakuOptions, PushData } from "./types";
+import { DanmakuOptions } from "./types";
 import settingTpl from "./template/setting.art";
 import "./style/index.scss";
 import i18n from "./locale";
-import MediaPlayer from "@media/player";
+import MediaPlayer, { PlayerEvents } from "@media/player";
+import { pluginName } from "./config/constant";
+import { initMethod } from "./js/init-methods";
 
 interface DataInfo {
   offsetX: number;
@@ -20,8 +18,10 @@ interface DataInfo {
 
 type HtmlElementProp = HTMLElement | null | undefined;
 
+initMethod(MediaPlayer);
+
 class Danmaku {
-  static pluginName = "Danmaku";
+  static pluginName = pluginName;
 
   private options: DanmakuOptions;
   // 播放器的dom
@@ -76,8 +76,6 @@ class Danmaku {
     this._getElement();
     // 初始化弹幕
     this._initDanmaku();
-    // 扩展方法
-    this._extendMethods();
     // 初始化弹幕透明度
     this._initOpacitySetting();
     // 初始化弹幕速度
@@ -171,49 +169,12 @@ class Danmaku {
     }
   }
 
-  private _extendMethods() {
-    this._instance.extend({
-      danmaku: {
-        // 发送弹幕
-        send: (data: string | PushData | Array<PushData>) =>
-          this._bulletChat?.add(data),
-        // 开始弹幕
-        play: () => {
-          this._bulletChat?.play();
-          this._isPauseDanmaku = false;
-          this._switchPlayOrPause();
-        },
-        // 暂停弹幕
-        pause: () => {
-          this._bulletChat?.pause();
-          this._isPauseDanmaku = true;
-          this._switchPlayOrPause();
-        },
-        // 容器发生变化
-        resize: () => this._bulletChat?.resize(),
-        // 清屏
-        clearScreen: () => this._bulletChat?.clearScreen(),
-        // 设置速度
-        setSpeed: (percent: number) => this._bulletChat?.setSpeed(percent),
-        // 关闭弹幕
-        close: () => {
-          this._bulletChat?.close();
-          this._isShowDanmaku = false;
-          this._switchShowOrHide();
-        },
-        // 打开弹幕
-        open: () => {
-          this._bulletChat?.open();
-          this._isShowDanmaku = true;
-          this._switchShowOrHide();
-        }
-      }
-    });
-  }
-
   private _initListener() {
     this._instance.$on(PlayerEvents.DESTROY, () => {
       this._destroy();
+    });
+    this._instance.$on(PlayerEvents.RESIZE, () => {
+      this._bulletChat?.resize();
     });
   }
 

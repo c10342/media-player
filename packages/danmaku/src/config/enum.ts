@@ -1,7 +1,3 @@
-export enum PlayerEvents {
-  DESTROY = "destroy"
-}
-
 // 多选框样式类
 export enum CheckboxClassNameEnum {
   open = "danmaku-setting-open",
