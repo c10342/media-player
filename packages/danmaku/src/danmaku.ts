@@ -21,6 +21,8 @@ interface DataInfo {
 type HtmlElementProp = HTMLElement | null | undefined;
 
 class Danmaku {
+  static pluginName = "Danmaku";
+
   private options: DanmakuOptions;
   // 播放器的dom
   private _el: HTMLElement;
