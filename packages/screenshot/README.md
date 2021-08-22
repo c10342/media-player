@@ -48,6 +48,6 @@ player.screenshot.snapshot();
 | ---------- | -------------- | ----------- |
 | screenshot | 截图的时候触发 | base64 图片 |
 
-## api
+## API
 
 - `player.screenshot.snapshot()` : 调用截图方法，请务必当 open 为 true 是才能使用该方法

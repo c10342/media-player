@@ -111,7 +111,7 @@ const player = new MediaPlayer({
 | volumechange   | 视频音量发生变化时触发                                  | event    |
 | waiting        | 正在播放，但是因为缓冲而卡顿时触发                      | event    |
 
-## api
+## API
 
 实例方法
 

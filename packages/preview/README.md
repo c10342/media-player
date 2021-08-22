@@ -70,7 +70,7 @@ const player = new MediaPlayer({
 | ------------- | ---------------- | -------- |
 | preview-click | 点击缩略点时触发 | item     |
 
-## api
+## API
 
 - `player.preview.setPreview(list:Array)` : 设置时间点缩略图列表
 

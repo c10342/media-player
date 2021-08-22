@@ -57,7 +57,7 @@ player.$on("highlight-click", (item) => {
 | --------------- | -------------------- | -------- |
 | highlight-click | 点击提示点的时候触发 | event    |
 
-## api
+## API
 
 - `player.highlight.set(list:Array)` : 设置提示点列表
 
