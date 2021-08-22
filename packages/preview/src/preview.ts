@@ -4,22 +4,18 @@ import { EventManager, isArray, isUndef, checkData } from "@media/utils";
 import { PreviewList, PreviewOptions } from "./types";
 import MediaPlayer, { PlayerEvents, VideoEvents } from "@media/player";
 import { PreviewEvents } from "./config/event";
+import { barViewImageWidth, pluginName } from "./config/constant";
+import { initMethod } from "./js/init-methods";
 
 const defaultOptions = {
   barPreview: false
 };
 
-const barViewImageWidth = 160;
-
-interface ProgressInfo {
-  width: number;
-  left: number;
-  right: number;
-}
+initMethod(MediaPlayer);
 
 class Preview {
   // 插件名称.
-  static pluginName = "Preview";
+  static pluginName = pluginName;
   // 播放器的dom
   private el: HTMLElement;
   // 播放器实例
@@ -45,8 +41,6 @@ class Preview {
     const options = this.instance.options?.previewOptions ?? {};
     this.options = { ...defaultOptions, ...options };
     this.eventManager = new EventManager();
-    // 往播放器实例中挂在方法
-    this.extendMethods();
     // 开始初始化
     this.initList();
     this.initInstanceListener();
@@ -54,19 +48,6 @@ class Preview {
 
   private get duration() {
     return this.instance.duration;
-  }
-
-  private extendMethods() {
-    this.instance.extend({
-      // 设置预览点列表
-      setPreview: (list: PreviewList) => this.setPreview(list),
-      // 销毁预览点列表
-      destroyPreview: () => this.destroyPreview(),
-      // 设置进度条预览
-      setBarView: (barPreviewUrl: string) => this.setBarView(barPreviewUrl),
-      // 销毁进度条预览
-      destroyBarView: () => this.destroyBarView()
-    });
   }
 
   private initInstanceListener() {

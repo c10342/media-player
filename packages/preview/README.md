@@ -37,7 +37,7 @@ const player = new MediaPlayer({
   }
 });
 
-// player.setPreview(previewList)
+// player.preview.setPreview(previewList)
 
 player.$on("preview-click", (item: any) => {
   console.log(item);
@@ -54,7 +54,7 @@ const player = new MediaPlayer({
     barPreviewUrl: "https://xxx/demo.jpg"
   }
 });
-// player.setBarView('https://xxx/demo.jpg')
+// player.preview.setBarView('https://xxx/demo.jpg')
 ```
 
 ## previewOptions 参数
@@ -72,13 +72,13 @@ const player = new MediaPlayer({
 
 ## api
 
-- `player.setPreview(list:Array)` : 设置时间点缩略图列表
+- `player.preview.setPreview(list:Array)` : 设置时间点缩略图列表
 
-- `player.destroyPreview()` : 销毁时间点缩略图列表
+- `player.preview.destroyPreview()` : 销毁时间点缩略图列表
 
-- `player.setBarView(barPreviewUrl:string)` : 设置进度条预览
+- `player.preview.setBarView(barPreviewUrl:string)` : 设置进度条预览
 
-- `player.destroyBarView()` : 销毁进度条预览
+- `player.preview.destroyBarView()` : 销毁进度条预览
 
 ## list 格式
 
