@@ -8,7 +8,7 @@ class VideoControls {
   // 是否进入播放器标志位
   private isEnter = false;
   // 定时器
-  private timer: number | null;
+  private timer: any;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.initVar();
@@ -81,7 +81,7 @@ class VideoControls {
     // 销毁定时器
     this.destroyTimer();
     // 4秒后隐藏
-    this.timer = window.setTimeout(() => {
+    this.timer = setTimeout(() => {
       if (!this.paused && !this.isEnter) {
         this.handleElement((element) => {
           element.style.transform = "translateY(100%)";

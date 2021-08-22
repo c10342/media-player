@@ -1,11 +1,11 @@
 function debounce(func: Function, time: number) {
-  let timer: number | null;
+  let timer: any;
   return function (...args: any) {
     if (timer) {
       clearTimeout(timer);
       timer = null;
     }
-    timer = window.setTimeout(() => {
+    timer = setTimeout(() => {
       // @ts-ignore
       func.apply(this, args);
     }, time);

@@ -9,10 +9,22 @@ export function getRandomItem<T>(list: Array<T>) {
   return list[index];
 }
 
-const DOMMatrix =
-  window.WebKitCSSMatrix || window.DOMMatrix || window.MSCSSMatrix;
+let DOMMatrixCache: any = null;
+
+function getDOMMatrix() {
+  if (DOMMatrixCache || !window) {
+    return DOMMatrixCache;
+  }
+  DOMMatrixCache =
+    window.WebKitCSSMatrix || window.DOMMatrix || window.MSCSSMatrix;
+  return DOMMatrixCache;
+}
 
 export function getTranslateX(node: HTMLElement) {
+  if (!window) {
+    return 0;
+  }
+  const DOMMatrix = getDOMMatrix();
   if (window.getComputedStyle && DOMMatrix) {
     const transform = window
       .getComputedStyle(node, null)

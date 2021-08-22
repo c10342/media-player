@@ -5,7 +5,7 @@ import { ComponentOptions } from "../types";
 class VideoTip {
   private options: ComponentOptions;
   // 定时器
-  private timer: number | null;
+  private timer: any;
   constructor(options: ComponentOptions) {
     this.options = options;
     this.options.instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
@@ -15,7 +15,7 @@ class VideoTip {
     this.destroyTimer();
     this.showTip(notice);
     // 2秒后隐藏
-    this.timer = window.setTimeout(() => {
+    this.timer = setTimeout(() => {
       this.hideTip();
     }, time || 2000);
   }
