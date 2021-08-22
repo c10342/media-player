@@ -1,8 +1,13 @@
 <template>
   <div class="danmaku-player-wrapper">
-    <demo-player :playerOptions="playerOptions" @init-success="onInitSuccess" />
+    <demo-player ref="demoPlayer" @init-success="onInitSuccess" />
     <div class="operation-wrapper">
-      <input class="input" type="text" v-model.trim="content" @keyup.enter="onSend" />
+      <input
+        class="input"
+        type="text"
+        v-model.trim="content"
+        @keyup.enter="onSend"
+      />
       <button class="button" @click="onSend">发送弹幕</button>
       <button class="button" @click="moreDanmaku">海量弹幕</button>
     </div>
@@ -45,46 +50,18 @@ export default {
   components: { DemoPlayer },
   data() {
     return {
-      playerOptions: null,
       content: ""
     };
   },
   mounted() {
-    this.playerOptions = {
-      videoList: [
-        {
-          label: "标清",
-          url: "/demo.mp4"
-        },
-        {
-          label: "高清",
-          url: "/demo.mp4"
-        }
-      ],
-      speedList: [
-        {
-          label: "0.5x",
-          value: 0.5
-        },
-        {
-          label: "1x",
-          value: 1,
-          default: true
-        },
-        {
-          label: "1.5x",
-          value: 1.5
-        }
-      ],
-      hotkey: true,
-      autoplay: true,
+    this.$refs.demoPlayer.initPlayer({
       danmakuOptions: {
         fontColors: ["blue", "red", "green", "purple", "yellow"],
         fontSizes: [16, 18, 20, 22, 24, 26, 28],
-        speedArg:0.009
+        speedArg: 0.009
       },
       plugins: [Danmaku]
-    };
+    });
   },
   methods: {
     onInitSuccess(player) {
@@ -97,7 +74,7 @@ export default {
       this.player.danmaku.send({
         text: this.content
       });
-      this.content = ''
+      this.content = "";
     },
     moreDanmaku() {
       if (!this.player) {

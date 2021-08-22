@@ -1,7 +1,10 @@
+const path = require("path");
+
 module.exports = {
   title: "MediaPlayer",
   description: "欢迎使用 MediaPlayer",
   plugins: {
+    "vuepress-plugin-typescript": true,
     "@vuepress/back-to-top": true,
     "@vuepress/pwa": {
       serviceWorker: true,
@@ -30,24 +33,33 @@ module.exports = {
       { text: "首页", link: "/" },
       { text: "指南", link: "/guide/" },
       {
-        text: '插件',
+        text: "插件",
         items: [
-          { text: '弹幕', link: '/danmaku/' },
-          { text: '自定义进度条提示点', link: '/highlight/' },
-          { text: '视频缩略图预览', link: '/preview/' },
-          { text: '截图', link: '/screenshot/' },
-          { text: '缩放', link: '/zoom/' },
+          { text: "弹幕", link: "/danmaku/" },
+          { text: "自定义进度条提示点", link: "/highlight/" },
+          { text: "视频缩略图预览", link: "/preview/" },
+          { text: "截图", link: "/screenshot/" },
+          { text: "缩放", link: "/zoom/" }
         ]
       }
     ],
     sidebarDepth: 2,
-    sidebar: 'auto',
-    // sidebar: [
-    //   {
-    //     title: "指南",
-    //     collapsable: false,
-    //     children: ["/guide/"]
-    //   }
-    // ]
+    sidebar: "auto"
+  },
+  configureWebpack: {
+    resolve: {
+      alias: {
+        "@media": path.resolve(__dirname, "../../packages")
+      },
+      mainFields: ["doc", "main"]
+    },
+    module: {
+      rules: [
+        {
+          test: /\.art$/,
+          loader: "art-template-loader"
+        }
+      ]
+    }
   }
 };

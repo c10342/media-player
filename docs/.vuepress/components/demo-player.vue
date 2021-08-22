@@ -6,30 +6,47 @@
 
 <script>
 import MediaPlayer from "@media/player";
+const playerOptions = {
+  videoList: [
+    {
+      label: "标清",
+      url: "/demo.mp4"
+    },
+    {
+      label: "高清",
+      url: "/demo.mp4"
+    }
+  ],
+  speedList: [
+    {
+      label: "0.5x",
+      value: 0.5
+    },
+    {
+      label: "1x",
+      value: 1,
+      default: true
+    },
+    {
+      label: "1.5x",
+      value: 1.5
+    }
+  ],
+  hotkey: true
+};
 export default {
-  props: {
-    playerOptions: {
-      type: Object
-    }
-  },
-  watch: {
-    playerOptions() {
-      if (this.playerOptions && this.playerOptions.videoList) {
-        this.initPlayer();
-      }
-    }
-  },
   created() {
     this.player = null;
   },
   methods: {
-    initPlayer() {
+    initPlayer(options = {}) {
       this.destroyPlayer();
       this.player = new MediaPlayer({
         el: this.$refs.wrapper,
-        ...this.playerOptions
+        ...playerOptions,
+        ...options
       });
-      this.$emit('init-success',this.player)
+      this.$emit("init-success", this.player);
     },
     destroyPlayer() {
       if (this.player) {
