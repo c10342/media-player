@@ -29,6 +29,7 @@ export default {
         el: this.$refs.wrapper,
         ...this.playerOptions
       });
+      this.$emit('init-success',this.player)
     },
     destroyPlayer() {
       if (this.player) {
