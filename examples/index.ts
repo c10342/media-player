@@ -88,8 +88,8 @@ const player = new VideoPlayer({
   plugins: [Screenshot, Zoom, Danmaku],
   highlightOptions: {
     jump: true,
-    showTip: true,
-    list: highlightList
+    showTip: true
+    // list: highlightList
   },
   screenshotOptions: {
     // 是否开启功能
@@ -139,6 +139,8 @@ player.$on("preview-click", (item: any) => {
 
 document.querySelector(".setoptions")?.addEventListener("click", () => {
   // (player as any).setBarView('https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg');
+  // (player as any).highlight.set(highlightList);
+  (player as any).screenshot.snapshot();
 });
 document.querySelector(".destroyoptions")?.addEventListener("click", () => {
   (player as any).destroyPreview();
