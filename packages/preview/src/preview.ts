@@ -47,7 +47,7 @@ class Preview {
   }
 
   private get duration() {
-    return this.instance.duration;
+    return this.instance.duration || 0;
   }
 
   private initInstanceListener() {
@@ -223,7 +223,8 @@ class Preview {
       }px`;
       // 找到第几张背景图
       const indexPic = Math.floor(
-        (checkData(left, 0, progressInfo.width) / progressInfo.width) * 100
+        (checkData(left, 0, progressInfo.width) / progressInfo.width) *
+          this.duration
       );
       // 改变背景图的位置
       this.barViewElement.style.backgroundPosition = `-${
