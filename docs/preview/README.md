@@ -1,8 +1,13 @@
 # 视频缩略图预览
 
-## 演示
+## 时间点缩略图预览演示
 
-<preview-use />
+<time-preview-use />
+
+
+## 进度条缩略图预览演示
+
+<bar-preview-use />
 
 ## 安装
 
