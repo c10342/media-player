@@ -21,7 +21,8 @@
       "emitDecoratorMetadata": false,
       "typeRoots": ["node_modules/@types"],
       "allowJs": true,
-      "resolveJsonModule":true
+      "resolveJsonModule":true,
+      "importHelpers":true
     },
     "exclude": [
       "node_modules"
