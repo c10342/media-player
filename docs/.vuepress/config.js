@@ -41,6 +41,14 @@ module.exports = {
           { text: "截图", link: "/screenshot/" },
           { text: "缩放", link: "/zoom/" }
         ]
+      },
+      { text: "生态", link: "/ecology/" },
+      {
+        text: "组件库",
+        items: [
+          { text: "微信小程序", link: "http://wxui.linjiafu.top/" },
+          { text: "vue2组件库", link: "http://ui.linjiafu.top/" }
+        ]
       }
     ],
     sidebarDepth: 2,

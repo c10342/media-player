@@ -55,6 +55,8 @@ player.$on("preview-click", (item: any) => {
 
 第二种：
 
+完整视频缩略图可通过[video-screenshot](https://github.com/c10342/media-player/tree/main/tools/video-screenshot)工具生成
+
 ```javascript
 const player = new MediaPlayer({
   // ...
