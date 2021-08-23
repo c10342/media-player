@@ -1,0 +1,29 @@
+{
+  "name": "video-screenshot",
+  "version": "0.0.0",
+  "description": "video-screenshot",
+  "main": "index.js",
+  "keywords": [
+    "video-screenshot"
+  ],
+  "homepage": "https://github.com/c10342/media-player",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c10342/media-player"
+  },
+  "author": "c10342",
+  "license": "MIT",
+  "bin": {
+    "video-screenshot": "index.js"
+  },
+  "devDependencies": {
+    "commander": "^8.1.0",
+    "del": "^6.0.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "jimp": "^0.16.1",
+    "node-sprite-generator": "^0.10.2"
+  }
+}
