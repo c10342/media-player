@@ -1,4 +1,3 @@
-
 const nsg = require("node-sprite-generator");
 
 module.exports = function spriteImage() {
@@ -20,4 +19,4 @@ module.exports = function spriteImage() {
       }
     );
   });
-}
+};

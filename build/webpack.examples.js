@@ -6,7 +6,7 @@ const baseConfig = require("./webpack.base.js");
 
 const { merge } = require("webpack-merge");
 
-const webpack = require('webpack')
+const webpack = require("webpack");
 
 const output = path.resolve(__dirname, "../examples-dist");
 
