@@ -21,9 +21,6 @@ function getDOMMatrix() {
 }
 
 export function getTranslateX(node: HTMLElement) {
-  if (!window) {
-    return 0;
-  }
   const DOMMatrix = getDOMMatrix();
   if (window.getComputedStyle && DOMMatrix) {
     const transform = window

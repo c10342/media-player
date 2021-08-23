@@ -14,7 +14,7 @@ export function downloadBase64(fileName: string, content: string) {
 export function base64ToBlob(code: string) {
   const parts = code.split(";base64,");
   const contentType = parts[0].split(":")[1];
-  const raw = atob(parts[1]);
+  const raw = window.atob(parts[1]);
   const rawLength = raw.length;
 
   const uInt8Array = new Uint8Array(rawLength);

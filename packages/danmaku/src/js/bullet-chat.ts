@@ -49,7 +49,7 @@ class BulletChat {
   //   容器总宽度
   private _totalWidth = 0;
   //   定时器
-  private _renderTimer: any = null;
+  private _renderTimer: number | null = null;
   //   弹幕数据队列
   private _queue: Array<QueueItem> = [];
   //   轨道信息，二维数组
@@ -436,7 +436,7 @@ class BulletChat {
   // 轮询结束后，根据队列长度继续执行或停止执行
   _renderEnd() {
     if (this._queue.length > 0) {
-      this._renderTimer = setTimeout(() => {
+      this._renderTimer = window.setTimeout(() => {
         this._render();
       }, this.options.renderInterval);
     } else {
