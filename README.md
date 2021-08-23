@@ -16,6 +16,7 @@
 - 自定义进度条提示插件 `@media/highlight`
 - 预览插件 `@media/preview`
 - 缩放插件 `@media/zoom`
+- 截图插件 `@media/screenshot`
 
 为什么要使用插件的形式扩展？
 
