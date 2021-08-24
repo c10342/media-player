@@ -1,14 +1,14 @@
 import { isUndef } from "@lin-media/utils";
 import { PlayerEvents } from "../config/event";
-import { ComponentOptions } from "../types";
+import PlayerConstructor from "../constructor";
 
 class VideoTip {
-  private options: ComponentOptions;
+  private playerInstance: PlayerConstructor;
   // 定时器
   private timer: number | null;
-  constructor(options: ComponentOptions) {
-    this.options = options;
-    this.options.instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
+  constructor(playerInstance: PlayerConstructor) {
+    this.playerInstance = playerInstance;
+    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
   }
   // 设置通知
   setNotice(notice: string, time?: number) {
@@ -28,7 +28,7 @@ class VideoTip {
   }
   // 显示提示
   private showTip(tip: string) {
-    const tipElement = this.options.templateInstance.tipElement;
+    const tipElement = this.playerInstance.templateInstance.tipElement;
     if (!isUndef(tipElement)) {
       tipElement.innerHTML = tip;
       tipElement.style.opacity = "1";
@@ -36,7 +36,7 @@ class VideoTip {
   }
   // 隐藏提示
   private hideTip() {
-    const tipElement = this.options.templateInstance.tipElement;
+    const tipElement = this.playerInstance.templateInstance.tipElement;
     if (!isUndef(tipElement)) {
       tipElement.style.opacity = "";
     }

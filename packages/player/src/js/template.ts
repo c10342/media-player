@@ -1,85 +1,76 @@
-import Player from "../constructor";
+import PlayerConstructor from "../constructor";
 import { t } from "../locale";
 import templateTpl from "../template/layout.art";
-
-import {
-  HtmlElementProp,
-  HTMLVideoElementProp,
-  NodeListElement,
-  PlayerOptions
-} from "../types/index";
 import { PlayerEvents } from "../config/event";
 import { isUndef, debounce } from "@lin-media/utils";
 
-interface OptionsParams extends PlayerOptions {
-  instance: Player;
-}
+type ElementType = HTMLElement | HTMLVideoElement;
 
 class Template {
-  private options: OptionsParams;
+  private playerInstance: PlayerConstructor;
 
   private resizeObserver: ResizeObserver | null;
 
-  containerElement: HtmlElementProp;
+  containerElement: HTMLElement;
 
-  playElement: HtmlElementProp;
+  playElement: HTMLElement;
 
-  videoElement: HTMLVideoElementProp;
+  videoElement: HTMLVideoElement;
 
-  currentTimeElement: HtmlElementProp;
+  currentTimeElement: HTMLElement;
 
-  totalTimeElement: HtmlElementProp;
+  totalTimeElement: HTMLElement;
 
-  videoLoadedElement: HtmlElementProp;
+  videoLoadedElement: HTMLElement;
 
-  videoPlayedElement: HtmlElementProp;
+  videoPlayedElement: HTMLElement;
 
-  progressMaskElement: HtmlElementProp;
+  progressMaskElement: HTMLElement;
 
-  progressBallElement: HtmlElementProp;
+  progressBallElement: HTMLElement;
 
-  videoMaskElement: HtmlElementProp;
+  videoMaskElement: HTMLElement;
 
-  fullscreenBrowserElement: HtmlElementProp;
+  fullscreenBrowserElement: HTMLElement;
 
-  fullscreenWebElement: HtmlElementProp;
+  fullscreenWebElement: HTMLElement;
 
-  loadingWrapperElement: HtmlElementProp;
+  loadingWrapperElement: HTMLElement;
 
-  processTimeElement: HtmlElementProp;
+  processTimeElement: HTMLElement;
 
-  volumeMaskElement: HtmlElementProp;
+  volumeMaskElement: HTMLElement;
 
-  volumeBallElement: HtmlElementProp;
+  volumeBallElement: HTMLElement;
 
-  volumeButtonElement: HtmlElementProp;
+  volumeButtonElement: HTMLElement;
 
-  volumeWrapperElement: HtmlElementProp;
+  volumeWrapperElement: HTMLElement;
 
-  volumeProcessElement: HtmlElementProp;
+  volumeProcessElement: HTMLElement;
 
-  volumeContainerElement: HtmlElementProp;
+  volumeContainerElement: HTMLElement;
 
-  volumeAnimationElement: HtmlElementProp;
+  volumeAnimationElement: HTMLElement;
 
-  speedWrapperElement: HtmlElementProp;
+  speedWrapperElement: HTMLElement;
 
-  speedLabelElement: HtmlElementProp;
+  speedLabelElement: HTMLElement;
 
-  speedItemsElement: NodeListElement;
+  speedItemsElement: NodeListOf<Element>;
 
-  definitionWrapperElement: HtmlElementProp;
+  definitionWrapperElement: HTMLElement;
 
-  definitionLabelElement: HtmlElementProp;
+  definitionLabelElement: HTMLElement;
 
-  definitionItemsElement: NodeListElement;
+  definitionItemsElement: NodeListOf<Element>;
 
-  tipElement: HtmlElementProp;
+  tipElement: HTMLElement;
 
-  controlsElement: HtmlElementProp;
+  controlsElement: HTMLElement;
 
-  constructor(options: OptionsParams) {
-    this.options = options;
+  constructor(playerInstance: PlayerConstructor) {
+    this.playerInstance = playerInstance;
     // 初始化模板，插入元素
     this.initTemplate();
     // 获取所需要的元素，统一在这里获取，到时候也方便修改
@@ -90,67 +81,74 @@ class Template {
   }
 
   private initTemplate() {
-    const el = this.options.el as HTMLElement;
+    const el = this.playerInstance.options.el as HTMLElement;
     const html = templateTpl({
-      ...this.options,
+      ...this.playerInstance.options,
       liveTip: t("live")
     });
     el.innerHTML = html;
   }
 
+  private getElement<T extends ElementType>(selector: string): T {
+    const el = this.playerInstance.options.el as HTMLElement;
+    return el.querySelector(selector) as T;
+  }
+
+  private getElementList(selector: string) {
+    const el = this.playerInstance.options.el as HTMLElement;
+    return el.querySelectorAll(selector) as NodeListOf<Element>;
+  }
+
   private initElement() {
-    const el = this.options.el as HTMLElement;
-    this.containerElement = el.querySelector(".player-container");
-    this.videoElement = el.querySelector(".player-video");
-    this.videoMaskElement = el.querySelector(".player-video-mask");
-    this.playElement = el.querySelector(".player-status-button");
-    this.currentTimeElement = el.querySelector(".player-currentTime");
-    this.totalTimeElement = el.querySelector(".player-totalTime");
-    this.videoLoadedElement = el.querySelector(".player-process-loaded");
-    this.videoPlayedElement = el.querySelector(".player-process-played");
-    this.progressMaskElement = el.querySelector(".player-process-mask");
-    this.progressBallElement = el.querySelector(".player-process-ball");
-    this.processTimeElement = el.querySelector(".player-process-time");
-    this.fullscreenBrowserElement = el.querySelector(
+    this.containerElement = this.getElement(".player-container");
+    this.videoElement = this.getElement(".player-video");
+    this.videoMaskElement = this.getElement(".player-video-mask");
+    this.playElement = this.getElement(".player-status-button");
+    this.currentTimeElement = this.getElement(".player-currentTime");
+    this.totalTimeElement = this.getElement(".player-totalTime");
+    this.videoLoadedElement = this.getElement(".player-process-loaded");
+    this.videoPlayedElement = this.getElement(".player-process-played");
+    this.progressMaskElement = this.getElement(".player-process-mask");
+    this.progressBallElement = this.getElement(".player-process-ball");
+    this.processTimeElement = this.getElement(".player-process-time");
+    this.fullscreenBrowserElement = this.getElement(
       ".player-fullscreen-browser"
     );
-    this.fullscreenWebElement = el.querySelector(".player-fullscreen-web");
-    this.loadingWrapperElement = el.querySelector(".player-loading-container");
-    this.volumeMaskElement = el.querySelector(".player-volume-mask");
-    this.volumeBallElement = el.querySelector(".player-volume-ball");
-    this.volumeButtonElement = el.querySelector(".player-volume-button");
-    this.volumeWrapperElement = el.querySelector(".player-volume-wrapper");
-    this.volumeProcessElement = el.querySelector(".player-volume-process");
-    this.volumeContainerElement = el.querySelector(".player-volume-container");
-    this.volumeAnimationElement = el.querySelector(".player-volume-animation");
-    this.speedWrapperElement = el.querySelector(".player-speed-wrapper");
-    this.speedLabelElement = el.querySelector(".player-speed-label");
-    this.speedItemsElement = el.querySelectorAll(".player-speed-item");
-    this.definitionWrapperElement = el.querySelector(
+    this.fullscreenWebElement = this.getElement(".player-fullscreen-web");
+    this.loadingWrapperElement = this.getElement(".player-loading-container");
+    this.volumeMaskElement = this.getElement(".player-volume-mask");
+    this.volumeBallElement = this.getElement(".player-volume-ball");
+    this.volumeButtonElement = this.getElement(".player-volume-button");
+    this.volumeWrapperElement = this.getElement(".player-volume-wrapper");
+    this.volumeProcessElement = this.getElement(".player-volume-process");
+    this.volumeContainerElement = this.getElement(".player-volume-container");
+    this.volumeAnimationElement = this.getElement(".player-volume-animation");
+    this.speedWrapperElement = this.getElement(".player-speed-wrapper");
+    this.speedLabelElement = this.getElement(".player-speed-label");
+    this.speedItemsElement = this.getElementList(".player-speed-item");
+    this.definitionWrapperElement = this.getElement(
       ".player-definition-wrapper"
     );
-    this.definitionLabelElement = el.querySelector(".player-definition-label");
-    this.definitionItemsElement = el.querySelectorAll(
+    this.definitionLabelElement = this.getElement(".player-definition-label");
+    this.definitionItemsElement = this.getElementList(
       ".player-definition-item"
     );
-    this.tipElement = el.querySelector(".player-tip");
-    this.controlsElement = el.querySelector(".player-controls");
+    this.tipElement = this.getElement(".player-tip");
+    this.controlsElement = this.getElement(".player-controls");
   }
 
   private initListener() {
-    const instance = this.options.instance;
     // 切换清晰度结束事件
-    instance.$on(
+    this.playerInstance.$on(
       PlayerEvents.SWITCH_DEFINITION_END,
       this.onElementReload.bind(this)
     );
-    instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
+    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
   }
 
   private onElementReload() {
     // 切换清晰度结束后需要刷新video标签元素
-    const el = this.options.el as HTMLElement;
-    this.videoElement = el.querySelector(".player-video");
+    this.videoElement = this.getElement(".player-video");
   }
 
   private initResizeObserver() {
@@ -158,48 +156,14 @@ class Template {
       this.resizeObserver = new ResizeObserver(
         debounce((entries: ResizeObserverEntry[]) => {
           const entrie = entries[0];
-          this.options.instance.$emit(PlayerEvents.RESIZE, entrie.contentRect);
+          this.playerInstance.$emit(PlayerEvents.RESIZE, entrie.contentRect);
         }, 500)
       );
       this.resizeObserver.observe(this.containerElement);
     }
   }
 
-  private resetData() {
-    this.containerElement = null;
-    this.playElement = null;
-    this.videoElement = null;
-    this.currentTimeElement = null;
-    this.totalTimeElement = null;
-    this.videoLoadedElement = null;
-    this.videoPlayedElement = null;
-    this.progressMaskElement = null;
-    this.progressBallElement = null;
-    this.videoMaskElement = null;
-    this.fullscreenBrowserElement = null;
-    this.fullscreenWebElement = null;
-    this.loadingWrapperElement = null;
-    this.processTimeElement = null;
-    this.volumeMaskElement = null;
-    this.volumeBallElement = null;
-    this.volumeButtonElement = null;
-    this.volumeWrapperElement = null;
-    this.volumeProcessElement = null;
-    this.volumeContainerElement = null;
-    this.volumeAnimationElement = null;
-    this.speedWrapperElement = null;
-    this.speedLabelElement = null;
-    this.speedItemsElement = null;
-    this.definitionWrapperElement = null;
-    this.definitionLabelElement = null;
-    this.definitionItemsElement = null;
-    this.tipElement = null;
-    this.controlsElement = null;
-  }
-
   private destroy() {
-    // 销毁的时候重置所有元素，防止移除元素之后保存其引用
-    // this.resetData();
     this.resizeObserver?.disconnect();
     this.resizeObserver = null;
   }

@@ -16,8 +16,8 @@ import { FullScreenTypeEnum } from "./config/enum";
 import { PlayerEvents } from "./config/event";
 
 class PlayerConstructor extends EventEmit {
-  private options: PlayerOptions;
-  private templateInstance: Template | null;
+  options: PlayerOptions;
+  templateInstance: Template;
   private videoPlayerInstance: VideoPlayer | null;
   private playButtonInstance: VideoPlayButton | null;
   private videoTimeInstance: VideoTime | null;
@@ -60,53 +60,24 @@ class PlayerConstructor extends EventEmit {
   }
 
   private initTemplate() {
-    this.templateInstance = new Template({
-      ...this.options,
-      instance: this
-    });
+    this.templateInstance = new Template(this);
   }
 
   private initVideoTip() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoTipInstance = new VideoTip({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
+    this.videoTipInstance = new VideoTip(this);
   }
 
   private initVideoPlayer() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoPlayerInstance = new VideoPlayer({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
+    this.videoPlayerInstance = new VideoPlayer(this);
   }
 
   private initVideoPlayButton() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.playButtonInstance = new VideoPlayButton({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
+    this.playButtonInstance = new VideoPlayButton(this);
   }
 
   private initVideoTime() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance) && !this.options.live) {
-      this.videoTimeInstance = new VideoTime({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
+    if (!this.options.live) {
+      this.videoTimeInstance = new VideoTime(this);
     }
   }
 
@@ -201,7 +172,7 @@ class PlayerConstructor extends EventEmit {
     this.videoFullscreenInstance = null;
     this.videoLoadingInstance = null;
     this.videoVolumeInstance = null;
-    this.templateInstance = null;
+    (this.templateInstance as any) = null;
     this.videoSpeedInstance = null;
   }
 

@@ -1,27 +1,22 @@
-import { isUndef, secondToTime } from "@lin-media/utils";
+import { secondToTime } from "@lin-media/utils";
 import { VideoEvents } from "../config/event";
-
-import { ComponentOptions } from "../types";
+import PlayerConstructor from "../constructor";
 
 class VideoTime {
-  private options: ComponentOptions;
+  private playerInstance: PlayerConstructor;
   // 当前播放时间
   private currentTime = 0;
-  constructor(options: ComponentOptions) {
-    this.options = options;
+  constructor(playerInstance: PlayerConstructor) {
+    this.playerInstance = playerInstance;
     this.initListener();
   }
 
-  private get instance() {
-    return this.options.instance;
-  }
-
   private initListener() {
-    this.instance.$on(
+    this.playerInstance.$on(
       VideoEvents.LOADEDMETADATA,
       this.onVideoLoadedmetadata.bind(this)
     );
-    this.instance.$on(
+    this.playerInstance.$on(
       VideoEvents.TIMEUPDATE,
       this.onVideoTimeupdate.bind(this)
     );
@@ -51,17 +46,15 @@ class VideoTime {
   }
   // 设置总时长
   private setTotalTime(duration: number) {
-    const totalTimeElement = this.options.templateInstance.totalTimeElement;
-    if (!isUndef(totalTimeElement)) {
-      totalTimeElement.innerHTML = secondToTime(duration);
-    }
+    const totalTimeElement =
+      this.playerInstance.templateInstance.totalTimeElement;
+    totalTimeElement.innerHTML = secondToTime(duration);
   }
   // 设置当前时长
   private setCurrentTime(currentTime: number) {
-    const currentTimeElement = this.options.templateInstance.currentTimeElement;
-    if (!isUndef(currentTimeElement)) {
-      currentTimeElement.innerHTML = secondToTime(currentTime);
-    }
+    const currentTimeElement =
+      this.playerInstance.templateInstance.currentTimeElement;
+    currentTimeElement.innerHTML = secondToTime(currentTime);
   }
 }
 

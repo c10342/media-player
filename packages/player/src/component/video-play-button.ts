@@ -1,21 +1,17 @@
-import { EventManager, isUndef } from "@lin-media/utils";
-import { ComponentOptions } from "../types";
+import { EventManager } from "@lin-media/utils";
 
 import { PlayButtonIconEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
+import PlayerConstructor from "../constructor";
 
 class VideoPlayButton {
-  private options: ComponentOptions;
+  private playerInstance: PlayerConstructor;
   private eventManager: EventManager;
-  constructor(options: ComponentOptions) {
-    this.options = options;
+  constructor(playerInstance: PlayerConstructor) {
+    this.playerInstance = playerInstance;
     this.initVar();
     this.initPlayButtonListener();
     this.initListener();
-  }
-
-  private get instance() {
-    return this.options.instance;
   }
 
   private initVar() {
@@ -23,7 +19,7 @@ class VideoPlayButton {
   }
 
   private initPlayButtonListener() {
-    const playElement = this.options.templateInstance.playElement;
+    const playElement = this.playerInstance.templateInstance.playElement;
     this.eventManager.addEventListener({
       element: playElement,
       eventName: "click",
@@ -32,10 +28,9 @@ class VideoPlayButton {
   }
 
   private initListener() {
-    const instance = this.instance;
-    instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
-    instance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
-    instance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
+    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
+    this.playerInstance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
+    this.playerInstance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
   }
 
   // 视频播放事件处理
@@ -53,27 +48,20 @@ class VideoPlayButton {
   private onPlayButtonClick(event: MouseEvent) {
     event.stopPropagation();
     // 切换播放状态
-    this.instance.toggle();
+    this.playerInstance.toggle();
   }
   // 显示播放图标
   private showPlayIcon() {
-    const playElement = this.options.templateInstance.playElement;
-    if (!isUndef(playElement)) {
-      if (playElement.classList.contains(PlayButtonIconEnum.Pause)) {
-        playElement.classList.remove(PlayButtonIconEnum.Pause);
-      }
-      playElement.classList.add(PlayButtonIconEnum.Play);
-    }
+    const playElement = this.playerInstance.templateInstance.playElement;
+    playElement.classList.remove(PlayButtonIconEnum.Pause);
+
+    playElement.classList.add(PlayButtonIconEnum.Play);
   }
   // 显示暂停图标
   private showPauseIcon() {
-    const playElement = this.options.templateInstance.playElement;
-    if (!isUndef(playElement)) {
-      if (playElement.classList.contains(PlayButtonIconEnum.Play)) {
-        playElement.classList.remove(PlayButtonIconEnum.Play);
-      }
-      playElement.classList.add(PlayButtonIconEnum.Pause);
-    }
+    const playElement = this.playerInstance.templateInstance.playElement;
+    playElement.classList.remove(PlayButtonIconEnum.Play);
+    playElement.classList.add(PlayButtonIconEnum.Pause);
   }
 
   private destroy() {
