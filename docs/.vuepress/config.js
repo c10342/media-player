@@ -4,7 +4,14 @@ module.exports = {
   title: "MediaPlayer",
   description: "欢迎使用 MediaPlayer",
   plugins: {
-    "vuepress-plugin-typescript": true,
+    "vuepress-plugin-typescript": {
+      tsLoaderOptions: {
+        configFile: path.resolve(__dirname, "../../tsconfig.json"),
+        compilerOptions: {
+          composite: true
+        }
+      }
+    },
     "@vuepress/back-to-top": true,
     "@vuepress/pwa": {
       serviceWorker: true,
@@ -57,7 +64,7 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        "@media": path.resolve(__dirname, "../../packages")
+        "@lin-media": path.resolve(__dirname, "../../packages")
       },
       mainFields: ["doc", "main"]
     },
