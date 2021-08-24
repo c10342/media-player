@@ -8,7 +8,7 @@ import {
   isUndef,
   LangTypeEnum,
   logWarn
-} from "@media/utils";
+} from "@lin-media/utils";
 
 function getPluginName(ctor: any) {
   return ctor.pluginName || ctor.name;

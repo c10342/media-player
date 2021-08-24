@@ -1,6 +1,6 @@
 import Template from "./js/template";
 import { PlayerOptions } from "./types";
-import { isArray, isUndef, checkData, EventEmit } from "@media/utils";
+import { isArray, isUndef, checkData, EventEmit } from "@lin-media/utils";
 import VideoPlayer from "./component/video-player";
 import VideoPlayButton from "./component/video-play-button";
 import VideoTime from "./component/video-time";

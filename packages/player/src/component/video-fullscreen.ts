@@ -4,7 +4,7 @@ import {
   isBrowserFullscreen,
   EventManager,
   isUndef
-} from "@media/utils";
+} from "@lin-media/utils";
 import { ComponentOptions } from "../types";
 import { WEBFULLSCREENCLASSNAME } from "../config/constant";
 import { KeyCodeEnum } from "../config/enum";

@@ -1,5 +1,5 @@
 {
-  "name": "@media/player",
+  "name": "@lin-media/player",
   "version": "0.0.0",
   "description": "player",
   "main": "dist/index.js",
@@ -19,6 +19,6 @@
   "author": "c10342",
   "license": "MIT",
   "dependencies": {
-    "@media/utils": "^0.0.0"
+    "@lin-media/utils": "^0.0.0"
   }
 }

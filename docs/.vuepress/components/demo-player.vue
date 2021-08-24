@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import MediaPlayer from "@media/player";
+import MediaPlayer from "@lin-media/player";
 const playerOptions = {
   videoList: [
     {

@@ -1,4 +1,4 @@
-import { isUndef } from "@media/utils";
+import { isUndef } from "@lin-media/utils";
 import { PlayerEvents } from "../config/event";
 import { ComponentOptions } from "../types";
 

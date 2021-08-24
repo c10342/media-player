@@ -4,7 +4,7 @@
 
 <script>
 import DemoPlayer from "./demo-player.vue";
-import Zoom from "@media/zoom";
+import Zoom from "@lin-media/zoom";
 export default {
   components: { DemoPlayer },
   mounted() {

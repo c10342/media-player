@@ -1,16 +1,16 @@
-import VideoPlayer from "@media/player";
-import Highlight from "@media/highlight";
-import Screenshot from "@media/screenshot";
-import Preview from "@media/preview";
-import Zoom from "@media/zoom";
-import Danmaku from "@media/danmaku";
+import VideoPlayer from "@lin-media/player";
+import Highlight from "@lin-media/highlight";
+import Screenshot from "@lin-media/screenshot";
+import Preview from "@lin-media/preview";
+import Zoom from "@lin-media/zoom";
+import Danmaku from "@lin-media/danmaku";
 VideoPlayer.use(Highlight);
 VideoPlayer.use(Preview);
 // VideoPlayer.use(Screenshot);
 import "./index.scss";
 
 import DanmukuTest from "./danmaku";
-// import { LangTypeEnum } from "@media/utils";
+// import { LangTypeEnum } from "@lin-media/utils";
 
 // VideoPlayer.setLang(LangTypeEnum.en);
 // import Hls from "hls.js";

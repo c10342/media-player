@@ -1,5 +1,5 @@
 {
-  "name": "@media/utils",
+  "name": "@lin-media/utils",
   "version": "0.0.0",
   "description": "utils",
   "main": "dist/index.js",

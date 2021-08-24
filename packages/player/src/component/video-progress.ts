@@ -5,7 +5,7 @@ import {
   secondToTime,
   checkData,
   Drag
-} from "@media/utils";
+} from "@lin-media/utils";
 import { ComponentOptions, DragDataInfo } from "../types";
 import { t } from "../locale";
 import { PlayerEvents, VideoEvents } from "../config/event";

@@ -11,14 +11,14 @@
 ## 安装
 
 ```bash
-npm i @media/zoom
+npm i @lin-media/zoom
 ```
 
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@media/player";
-import Zoom from "@media/zoom";
+import MediaPlayer from "@lin-media/player";
+import Zoom from "@lin-media/zoom";
 MediaPlayer.use(Zoom);
 
 const player = new MediaPlayer({

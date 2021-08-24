@@ -4,7 +4,7 @@
 
 <script>
 import DemoPlayer from "./demo-player.vue";
-import Screenshot from "@media/screenshot";
+import Screenshot from "@lin-media/screenshot";
 export default {
   components: { DemoPlayer },
   mounted() {

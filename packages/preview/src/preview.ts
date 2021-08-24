@@ -1,8 +1,8 @@
 import pointListTpl from "./template/preview-list.art";
 import "./style/index.scss";
-import { EventManager, isArray, isUndef, checkData } from "@media/utils";
+import { EventManager, isArray, isUndef, checkData } from "@lin-media/utils";
 import { PreviewList, PreviewOptions } from "./types";
-import MediaPlayer, { PlayerEvents, VideoEvents } from "@media/player";
+import MediaPlayer, { PlayerEvents, VideoEvents } from "@lin-media/player";
 import { PreviewEvents } from "./config/event";
 import { barViewImageWidth, pluginName } from "./config/constant";
 import { initMethod } from "./js/init-methods";

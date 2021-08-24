@@ -1,9 +1,9 @@
 import "./style/index.scss";
-import { EventManager, isUndef, logError } from "@media/utils";
+import { EventManager, isUndef, logError } from "@lin-media/utils";
 import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
 import { downloadPicName } from "./config/constant";
-import MediaPlayer, { PlayerEvents } from "@media/player";
+import MediaPlayer, { PlayerEvents } from "@lin-media/player";
 import { ScreenshotEvents } from "./config/event";
 import { initMethod } from "./js/init-methods";
 

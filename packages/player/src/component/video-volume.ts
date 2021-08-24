@@ -1,4 +1,4 @@
-import { EventManager, isUndef, Drag } from "@media/utils";
+import { EventManager, isUndef, Drag } from "@lin-media/utils";
 import { ComponentOptions, DragDataInfo } from "../types";
 import { VolumeButtonIconEnum } from "../config/enum";
 import { t } from "../locale";

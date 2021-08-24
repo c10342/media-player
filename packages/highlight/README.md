@@ -3,14 +3,14 @@
 ## 安装
 
 ```bash
-npm i @media/highlight
+npm i @lin-media/highlight
 ```
 
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@media/player";
-import Highlight from "@media/highlight";
+import MediaPlayer from "@lin-media/player";
+import Highlight from "@lin-media/highlight";
 MediaPlayer.use(Highlight);
 
 const highlightList = [

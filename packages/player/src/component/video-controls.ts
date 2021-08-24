@@ -1,4 +1,4 @@
-import { EventManager, isFunction, isUndef } from "@media/utils";
+import { EventManager, isFunction, isUndef } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import { ComponentOptions } from "../types";
 

@@ -4,7 +4,7 @@
 
 <script>
 import DemoPlayer from "./demo-player.vue";
-import Highlight from "@media/highlight";
+import Highlight from "@lin-media/highlight";
 
 const highlightList = [
   {

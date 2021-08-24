@@ -1,4 +1,4 @@
-import { EventManager, isUndef } from "@media/utils";
+import { EventManager, isUndef } from "@lin-media/utils";
 import { VideoReadyStateEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import { ComponentOptions } from "../types";

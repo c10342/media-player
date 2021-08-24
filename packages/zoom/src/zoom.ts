@@ -1,5 +1,5 @@
-import { PlayerEvents } from "@media/player";
-import { isUndef, Drag } from "@media/utils";
+import { PlayerEvents } from "@lin-media/player";
+import { isUndef, Drag } from "@lin-media/utils";
 import { pluginName } from "./config/constant";
 import { ClassNameEnum, CursorEnum } from "./config/enum";
 import { ZoomEvents } from "./config/event";

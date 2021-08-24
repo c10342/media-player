@@ -4,7 +4,7 @@
 
 <script>
 import DemoPlayer from "./demo-player.vue";
-import Preview from "@media/preview";
+import Preview from "@lin-media/preview";
 
 
 export default {

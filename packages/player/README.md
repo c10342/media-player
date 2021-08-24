@@ -3,13 +3,13 @@
 ## 安装
 
 ```bash
-npm i @media/player
+npm i @lin-media/player
 ```
 
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@media/player";
+import MediaPlayer from "@lin-media/player";
 
 const player = new MediaPlayer({
   // 容器
@@ -254,7 +254,7 @@ class Test {
 使用插件：
 
 ```javascript
-import MediaPlayer from "@media/player";
+import MediaPlayer from "@lin-media/player";
 
 // 全局注册插件
 MediaPlayer.use(Test);

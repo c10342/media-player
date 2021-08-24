@@ -1,4 +1,4 @@
-import { EventManager, isUndef } from "@media/utils";
+import { EventManager, isUndef } from "@lin-media/utils";
 import { ComponentOptions } from "../types";
 
 import { PlayButtonIconEnum } from "../config/enum";

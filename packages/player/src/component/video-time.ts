@@ -1,4 +1,4 @@
-import { isUndef, secondToTime } from "@media/utils";
+import { isUndef, secondToTime } from "@lin-media/utils";
 import { VideoEvents } from "../config/event";
 
 import { ComponentOptions } from "../types";

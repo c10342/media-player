@@ -3,14 +3,14 @@
 ## 安装
 
 ```bash
-npm i @media/danmaku
+npm i @lin-media/danmaku
 ```
 
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@media/player";
-import Danmaku from "@media/danmaku";
+import MediaPlayer from "@lin-media/player";
+import Danmaku from "@lin-media/danmaku";
 MediaPlayer.use(Danmaku);
 
 const player = new MediaPlayer({

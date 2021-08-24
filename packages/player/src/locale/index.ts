@@ -4,7 +4,7 @@ import {
   isPlainObject,
   isUndef,
   LangTypeEnum
-} from "@media/utils";
+} from "@lin-media/utils";
 
 import zhLang from "./lang/zh.json";
 

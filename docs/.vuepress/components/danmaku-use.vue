@@ -16,11 +16,11 @@
 
 <script>
 import DemoPlayer from "./demo-player.vue";
-import Danmaku from "@media/danmaku";
+import Danmaku from "@lin-media/danmaku";
 
 const messages = [
   "你可以通过下面的参数来自定义你的播放器具体需要什么功能",
-  "npm i @media/player",
+  "npm i @lin-media/player",
   "我们先初始化一个最简单的播放器",
   "一个简单的MediaPlayer实例已经初始化完成了，它已经具有一些基本的功能了",
   "你可以把MediaPlayer用在直播中，你只需要把live参数设置为true即可",

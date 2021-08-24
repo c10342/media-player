@@ -1,4 +1,4 @@
-import { EventManager, isUndef, EventEmit } from "@media/utils";
+import { EventManager, isUndef, EventEmit } from "@lin-media/utils";
 import { AnimationClassName, HtmlElementProp } from "../types";
 import {
   getAnimationClassName,

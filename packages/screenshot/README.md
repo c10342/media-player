@@ -3,14 +3,14 @@
 ## 安装
 
 ```bash
-npm i @media/screenshot
+npm i @lin-media/screenshot
 ```
 
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@media/player";
-import Screenshot from "@media/screenshot";
+import MediaPlayer from "@lin-media/player";
+import Screenshot from "@lin-media/screenshot";
 MediaPlayer.use(Screenshot);
 
 const player = new MediaPlayer({

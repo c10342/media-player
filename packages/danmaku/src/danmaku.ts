@@ -1,11 +1,11 @@
-import { Drag, EventManager, isUndef } from "@media/utils";
+import { Drag, EventManager, isUndef } from "@lin-media/utils";
 import { CheckboxClassNameEnum, DanmakuAreaEnum } from "./config/enum";
 import BulletChat from "./js/bullet-chat";
 import { DanmakuOptions } from "./types";
 import settingTpl from "./template/setting.art";
 import "./style/index.scss";
 import i18n from "./locale";
-import MediaPlayer, { PlayerEvents } from "@media/player";
+import MediaPlayer, { PlayerEvents } from "@lin-media/player";
 import { pluginName } from "./config/constant";
 import { initMethod } from "./js/init-methods";
 

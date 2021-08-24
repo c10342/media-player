@@ -18,8 +18,8 @@
 
 ### 插件
 
-- 弹幕插件：[@media/danmaku](https://github.com/c10342/media-player/tree/main/packages/danmaku)
-- 自定义进度条提示插件：[@media/highlight](https://github.com/c10342/media-player/tree/main/packages/highlight)
-- 预览插件：[@media/preview](https://github.com/c10342/media-player/tree/main/packages/preview)
-- 缩放插件：[@media/zoom](https://github.com/c10342/media-player/tree/main/packages/zoom)
-- 截图插件：[@media/screenshot](https://github.com/c10342/media-player/tree/main/packages/screenshot)
+- 弹幕插件：[@lin-media/danmaku](https://github.com/c10342/media-player/tree/main/packages/danmaku)
+- 自定义进度条提示插件：[@lin-media/highlight](https://github.com/c10342/media-player/tree/main/packages/highlight)
+- 预览插件：[@lin-media/preview](https://github.com/c10342/media-player/tree/main/packages/preview)
+- 缩放插件：[@lin-media/zoom](https://github.com/c10342/media-player/tree/main/packages/zoom)
+- 截图插件：[@lin-media/screenshot](https://github.com/c10342/media-player/tree/main/packages/screenshot)

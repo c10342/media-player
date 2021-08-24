@@ -1,8 +1,8 @@
 import pointListTpl from "./template/point-list.art";
 import "./style/index.scss";
-import { EventManager, isArray, isUndef } from "@media/utils";
+import { EventManager, isArray, isUndef } from "@lin-media/utils";
 import { HighlightList, HighlightOptions } from "./types";
-import MediaPlayer, { PlayerEvents, VideoEvents } from "@media/player";
+import MediaPlayer, { PlayerEvents, VideoEvents } from "@lin-media/player";
 import { HighlightEvents } from "./config/event";
 import { pluginName } from "./config/constant";
 import { initMethod } from "./js/init-methods";

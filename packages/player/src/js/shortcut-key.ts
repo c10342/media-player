@@ -1,4 +1,4 @@
-import { EventManager } from "@media/utils";
+import { EventManager } from "@lin-media/utils";
 import { CanFocusTagEnum, KeyCodeEnum } from "../config/enum";
 import { PlayerEvents } from "../config/event";
 import { ComponentOptions } from "../types";

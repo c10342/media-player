@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npm i @media/player
+npm i @lin-media/player
 ```
 
 ## 快速开始
@@ -26,7 +26,7 @@ npm i @media/player
 ```
 
 ```javascript
-import MediaPlayer from "@media/player";
+import MediaPlayer from "@lin-media/player";
 
 const player = new MediaPlayer({
   // 容器
@@ -228,7 +228,7 @@ MediaPlayer.useLang({
 
 ```javascript
 import Hls from "hls.js";
-import MediaPlayer from "@media/player";
+import MediaPlayer from "@lin-media/player";
 
 const player = new MediaPlayer({
   el: ".container",
@@ -256,7 +256,7 @@ const player = new MediaPlayer({
 
 ```javascript
 import Hls from "hls.js";
-import MediaPlayer from "@media/player";
+import MediaPlayer from "@lin-media/player";
 
 const player = new MediaPlayer({
   el: ".container",
@@ -301,7 +301,7 @@ const player = new MediaPlayer({
 Test 插件
 
 ```javascript
-import MediaPlayer from "@media/player";
+import MediaPlayer from "@lin-media/player";
 
 // 往MediaPlayer原型链上添加一个say方法
 MediaPlayer.prototype.say = function(){
@@ -346,7 +346,7 @@ class Test {
 使用插件：
 
 ```javascript
-import MediaPlayer from "@media/player";
+import MediaPlayer from "@lin-media/player";
 
 // 全局注册插件
 MediaPlayer.use(Test);

@@ -3,14 +3,14 @@
 ## 安装
 
 ```bash
-npm i @media/preview
+npm i @lin-media/preview
 ```
 
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@media/player";
-import Preview from "@media/preview";
+import MediaPlayer from "@lin-media/player";
+import Preview from "@lin-media/preview";
 MediaPlayer.use(Preview);
 ```
 

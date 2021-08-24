@@ -9,7 +9,7 @@ import {
   PlayerOptions
 } from "../types/index";
 import { PlayerEvents } from "../config/event";
-import { isUndef, debounce } from "@media/utils";
+import { isUndef, debounce } from "@lin-media/utils";
 
 interface OptionsParams extends PlayerOptions {
   instance: Player;

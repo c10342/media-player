@@ -1,4 +1,4 @@
-import { isPlainObject, isString, isArray } from "@media/utils";
+import { isPlainObject, isString, isArray } from "@lin-media/utils";
 import { BulletChatOptions, PushData, QueueItem } from "../types";
 
 import { getRandomItem, getTranslateX } from "./utils";
