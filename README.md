@@ -4,25 +4,25 @@
 
 ## 在线文档
 
-[http://media-player.linjiafu.top](http://media-player.linjiafu.top)
+[http://player.linjiafu.top](http://player.linjiafu.top)
 
 ## 简介
 
-`MediaPlayer` 是由多包架构组成的开源项目。其中`@media/player`为核心包，集成了一些常用的功能，如清晰度切换，倍数播放，全屏等等；其他非常见功能通过插件的形式扩展使用，如截图，弹幕，自定义进度条提示点等等；其中，插件以第三方包的形式存在，独立于`@media/player`核心包，使用的时候需要自行进行下载安装。
+`MediaPlayer` 是由多包架构组成的开源项目。其中`@lin-media/player`为核心包，集成了一些常用的功能，如清晰度切换，倍数播放，全屏等等；其他非常见功能通过插件的形式扩展使用，如截图，弹幕，自定义进度条提示点等等；其中，插件以第三方包的形式存在，独立于`@lin-media/player`核心包，使用的时候需要自行进行下载安装。
 
 目前有四个插件包，分别为：
 
-- 弹幕插件 `@media/danmaku`
-- 自定义进度条提示插件 `@media/highlight`
-- 预览插件 `@media/preview`
-- 缩放插件 `@media/zoom`
-- 截图插件 `@media/screenshot`
+- 弹幕插件 `@lin-media/danmaku`
+- 自定义进度条提示插件 `@lin-media/highlight`
+- 预览插件 `@lin-media/preview`
+- 缩放插件 `@lin-media/zoom`
+- 截图插件 `@lin-media/screenshot`
 
 为什么要使用插件的形式扩展？
 
 1、考虑到一些功能使用频率不高，但我们在打包的时候也无法剔除这些功能，这样就会导致我们的打包体积变大。
 
-2、开闭原则。当我们需要实现新的功能的是时候，可通过插件的形式去实现，而不是在`@media/player`这个核心包中添加功能
+2、开闭原则。当我们需要实现新的功能的是时候，可通过插件的形式去实现，而不是在`@lin-media/player`这个核心包中添加功能
 
 3、防止包的体积无限制得增大。插件功能天然支持按需加载功能
 
@@ -39,13 +39,13 @@
 安装
 
 ```
-npm i @media/player
+npm i @lin-media/player
 ```
 
 初始化
 
 ```javascript
-import MediaPlayer from "@media/player";
+import MediaPlayer from "@lin-media/player";
 const player = new MediaPlayer({
   // 容器
   el: ".container",
@@ -71,13 +71,13 @@ const player = new MediaPlayer({
 
 安装
 ```
-npm i @media/danmaku
+npm i @lin-media/danmaku
 ```
 
 注册使用插件
 ```javascript
-import MediaPlayer from "@media/player";
-import Danmaku from "@media/danmaku";
+import MediaPlayer from "@lin-media/player";
+import Danmaku from "@lin-media/danmaku";
 // 全局注册插件。插件注册分全局注册和局部注册
 MediaPlayer.use(Danmaku);
 
