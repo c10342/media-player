@@ -34,10 +34,11 @@
     "declarationDir": "temp_types"
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "temp_types"
   ],
   "include": [
-    "packages/*",
-    "types/*",
+    "./**/*.ts",
+    "./**/*.json"
   ]
 }
