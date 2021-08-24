@@ -14,7 +14,7 @@ const baseConfig = {
   resolve: {
     extensions: [".ts", ".js"],
     alias: {
-      "@media": path.join(__dirname, "../packages")
+      "@lin-media": path.join(__dirname, "../packages")
     },
     mainFields: ["doc", "main"]
   },
