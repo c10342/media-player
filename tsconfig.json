@@ -5,24 +5,23 @@
       "outDir": ".",
       "moduleResolution": "node",
       "paths": {
-        "@media/*": ["packages/*"]
+        "@lin-media/*": ["packages/*"]
       },
       "target": "es5",
-      "module": "es2015",
+      "module": "esnext",
       "lib": ["es2015", "es2016", "es2017", "dom"],
       "esModuleInterop": true,
       "strictPropertyInitialization": false,
       "strict": true,
       "preserveSymlinks": true,
-      "declaration": true,
-      "declarationDir":"temp_types",
       "allowSyntheticDefaultImports": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": false,
       "typeRoots": ["node_modules/@types"],
       "allowJs": true,
       "resolveJsonModule":true,
-      "importHelpers":true
+      "importHelpers":true,
+      "composite":true
     },
     "exclude": [
       "node_modules"
