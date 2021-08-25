@@ -48,34 +48,74 @@ const previewList = [
 
 const contextMenuList = [
   {
-    label: "下载视频",
-    desc: "描述",
+    label: "播放",
+    desc: "描述信息",
     type: "MenuItem",
     callback: () => {
-      console.log(1);
+      player.play();
+    },
+    eventName: "click-play"
+  },
+  {
+    label: "暂停",
+    type: "MenuItem",
+    callback: () => {
+      player.pause();
     }
   },
   {
-    label: "刷新",
-    type: "MenuItem"
+    label: "播放/暂停",
+    type: "MenuItem",
+    callback: () => {
+      player.toggle();
+    }
   },
   {
     type: "MenuLine"
   },
   {
     type: "SubMenuItem",
-    label: "副标题菜单",
+    label: "倍数",
     subMenuList: [
       {
-        label: "查看引用"
+        label: "0.5x",
+        callback: () => {
+          player.setSpeed(0.5);
+        }
       },
       {
-        label: "定义菜单"
+        label: "1x",
+        callback: () => {
+          player.setSpeed(1);
+        }
+      },
+      {
+        label: "1.5x",
+        callback: () => {
+          player.setSpeed(1.5);
+        }
+      }
+    ]
+  },
+  {
+    type: "SubMenuItem",
+    label: "清晰度",
+    subMenuList: [
+      {
+        label: "标清",
+        callback: () => {
+          player.switchDefinition(0);
+        }
+      },
+      {
+        label: "高清",
+        callback: () => {
+          player.switchDefinition(1);
+        }
       }
     ]
   }
 ];
-
 const player = new VideoPlayer({
   el: ".container",
   videoList: [
@@ -143,7 +183,9 @@ const player = new VideoPlayer({
     fontSizes: [16, 18, 20, 22, 24, 26, 28]
   },
   Contextmenu: {
-    menuList: contextMenuList
+    menuList: contextMenuList,
+    meunItemWidth: "200px",
+    subMenuItemWidth: "100px"
   }
   // hotkey:true
   // live:true
