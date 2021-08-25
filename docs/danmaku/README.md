@@ -19,7 +19,7 @@ MediaPlayer.use(Danmaku);
 
 const player = new MediaPlayer({
   // ...
-  danmakuOptions: {
+  Danmaku: {
     // 弹幕字体颜色，随机
     fontColors: ["blue", "red", "green", "#fff"],
     // 弹幕字体大小随机
@@ -28,7 +28,11 @@ const player = new MediaPlayer({
 });
 ```
 
-## danmakuOptions 参数
+## Danmaku 参数
+
+::: tip
+Danmaku 参数设置为 `false` 可关闭插件功能
+:::
 
 | 参数           | 说明                             | 类型          | 可选值 | 默认值          |
 | -------------- | -------------------------------- | ------------- | ------ | --------------- |

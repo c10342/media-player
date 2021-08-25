@@ -23,7 +23,7 @@ MediaPlayer.use(Zoom);
 
 const player = new MediaPlayer({
   // ...
-  zoomOptions: {
+  Zoom: {
     // 是否允许横向缩放，默认true
     x: true,
     // 是否允许纵向缩放，默认true
@@ -35,9 +35,7 @@ const player = new MediaPlayer({
     // 最小缩放高度
     minHeight: 100,
     // 最小缩放宽度
-    minWidth: 100,
-    // 是否开启缩放功能，默认true
-    open: true
+    minWidth: 100
   }
 });
 
@@ -47,7 +45,12 @@ player.$on("zoom", (item) => {
 });
 ```
 
-## zoomOptions 参数
+## Zoom 参数
+
+
+::: tip
+Zoom 参数设置为 `false` 可关闭插件功能
+:::
 
 | 参数      | 说明                    | 类型    | 可选值 | 默认值 |
 | --------- | ----------------------- | ------- | ------ | ------ |
@@ -57,7 +60,6 @@ player.$on("zoom", (item) => {
 | maxHeight | 最大缩放高度，可选      | number  | —      | —      |
 | minHeight | 最小缩放高度，可选      | number  | —      | 0      |
 | minWidth  | 最小缩放宽度，可选      | number  | —      | 0      |
-| open      | 是否开启功能，可选      | boolean | —      | true   |
 
 ## 事件
 

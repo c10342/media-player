@@ -40,7 +40,7 @@ const previewList = [
 ];
 const player = new MediaPlayer({
   // ...
-  previewOptions: {
+  Preview: {
     // 通过参数传入或者通过setPreview方法设置
     list: previewList
   }
@@ -60,7 +60,7 @@ player.$on("preview-click", (item: any) => {
 ```javascript
 const player = new MediaPlayer({
   // ...
-  previewOptions: {
+  Preview: {
     // 通过参数传入或者通过setBarView方法设置
     barPreviewUrl: "https://xxx/demo.jpg"
   }
@@ -68,7 +68,12 @@ const player = new MediaPlayer({
 // player.preview.setBarView('https://xxx/demo.jpg')
 ```
 
-## previewOptions 参数
+## Preview 参数
+
+::: tip
+Preview 参数设置为 `false` 可关闭插件功能
+:::
+
 
 | 参数          | 说明                               | 类型   | 可选值 | 默认值 |
 | ------------- | ---------------------------------- | ------ | ------ | ------ |

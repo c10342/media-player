@@ -19,9 +19,7 @@ MediaPlayer.use(Screenshot);
 
 const player = new MediaPlayer({
   // ...
-  screenshotOptions: {
-    // 是否开启功能，默认为true，如果是通过全局注册的插件，可通过该选项关闭功能
-    open: true,
+  Screenshot: {
     // 点击后自动下载,默认true，你可以设置为false，然后通过事件监听来自定义点击之后的操作
     download: true
   }
@@ -40,11 +38,16 @@ player.screenshot.snapshot();
 该插件需要视频开启跨域功能，否则无法截图
 :::
 
-## screenshotOptions 参数
+## Screenshot 参数
+
+
+::: tip
+Screenshot 参数设置为 `false` 可关闭插件功能
+:::
+
 
 | 参数     | 说明                                                        | 类型    | 可选值 | 默认值         |
 | -------- | ----------------------------------------------------------- | ------- | ------ | -------------- |
-| open     | 是否开启功能,如果是通过全局注册的插件，可通过该选项关闭功能 | boolean | —      | true           |
 | download | 是否点击后自动下载                                          | boolean | —      | true           |
 | picName  | 下载的图片名称                                              | string  | —      | screenshot.png |
 
@@ -56,4 +59,4 @@ player.screenshot.snapshot();
 
 ## API
 
-- `player.screenshot.snapshot()` : 调用截图方法，请务必当 open 为 true 是才能使用该方法
+- `player.screenshot.snapshot()` : 调用截图方法

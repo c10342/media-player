@@ -25,7 +25,7 @@ const highlightList = [
 ];
 const player = new MediaPlayer({
   // ...
-  highlightOptions: {
+  Highlight: {
     // 点击跳转到提示点的时间点，默认true
     jump: true,
     // 显示点击的提示点的文本，默认true
@@ -47,7 +47,11 @@ player.$on("highlight-click", (item) => {
 });
 ```
 
-## highlightOptions 参数
+## Highlight 参数
+
+::: tip
+Highlight 参数设置为 `false` 可关闭插件功能
+:::
 
 | 参数    | 说明                               | 类型    | 可选值 | 默认值 |
 | ------- | ---------------------------------- | ------- | ------ | ------ |
