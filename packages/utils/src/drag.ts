@@ -1,6 +1,7 @@
 import checkData from "./checkData";
 import EventEmit from "./event-emit";
 import EventManager from "./event-manager";
+import getBoundingClientRect from "./getBoundingClientRect";
 import { isFunction, isUndef } from "./is";
 import userSelect from "./user-select";
 
@@ -45,23 +46,7 @@ class Drag extends EventEmit {
     this.eventManager = new EventManager();
   }
   private getWrapperInfo() {
-    const wrapperElement = this.options?.wrapperElement;
-
-    const pos = { left: 0, top: 0 };
-    let obj: any = wrapperElement;
-
-    while (obj) {
-      pos.left += obj.offsetLeft;
-      pos.top += obj.offsetTop;
-      obj = obj.offsetParent;
-    }
-
-    return {
-      left: pos.left,
-      top: pos.top,
-      width: wrapperElement?.offsetWidth || 0,
-      height: wrapperElement?.offsetHeight || 0
-    };
+    return getBoundingClientRect(this.options?.wrapperElement);
   }
   private initDrag() {
     // 进行拖拽的元素

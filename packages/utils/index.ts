@@ -10,3 +10,4 @@ export { default as checkData } from "./src/checkData";
 export { default as debounce } from "./src/debounce";
 export { default as EventEmit } from "./src/event-emit";
 export { default as Drag } from "./src/drag";
+export { default as getBoundingClientRect } from "./src/getBoundingClientRect";
