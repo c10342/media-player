@@ -4,7 +4,7 @@ node_modules
 /debug.log
 /coverage
 /temp_types
-/packages/**/types
+/packages/*/types
 /scripts/userInfo.js
 package-lock.json
 yarn.lock
