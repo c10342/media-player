@@ -1,17 +1,20 @@
 import pointListTpl from "./template/preview-list.art";
 import "./style/index.scss";
-import { EventManager, isArray, isUndef, checkData } from "@lin-media/utils";
+import {
+  EventManager,
+  isArray,
+  isUndef,
+  checkData,
+  getBoundingClientRect
+} from "@lin-media/utils";
 import { PreviewList, PreviewOptions } from "./types";
 import MediaPlayer, { PlayerEvents, VideoEvents } from "@lin-media/player";
 import { PreviewEvents } from "./config/event";
 import { barViewImageWidth, pluginName } from "./config/constant";
-import { initMethod } from "./js/init-methods";
 
 const defaultOptions = {
   barPreview: false
 };
-
-initMethod(MediaPlayer);
 
 class Preview {
   // 插件名称.
@@ -38,16 +41,43 @@ class Preview {
     this.el = el;
     this.instance = instance;
     // 参数
-    const options = this.instance.options?.previewOptions ?? {};
+    const options = this.instance.options[pluginName] ?? {};
     this.options = { ...defaultOptions, ...options };
     this.eventManager = new EventManager();
     // 开始初始化
     this.initList();
     this.initInstanceListener();
+    // 挂载方法给外部使用
+    this.initMethods();
   }
 
   private get duration() {
     return this.instance.duration || 0;
+  }
+
+  private initMethods() {
+    Object.defineProperty(this.instance, "preview", {
+      get: () => {
+        return {
+          // 设置预览点列表
+          setPreview: (list: PreviewList) => {
+            this.setPreview(list);
+          },
+          // 销毁预览点列表
+          destroyPreview: () => {
+            this.destroyPreview();
+          },
+          // 设置进度条预览
+          setBarView: (barPreviewUrl: string) => {
+            this.setBarView(barPreviewUrl);
+          },
+          // 销毁进度条预览
+          destroyBarView: () => {
+            this.destroyBarView();
+          }
+        };
+      }
+    });
   }
 
   private initInstanceListener() {
@@ -103,7 +133,7 @@ class Preview {
   // 调整位置
   private adjustPosition() {
     const imageListElement = this.element?.querySelectorAll(".preview-image");
-    const { left, right } = this.el.getBoundingClientRect();
+    const { left, right } = getBoundingClientRect(this.el);
     if (!isUndef(imageListElement)) {
       this.adjustLeft(imageListElement, left);
       this.adjustRight(imageListElement, right);
@@ -115,11 +145,11 @@ class Preview {
     const length = imageListElement.length;
     for (let i = 0; i < length; i++) {
       const element = imageListElement[i] as HTMLElement;
-      const clientRect = element.getBoundingClientRect();
+      const clientRect = getBoundingClientRect(element);
       if (left > clientRect.left) {
         // 容器距离页面左边的距离大于元素距离页面左边的距离，说明元素被遮挡住了，需要调整一下
         const parentLeft =
-          element.parentElement?.getBoundingClientRect().left ?? 0;
+          getBoundingClientRect(element.parentElement).left ?? 0;
         const offsetLeft = parentLeft - left;
         element.style.left = `${-offsetLeft}px`;
         element.style.transform = "translate(0,-100%)";
@@ -135,10 +165,10 @@ class Preview {
     const length = imageListElement.length;
     for (let i = length - 1; i >= 0; i--) {
       const element = imageListElement[i] as HTMLElement;
-      const clientRect = element.getBoundingClientRect();
+      const clientRect = getBoundingClientRect(element);
       if (right < clientRect.right) {
         const parentRight =
-          element.parentElement?.getBoundingClientRect().right ?? 0;
+          getBoundingClientRect(element.parentElement).right ?? 0;
         const offsetRight = right - parentRight;
         element.style.left = `${offsetRight}px`;
         element.style.transform = "translate(-100%,-100%)";
@@ -209,8 +239,8 @@ class Preview {
   // 鼠标移动事件
   private onMousemove(event: MouseEvent) {
     if (!isUndef(this.barViewElement) && !isUndef(this.progressElement)) {
-      const progressInfo = this.progressElement.getBoundingClientRect();
-      const containerInfo = this.el.getBoundingClientRect();
+      const progressInfo = getBoundingClientRect(this.progressElement);
+      const containerInfo = getBoundingClientRect(this.el);
       // 鼠标距离左边最小的距离
       const minLeft = barViewImageWidth / 2;
       // 鼠标距离最左边的最大距离
