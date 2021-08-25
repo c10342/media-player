@@ -9,7 +9,7 @@ export default {
   components: { DemoPlayer },
   mounted() {
     this.$refs.demoPlayer.initPlayer({
-      zoomOptions: {
+      Zoom: {
         // 最大缩放宽度
         minWidth: 400,
         // 最大缩放高度

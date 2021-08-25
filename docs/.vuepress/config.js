@@ -43,10 +43,11 @@ module.exports = {
         text: "插件",
         items: [
           { text: "弹幕", link: "/danmaku/" },
-          { text: "自定义进度条提示点", link: "/highlight/" },
-          { text: "视频缩略图预览", link: "/preview/" },
           { text: "截图", link: "/screenshot/" },
-          { text: "缩放", link: "/zoom/" }
+          { text: "缩放", link: "/zoom/" },
+          { text: "右键菜单", link: "/contextmenu/" },
+          { text: "视频缩略图预览", link: "/preview/" },
+          { text: "自定义进度条提示点", link: "/highlight/" }
         ]
       },
       { text: "生态", link: "/ecology/" },

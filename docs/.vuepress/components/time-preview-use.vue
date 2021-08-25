@@ -25,7 +25,7 @@ export default {
   components: { DemoPlayer },
   mounted() {
     this.$refs.demoPlayer.initPlayer({
-      previewOptions: {
+      Preview: {
         // 通过参数传入或者通过setPreview方法设置
         list: previewList
       },

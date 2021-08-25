@@ -41,7 +41,7 @@ export default {
   components: { DemoPlayer },
   mounted() {
     this.$refs.demoPlayer.initPlayer({
-      highlightOptions: {
+      Highlight: {
         list: highlightList
       },
       plugins: [Highlight]

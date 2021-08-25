@@ -11,7 +11,7 @@ export default {
   components: { DemoPlayer },
   mounted() {
     this.$refs.demoPlayer.initPlayer({
-      previewOptions: {
+      Preview: {
         barPreviewUrl:'/images/screenshot.png'
       },
       plugins: [Preview]

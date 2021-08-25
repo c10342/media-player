@@ -55,7 +55,7 @@ export default {
   },
   mounted() {
     this.$refs.demoPlayer.initPlayer({
-      danmakuOptions: {
+      Danmaku: {
         fontColors: ["blue", "red", "green", "purple", "yellow"],
         fontSizes: [16, 18, 20, 22, 24, 26, 28],
         speedArg: 0.009

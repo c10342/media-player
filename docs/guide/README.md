@@ -96,7 +96,7 @@ player.$on("ended", function () {
 });
 ```
 
-- 播放器自定义事件
+- **播放器自定义事件**
 
 | 事件名称                | 说明                     | 回调参数 |
 | ----------------------- | ------------------------ | -------- |
@@ -111,7 +111,7 @@ player.$on("ended", function () {
 | hide_controls           | 控制条隐藏时触发         | —        |
 | resize                  | 播放器大小发生变化时触发 | —        |
 
-- 原生 video 标签事件
+- **原生 video 标签事件**
 
 | 事件名称       | 说明                                                    | 回调参数 |
 | -------------- | ------------------------------------------------------- | -------- |
@@ -140,7 +140,7 @@ player.$on("ended", function () {
 
 ## API
 
-播放器实例方法：
+**播放器实例方法：**
 
 - `player.$on(eventName: string, handler: Function)` : 监听播放器自定义事件或者原生 video 标签事件
 
@@ -186,7 +186,7 @@ player.fullScreen.cancel("web");
 player.fullScreen.cancel("browser");
 ```
 
-播放器实例属性：
+**播放器实例属性：**
 
 - `player.videoElement` : 原生 video 标签
 
@@ -198,7 +198,7 @@ player.fullScreen.cancel("browser");
 
 - `player.volume` : 当前音量
 
-播放器构造函数静态方法
+**播放器构造函数静态方法：**
 
 - `MediaPlayer.useLang(lang:Object)` : 自定义语言包，会跟默认的语言包进行合并
 
