@@ -282,7 +282,9 @@ const player = new MediaPlayer({
 
 ## 插件
 
-- 播放器提供了了插件功能，可自己定制一些需求，比如自定义进度条提示点，截图，弹幕等等。
+### 介绍
+
+- 播放器提供了插件功能，可自己定制一些需求，比如自定义进度条提示点，截图，弹幕等等。
 
 - 插件分为全局插件和局部插件，使用全局插件时，每个播放器实例都会具备全局插件的功能。使用局部插件时，只有当前播放器实例才会存在局部插件的功能。
 
@@ -290,23 +292,20 @@ const player = new MediaPlayer({
 
   - 局部插件是通过 options 参数中的`plugins`字段进行注册的
 
-- 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性（不写就默认使用构造器的 name），这是为了外部可以通过`player.plugins[pluginName]`访问到插件实例
+### 插件的构成
 
-- 构造器函数（类）会接受到三个参数：
-  - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`
-  - instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往实例中挂载其他属性或者方法
+- 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性（不写就默认使用构造器的 name），`pluginName`是用来作为插件的唯一标识，同时外部可以通过`player.plugins[pluginName]`访问到插件实例
 
-插件代码示例：
+- 构造器函数（类）会接受到两个参数：
+  - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`。因为当你同时初始化了2个播放器的时候，`document.querySelector()`获取的始终是第一个元素
+  - instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往实例中挂载其他属性或者方法，提供给外部使用
 
-Test 插件
+### 插件代码示例
+
+**Test 插件：**
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
-
-// 往MediaPlayer原型链上添加一个say方法
-MediaPlayer.prototype.say = function(){
-  console.log(this.plugins.Test)
-}
 
 class Test {
   // 提供一个pluginName静态属性
@@ -314,13 +313,13 @@ class Test {
   el = null;
   instance = null;
 
-  constructor(el, instance, MediaPlayer) {
-    // 保存接受到的三个参数
+  constructor(el, instance) {
+    // 保存接受到的两个参数
     this.el = el;
     this.instance = instance;
     // 往播放器实例中添加一个sleep方法
     instance.extend({
-      sleep() {
+      sleep:()=>{
         console.log("sleep");
       }
     });
@@ -343,7 +342,7 @@ class Test {
 }
 ```
 
-使用插件：
+**使用插件：**
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
@@ -355,19 +354,26 @@ const player = new MediaPlayer({
   // ...
   // 或者通过局部注册
   // plugins:[Test]
+  // 关闭插件功能
+  // Test:false
 });
 
-// Test插件发射出来的事件
+// 监听Test插件发射出来的事件
 player.$on("test-click", () => {
   console.log("test-click");
 });
 // Test插件在播放器实例上面挂载的方法
 player.sleep();
-// Test插件在MediaPlayer原型上面挂载的方法
-player.say();
 // 访问Test插件的实例
 player.plugins.Test;
 ```
+
+### 注意事项
+
+- 插件必须是一个构造器函数（类），因为内部是通过 `new` 的方式去初始化插件
+- 插件中请提供一个`pluginName`静态属性，该属性作为插件的唯一标识。如果不提供会默认使用构造器的 `name` 值，但可能会造成冲突
+- 如果有其他副作用的代码，可以通过监听 `destroy` 事件来销毁这些副作用代码
+- 如果需要监听原生 `video` 标签事件，请通过`player.$on(eventName:string,handler:Function)`进行监听，而不是通过`video.addEventListener()`进行监听，因为清晰度切换的时候，会删除旧的 `video` 标签，插入新的 `video` 标签，此时通过`video.addEventListener()`监听的事件会失效。当然，你也可以通过监听`switch_definition_end`事件，重新对 `video` 标签进行监听，但这样显得没必要。
 
 
 ## 常见问题
