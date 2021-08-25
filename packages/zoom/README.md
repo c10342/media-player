@@ -27,9 +27,7 @@ const player = new MediaPlayer({
     // 最小缩放高度
     minHeight: 100,
     // 最小缩放宽度
-    minWidth: 100,
-    // 是否开启缩放功能，默认true
-    open: true
+    minWidth: 100
   }
 });
 
@@ -49,7 +47,6 @@ player.$on("zoom", (item) => {
 | maxHeight | 最大缩放高度      | number  | —      | —      |
 | minHeight | 最小缩放高度      | number  | —      | 0      |
 | minWidth  | 最小缩放宽度      | number  | —      | 0      |
-| open      | 是否开启功能      | boolean | —      | true   |
 
 ## 事件
 

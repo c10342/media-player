@@ -5,7 +5,6 @@ export interface ZoomOptions {
   maxHeight?: number;
   minHeight?: number;
   minWidth?: number;
-  open?: boolean;
 }
 
 export interface ZoomData {

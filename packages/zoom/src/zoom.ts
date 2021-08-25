@@ -1,25 +1,24 @@
-import { PlayerEvents } from "@lin-media/player";
 import { isUndef, Drag } from "@lin-media/utils";
 import { pluginName } from "./config/constant";
 import { ClassNameEnum, CursorEnum } from "./config/enum";
 import { ZoomEvents } from "./config/event";
 import "./style/index.scss";
 import { ZoomData, ZoomOptions } from "./types";
+import MediaPlayer, { PlayerEvents } from "@lin-media/player";
 
 const defaultOptions = {
   x: true,
   y: true,
   minHeight: 0,
-  minWidth: 0,
-  open: true
+  minWidth: 0
 };
 class Zoom {
   // 插件名称.
   static pluginName = pluginName;
   // 播放器实例
-  private instance: any;
+  private instance: MediaPlayer;
   //   父级元素
-  private parentElement: HTMLElement | null;
+  private parentElement: HTMLElement;
   //   拖拽的元素
   private dragElement: HTMLElement | null;
   // 参数
@@ -28,17 +27,14 @@ class Zoom {
   private dragInstance: Drag | null;
   // 记录上一个位置
   private prevPosition: ZoomData = { width: -1, height: -1 };
-  constructor(el: HTMLElement, instance: any) {
+  constructor(el: HTMLElement, instance: MediaPlayer) {
     this.instance = instance;
-    this.parentElement = instance.options.el;
-    const options = instance.options.zoomOptions ?? {};
+    this.parentElement = instance.options.el as HTMLElement;
+    const options = instance.options[pluginName] ?? {};
     this.options = { ...defaultOptions, ...options };
-    // 开启了功能在进行初始化
-    if (this.options.open) {
-      this.init();
-      this.initDrag();
-      this.initListener();
-    }
+    this.init();
+    this.initDrag();
+    this.initListener();
   }
 
   // 初始化拖拽行为
@@ -68,7 +64,7 @@ class Zoom {
     // 生成拖拽的元素
     this.dragElement = this.createElement();
     // 插入拖拽元素到父容器中
-    this.parentElement?.appendChild(this.dragElement);
+    this.parentElement.appendChild(this.dragElement);
   }
 
   // 移除拖拽的元素
@@ -96,14 +92,14 @@ class Zoom {
 
   // 添加类名到父容器中
   private addClassNameToParent() {
-    if (!this.parentElement?.classList.contains(ClassNameEnum.ZOOMRELATIVE)) {
-      this.parentElement?.classList.add(ClassNameEnum.ZOOMRELATIVE);
+    if (!this.parentElement.classList.contains(ClassNameEnum.ZOOMRELATIVE)) {
+      this.parentElement.classList.add(ClassNameEnum.ZOOMRELATIVE);
     }
   }
   // 移除父容器类名
   private removeClassNameToParent() {
-    if (this.parentElement?.classList.contains(ClassNameEnum.ZOOMRELATIVE)) {
-      this.parentElement?.classList.remove(ClassNameEnum.ZOOMRELATIVE);
+    if (this.parentElement.classList.contains(ClassNameEnum.ZOOMRELATIVE)) {
+      this.parentElement.classList.remove(ClassNameEnum.ZOOMRELATIVE);
     }
   }
   // 检查宽高是否越界，符合要求等
@@ -146,22 +142,20 @@ class Zoom {
 
   // 设置父容器的宽高样式
   private setParentStyle(style?: { width: number; height: number }) {
-    if (!isUndef(this.parentElement)) {
-      if (!isUndef(style)) {
-        const { x, y } = this.options;
-        if (x) {
-          // 开启横向拖拽才设置
-          this.parentElement.style.width = `${style.width}px`;
-        }
-        if (y) {
-          // 开始纵向拖拽才设置
-          this.parentElement.style.height = `${style.height}px`;
-        }
-      } else {
-        // 宽高样式不存在就重置样式
-        this.parentElement.style.width = "";
-        this.parentElement.style.height = "";
+    if (!isUndef(style)) {
+      const { x, y } = this.options;
+      if (x) {
+        // 开启横向拖拽才设置
+        this.parentElement.style.width = `${style.width}px`;
       }
+      if (y) {
+        // 开始纵向拖拽才设置
+        this.parentElement.style.height = `${style.height}px`;
+      }
+    } else {
+      // 宽高样式不存在就重置样式
+      this.parentElement.style.width = "";
+      this.parentElement.style.height = "";
     }
   }
 
