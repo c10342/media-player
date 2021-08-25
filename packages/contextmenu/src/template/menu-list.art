@@ -3,20 +3,23 @@
 {{if $value.type==='MenuItem'}}
 <div class="contextmenu-item" data-index='{{$index}}'>
   <span class="contextmenu-item-info">{{$value.label}}</span>
-  {{if $value.decs}}
-  <span class="contextmenu-item-desc">{{$value.decs}}</span>
+  {{if $value.desc}}
+  <span class="contextmenu-item-desc">{{$value.desc}}</span>
   {{/if}}
 </div>
 {{/if}}
 {{if $value.type==='SubMenuItem'}}
 <div class="contextmenu-item">
   <span class="contextmenu-item-info">{{$value.label}}</span>
-  <span>&gt;</span>
+  <span class='contextmenu-icon-right'></span>
   {{if $value.subMenuList && $value.subMenuList.length>0}}
-  <div class="contextmenu-subMenu-container">
+  <div class="contextmenu-subMenu-container" {{if subMenuItemWidth}} style='width:{{subMenuItemWidth}};' {{/if}}>
   {{each $value.subMenuList as subMenuItem i}}
     <div class="contextmenu-item" data-parent='{{$index}}' data-index='{{i}}'>
       <span class="contextmenu-item-info">{{subMenuItem.label}}</span>
+        {{if subMenuItem.desc}}
+        <span class="contextmenu-item-desc">{{subMenuItem.desc}}</span>
+        {{/if}}
     </div>
     {{/each}}
   </div>

@@ -1,5 +1,7 @@
 export interface ContextmenuOptions {
   menuList: MenuList;
+  meunItemWidth?: string;
+  subMenuItemWidth?: string;
 }
 
 export type MenuList =
@@ -12,7 +14,7 @@ export type MenuItemType = "MenuItem" | "SubMenuItem" | "MenuLine";
 export interface MenuItem {
   type: "MenuItem";
   label: string;
-  callback?: Function;
+  callback?: (data: MenuItem) => void;
   eventName?: string;
   desc?: string;
   [key: string]: any;

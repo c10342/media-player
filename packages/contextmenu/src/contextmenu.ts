@@ -1,7 +1,7 @@
 import MediaPlayer from "@lin-media/player";
-import { EventManager, isArray } from "@lin-media/utils";
+import { EventManager, isArray, isFunction, isString } from "@lin-media/utils";
 import { pluginName } from "./config/constant";
-import { ContextmenuOptions } from "./types";
+import { ContextmenuOptions, MenuItem } from "./types";
 import menuListTpl from "./template/menu-list.art";
 
 import "./style/index.scss";
@@ -60,15 +60,26 @@ class Contextmenu {
     if (dataset) {
       const menuList = this._options.menuList as any;
       let menuItem = null;
+
       if (dataset.parent && dataset.index) {
-        menuItem = menuList[dataset.parent][dataset.index];
+        menuItem = menuList[dataset.parent]["subMenuList"][dataset.index];
       } else if (dataset.index) {
         menuItem = menuList[dataset.index];
       }
       if (menuItem) {
-        console.log(menuItem);
+        this._handelMenuItemClick(menuItem);
       }
     }
+  }
+
+  private _handelMenuItemClick(menuItem: MenuItem) {
+    if (isFunction(menuItem.callback)) {
+      menuItem.callback(menuItem);
+    }
+    if (isString(menuItem.eventName)) {
+      this._instance.$emit(menuItem.eventName, menuItem);
+    }
+    this._hideMenu();
   }
 
   private _onDocumentClick(event: MouseEvent) {
@@ -84,6 +95,9 @@ class Contextmenu {
     div.innerHTML = menuListTpl({
       ...this._options
     });
+    if (this._options.meunItemWidth) {
+      div.style.width = this._options.meunItemWidth;
+    }
     this._parentElement.appendChild(div);
     this._wrapperElement = div;
   }
