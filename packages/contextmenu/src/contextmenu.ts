@@ -1,10 +1,17 @@
 import MediaPlayer from "@lin-media/player";
-import { EventManager, isArray, isFunction, isString } from "@lin-media/utils";
+import {
+  EventManager,
+  isArray,
+  isFunction,
+  isString,
+  getViewPortInfo
+} from "@lin-media/utils";
 import { pluginName } from "./config/constant";
 import { ContextmenuOptions, MenuItem } from "./types";
 import menuListTpl from "./template/menu-list.art";
 
 import "./style/index.scss";
+import { PlayerEvents } from "@lin-media/player";
 
 class Contextmenu {
   static pluginName = pluginName;
@@ -52,6 +59,12 @@ class Contextmenu {
       eventName: "click",
       handler: this._onMenuClick.bind(this)
     });
+    this._eventManager.addEventListener({
+      element: window,
+      eventName: "scroll",
+      handler: this._hideMenu.bind(this)
+    });
+    this._instance.$on(PlayerEvents.DESTROY, this._destroy.bind(this));
   }
 
   private _onMenuClick(event: MouseEvent) {
@@ -122,24 +135,29 @@ class Contextmenu {
   }
 
   private _adjustPosition(event: MouseEvent) {
-    let y = event.pageY;
-    let x = event.pageX;
+    let y = event.clientY;
+    let x = event.clientX;
     const scrollWidth = this._wrapperElement.scrollWidth;
     const scrollHeight = this._wrapperElement.scrollHeight;
+    const viewPortInfo = getViewPortInfo();
     if (
-      scrollHeight > window.innerHeight - event.pageY &&
-      scrollHeight < event.pageY
+      scrollHeight > viewPortInfo.clientHeight - event.clientY &&
+      scrollHeight < event.clientY
     ) {
-      y = event.pageY - scrollHeight;
+      y = event.clientY - scrollHeight;
     }
     if (
-      scrollWidth > window.innerWidth - event.pageX &&
-      scrollWidth < event.pageX
+      scrollWidth > viewPortInfo.clientWidth - event.clientX &&
+      scrollWidth < event.clientX
     ) {
-      x = event.pageX - scrollWidth;
+      x = event.clientX - scrollWidth;
     }
     this._wrapperElement.style.top = `${y}px`;
     this._wrapperElement.style.left = `${x}px`;
+  }
+
+  private _destroy() {
+    this._eventManager.removeEventListener();
   }
 }
 

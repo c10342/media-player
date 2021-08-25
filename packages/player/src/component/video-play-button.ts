@@ -10,7 +10,6 @@ class VideoPlayButton {
   constructor(playerInstance: PlayerConstructor) {
     this.playerInstance = playerInstance;
     this.initVar();
-    this.initPlayButtonListener();
     this.initListener();
   }
 
@@ -18,19 +17,15 @@ class VideoPlayButton {
     this.eventManager = new EventManager();
   }
 
-  private initPlayButtonListener() {
-    const playElement = this.playerInstance.templateInstance.playElement;
-    this.eventManager.addEventListener({
-      element: playElement,
-      eventName: "click",
-      handler: this.onPlayButtonClick.bind(this)
-    });
-  }
-
   private initListener() {
     this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
     this.playerInstance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
     this.playerInstance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
+    this.eventManager.addEventListener({
+      element: this.playerInstance.templateInstance.playElement,
+      eventName: "click",
+      handler: this.onPlayButtonClick.bind(this)
+    });
   }
 
   // 视频播放事件处理

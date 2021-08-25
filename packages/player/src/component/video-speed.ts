@@ -1,6 +1,6 @@
 import { EventManager, isFunction } from "@lin-media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
-import { PlayerEvents } from "../config/event";
+import { PlayerEvents, VideoEvents } from "../config/event";
 import PlayerConstructor from "../constructor";
 
 class VideoSpeed {
@@ -15,7 +15,6 @@ class VideoSpeed {
     this.initCurrentIndex();
     // 设置video标签倍数
     this.initDefaultRate();
-    this.initSpeedListener();
     this.initListener();
   }
 
@@ -25,13 +24,12 @@ class VideoSpeed {
 
   private initListener() {
     this.playerInstance.$on(PlayerEvents.DESTROY, () => this.destroy());
-  }
-
-  private initSpeedListener() {
-    const speedWrapperElement =
-      this.playerInstance.templateInstance.speedWrapperElement;
+    this.playerInstance.$on(
+      VideoEvents.RATECHANGE,
+      this.onRatechange.bind(this)
+    );
     this.eventManager.addEventListener({
-      element: speedWrapperElement,
+      element: this.playerInstance.templateInstance.speedWrapperElement,
       eventName: "click",
       handler: this.onSpeedWrapperClick.bind(this)
     });
@@ -62,6 +60,19 @@ class VideoSpeed {
       this.setCurrentInfo(index);
     }
   }
+
+  private onRatechange(event: MouseEvent) {
+    const target = event.target as HTMLVideoElement;
+    const rate = target.playbackRate;
+    const speedList = this.playerInstance.options.speedList ?? [];
+    const index = speedList.findIndex((item) => item.value === rate);
+    if (index > -1 && index !== this.currentIndex) {
+      this.setCurrentInfo(index);
+      // 显示通知
+      this.playerInstance.setNotice(speedList[index].label);
+    }
+  }
+
   // 设置索引
   private setCurrentIndex(index: number) {
     this.currentIndex = index;

@@ -12,7 +12,6 @@ class VideoControls {
   constructor(playerInstance: PlayerConstructor) {
     this.playerInstance = playerInstance;
     this.initVar();
-    this.initWrapperListener();
     this.initListener();
   }
 
@@ -20,7 +19,10 @@ class VideoControls {
     this.eventManager = new EventManager();
   }
 
-  private initWrapperListener() {
+  private initListener() {
+    this.playerInstance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
+    this.playerInstance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
+    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
     const containerElement =
       this.playerInstance.templateInstance.containerElement;
     this.eventManager.addEventListener({
@@ -33,12 +35,6 @@ class VideoControls {
       eventName: "mouseleave",
       handler: this.onMouseleave.bind(this)
     });
-  }
-
-  private initListener() {
-    this.playerInstance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
-    this.playerInstance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
-    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
   }
 
   // 鼠标进入容器事件处理

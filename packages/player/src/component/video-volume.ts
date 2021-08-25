@@ -21,8 +21,6 @@ class VideoVolume {
     this.initVolumeProgress();
     // 初始化拖拽事件
     this.initDrag();
-    // 初始化事件监听
-    this.initVolumeListener();
     this.initListener();
   }
 
@@ -71,7 +69,18 @@ class VideoVolume {
     });
   }
 
-  private initVolumeListener() {
+  // 初始化音量进度条长度
+  private initVolumeProgress() {
+    this.prevVolume = this.playerInstance.volume || 1;
+    this.setProgressWidth(this.playerInstance.volume);
+  }
+
+  private initListener() {
+    this.playerInstance.$on(PlayerEvents.DESTROY, () => this.destroy());
+    this.playerInstance.$on(
+      VideoEvents.VOLUMECHANGE,
+      this.onVideoVolumechange.bind(this)
+    );
     const { volumeButtonElement, volumeContainerElement } =
       this.playerInstance.templateInstance;
     // 音量图标
@@ -92,20 +101,6 @@ class VideoVolume {
       eventName: "mouseleave",
       handler: this.onMouseleave.bind(this)
     });
-  }
-
-  // 初始化音量进度条长度
-  private initVolumeProgress() {
-    this.prevVolume = this.playerInstance.volume || 1;
-    this.setProgressWidth(this.playerInstance.volume);
-  }
-
-  private initListener() {
-    this.playerInstance.$on(PlayerEvents.DESTROY, () => this.destroy());
-    this.playerInstance.$on(
-      VideoEvents.VOLUMECHANGE,
-      this.onVideoVolumechange.bind(this)
-    );
   }
   // 点击音量图标
   private onVolumeButtonClick() {

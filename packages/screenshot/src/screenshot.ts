@@ -105,21 +105,19 @@ class Screenshot {
     const videoElement = this.el.querySelector(
       ".player-video"
     ) as HTMLVideoElement;
-    if (!isUndef(videoElement)) {
-      try {
-        // 截图视频
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        // 获取视频宽高
-        const videoInfo = this.getVideoInfo(videoElement);
-        canvas.width = videoInfo.width;
-        canvas.height = videoInfo.height;
-        ctx?.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-        return canvas.toDataURL() || null;
-      } catch (error) {
-        logError(error);
-        return null;
-      }
+    try {
+      // 截图视频
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      // 获取视频宽高
+      const videoInfo = this.getVideoInfo(videoElement);
+      canvas.width = videoInfo.width;
+      canvas.height = videoInfo.height;
+      ctx?.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+      return canvas.toDataURL() || null;
+    } catch (error) {
+      logError(error);
+      return null;
     }
     return null;
   }

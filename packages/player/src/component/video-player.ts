@@ -18,10 +18,6 @@ class VideoPlayer {
     this.setCurrentIndex(this.getDefaultIndex());
     // 初始化video标签视频
     this.initPlayer();
-    // 初始化清晰度事件监听
-    this.initDefinitionListener();
-    // 遮罩层事件监听
-    this.initMaskListener();
     this.initListener();
   }
 
@@ -67,6 +63,16 @@ class VideoPlayer {
 
   private initListener() {
     this.playerInstance.$on(PlayerEvents.DESTROY, () => this.destroy());
+    this.eventManager.addEventListener({
+      element: this.playerInstance.templateInstance.definitionWrapperElement,
+      eventName: "click",
+      handler: this.onWrapperClick.bind(this)
+    });
+    this.eventManager.addEventListener({
+      element: this.playerInstance.templateInstance.videoMaskElement,
+      eventName: "click",
+      handler: this.onVideoMaskClick.bind(this)
+    });
   }
 
   // 获取默认播放的视频，有default的就是默认得了
@@ -82,16 +88,6 @@ class VideoPlayer {
     return -1;
   }
 
-  // 清晰度点击事件处理
-  private initDefinitionListener() {
-    const definitionWrapperElement =
-      this.playerInstance.templateInstance.definitionWrapperElement;
-    this.eventManager.addEventListener({
-      element: definitionWrapperElement,
-      eventName: "click",
-      handler: this.onWrapperClick.bind(this)
-    });
-  }
   // 销毁播放器
   private destroyPlayer() {
     this.playerInstance.videoElement.src = "";
@@ -104,16 +100,6 @@ class VideoPlayer {
       return videoList[currentIndex];
     }
     return null;
-  }
-  // 遮罩层事件处理
-  private initMaskListener() {
-    const videoMaskElement =
-      this.playerInstance.templateInstance.videoMaskElement;
-    this.eventManager.addEventListener({
-      element: videoMaskElement,
-      eventName: "click",
-      handler: this.onVideoMaskClick.bind(this)
-    });
   }
 
   private onVideoMaskClick() {

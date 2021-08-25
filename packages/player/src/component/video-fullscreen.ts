@@ -17,10 +17,6 @@ class VideoFullscreen {
   constructor(playerInstance: PlayerConstructor) {
     this.playerInstance = playerInstance;
     this.initVar();
-    // 全屏图标事件监听
-    this.initButtonListener();
-    // 全局事件
-    this.initGlobalListener();
     this.initListener();
   }
 
@@ -28,29 +24,20 @@ class VideoFullscreen {
     this.eventManager = new EventManager();
   }
 
-  private initButtonListener() {
-    const { fullscreenWebElement, fullscreenBrowserElement } =
-      this.playerInstance.templateInstance;
+  private initListener() {
+    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
     // 网页全屏
     this.eventManager.addEventListener({
-      element: fullscreenWebElement,
+      element: this.playerInstance.templateInstance.fullscreenWebElement,
       eventName: "click",
       handler: this.onWebFullscreen.bind(this)
     });
     // 浏览器全屏
     this.eventManager.addEventListener({
-      element: fullscreenBrowserElement,
+      element: this.playerInstance.templateInstance.fullscreenBrowserElement,
       eventName: "click",
       handler: this.onBrowserFullscreen.bind(this)
     });
-  }
-
-  private initListener() {
-    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
-  }
-
-  // 监听全局事件
-  private initGlobalListener() {
     this.eventManager.addEventListener({
       element: document,
       eventName: "keyup",

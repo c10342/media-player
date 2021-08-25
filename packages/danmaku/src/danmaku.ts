@@ -76,12 +76,6 @@ class Danmaku {
     this._initOpacitySetting();
     // 初始化弹幕速度
     this._initSpeedSetting();
-    // 初始化显示/隐藏弹幕
-    this._initShowOrHideSetting();
-    // 初始化开始/暂停弹幕
-    this._initPlayOrPauseSetting();
-    // 初始化弹幕区域
-    this._initAreaSetting();
     // 初始化监听
     this._initListener();
     // 挂载方法给外部用
@@ -223,6 +217,21 @@ class Danmaku {
     this._instance.$on(PlayerEvents.RESIZE, () => {
       this._bulletChat?.resize();
     });
+    this._eventManager?.addEventListener({
+      element: this._showLabelElement,
+      eventName: "click",
+      handler: this._onShowOrHideChange.bind(this)
+    });
+    this._eventManager?.addEventListener({
+      element: this._pauseLabelElement,
+      eventName: "click",
+      handler: this._onPlayOrPauseChange.bind(this)
+    });
+    this._eventManager?.addEventListener({
+      element: this._danmakuAreaWrapperElement,
+      eventName: "click",
+      handler: this._onAreaClick.bind(this)
+    });
   }
 
   private _getSettingElement(selector: string) {
@@ -278,30 +287,6 @@ class Danmaku {
   private _setSpeed(event: DataInfo) {
     this._speedProgressElement.style.width = `${event.percentX * 100}%`;
     this._bulletChat?.setSpeed(event.percentX * 2);
-  }
-
-  private _initShowOrHideSetting() {
-    this._eventManager?.addEventListener({
-      element: this._showLabelElement,
-      eventName: "click",
-      handler: this._onShowOrHideChange.bind(this)
-    });
-  }
-
-  private _initPlayOrPauseSetting() {
-    this._eventManager?.addEventListener({
-      element: this._pauseLabelElement,
-      eventName: "click",
-      handler: this._onPlayOrPauseChange.bind(this)
-    });
-  }
-
-  private _initAreaSetting() {
-    this._eventManager?.addEventListener({
-      element: this._danmakuAreaWrapperElement,
-      eventName: "click",
-      handler: this._onAreaClick.bind(this)
-    });
   }
 
   private _onShowOrHideChange() {

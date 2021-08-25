@@ -22,8 +22,6 @@ class VideoProgress {
     this.initVar();
     // 初始化拖拽事件
     this.initDrag();
-    // 初始化进度条事件
-    this.initProgressListener();
     this.initListener();
   }
 
@@ -80,7 +78,17 @@ class VideoProgress {
     });
   }
 
-  private initProgressListener() {
+  private initListener() {
+    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
+    this.playerInstance.$on(
+      VideoEvents.TIMEUPDATE,
+      this.onVideoTimeupdate.bind(this)
+    );
+    this.playerInstance.$on(
+      VideoEvents.PROGRESS,
+      this.onVideoProgress.bind(this)
+    );
+    this.playerInstance.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
     const progressMaskElement =
       this.playerInstance.templateInstance.progressMaskElement;
     this.eventManager.addEventListener({
@@ -93,19 +101,6 @@ class VideoProgress {
       eventName: "mouseleave",
       handler: this.onMaskMouseleave.bind(this)
     });
-  }
-
-  private initListener() {
-    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
-    this.playerInstance.$on(
-      VideoEvents.TIMEUPDATE,
-      this.onVideoTimeupdate.bind(this)
-    );
-    this.playerInstance.$on(
-      VideoEvents.PROGRESS,
-      this.onVideoProgress.bind(this)
-    );
-    this.playerInstance.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
   }
 
   // 鼠标进入进度条容器
