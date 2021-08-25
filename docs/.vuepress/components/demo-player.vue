@@ -47,6 +47,7 @@ export default {
         ...options
       });
       this.$emit("init-success", this.player);
+      return this.player
     },
     destroyPlayer() {
       if (this.player) {

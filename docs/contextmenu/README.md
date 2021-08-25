@@ -1,6 +1,6 @@
 # 右键菜单
 
-## 演示 
+## 演示
 
 <contextmenu-use />
 
@@ -90,6 +90,7 @@ const contextMenuList = [
 const player = new MediaPlayer({
   // ...
   Contextmenu: {
+    menuList: contextMenuList,
     // 一级菜单宽度
     meunItemWidth: "300px",
     // 二级菜单宽度
@@ -116,24 +117,24 @@ player.$on("click-play", (item) => {
 
 **MenuItem：**
 
-| 字段      | 说明                                                           | 类型   |
-| --------- | -------------------------------------------------------------- | ------ |
-| type      | 菜单类型，值为：`MenuItem`                                      | string |
-| label     | 菜单文本                                                       | string |
+| 字段      | 说明                                                           | 类型     |
+| --------- | -------------------------------------------------------------- | -------- |
+| type      | 菜单类型，值为：`MenuItem`                                     | string   |
+| label     | 菜单文本                                                       | string   |
 | callback  | 回调函数，可选。存在时，点击菜单项会执行，回调参数：`MenuItem` | Function |
-| eventName | 自定义事件，可选。存在时，点击菜单项会广播事件                 | string |
-| desc      | 描述信息，可选。                                               | string |
+| eventName | 自定义事件，可选。存在时，点击菜单项会广播事件                 | string   |
+| desc      | 描述信息，可选。                                               | string   |
 
 **MenuItemLine：**
 
-| 字段 | 说明                      | 类型   |
-| ---- | ------------------------- | ------ |
+| 字段 | 说明                       | 类型   |
+| ---- | -------------------------- | ------ |
 | type | 菜单类型，值为：`MenuLine` | string |
 
 **SubMenuItem：**
 
-| 字段        | 说明                                   | 类型   |
-| ----------- | -------------------------------------- | ------ |
-| type        | 菜单类型，值为：`SubMenuItem`           | string |
-| label       | 菜单文本                               | string |
+| 字段        | 说明                                   | 类型                  |
+| ----------- | -------------------------------------- | --------------------- |
+| type        | 菜单类型，值为：`SubMenuItem`          | string                |
+| label       | 菜单文本                               | string                |
 | subMenuList | 二级菜单列表，列表项请参考：`MenuItem` | Array&lt;MenuItem&gt; |
