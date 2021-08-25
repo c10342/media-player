@@ -15,7 +15,7 @@ MediaPlayer.use(Zoom);
 
 const player = new MediaPlayer({
   // ...
-  zoomOptions: {
+  Zoom: {
     // 是否允许横向缩放，默认true
     x: true,
     // 是否允许纵向缩放，默认true
@@ -37,7 +37,7 @@ player.$on("zoom", (item) => {
 });
 ```
 
-## zoomOptions 参数
+## Zoom 参数
 
 | 参数      | 说明              | 类型    | 可选值 | 默认值 |
 | --------- | ----------------- | ------- | ------ | ------ |

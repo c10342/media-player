@@ -15,7 +15,7 @@ MediaPlayer.use(Screenshot);
 
 const player = new MediaPlayer({
   // ...
-  screenshotOptions: {
+  Screenshot: {
     // 点击后自动下载,默认true，你可以设置为false，然后通过事件监听来自定义点击之后的操作
     download: true
   }
@@ -32,7 +32,7 @@ player.screenshot.snapshot();
 
 注意：该插件需要视频开启跨域功能，否则无法截图
 
-## screenshotOptions 参数
+## Screenshot 参数
 
 | 参数     | 说明                                                        | 类型    | 可选值 | 默认值 |
 | -------- | ----------------------------------------------------------- | ------- | ------ | ------ |

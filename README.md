@@ -13,10 +13,11 @@
 目前有四个插件包，分别为：
 
 - 弹幕插件 `@lin-media/danmaku`
-- 自定义进度条提示插件 `@lin-media/highlight`
-- 预览插件 `@lin-media/preview`
 - 缩放插件 `@lin-media/zoom`
 - 截图插件 `@lin-media/screenshot`
+- 右键菜单插件 `@lin-media/contextmenu`
+- 视频缩略图预览插件 `@lin-media/preview`
+- 自定义进度条提示插件 `@lin-media/highlight`
 
 为什么要使用插件的形式扩展？
 
@@ -83,7 +84,7 @@ MediaPlayer.use(Danmaku);
 
 const player = new MediaPlayer({
   // ...
-  danmakuOptions: {
+  Danmaku: {
     // 弹幕字体颜色，随机
     fontColors: ["blue", "red", "green", "#fff"],
     // 弹幕字体大小随机
