@@ -4,6 +4,7 @@ import Screenshot from "@lin-media/screenshot";
 import Preview from "@lin-media/preview";
 import Zoom from "@lin-media/zoom";
 import Danmaku from "@lin-media/danmaku";
+import Contextmenu from "@lin-media/contextmenu";
 VideoPlayer.use(Highlight);
 VideoPlayer.use(Preview);
 // VideoPlayer.use(Screenshot);
@@ -34,16 +35,46 @@ const highlightList = [
   }
 ];
 
-// const previewList = [
-//   {
-//     time: 40,
-//     url: "http://xxx/demo.png"
-//   },
-//   {
-//     time: 80,
-//     url: "http://xxx/demo.png"
-//   }
-// ];
+const previewList = [
+  {
+    time: 40,
+    url: "http://xxx/demo.png"
+  },
+  {
+    time: 80,
+    url: "http://xxx/demo.png"
+  }
+];
+
+const contextMenuList = [
+  {
+    label: "下载视频",
+    desc: "描述",
+    type: "MenuItem",
+    callback: () => {
+      console.log(1);
+    }
+  },
+  {
+    label: "刷新",
+    type: "MenuItem"
+  },
+  {
+    type: "MenuLine"
+  },
+  {
+    type: "SubMenuItem",
+    label: "副标题菜单",
+    subMenuList: [
+      {
+        label: "查看引用"
+      },
+      {
+        label: "定义菜单"
+      }
+    ]
+  }
+];
 
 const player = new VideoPlayer({
   el: ".container",
@@ -85,31 +116,34 @@ const player = new VideoPlayer({
       value: 1.5
     }
   ],
-  plugins: [Screenshot, Zoom, Danmaku],
-  highlightOptions: {
+  plugins: [Screenshot, Zoom, Danmaku, Contextmenu],
+  Highlight: {
     jump: true,
-    showTip: true
-    // list: highlightList
+    showTip: true,
+    list: highlightList
   },
-  screenshotOptions: {
+  Screenshot: {
     // 是否开启功能
     open: true,
     // 点击后自动下载,默认true，你可以设置为false，然后通过事件监听来自定义点击之后的操作
     download: true
   },
-  previewOptions: {
+  Preview: {
     // list: previewList,
     barPreviewUrl: "https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg"
   },
-  zoomOptions: {
+  Zoom: {
     // y:false,
     // open:false,
     minWidth: 300,
     minHeight: 300
   },
-  danmakuOptions: {
+  Danmaku: {
     fontColors: ["blue", "red", "green", "#fff", "yellow"],
     fontSizes: [16, 18, 20, 22, 24, 26, 28]
+  },
+  Contextmenu: {
+    menuList: contextMenuList
   }
   // hotkey:true
   // live:true
