@@ -2,21 +2,17 @@ import "./style/index.scss";
 import { EventManager, isUndef, logError } from "@lin-media/utils";
 import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
-import { downloadPicName } from "./config/constant";
+import { downloadPicName, pluginName } from "./config/constant";
 import MediaPlayer, { PlayerEvents } from "@lin-media/player";
 import { ScreenshotEvents } from "./config/event";
-import { initMethod } from "./js/init-methods";
 
 const defaultOptions = {
-  open: true,
   download: true
 };
 
-initMethod(MediaPlayer);
-
 class Screenshot {
   // 插件名称.
-  static pluginName = "Screenshot";
+  static pluginName = pluginName;
   // 播放器的dom
   private el: HTMLElement;
   // 播放器实例
@@ -33,23 +29,34 @@ class Screenshot {
     this.el = el;
     this.instance = instance;
     // 合并默认参数
-    const options = this.instance.options?.screenshotOptions ?? {};
+    const options = this.instance.options[pluginName] ?? {};
     this.options = { ...defaultOptions, ...options };
     // 初始化
     this.handleInit();
+    // 挂载方法给外部使用
+    this.initMethods();
   }
 
   private handleInit() {
-    // 功能关闭的情况下不进行初始化
-    if (this.options.open) {
-      this.initVar();
-      // 初始化dom
-      this.initElement();
-      // 销毁
-      this.instance.$on(PlayerEvents.DESTROY, () => {
-        this.destroy();
-      });
-    }
+    this.initVar();
+    // 初始化dom
+    this.initElement();
+    // 销毁
+    this.instance.$on(PlayerEvents.DESTROY, () => {
+      this.destroy();
+    });
+  }
+
+  private initMethods() {
+    Object.defineProperty(this, "screenshot", {
+      get: () => {
+        return {
+          snapshot: () => {
+            this.onClick();
+          }
+        };
+      }
+    });
   }
 
   private initVar() {
