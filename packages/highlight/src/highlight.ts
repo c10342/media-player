@@ -1,13 +1,10 @@
 import pointListTpl from "./template/point-list.art";
 import "./style/index.scss";
-import { EventManager, isArray, isUndef } from "@lin-media/utils";
+import { EventManager, getBoundingClientRect, isArray } from "@lin-media/utils";
 import { HighlightList, HighlightOptions } from "./types";
 import MediaPlayer, { PlayerEvents, VideoEvents } from "@lin-media/player";
 import { HighlightEvents } from "./config/event";
 import { pluginName } from "./config/constant";
-import { initMethod } from "./js/init-methods";
-
-initMethod(MediaPlayer);
 
 const defaultOptions = {
   jump: true,
@@ -35,12 +32,29 @@ class Highlight {
     this.el = el;
     this.instance = instance;
     // 合并默认参数
-    const options = this.instance.options?.highlightOptions ?? {};
+    const options = this.instance.options[pluginName] ?? {};
     this.options = { ...defaultOptions, ...options };
     this.initVar();
     // 开始初始化
     this.init();
     this.initInstanceListener();
+    // 挂载方法给外部用
+    this.initMethods();
+  }
+
+  private initMethods() {
+    Object.defineProperty(this.instance, "highlight", {
+      get: () => {
+        return {
+          set: (list: HighlightList) => {
+            this.setHighlight(list);
+          },
+          destroy: () => {
+            this.destroyHighlight();
+          }
+        };
+      }
+    });
   }
 
   private initVar() {
@@ -101,14 +115,12 @@ class Highlight {
   }
   // 调整位置
   private adjustPosition() {
-    const pointListElement = this.element?.querySelectorAll(
+    const pointListElement = this.element!.querySelectorAll(
       ".highlight-point-tip"
     );
-    const { left, right } = this.el.getBoundingClientRect();
-    if (!isUndef(pointListElement)) {
-      this.adjustLeft(pointListElement, left);
-      this.adjustRight(pointListElement, right);
-    }
+    const { left, right } = getBoundingClientRect(this.el);
+    this.adjustLeft(pointListElement, left);
+    this.adjustRight(pointListElement, right);
   }
 
   // 调整左边的距离
@@ -116,11 +128,11 @@ class Highlight {
     const length = pointListElement.length;
     for (let i = 0; i < length; i++) {
       const element = pointListElement[i] as HTMLElement;
-      const clientRect = element.getBoundingClientRect();
+      const clientRect = getBoundingClientRect(element);
       if (left > clientRect.left) {
         // 容器距离页面左边的距离大于元素距离页面左边的距离，说明元素被遮挡住了，需要调整一下
         const parentLeft =
-          element.parentElement?.getBoundingClientRect().left ?? 0;
+          getBoundingClientRect(element.parentElement).left ?? 0;
         const offsetLeft = parentLeft - left;
         element.style.left = `${-offsetLeft}px`;
         element.style.transform = "translate(0,-100%)";
@@ -136,10 +148,10 @@ class Highlight {
     const length = pointListElement.length;
     for (let i = length - 1; i >= 0; i--) {
       const element = pointListElement[i] as HTMLElement;
-      const clientRect = element.getBoundingClientRect();
+      const clientRect = getBoundingClientRect(element);
       if (right < clientRect.right) {
         const parentRight =
-          element.parentElement?.getBoundingClientRect().right ?? 0;
+          getBoundingClientRect(element.parentElement).right ?? 0;
         const offsetRight = right - parentRight;
         element.style.left = `${offsetRight}px`;
         element.style.transform = "translate(-100%,-100%)";
@@ -184,10 +196,8 @@ class Highlight {
 
   private removeElementAndListener() {
     this.eventManager?.removeEventListener();
-    if (this.element) {
-      this.element.parentNode?.removeChild(this.element);
-      this.element = null;
-    }
+    this.element?.remove();
+    (this.element as any) = null;
   }
 
   // 设置提示点列表
