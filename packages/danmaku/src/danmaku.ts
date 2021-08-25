@@ -1,13 +1,12 @@
-import { Drag, EventManager, isUndef } from "@lin-media/utils";
+import { Drag, EventManager } from "@lin-media/utils";
 import { CheckboxClassNameEnum, DanmakuAreaEnum } from "./config/enum";
 import BulletChat from "./js/bullet-chat";
-import { DanmakuOptions } from "./types";
+import { DanmakuOptions, PushData } from "./types";
 import settingTpl from "./template/setting.art";
 import "./style/index.scss";
 import i18n from "./locale";
 import MediaPlayer, { PlayerEvents } from "@lin-media/player";
 import { pluginName } from "./config/constant";
-import { initMethod } from "./js/init-methods";
 
 interface DataInfo {
   offsetX: number;
@@ -15,10 +14,6 @@ interface DataInfo {
   percentX: number;
   percentY: number;
 }
-
-type HtmlElementProp = HTMLElement | null | undefined;
-
-initMethod(MediaPlayer);
 
 class Danmaku {
   static pluginName = pluginName;
@@ -32,48 +27,49 @@ class Danmaku {
   // 弹幕类
   private _bulletChat: BulletChat | null;
   // 弹幕容器
-  private _danmakuWrapperElement: HtmlElementProp;
+  private _danmakuWrapperElement: HTMLElement;
   // 弹幕设置容器
-  private _settingWrapperElement: HtmlElementProp;
+  private _settingWrapperElement: HTMLElement;
   // 透明度进度条容器
-  private _opacityWrapperElement: HtmlElementProp;
+  private _opacityWrapperElement: HTMLElement;
   // 透明度进度条
-  private _opacityProgressElement: HtmlElementProp;
+  private _opacityProgressElement: HTMLElement;
   // 透明度小球
-  private _opacityBallElement: HtmlElementProp;
+  private _opacityBallElement: HTMLElement;
   // 透明度小球
   private _opacityDragInstance: Drag | null;
 
   // 弹幕速度相关
-  private _speedWrapperElement: HtmlElementProp;
-  private _speedProgressElement: HtmlElementProp;
-  private _speedBallElement: HtmlElementProp;
+  private _speedWrapperElement: HTMLElement;
+  private _speedProgressElement: HTMLElement;
+  private _speedBallElement: HTMLElement;
   private _speedDragInstance: Drag | null;
 
   // 显示或者隐藏弹幕相关
-  private _showLabelElement: HtmlElementProp;
+  private _showLabelElement: HTMLElement;
   private _isShowDanmaku = true;
 
   // 暂停或者显示弹幕相关
-  private _pauseLabelElement: HtmlElementProp;
+  private _pauseLabelElement: HTMLElement;
   private _isPauseDanmaku = false;
 
   // 弹幕显示区域相关
-  private _danmakuAreaWrapperElement: HtmlElementProp;
+  private _danmakuAreaWrapperElement: HTMLElement;
   private _danmakuAreaPosition = DanmakuAreaEnum.all;
 
   constructor(el: HTMLElement, instance: MediaPlayer) {
     this._el = el;
     this._instance = instance;
-    const options = instance.options?.danmakuOptions ?? {};
+    const options = instance.options[pluginName] ?? {};
     this.options = options;
+    // 初始化语言
     this._initLang();
     // 初始化变量
     this._initVar();
     // 生成dom元素
     this._initElement();
     // 获取相关元素
-    this._getElement();
+    this._initHTMLElement();
     // 初始化弹幕
     this._initDanmaku();
     // 初始化弹幕透明度
@@ -88,6 +84,57 @@ class Danmaku {
     this._initAreaSetting();
     // 初始化监听
     this._initListener();
+    // 挂载方法给外部用
+    this._initMethods();
+  }
+
+  private _initMethods() {
+    Object.defineProperty(this._instance, "danmaku", {
+      get: () => {
+        return {
+          // 发送弹幕
+          send: (data: string | PushData | Array<PushData>) => {
+            this._bulletChat?.add(data);
+          },
+          // 开始弹幕
+          play: () => {
+            this._bulletChat?.play();
+            this._isPauseDanmaku = false;
+            this._switchPlayOrPause();
+          },
+          // 暂停弹幕
+          pause: () => {
+            this._bulletChat?.pause();
+            this._isPauseDanmaku = true;
+            this._switchPlayOrPause();
+          },
+          // 容器发生变化
+          resize: () => {
+            this._bulletChat?.resize();
+          },
+          // 清屏
+          clearScreen: () => {
+            this._bulletChat?.clearScreen();
+          },
+          // 设置速度
+          setSpeed: (percent: number) => {
+            this._bulletChat?.setSpeed(percent);
+          },
+          // 关闭弹幕
+          close: () => {
+            this._bulletChat?.close();
+            this._isShowDanmaku = false;
+            this._switchShowOrHide();
+          },
+          // 打开弹幕
+          open: () => {
+            this._bulletChat?.open();
+            this._isShowDanmaku = true;
+            this._switchShowOrHide();
+          }
+        };
+      }
+    });
   }
 
   private _initLang() {
@@ -155,18 +202,18 @@ class Danmaku {
       ],
       showArea: i18n.t("showArea")
     });
-    const parentNode = this._el.querySelector(".player-controls-right");
-    parentNode?.insertBefore(settingDiv, parentNode?.firstElementChild);
+    const parentNode = this._el.querySelector(
+      ".player-controls-right"
+    ) as HTMLElement;
+    parentNode.insertBefore(settingDiv, parentNode?.firstElementChild);
     this._settingWrapperElement = settingDiv;
   }
 
   private _initDanmaku() {
-    if (!isUndef(this._danmakuWrapperElement)) {
-      this._bulletChat = new BulletChat({
-        ...this.options,
-        container: this._danmakuWrapperElement
-      });
-    }
+    this._bulletChat = new BulletChat({
+      ...this.options,
+      container: this._danmakuWrapperElement
+    });
   }
 
   private _initListener() {
@@ -178,33 +225,27 @@ class Danmaku {
     });
   }
 
-  private _getElement() {
-    this._opacityWrapperElement = this._settingWrapperElement?.querySelector(
+  private _getSettingElement(selector: string) {
+    return this._settingWrapperElement.querySelector(selector) as HTMLElement;
+  }
+
+  private _initHTMLElement() {
+    this._opacityWrapperElement = this._getSettingElement(
       ".danmu-opacity-wrapper"
     );
-    this._opacityProgressElement = this._settingWrapperElement?.querySelector(
+    this._opacityProgressElement = this._getSettingElement(
       ".danmu-opacity-progress"
     );
-    this._opacityBallElement = this._settingWrapperElement?.querySelector(
-      ".danmu-opacity-ball"
-    );
-    this._showLabelElement = this._settingWrapperElement?.querySelector(
-      ".danmaku-show-label"
-    );
-    this._pauseLabelElement = this._settingWrapperElement?.querySelector(
-      ".danmaku-pause-label"
-    );
-    this._danmakuAreaWrapperElement =
-      this._settingWrapperElement?.querySelector(".danmaku-area");
+    this._opacityBallElement = this._getSettingElement(".danmu-opacity-ball");
+    this._showLabelElement = this._getSettingElement(".danmaku-show-label");
+    this._pauseLabelElement = this._getSettingElement(".danmaku-pause-label");
+    this._danmakuAreaWrapperElement = this._getSettingElement(".danmaku-area");
 
-    this._speedWrapperElement = this._settingWrapperElement?.querySelector(
-      ".danmu-speed-wrapper"
-    );
-    this._speedProgressElement = this._settingWrapperElement?.querySelector(
+    this._speedWrapperElement = this._getSettingElement(".danmu-speed-wrapper");
+    this._speedProgressElement = this._getSettingElement(
       ".danmu-speed-progress"
     );
-    this._speedBallElement =
-      this._settingWrapperElement?.querySelector(".danmu-speed-ball");
+    this._speedBallElement = this._getSettingElement(".danmu-speed-ball");
   }
 
   private _initOpacitySetting() {
@@ -221,7 +262,7 @@ class Danmaku {
       wrapperElement: this._speedWrapperElement,
       dragElement: this._speedBallElement
     });
-    this._speedProgressElement!.style.width = "50%";
+    this._speedProgressElement.style.width = "50%";
     this._speedDragInstance.$on("mousemove", (event: DataInfo) => {
       this._speedProgressElement!.style.width = `${event.percentX * 100}%`;
     });
@@ -230,12 +271,12 @@ class Danmaku {
   }
 
   private _setOpacity(event: DataInfo) {
-    this._opacityProgressElement!.style.width = `${event.percentX * 100}%`;
-    this._danmakuWrapperElement!.style.opacity = `${event.percentX}`;
+    this._opacityProgressElement.style.width = `${event.percentX * 100}%`;
+    this._danmakuWrapperElement.style.opacity = `${event.percentX}`;
   }
 
   private _setSpeed(event: DataInfo) {
-    this._speedProgressElement!.style.width = `${event.percentX * 100}%`;
+    this._speedProgressElement.style.width = `${event.percentX * 100}%`;
     this._bulletChat?.setSpeed(event.percentX * 2);
   }
 
@@ -276,12 +317,12 @@ class Danmaku {
   // 切换播放/暂停弹幕状态
   private _switchPlayOrPause() {
     if (this._isPauseDanmaku) {
-      this._pauseLabelElement!.classList.remove(CheckboxClassNameEnum.close);
-      this._pauseLabelElement!.classList.add(CheckboxClassNameEnum.open);
+      this._pauseLabelElement.classList.remove(CheckboxClassNameEnum.close);
+      this._pauseLabelElement.classList.add(CheckboxClassNameEnum.open);
       this._bulletChat?.pause();
     } else {
-      this._pauseLabelElement!.classList.remove(CheckboxClassNameEnum.open);
-      this._pauseLabelElement!.classList.add(CheckboxClassNameEnum.close);
+      this._pauseLabelElement.classList.remove(CheckboxClassNameEnum.open);
+      this._pauseLabelElement.classList.add(CheckboxClassNameEnum.close);
       this._bulletChat?.play();
     }
   }
@@ -289,12 +330,12 @@ class Danmaku {
   // 切换显示/隐藏弹幕状态
   private _switchShowOrHide() {
     if (this._isShowDanmaku) {
-      this._showLabelElement!.classList.remove(CheckboxClassNameEnum.close);
-      this._showLabelElement!.classList.add(CheckboxClassNameEnum.open);
+      this._showLabelElement.classList.remove(CheckboxClassNameEnum.close);
+      this._showLabelElement.classList.add(CheckboxClassNameEnum.open);
       this._bulletChat?.open();
     } else {
-      this._showLabelElement!.classList.remove(CheckboxClassNameEnum.open);
-      this._showLabelElement!.classList.add(CheckboxClassNameEnum.close);
+      this._showLabelElement.classList.remove(CheckboxClassNameEnum.open);
+      this._showLabelElement.classList.add(CheckboxClassNameEnum.close);
       this._bulletChat?.close();
     }
   }
@@ -319,7 +360,7 @@ class Danmaku {
           className += " danmaku-container-bottom";
           break;
       }
-      this._danmakuWrapperElement!.className = className;
+      this._danmakuWrapperElement.className = className;
       this._switchAreaActive(dataset.position);
       this._danmakuAreaPosition = dataset.position as DanmakuAreaEnum;
       this._bulletChat?.resize();
@@ -328,7 +369,7 @@ class Danmaku {
 
   private _switchAreaActive(position: string) {
     const list =
-      this._danmakuAreaWrapperElement!.querySelectorAll(".danmaku-area-span");
+      this._danmakuAreaWrapperElement.querySelectorAll(".danmaku-area-span");
     const length = list.length;
     for (let i = 0; i < length; i++) {
       const element = list[i] as HTMLElement;
@@ -343,12 +384,10 @@ class Danmaku {
 
   private _destroy() {
     this._bulletChat?.destroy();
-    this._danmakuWrapperElement?.remove();
-    this._settingWrapperElement?.remove();
+    this._danmakuWrapperElement.remove();
+    this._settingWrapperElement.remove();
     this._opacityDragInstance?.destroy();
     this._bulletChat = null;
-
-    this._eventManager?.removeEventListener();
     this._eventManager?.removeEventListener();
   }
 }
