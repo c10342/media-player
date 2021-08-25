@@ -82,8 +82,9 @@ export default {
   mounted() {
     this.$refs.demoPlayer.initPlayer({
       Contextmenu: {
+        menuList: contextMenuList,
         // 一级菜单宽度
-        meunItemWidth: "300px",
+        meunItemWidth: "200px",
         // 二级菜单宽度
         subMenuItemWidth: "100px"
       },
