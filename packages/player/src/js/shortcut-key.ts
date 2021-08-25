@@ -1,22 +1,18 @@
 import { EventManager } from "@lin-media/utils";
 import { CanFocusTagEnum, KeyCodeEnum } from "../config/enum";
 import { PlayerEvents } from "../config/event";
-import { ComponentOptions } from "../types";
+import PlayerConstructor from "../constructor";
 
 class ShortcutKey {
-  private options: ComponentOptions;
+  private playerInstance: PlayerConstructor;
   // 标志位，标记用户是否点击了播放器，也就是播放器是否处于活跃状态
   private isFocus = false;
   private eventManager: EventManager;
-  constructor(options: ComponentOptions) {
-    this.options = options;
+  constructor(playerInstance: PlayerConstructor) {
+    this.playerInstance = playerInstance;
     this.initVar();
     // 初始化事件监听
     this.initListener();
-  }
-
-  private get instance() {
-    return this.options.instance;
   }
 
   private initVar() {
@@ -24,7 +20,8 @@ class ShortcutKey {
   }
 
   private initListener() {
-    const containerElement = this.options.templateInstance.containerElement;
+    const containerElement =
+      this.playerInstance.templateInstance.containerElement;
     this.eventManager.addEventListener({
       element: document,
       eventName: "click",
@@ -40,8 +37,7 @@ class ShortcutKey {
       eventName: "keyup",
       handler: this.onDocumentKeyup.bind(this)
     });
-    const instance = this.options.instance;
-    instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
+    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
   }
 
   // 点击播放器外的元素时吧标志位置为false
@@ -71,32 +67,32 @@ class ShortcutKey {
 
   private handleKey(event: KeyboardEvent) {
     event.preventDefault();
-    const { live } = this.options;
+    const { live } = this.playerInstance.options;
     switch (event.keyCode) {
       case KeyCodeEnum.space:
         // 按下空格键切换播放状态
-        this.instance.toggle();
+        this.playerInstance.toggle();
         break;
       case KeyCodeEnum.left:
         // 按下左箭头，时间后退5秒
         if (!live) {
           // 直播不能后退
-          this.instance.seek(this.instance.currentTime - 5);
+          this.playerInstance.seek(this.playerInstance.currentTime - 5);
         }
         break;
       case KeyCodeEnum.right:
         if (!live) {
           // 按下右箭头，时间前进5秒
-          this.instance.seek(this.instance.currentTime + 5);
+          this.playerInstance.seek(this.playerInstance.currentTime + 5);
         }
         break;
       case KeyCodeEnum.up:
         // 按下上箭头，音量增大
-        this.instance.setVolume(this.instance.volume + 0.1);
+        this.playerInstance.setVolume(this.playerInstance.volume + 0.1);
         break;
       case KeyCodeEnum.down:
         // 按下下箭头，音量减少
-        this.instance.setVolume(this.instance.volume - 0.1);
+        this.playerInstance.setVolume(this.playerInstance.volume - 0.1);
         break;
     }
   }

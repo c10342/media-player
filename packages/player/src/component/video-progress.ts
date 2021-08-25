@@ -1,23 +1,24 @@
 import {
   EventManager,
   isNumber,
-  isUndef,
   secondToTime,
   checkData,
-  Drag
+  Drag,
+  getBoundingClientRect
 } from "@lin-media/utils";
-import { ComponentOptions, DragDataInfo } from "../types";
+import { DragDataInfo } from "../types";
 import { t } from "../locale";
 import { PlayerEvents, VideoEvents } from "../config/event";
+import PlayerConstructor from "../constructor";
 
 class VideoProgress {
-  private options: ComponentOptions;
+  private playerInstance: PlayerConstructor;
   private currentTime = 0;
   private dragInstance: Drag | null;
   private isMousedown = false;
   private eventManager: EventManager;
-  constructor(options: ComponentOptions) {
-    this.options = options;
+  constructor(playerInstance: PlayerConstructor) {
+    this.playerInstance = playerInstance;
     this.initVar();
     // 初始化拖拽事件
     this.initDrag();
@@ -26,34 +27,29 @@ class VideoProgress {
     this.initListener();
   }
 
-  private get instance() {
-    return this.options.instance;
-  }
-
   private initVar() {
     this.eventManager = new EventManager();
   }
 
   // 获取进度条容器信息
   private getProcessMaskInfo() {
-    const clientRect =
-      this.options.templateInstance.progressMaskElement?.getBoundingClientRect();
+    const clientRect = getBoundingClientRect(
+      this.playerInstance.templateInstance.progressMaskElement
+    );
     return {
-      left: clientRect?.left || 0,
-      width: clientRect?.width || 0
+      left: clientRect.left || 0,
+      width: clientRect.width || 0
     };
   }
 
   private initDrag() {
     const { progressMaskElement, progressBallElement } =
-      this.options.templateInstance;
-    if (!isUndef(progressMaskElement) && !isUndef(progressBallElement)) {
-      this.dragInstance = new Drag({
-        dragElement: progressBallElement,
-        wrapperElement: progressMaskElement
-      });
-      this.initDragListener();
-    }
+      this.playerInstance.templateInstance;
+    this.dragInstance = new Drag({
+      dragElement: progressBallElement,
+      wrapperElement: progressMaskElement
+    });
+    this.initDragListener();
   }
 
   private initDragListener() {
@@ -86,7 +82,7 @@ class VideoProgress {
 
   private initProgressListener() {
     const progressMaskElement =
-      this.options.templateInstance.progressMaskElement;
+      this.playerInstance.templateInstance.progressMaskElement;
     this.eventManager.addEventListener({
       element: progressMaskElement,
       eventName: "mousemove",
@@ -100,11 +96,16 @@ class VideoProgress {
   }
 
   private initListener() {
-    const instance = this.instance;
-    instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
-    instance.$on(VideoEvents.TIMEUPDATE, this.onVideoTimeupdate.bind(this));
-    instance.$on(VideoEvents.PROGRESS, this.onVideoProgress.bind(this));
-    instance.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
+    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
+    this.playerInstance.$on(
+      VideoEvents.TIMEUPDATE,
+      this.onVideoTimeupdate.bind(this)
+    );
+    this.playerInstance.$on(
+      VideoEvents.PROGRESS,
+      this.onVideoProgress.bind(this)
+    );
+    this.playerInstance.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
   }
 
   // 鼠标进入进度条容器
@@ -121,14 +122,12 @@ class VideoProgress {
   private onVideoTimeupdate(event: Event) {
     const videoElement = event.target as HTMLVideoElement;
     const currentTime = videoElement.currentTime || 0;
-
     const intCurrentTime = Math.floor(currentTime);
     const intPrevTime = Math.floor(this.currentTime);
     // 保证每一秒触发一次，防抖
     if (intCurrentTime === intPrevTime) {
       return;
     }
-
     this.currentTime = currentTime;
     if (!this.isMousedown) {
       // 不是在拖拽进度条的时候需要更新进度条
@@ -149,61 +148,56 @@ class VideoProgress {
   }
   // 根据百分比设置已播放的长度
   private setPlayedProgressByPercent(percent: number) {
-    const videoPlayedElement = this.options.templateInstance.videoPlayedElement;
-    if (!isUndef(videoPlayedElement)) {
-      videoPlayedElement.style.width = `${percent * 100}%`;
-    }
+    const videoPlayedElement =
+      this.playerInstance.templateInstance.videoPlayedElement;
+    videoPlayedElement.style.width = `${percent * 100}%`;
   }
   // 设置已播放的进度
   private setPlayedProgress() {
-    const videoPlayedElement = this.options.templateInstance.videoPlayedElement;
-    if (!isUndef(videoPlayedElement)) {
-      const duration = this.instance.duration;
-      const currentTime = this.currentTime;
-      if (duration > 0 && currentTime > 0) {
-        // 计算出百分比
-        let percent = currentTime / duration;
-        percent = checkData(percent, 0, 1);
-        videoPlayedElement.style.width = `${percent * 100}%`;
-      }
+    const videoPlayedElement =
+      this.playerInstance.templateInstance.videoPlayedElement;
+    const duration = this.playerInstance.duration;
+    const currentTime = this.currentTime;
+    if (duration > 0 && currentTime > 0) {
+      // 计算出百分比
+      let percent = currentTime / duration;
+      percent = checkData(percent, 0, 1);
+      videoPlayedElement.style.width = `${percent * 100}%`;
     }
   }
   // 设置缓冲的进度
   private setLoadedProgress(preloadTime: number) {
-    const videoLoadedElement = this.options.templateInstance.videoLoadedElement;
-    if (!isUndef(videoLoadedElement)) {
-      const duration = this.instance.duration;
-
-      if (duration > 0) {
-        let percent = preloadTime / duration;
-        percent = checkData(percent, 0, 1);
-        videoLoadedElement.style.width = `${percent * 100}%`;
-      }
+    const videoLoadedElement =
+      this.playerInstance.templateInstance.videoLoadedElement;
+    const duration = this.playerInstance.duration;
+    if (duration > 0) {
+      let percent = preloadTime / duration;
+      percent = checkData(percent, 0, 1);
+      videoLoadedElement.style.width = `${percent * 100}%`;
     }
   }
   // 设置过度时长
   private setTransitionDuration(duration?: number) {
-    const videoPlayedElement = this.options.templateInstance.videoPlayedElement;
-    if (!isUndef(videoPlayedElement)) {
-      if (isNumber(duration)) {
-        videoPlayedElement.style.transitionDuration = `${duration}ms`;
-      } else {
-        videoPlayedElement.style.transitionDuration = "";
-      }
+    const videoPlayedElement =
+      this.playerInstance.templateInstance.videoPlayedElement;
+    if (isNumber(duration)) {
+      videoPlayedElement.style.transitionDuration = `${duration}ms`;
+    } else {
+      videoPlayedElement.style.transitionDuration = "";
     }
   }
 
   // 根据百分比跳转到指定时间
   private seekByPercent(percent: number) {
-    if (this.instance.duration > 0) {
+    if (this.playerInstance.duration > 0) {
       percent = checkData(percent, 0, 1);
       // 时间点
-      const time = this.instance.duration * percent;
+      const time = this.playerInstance.duration * percent;
       // 计算前进或者后退了多少秒
       const offsetTime = time - this.currentTime;
       this.setTip(offsetTime);
       // 跳转
-      this.instance.seek(time);
+      this.playerInstance.seek(time);
     }
   }
   // 显示通知
@@ -215,27 +209,25 @@ class VideoProgress {
     } else {
       tip = t("goBack", { time: -offsetTime });
     }
-    this.instance.setNotice(tip);
+    this.playerInstance.setNotice(tip);
   }
   // 显示时间提示，鼠标悬浮在进度条容器时
   private showProcessTime(event: MouseEvent) {
-    const processTimeElement = this.options.templateInstance.processTimeElement;
-    if (!isUndef(processTimeElement)) {
-      const { left, width } = this.getProcessMaskInfo();
-      let offsetX = event.pageX - left;
-      offsetX = checkData(offsetX, 0, width);
-      processTimeElement.style.left = `${offsetX}px`;
-      const time = this.instance.duration * (offsetX / width);
-      processTimeElement.innerHTML = secondToTime(time);
-      processTimeElement.style.opacity = "1";
-    }
+    const processTimeElement =
+      this.playerInstance.templateInstance.processTimeElement;
+    const { left, width } = this.getProcessMaskInfo();
+    let offsetX = event.pageX - left;
+    offsetX = checkData(offsetX, 0, width);
+    processTimeElement.style.left = `${offsetX}px`;
+    const time = this.playerInstance.duration * (offsetX / width);
+    processTimeElement.innerHTML = secondToTime(time);
+    processTimeElement.style.opacity = "1";
   }
   // 隐藏时间提示，鼠标离开进度条容器
   private hideProcessTime() {
-    const processTimeElement = this.options.templateInstance.processTimeElement;
-    if (processTimeElement) {
-      processTimeElement.style.opacity = "";
-    }
+    const processTimeElement =
+      this.playerInstance.templateInstance.processTimeElement;
+    processTimeElement.style.opacity = "";
   }
 
   private destroy() {

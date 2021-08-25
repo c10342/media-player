@@ -14,21 +14,6 @@ function getPluginName(ctor: any) {
   return ctor.pluginName || ctor.name;
 }
 
-function getPluginsList(globalPlugins: PluginsType, localPlugins: PluginsType) {
-  const pluginsList = [...globalPlugins, ...localPlugins];
-  const list: PluginsType = [];
-  for (let i = 0; i < pluginsList.length; i++) {
-    const plugin = pluginsList[i];
-    const installed = list.some((ctor) => {
-      return getPluginName(ctor) === getPluginName(plugin);
-    });
-    if (!installed) {
-      list.push(plugin);
-    }
-  }
-  return list;
-}
-
 const defaultOptions = {
   live: false,
   hotkey: true,
@@ -227,16 +212,34 @@ class MediaPlayer {
       }
     };
   }
+
+  getPluginsList() {
+    const localPlugins = this.options.plugins || [];
+    const globalPlugins = MediaPlayer.pluginsList || [];
+    const pluginsList = [...globalPlugins, ...localPlugins];
+    const list: PluginsType = [];
+    for (let i = 0; i < pluginsList.length; i++) {
+      const plugin = pluginsList[i];
+      const pluginName = getPluginName(plugin);
+      const installed = list.some((ctor) => {
+        return getPluginName(ctor) === pluginName;
+      });
+      if (!installed && this.options[pluginName] !== false) {
+        list.push(plugin);
+      }
+    }
+    return list;
+  }
+
   // 应用插件
   private applyPlugins() {
     const el = (this.options.el as HTMLElement).querySelector(
       ".player-container"
     );
+
     // 合并全局插件和局部插件
-    const plugins = getPluginsList(
-      MediaPlayer.pluginsList || [],
-      this.options.plugins || []
-    );
+    const plugins = this.getPluginsList();
+
     plugins.forEach((Ctor: any) => {
       const instance = new Ctor(el, this);
       const pluginName = getPluginName(Ctor);

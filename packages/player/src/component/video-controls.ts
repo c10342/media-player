@@ -1,27 +1,19 @@
 import { EventManager, isFunction, isUndef } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
-import { ComponentOptions } from "../types";
+import PlayerConstructor from "../constructor";
 
 class VideoControls {
-  private options: ComponentOptions;
+  private playerInstance: PlayerConstructor;
   private eventManager: EventManager;
   // 是否进入播放器标志位
   private isEnter = false;
   // 定时器
   private timer: number | null;
-  constructor(options: ComponentOptions) {
-    this.options = options;
+  constructor(playerInstance: PlayerConstructor) {
+    this.playerInstance = playerInstance;
     this.initVar();
     this.initWrapperListener();
     this.initListener();
-  }
-
-  private get instance() {
-    return this.options.instance;
-  }
-
-  private get paused() {
-    return this.options.templateInstance.videoElement?.paused;
   }
 
   private initVar() {
@@ -29,7 +21,8 @@ class VideoControls {
   }
 
   private initWrapperListener() {
-    const containerElement = this.options.templateInstance.containerElement;
+    const containerElement =
+      this.playerInstance.templateInstance.containerElement;
     this.eventManager.addEventListener({
       element: containerElement,
       eventName: "mouseenter",
@@ -43,9 +36,9 @@ class VideoControls {
   }
 
   private initListener() {
-    this.instance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
-    this.instance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
-    this.instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
+    this.playerInstance.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
+    this.playerInstance.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
+    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
   }
 
   // 鼠标进入容器事件处理
@@ -69,10 +62,10 @@ class VideoControls {
   // 显示控制条
   private showControls() {
     // 非播放状态，或者鼠标在播放器内，显示出来
-    if (this.paused || this.isEnter) {
+    if (this.playerInstance.paused || this.isEnter) {
       this.handleElement((element) => {
         element.style.transform = "";
-        this.instance.$emit(PlayerEvents.SHOW_CONTROLS);
+        this.playerInstance.$emit(PlayerEvents.SHOW_CONTROLS);
       });
     }
   }
@@ -82,10 +75,10 @@ class VideoControls {
     this.destroyTimer();
     // 4秒后隐藏
     this.timer = window.setTimeout(() => {
-      if (!this.paused && !this.isEnter) {
+      if (!this.playerInstance.paused && !this.isEnter) {
         this.handleElement((element) => {
           element.style.transform = "translateY(100%)";
-          this.instance.$emit(PlayerEvents.HIDE_CONTROLS);
+          this.playerInstance.$emit(PlayerEvents.HIDE_CONTROLS);
         });
       }
     }, 4000);
@@ -93,8 +86,9 @@ class VideoControls {
 
   // 统一在这里判断元素是否存在，然后执行回调
   private handleElement(callback: (element: HTMLElement) => void) {
-    const controlsElement = this.options.templateInstance.controlsElement;
-    if (!isUndef(controlsElement) && isFunction(callback)) {
+    const controlsElement =
+      this.playerInstance.templateInstance.controlsElement;
+    if (isFunction(callback)) {
       callback(controlsElement);
     }
   }

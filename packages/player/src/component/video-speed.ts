@@ -1,19 +1,15 @@
-import { EventManager, isFunction, isUndef } from "@lin-media/utils";
+import { EventManager, isFunction } from "@lin-media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
 import { PlayerEvents } from "../config/event";
-import { ComponentOptions, SpeedItem } from "../types";
-
-interface OptionsParams extends ComponentOptions {
-  speedList: Array<SpeedItem>;
-}
+import PlayerConstructor from "../constructor";
 
 class VideoSpeed {
-  private options: OptionsParams;
+  private playerInstance: PlayerConstructor;
   private eventManager: EventManager;
   // 倍数索引，当前是那个倍数
   private currentIndex = 0;
-  constructor(options: OptionsParams) {
-    this.options = options;
+  constructor(playerInstance: PlayerConstructor) {
+    this.playerInstance = playerInstance;
     this.initVar();
     // 初始化索引，即是那个倍数
     this.initCurrentIndex();
@@ -23,21 +19,17 @@ class VideoSpeed {
     this.initListener();
   }
 
-  private get instance() {
-    return this.options.instance;
-  }
-
   private initVar() {
     this.eventManager = new EventManager();
   }
 
   private initListener() {
-    this.instance.$on(PlayerEvents.DESTROY, () => this.destroy());
+    this.playerInstance.$on(PlayerEvents.DESTROY, () => this.destroy());
   }
 
   private initSpeedListener() {
     const speedWrapperElement =
-      this.options.templateInstance.speedWrapperElement;
+      this.playerInstance.templateInstance.speedWrapperElement;
     this.eventManager.addEventListener({
       element: speedWrapperElement,
       eventName: "click",
@@ -47,8 +39,8 @@ class VideoSpeed {
 
   // 找出默认的倍数，default，然后设置
   private initCurrentIndex() {
-    const speedList = this.options.speedList;
-    const index = speedList.findIndex((speed) => speed.default);
+    const speedList = this.playerInstance.options.speedList;
+    const index = speedList!.findIndex((speed) => speed.default);
     if (index > -1) {
       this.setCurrentInfo(index);
     }
@@ -60,12 +52,12 @@ class VideoSpeed {
     index = Number(index);
     if (index !== -1 && index !== this.currentIndex) {
       // 找到对应的倍数
-      const speedList = this.options.speedList;
-      const speed = speedList[index];
+      const speedList = this.playerInstance.options.speedList;
+      const speed = speedList![index];
       // 设置倍数
-      this.instance.setSpeed(speed.value);
+      this.playerInstance.setSpeed(speed.value);
       // 显示通知
-      this.instance.setNotice(speed.label);
+      this.playerInstance.setNotice(speed.label);
       // 设置索引信息
       this.setCurrentInfo(index);
     }
@@ -93,20 +85,19 @@ class VideoSpeed {
   }
   // 设置标签文本
   private setCurrentLabel() {
-    const speedLabelElement = this.options.templateInstance.speedLabelElement;
-    if (!isUndef(speedLabelElement)) {
-      const speedList = this.options.speedList;
-      if (speedList.length > 0) {
-        const text = speedList[this.currentIndex].label;
-        speedLabelElement.innerHTML = text;
-      }
+    const speedLabelElement =
+      this.playerInstance.templateInstance.speedLabelElement;
+    const speedList = this.playerInstance.options.speedList;
+    if (speedList!.length > 0) {
+      const text = speedList![this.currentIndex].label;
+      speedLabelElement.innerHTML = text;
     }
   }
   // 一开始的时候初始化倍数
   private initDefaultRate() {
-    const speedList = this.options.speedList;
-    if (speedList.length > 0) {
-      this.instance.setSpeed(speedList[this.currentIndex].value);
+    const speedList = this.playerInstance.options.speedList;
+    if (speedList!.length > 0) {
+      this.playerInstance.setSpeed(speedList![this.currentIndex].value);
     }
   }
   // 删除元素的活跃类名
@@ -126,7 +117,8 @@ class VideoSpeed {
     callback: (element: Element, index: number) => void
   ) {
     if (isFunction(callback)) {
-      const speedItemsElement = this.options.templateInstance.speedItemsElement;
+      const speedItemsElement =
+        this.playerInstance.templateInstance.speedItemsElement;
       const length = speedItemsElement?.length ?? 0;
       if (speedItemsElement && length > 0) {
         for (let i = 0; i < speedItemsElement.length; i++) {

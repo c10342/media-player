@@ -1,6 +1,3 @@
-import Player from "../constructor";
-import Template from "../js/template";
-
 // 视频列表项
 export type VideoListItem = { label: string; url: string; default?: boolean };
 // 视频列表
@@ -35,24 +32,12 @@ export interface PlayerOptions {
 // dom元素
 export type HtmlElementProp = HTMLElement | null;
 
-export type HTMLVideoElementProp = HTMLVideoElement | null;
-
-export type NodeListElement = NodeListOf<Element> | null;
-
-export type HTMLImageElementProp = HTMLImageElement | null;
-
 // 动画类名
 export interface AnimationClassName {
   enter: string;
   "enter-to": string;
   leave: string;
   "leave-to": string;
-}
-
-// 组件参数
-export interface ComponentOptions extends PlayerOptions {
-  templateInstance: Template;
-  instance: Player;
 }
 
 // 语言

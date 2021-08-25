@@ -1,25 +1,21 @@
-import { EventManager, isUndef } from "@lin-media/utils";
+import { EventManager } from "@lin-media/utils";
 import { VideoReadyStateEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
-import { ComponentOptions } from "../types";
+import PlayerConstructor from "../constructor";
 
 class VideoLoading {
-  private options: ComponentOptions;
+  private playerInstance: PlayerConstructor;
   private eventManager: EventManager;
-  constructor(options: ComponentOptions) {
-    this.options = options;
+  constructor(playerInstance: PlayerConstructor) {
+    this.playerInstance = playerInstance;
     this.initVar();
     this.initListener();
   }
 
-  private get instance() {
-    return this.options.instance;
-  }
-
   // 视频状态，4表示可以了
   private get videoReadyState() {
-    const videoElement = this.instance.videoElement;
-    return videoElement?.readyState ?? -1;
+    const videoElement = this.playerInstance.videoElement;
+    return videoElement.readyState ?? -1;
   }
 
   private initVar() {
@@ -27,15 +23,20 @@ class VideoLoading {
   }
 
   private initListener() {
-    const instance = this.instance;
-    instance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
+    this.playerInstance.$on(PlayerEvents.DESTROY, this.destroy.bind(this));
     // 切换清晰度前
-    instance.$on(
+    this.playerInstance.$on(
       PlayerEvents.SWITCH_DEFINITION_START,
       this.onBeforeSwitchDefinition.bind(this)
     );
-    instance.$on(VideoEvents.WAITING, this.onVideoWaiting.bind(this));
-    instance.$on(VideoEvents.CANPLAY, this.onVideoCanplay.bind(this));
+    this.playerInstance.$on(
+      VideoEvents.WAITING,
+      this.onVideoWaiting.bind(this)
+    );
+    this.playerInstance.$on(
+      VideoEvents.CANPLAY,
+      this.onVideoCanplay.bind(this)
+    );
   }
 
   // 视频缓冲事件
@@ -57,18 +58,14 @@ class VideoLoading {
   // 显示loading
   private showLoading() {
     const loadingWrapperElement =
-      this.options.templateInstance.loadingWrapperElement;
-    if (!isUndef(loadingWrapperElement)) {
-      loadingWrapperElement.style.display = "flex";
-    }
+      this.playerInstance.templateInstance.loadingWrapperElement;
+    loadingWrapperElement.style.display = "flex";
   }
   // 隐藏loading
   private hideLoading() {
     const loadingWrapperElement =
-      this.options.templateInstance.loadingWrapperElement;
-    if (!isUndef(loadingWrapperElement)) {
-      loadingWrapperElement.style.display = "";
-    }
+      this.playerInstance.templateInstance.loadingWrapperElement;
+    loadingWrapperElement.style.display = "";
   }
 
   private destroy() {

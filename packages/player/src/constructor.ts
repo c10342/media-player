@@ -82,84 +82,38 @@ class PlayerConstructor extends EventEmit {
   }
 
   private initVideoProgress() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance) && !this.options.live) {
-      this.videoProgressInstance = new VideoProgress({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
+    if (!this.options.live) {
+      this.videoProgressInstance = new VideoProgress(this);
     }
   }
 
   private initVideoFullscreen() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoFullscreenInstance = new VideoFullscreen({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
+    this.videoFullscreenInstance = new VideoFullscreen(this);
   }
 
   private initVideoLoading() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoLoadingInstance = new VideoLoading({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
+    this.videoLoadingInstance = new VideoLoading(this);
   }
 
   private initVideoVolume() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoVolumeInstance = new VideoVolume({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
+    this.videoVolumeInstance = new VideoVolume(this);
   }
 
   private initVideoSpeed() {
     const speedList = this.options.speedList;
     if (!this.options.live && isArray(speedList) && speedList.length > 0) {
-      const templateInstance = this.templateInstance;
-      if (!isUndef(templateInstance)) {
-        this.videoSpeedInstance = new VideoSpeed({
-          ...this.options,
-          speedList,
-          templateInstance,
-          instance: this
-        });
-      }
+      this.videoSpeedInstance = new VideoSpeed(this);
     }
   }
 
   private initVideoControls() {
-    const templateInstance = this.templateInstance;
-    if (!isUndef(templateInstance)) {
-      this.videoControlsInstance = new VideoControls({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
-    }
+    this.videoControlsInstance = new VideoControls(this);
   }
 
   private initShortcutKey() {
-    const templateInstance = this.templateInstance;
     const { hotkey } = this.options;
-    if (!isUndef(templateInstance) && hotkey) {
-      this.shortcutKeyInstance = new ShortcutKey({
-        ...this.options,
-        templateInstance,
-        instance: this
-      });
+    if (hotkey) {
+      this.shortcutKeyInstance = new ShortcutKey(this);
     }
   }
 
@@ -174,14 +128,15 @@ class PlayerConstructor extends EventEmit {
     this.videoVolumeInstance = null;
     (this.templateInstance as any) = null;
     this.videoSpeedInstance = null;
+    this.shortcutKeyInstance = null;
+    this.videoControlsInstance = null;
+    this.videoTipInstance = null;
   }
 
   // 移除元素
   private removeElement() {
-    const containerElement = this.templateInstance?.containerElement;
-    if (!isUndef(containerElement)) {
-      (this.options.el as HTMLElement).removeChild(containerElement);
-    }
+    const containerElement = this.templateInstance.containerElement;
+    (this.options.el as HTMLElement).removeChild(containerElement);
   }
   // 播放
   play() {
