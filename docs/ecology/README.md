@@ -14,7 +14,7 @@
 
 ### 工具
 
-- [视频缩略图生成工具](https://github.com/c10342/media-player/tree/main/tools/video-screenshot)
+- [视频缩略图生成工具](https://github.com/c10342/video-screenshot)
 
 ### 插件
 
