@@ -35,14 +35,18 @@ player.screenshot.snapshot();
 ```
 
 ::: warning
+
 该插件需要视频开启跨域功能，否则无法截图
+
 :::
 
 ## Screenshot 参数
 
 
 ::: tip
+
 Screenshot 参数设置为 `false` 可关闭插件功能
+
 :::
 
 

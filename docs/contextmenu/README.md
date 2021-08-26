@@ -106,7 +106,9 @@ player.$on("click-play", (item) => {
 ## Contextmenu 参数
 
 ::: tip
+
 Contextmenu 参数设置为 `false` 可关闭插件功能
+
 :::
 
 | 参数             | 说明                 | 类型   | 可选值 | 默认值 |
@@ -117,7 +119,7 @@ Contextmenu 参数设置为 `false` 可关闭插件功能
 
 ## menuList 参数格式
 
-菜单项分为三种格式，分别是：MenuItem，MenuItemLine，SubMenuItem
+菜单项分为三种格式，分别是：`MenuItem`，`MenuItemLine`，`SubMenuItem`
 
 **MenuItem：**
 

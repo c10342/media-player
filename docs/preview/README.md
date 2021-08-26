@@ -25,7 +25,7 @@ MediaPlayer.use(Preview);
 
 缩略图有 2 中形式，一种是通过列表传入对应时间点的缩略图，另一种是传入整个视频的缩略图地址（这种是可以查看任意时间点的缩略图，但是缩略图必须是完整的）
 
-第一种：
+**第一种：**
 
 ```javascript
 const previewList = [
@@ -53,7 +53,7 @@ player.$on("preview-click", (item: any) => {
 });
 ```
 
-第二种：
+**第二种：**
 
 完整视频缩略图可通过[video-screenshot](https://github.com/c10342/media-player/tree/main/tools/video-screenshot)工具生成
 
@@ -71,7 +71,9 @@ const player = new MediaPlayer({
 ## Preview 参数
 
 ::: tip
+
 Preview 参数设置为 `false` 可关闭插件功能
+
 :::
 
 

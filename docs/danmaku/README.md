@@ -31,7 +31,9 @@ const player = new MediaPlayer({
 ## Danmaku 参数
 
 ::: tip
+
 Danmaku 参数设置为 `false` 可关闭插件功能
+
 :::
 
 | 参数           | 说明                             | 类型          | 可选值 | 默认值          |
@@ -46,17 +48,25 @@ Danmaku 参数设置为 `false` 可关闭插件功能
 ## API
 
 - `player.danmaku.send(message)`：发送消息弹幕，message 格式见下方
+
 - `player.danmaku.play()`：开始弹幕
+
 - `player.danmaku.pause()`：暂停弹幕
+
 - `player.danmaku.resize()`：容器发生变化时调用
+
 - `player.danmaku.clearScreen()`：清屏，移除所有弹幕
+
 - `player.danmaku.close()`：关闭弹幕
+
 - `player.danmaku.open()`：打开弹幕
 
 ## message 参数格式
 
 - `player.danmaku.send('你好')`
+
 - `player.danmaku.send({text:'你好',fontColor:30})`
+
 - `player.danmaku.send([{text:'你好',fontColor:30},{text:'世界',fontColor:'blue'}])`
 
 当参数是`Object`或者`Array`类型时，下列字段可选

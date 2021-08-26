@@ -294,10 +294,12 @@ const player = new MediaPlayer({
 
 ### 插件的构成
 
-- 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性（不写就默认使用构造器的 name），`pluginName`是用来作为插件的唯一标识，同时外部可以通过`player.plugins[pluginName]`访问到插件实例
+- 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性（不写就默认使用构造器的 name 值），`pluginName` 是用来作为插件的唯一标识，同时外部可以通过`player.plugins[pluginName]`访问到插件实例
 
 - 构造器函数（类）会接受到两个参数：
+  
   - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`。因为当你同时初始化了2个播放器的时候，`document.querySelector()`获取的始终是第一个元素
+  
   - instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往实例中挂载其他属性或者方法，提供给外部使用
 
 ### 插件代码示例
@@ -371,9 +373,27 @@ player.plugins.Test;
 ### 注意事项
 
 - 插件必须是一个构造器函数（类），因为内部是通过 `new` 的方式去初始化插件
-- 插件中请提供一个`pluginName`静态属性，该属性作为插件的唯一标识。如果不提供会默认使用构造器的 `name` 值，但可能会造成冲突
+
+- 插件中请提供一个`pluginName`静态属性，如果不提供会默认使用构造器的 `name` 值。`pluginName` 会作为插件的唯一标识
+
 - 如果有其他副作用的代码，可以通过监听 `destroy` 事件来销毁这些副作用代码
-- 如果需要监听原生 `video` 标签事件，请通过`player.$on(eventName:string,handler:Function)`进行监听，而不是通过`video.addEventListener()`进行监听，因为清晰度切换的时候，会删除旧的 `video` 标签，插入新的 `video` 标签，此时通过`video.addEventListener()`监听的事件会失效。当然，你也可以通过监听`switch_definition_end`事件，重新对 `video` 标签进行监听，但这样显得没必要。
+
+- 如果需要监听原生 `video` 标签事件，请通过`player.$on(eventName:string,handler:Function)`进行监听，而不是通过`video.addEventListener()`进行监听，因为清晰度切换的时候，会删除旧的 `video` 标签，插入新的 `video` 标签，此时通过`video.addEventListener()`监听的事件会失效。当然，你也可以通过监听`switch_definition_end`事件，重新对 `video` 标签进行监听，但这样显得没必要
+
+- 当你需要读取原生`video`标签时，请不要缓存`video`标签，而是每次动态去读取，因为清晰度切换的时候，会删除旧的`video`标签，插入新的`video`标签。当然，出于对性能的考虑，你也可以对`video`标签进行缓存，然后监听`switch_definition_end`事件，重新刷新`video`标签的缓存
+
+- 如果 `MediaPlayer` 的 `options` 参数中出现 `key` 值为插件的唯一标识，且 `value` 值为false，那么该插件不会被初始化。这个是用来关闭一些全局注册的插件。以关闭弹幕插件为例：
+
+```javascript
+import MediaPlayer from "@lin-media/player";
+import DanmakuPlugin from "@lin-media/danmaku";
+MediaPlayer.use(DanmakuPlugin);
+
+const player = new MediaPlayer({
+  // ...
+  Danmaku:false
+});
+```
 
 
 ## 常见问题
@@ -383,12 +403,15 @@ player.plugins.Test;
 由于浏览器的策略问题，很多时候就算我们设置了`autoplay`属性也无法实现自动播放的。以下提供2种思路实现自动播放，这2种思路的前提是设置了`autoplay`属性
 
 - 用户与网页进行交互。浏览器是不允许在用户没有操作的的时候自动播放视频的，所以你需要想办法让用户跟网页产生交互，然后才去初始化播放器。但是这种做法基本用不上。。。
+
 - 静音播放。浏览器是不允许有声音的视频进行自动播放的，但是允许静音的视频进行播放的。所以你可以将视频的音量设置为0，然后在进行自动播放。`MediaPlayer`可以通过设置对应的参数实现这种静音自动播放的功能
 
 ::: warning
+
 误区：
 
 设置了`autoplay`属性，然后通过监听`canplaythrough`事件，手动去播放，这样子是不能实现自动播放的
+
 ```javascript
 player.$once("canplaythrough", () => {
   player.play()
@@ -396,10 +419,12 @@ player.$once("canplaythrough", () => {
 ```
 
 静音自动播放，然后监听`canplaythrough`事件，恢复视频的音量，这样子也是不能实现自动播放的
+
 ```javascript
 player.$once("canplaythrough", () => {
   player.setVolume(1)
 });
 ```
+
 :::
 

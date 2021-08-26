@@ -50,7 +50,9 @@ player.$on("highlight-click", (item) => {
 ## Highlight 参数
 
 ::: tip
+
 Highlight 参数设置为 `false` 可关闭插件功能
+
 :::
 
 | 参数    | 说明                               | 类型    | 可选值 | 默认值 |
