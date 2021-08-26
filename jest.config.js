@@ -2,9 +2,11 @@ const path = require("path");
 
 module.exports = {
   testEnvironment: "jsdom",
-  moduleFileExtensions: ["ts", "json"],
+  moduleFileExtensions: ["ts", "json", "js", "art"],
   transform: {
-    ".*\\.(ts)$": "ts-jest"
+    ".*\\.(ts)$": "ts-jest",
+    ".+\\.(css|styl|less|sass|scss)$": "jest-css-modules-transform",
+    ".+\\.art$": "jest-transformer-arttemplate"
   },
   moduleNameMapper: {
     "^@lin-media/(.*)$": "<rootDir>/packages/$1/index.ts"
