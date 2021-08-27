@@ -5,8 +5,8 @@ import Preview from "@lin-media/preview";
 import Zoom from "@lin-media/zoom";
 import Danmaku from "@lin-media/danmaku";
 import Contextmenu from "@lin-media/contextmenu";
-VideoPlayer.use(Highlight);
-VideoPlayer.use(Preview);
+// VideoPlayer.use(Highlight);
+// VideoPlayer.use(Preview);
 // VideoPlayer.use(Screenshot);
 import "./index.scss";
 
@@ -156,7 +156,7 @@ const player = new VideoPlayer({
       value: 1.5
     }
   ],
-  plugins: [Screenshot, Zoom, Danmaku, Contextmenu],
+  // plugins: [Screenshot, Zoom, Danmaku, Contextmenu],
   Highlight: {
     jump: true,
     showTip: true,
