@@ -89,18 +89,20 @@ class VideoProgress {
       this.onVideoProgress.bind(this)
     );
     this.playerInstance.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
-    const progressMaskElement =
-      this.playerInstance.templateInstance.progressMaskElement;
-    this.eventManager.addEventListener({
-      element: progressMaskElement,
-      eventName: "mousemove",
-      handler: this.onMaskMousemove.bind(this)
-    });
-    this.eventManager.addEventListener({
-      element: progressMaskElement,
-      eventName: "mouseleave",
-      handler: this.onMaskMouseleave.bind(this)
-    });
+    if (!this.playerInstance.isMobile) {
+      const progressMaskElement =
+        this.playerInstance.templateInstance.progressMaskElement;
+      this.eventManager.addEventListener({
+        element: progressMaskElement,
+        eventName: "mousemove",
+        handler: this.onMaskMousemove.bind(this)
+      });
+      this.eventManager.addEventListener({
+        element: progressMaskElement,
+        eventName: "mouseleave",
+        handler: this.onMaskMouseleave.bind(this)
+      });
+    }
   }
 
   // 鼠标进入进度条容器

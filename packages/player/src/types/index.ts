@@ -27,6 +27,10 @@ export interface PlayerOptions {
   plugins?: Array<Function>;
   // 是否开启跨域
   crossorigin?: boolean;
+  // 视频预加载
+  preload?: string;
+  // 视频封面
+  poster?: string;
   // 加这个是给插件使用的
   [key: string]: any;
 }

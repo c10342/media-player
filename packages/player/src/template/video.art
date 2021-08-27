@@ -1,3 +1,20 @@
 
-  <video class="player-video" {{if crossorigin}} crossorigin="anonymous" {{/if}} {{if autoplay}} autoplay {{/if}}></video>
+  <video 
+  class="player-video" 
+  webkit-playsinline
+  playsinline
+  {{if preload}}
+  preload='{{preload}}'
+  {{/if}}
+  {{if poster}}
+  poster='{{poster}}'
+  {{/if}}
+  {{if crossorigin}} 
+  crossorigin="anonymous" 
+  {{/if}} 
+  {{if autoplay}} 
+  autoplay 
+  {{/if}}
+  >
+  </video>
   

@@ -18,7 +18,9 @@ const defaultOptions = {
   live: false,
   hotkey: true,
   autoplay: false,
-  muted: false
+  muted: false,
+  preload: "auto",
+  crossorigin: true
 };
 
 class MediaPlayer {

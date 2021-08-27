@@ -1,16 +1,7 @@
-  
-  {{if !isMobile}}
-  <div class="player-fullscreen-container">
-    <span class="player-icon-full-screen  player-icon-item player-fullscreen-browser"></span>
-    <div class="player-fullscreen-hover">
-      <span class="player-icon-web-fullscreen  player-icon-item player-fullscreen-web"></span>
-    </div>
-  </div>
-  {{/if}}
 
-    {{if isMobile}}
-  <div class="player-fullscreen-container player-fullscreen-mobile">
+
+  <div class="player-fullscreen-container {{if isMobile}} player-fullscreen-mobile {{/if}} {{if !isMobile}} player-fullscreen-pc {{/if}}">
     <span class="player-icon-web-fullscreen  player-icon-item player-fullscreen-web"></span>
     <span class="player-icon-full-screen  player-icon-item player-fullscreen-browser"></span>
   </div>
-  {{/if}}
+  

@@ -5,6 +5,12 @@
   box-sizing: border-box;
   width: 100%;
   padding: 0 20px;
+}
+
+.player-process-pc {
+  .player-process-ball {
+    transform: scale(0);
+  }
 
   &:hover {
     .player-process-ball {
@@ -79,5 +85,4 @@
   background-color: $main-color;
   border-radius: 50%;
   transition: transform 0.3s ease-in-out;
-  transform: scale(0);
 }
