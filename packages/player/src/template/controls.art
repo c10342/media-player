@@ -2,7 +2,7 @@
   <div class="player-controls-mask"></div>
   <div class="player-controls-group">
     {{ include './progress.art' }}
-    <span class="player-icon-play player-icon-item player-status-button"></span>
+    {{ include './play-button.art' }}
     {{ include './volume.art' }}
     {{ include './time.art' }}
     {{ include './live.art' }}

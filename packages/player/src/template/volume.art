@@ -1,3 +1,5 @@
+  
+      {{if !isMobile}}
   <div class="player-volume-container">
     <span class="player-icon-volume player-icon-item player-volume-button"></span>
     <div class='player-volume-animation'>
@@ -12,3 +14,4 @@
     </div>
     </div>
   </div>
+  {{/if}}

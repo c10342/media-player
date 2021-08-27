@@ -1,3 +1,3 @@
 
-  <video class="player-video" crossorigin="anonymous" {{if autoplay}} autoplay {{/if}}></video>
+  <video class="player-video" {{if crossorigin}} crossorigin="anonymous" {{/if}} {{if autoplay}} autoplay {{/if}}></video>
   

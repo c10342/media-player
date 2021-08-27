@@ -1,6 +1,12 @@
 import Template from "./js/template";
 import { PlayerOptions } from "./types";
-import { isArray, isUndef, checkData, EventEmit } from "@lin-media/utils";
+import {
+  isArray,
+  isUndef,
+  checkData,
+  EventEmit,
+  isMobile
+} from "@lin-media/utils";
 import VideoPlayer from "./component/video-player";
 import VideoPlayButton from "./component/video-play-button";
 import VideoTime from "./component/video-time";
@@ -29,6 +35,7 @@ class PlayerConstructor extends EventEmit {
   private videoTipInstance: VideoTip | null;
   private videoControlsInstance: VideoControls | null;
   private shortcutKeyInstance: ShortcutKey | null;
+  isMobile = isMobile();
   constructor(options: PlayerOptions) {
     super();
     // 参数
@@ -72,7 +79,9 @@ class PlayerConstructor extends EventEmit {
   }
 
   private initVideoPlayButton() {
-    this.playButtonInstance = new VideoPlayButton(this);
+    if (!this.isMobile) {
+      this.playButtonInstance = new VideoPlayButton(this);
+    }
   }
 
   private initVideoTime() {
@@ -96,7 +105,9 @@ class PlayerConstructor extends EventEmit {
   }
 
   private initVideoVolume() {
-    this.videoVolumeInstance = new VideoVolume(this);
+    if (!this.isMobile) {
+      this.videoVolumeInstance = new VideoVolume(this);
+    }
   }
 
   private initVideoSpeed() {

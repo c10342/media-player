@@ -25,6 +25,8 @@ export interface PlayerOptions {
   hotkey?: boolean;
   // 局部插件
   plugins?: Array<Function>;
+  // 是否开启跨域
+  crossorigin?: boolean;
   // 加这个是给插件使用的
   [key: string]: any;
 }
