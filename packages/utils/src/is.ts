@@ -31,3 +31,10 @@ export function isUndef(data: any): data is null | undefined {
 export function isArray(data: any): data is Array<any> {
   return toString.call(data) === "[object Array]";
 }
+
+export function isMobile() {
+  const u = navigator.userAgent;
+  const isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //android终端
+  const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+  return isAndroid || isiOS;
+}
