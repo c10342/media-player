@@ -2,7 +2,7 @@ import checkData from "./checkData";
 import EventEmit from "./event-emit";
 import EventManager from "./event-manager";
 import getBoundingClientRect from "./getBoundingClientRect";
-import { isFunction, isUndef } from "./is";
+import { isFunction, isMobile, isUndef } from "./is";
 import userSelect from "./user-select";
 
 interface DragOptions {
@@ -10,7 +10,7 @@ interface DragOptions {
   wrapperElement: HTMLElement | null | undefined;
 }
 
-type MouseFunction = (event: MouseEvent) => void;
+type MouseFunction = (event: any) => void;
 
 interface DataInfo {
   offsetX: number;
@@ -31,6 +31,10 @@ class Drag extends EventEmit {
   // 参数
   private options: DragOptions;
 
+  private mousedownEventName = "mousedown";
+  private mousemoveEventName = "mousemove";
+  private mouseupEventName = "mouseup";
+
   constructor(options: DragOptions) {
     super();
     this.options = options;
@@ -43,6 +47,12 @@ class Drag extends EventEmit {
   private initVar() {
     this._onMousemove = this.onMousemove.bind(this);
     this._onMouseup = this.onMouseup.bind(this);
+    const isMobileClient = isMobile();
+    if (isMobileClient) {
+      this.mousedownEventName = "touchstart";
+      this.mousemoveEventName = "touchmove";
+      this.mouseupEventName = "touchend";
+    }
     this.eventManager = new EventManager();
   }
   private getWrapperInfo() {
@@ -54,9 +64,10 @@ class Drag extends EventEmit {
     // 在那个容器上面进行拖拽
     const wrapperElement = this.options?.wrapperElement;
     if (!isUndef(dragElement)) {
+      // pc端
       this.eventManager.addEventListener({
         element: dragElement,
-        eventName: "mousedown",
+        eventName: this.mousedownEventName,
         handler: this.onMousedown.bind(this)
       });
       // 阻止点击事件
@@ -95,10 +106,8 @@ class Drag extends EventEmit {
     // 鼠标按下标志位
     this.isMousedown = true;
     // 全局注册鼠标移动事件和抬起事件
-    if (isFunction(this._onMousemove) && isFunction(this._onMouseup)) {
-      document.addEventListener("mousemove", this._onMousemove);
-      document.addEventListener("mouseup", this._onMouseup);
-    }
+    document.addEventListener(this.mousemoveEventName, this._onMousemove);
+    document.addEventListener(this.mouseupEventName, this._onMouseup);
     // 发射出去让外部处理
     this.$emit("mousedown");
   }
@@ -106,8 +115,8 @@ class Drag extends EventEmit {
   private removeEventListener() {
     // 移除事件监听
     if (isFunction(this._onMousemove) && isFunction(this._onMouseup)) {
-      document.removeEventListener("mouseup", this._onMouseup);
-      document.removeEventListener("mousemove", this._onMousemove);
+      document.removeEventListener(this.mouseupEventName, this._onMouseup);
+      document.removeEventListener(this.mousemoveEventName, this._onMousemove);
     }
   }
 
@@ -131,14 +140,19 @@ class Drag extends EventEmit {
     this.$emit("mouseup", data);
   }
 
-  private getInfo(event: MouseEvent): DataInfo {
+  private getInfo(event: any): DataInfo {
     // 获取容器的宽度和记录页面左边的距离
     const { left, width, top, height } = this.getWrapperInfo();
+    if (event.touches && event.touches[0]) {
+      event = event.touches[0];
+    } else if (event.changedTouches && event.changedTouches[0]) {
+      event = event.changedTouches[0];
+    }
 
     // 拿到点击的位置距离容器左边的距离
     const offsetX = event.pageX - left;
     const offsetY = event.pageY - top;
-    // 计算百分比
+
     const percentX = checkData(offsetX / width, 0, 1);
     const percentY = checkData(offsetY / height, 0, 1);
     return {
