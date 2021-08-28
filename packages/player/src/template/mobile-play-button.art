@@ -1,0 +1,3 @@
+    {{if isMobile}}
+    <span class="player-icon-play player-mobile-play-button"></span>
+    {{/if}}

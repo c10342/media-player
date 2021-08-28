@@ -17,6 +17,7 @@ import VideoVolume from "./component/video-volume";
 import VideoSpeed from "./component/video-speed";
 import VideoTip from "./component/video-tip";
 import VideoControls from "./component/video-controls";
+import MobilePlayButton from "./component/mobile-play-button";
 import ShortcutKey from "./js/shortcut-key";
 import { FullScreenTypeEnum } from "./config/enum";
 import { PlayerEvents } from "./config/event";
@@ -35,6 +36,7 @@ class PlayerConstructor extends EventEmit {
   private videoTipInstance: VideoTip | null;
   private videoControlsInstance: VideoControls | null;
   private shortcutKeyInstance: ShortcutKey | null;
+  private mobilePlayButtonInstance: MobilePlayButton | null;
   isMobile = isMobile();
   constructor(options: PlayerOptions) {
     super();
@@ -64,6 +66,8 @@ class PlayerConstructor extends EventEmit {
     this.initVideoControls();
     // 初始化快捷键
     this.initShortcutKey();
+    // 初始化移动端播放按钮
+    this.initMobilePlayButton();
   }
 
   private initTemplate() {
@@ -81,6 +85,12 @@ class PlayerConstructor extends EventEmit {
   private initVideoPlayButton() {
     if (!this.isMobile) {
       this.playButtonInstance = new VideoPlayButton(this);
+    }
+  }
+
+  private initMobilePlayButton() {
+    if (this.isMobile) {
+      this.mobilePlayButtonInstance = new MobilePlayButton(this);
     }
   }
 

@@ -4,4 +4,5 @@
   <div class='player-tip'></div>
   {{ include './loading.art' }}
   {{ include './controls.art' }}
+  {{ include './mobile-play-button.art' }}
 </div>

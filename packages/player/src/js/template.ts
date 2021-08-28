@@ -69,6 +69,8 @@ class Template {
 
   controlsElement: HTMLElement;
 
+  mobilePlayButton: HTMLElement;
+
   constructor(playerInstance: PlayerConstructor) {
     this.playerInstance = playerInstance;
     // 初始化模板，插入元素
@@ -136,6 +138,7 @@ class Template {
     );
     this.tipElement = this.getElement(".player-tip");
     this.controlsElement = this.getElement(".player-controls");
+    this.mobilePlayButton = this.getElement(".player-mobile-play-button");
   }
 
   private initListener() {
