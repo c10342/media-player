@@ -1,3 +1,7 @@
+interface Window {
+  ResizeObserver: any;
+}
+
 // @ts-ignore
 class ResizeObserver {
   callback: Function;
@@ -16,4 +20,4 @@ class ResizeObserver {
   }
 }
 
-window.ResizeObserver = ResizeObserver;
+global.window.ResizeObserver = ResizeObserver;
