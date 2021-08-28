@@ -34,7 +34,7 @@ player.$on("screenshot", (imageBase64) => {
 player.screenshot.snapshot();
 ```
 
-::: warning
+::: warning 警告
 
 该插件需要视频开启跨域功能，否则无法截图
 
@@ -43,7 +43,7 @@ player.screenshot.snapshot();
 ## Screenshot 参数
 
 
-::: tip
+::: tip 提示
 
 Screenshot 参数设置为 `false` 可关闭插件功能
 

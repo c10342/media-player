@@ -4,9 +4,15 @@
 
 <zoom-use />
 
-::: tip
+::: tip 提示
 
 拖拽播放器右下方的小红点可进行缩放
+
+:::
+
+::: warning 警告
+
+此插件只适用于pc端
 
 :::
 
@@ -49,7 +55,7 @@ player.$on("zoom", (item) => {
 
 ## Zoom 参数
 
-::: tip
+::: tip 提示
 
 Zoom 参数设置为 `false` 可关闭插件功能
 

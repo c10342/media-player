@@ -70,7 +70,7 @@ const player = new MediaPlayer({
 
 ## Preview 参数
 
-::: tip
+::: tip 提示
 
 Preview 参数设置为 `false` 可关闭插件功能
 

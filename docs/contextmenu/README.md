@@ -4,6 +4,13 @@
 
 <contextmenu-use />
 
+
+::: warning 警告
+
+此插件只适用于pc端
+
+:::
+
 ## 安装
 
 ```bash
@@ -105,7 +112,7 @@ player.$on("click-play", (item) => {
 
 ## Contextmenu 参数
 
-::: tip
+::: tip 提示
 
 Contextmenu 参数设置为 `false` 可关闭插件功能
 

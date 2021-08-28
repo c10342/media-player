@@ -30,7 +30,7 @@ const player = new MediaPlayer({
 
 ## Danmaku 参数
 
-::: tip
+::: tip 提示
 
 Danmaku 参数设置为 `false` 可关闭插件功能
 
