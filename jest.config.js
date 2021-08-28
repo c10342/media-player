@@ -16,5 +16,6 @@ module.exports = {
     // 匹配测试用例的文件
     "<rootDir>/packages/**/__tests__/*.test.ts"
   ],
-  collectCoverageFrom: ["<rootDir>/packages/**/src/*.ts"]
+  collectCoverageFrom: ["<rootDir>/packages/**/src/*.ts"],
+  setupFiles: ["<rootDir>/tests/__mocks__/ResizeObserver.js"]
 };
