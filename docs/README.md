@@ -9,5 +9,7 @@ features:
   details: 提供插件的功能，可定制化需求。
 - title: 轻量灵活
   details: 没有第三方依赖，天然支持按需加载。
+- title: 响应式布局
+  details: 同时支持移动端和pc端。
 footer: MIT Licensed | Copyright © 2021-present
 ---
