@@ -25,22 +25,25 @@ class MobilePlayButton {
       this.hidePlayButton.bind(this)
     );
   }
+  // 显示播放图标
   showPlayIcon() {
     this.mobilePlayButton.classList.remove(PlayButtonIconEnum.Pause);
     this.mobilePlayButton.classList.add(PlayButtonIconEnum.Play);
   }
-
+  // 显示暂停图标
   showPauseIcon() {
     this.mobilePlayButton.classList.add(PlayButtonIconEnum.Pause);
     this.mobilePlayButton.classList.remove(PlayButtonIconEnum.Play);
   }
-
+  // 显示播放按钮
   showPlayButton() {
     this.mobilePlayButton.style.opacity = "";
+    this.mobilePlayButton.style.pointerEvents = "";
   }
-
+  // 隐藏播放按钮
   hidePlayButton() {
     this.mobilePlayButton.style.opacity = "0";
+    this.mobilePlayButton.style.pointerEvents = "none";
   }
 }
 

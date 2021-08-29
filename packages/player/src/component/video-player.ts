@@ -68,11 +68,6 @@ class VideoPlayer {
       eventName: "click",
       handler: this.onWrapperClick.bind(this)
     });
-    this.eventManager.addEventListener({
-      element: this.playerInstance.templateInstance.videoMaskElement,
-      eventName: "click",
-      handler: this.onVideoMaskClick.bind(this)
-    });
   }
 
   // 获取默认播放的视频，有default的就是默认得了
@@ -102,10 +97,6 @@ class VideoPlayer {
     return null;
   }
 
-  private onVideoMaskClick() {
-    // 点击遮罩层的时候切换播放状态
-    this.playerInstance.toggle();
-  }
   // 清晰度切换事件处理
   private onWrapperClick(event: MouseEvent) {
     const target = event.target as HTMLElement;

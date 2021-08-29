@@ -133,7 +133,7 @@ class PlayerConstructor extends EventEmit {
 
   private initShortcutKey() {
     const { hotkey } = this.options;
-    if (hotkey) {
+    if (hotkey && !this.isMobile) {
       this.shortcutKeyInstance = new ShortcutKey(this);
     }
   }
