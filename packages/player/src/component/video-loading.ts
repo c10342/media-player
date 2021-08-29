@@ -12,12 +12,6 @@ class VideoLoading {
     this.initListener();
   }
 
-  // 视频状态，4表示可以了
-  private get videoReadyState() {
-    const videoElement = this.playerInstance.videoElement;
-    return videoElement.readyState ?? -1;
-  }
-
   private initVar() {
     this.eventManager = new EventManager();
   }
@@ -40,8 +34,9 @@ class VideoLoading {
   }
 
   // 视频缓冲事件
-  private onVideoWaiting() {
-    if (this.videoReadyState !== VideoReadyStateEnum.complete) {
+  private onVideoWaiting(event: Event) {
+    const target = event.target as HTMLVideoElement;
+    if (target.readyState !== VideoReadyStateEnum.complete) {
       // 显示loading
       this.showLoading();
     }
