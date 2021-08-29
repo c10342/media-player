@@ -215,7 +215,7 @@ class MediaPlayer {
     };
   }
 
-  getPluginsList() {
+  private getPluginsList() {
     const localPlugins = this.options.plugins || [];
     const globalPlugins = MediaPlayer.pluginsList || [];
     const pluginsList = [...globalPlugins, ...localPlugins];
