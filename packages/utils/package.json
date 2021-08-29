@@ -1,6 +1,6 @@
 {
   "name": "@lin-media/utils",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "utils",
   "main": "dist/index.js",
   "doc": "index.ts",
@@ -17,6 +17,5 @@
     "url": "https://github.com/c10342/media-player"
   },
   "author": "c10342",
-  "license": "MIT",
-  "dependencies": {}
+  "license": "MIT"
 }
