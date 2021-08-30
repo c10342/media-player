@@ -43,6 +43,9 @@ const player = new MediaPlayer({
 | muted      | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean             | —      | false  |
 | customType | 自定义 esm，可选，，格式见下方                     | Function            | —      | —      |
 | live       | 是否为直播，可选                                   | boolean             | —      | false  |
+| crossorigin       | 是否开启跨域，可选                                   | boolean             | —      | true  |
+| preload       | 视频预加载，可选                                   | string             | none，metadata，auto      | auto  |
+| poster       | 视频封面，可选                                   | string             | —      | —  |
 
 ## videoList 格式
 
