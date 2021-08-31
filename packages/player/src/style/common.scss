@@ -4,25 +4,40 @@
   height: 100%;
   overflow: hidden;
   user-select: none;
-  background-color: #000;
+  background-color: var(--player-container-background-color, $container-background-color);
 }
 
-.player-video {
-  position: absolute;
+.player-fullscreen {
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  z-index: 1000;
+  width: 100vw !important;
+  height: 100vh !important;
 }
 
-.player-video-mask {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+.player-icon-item {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
+  padding: 0 5px;
+  font-size: 25px;
+  color: var(--player-icon-color, $icon-color);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.player-not-select {
+  user-select: none;
 }
 
 .player-common-list-container {
@@ -32,7 +47,7 @@
   justify-content: center;
   height: 100%;
   margin-right: 15px;
-  color: #fff;
+  color: var(--player-text-color, $text-color);
 
   &:hover {
     .player-common-list-wrapper {
@@ -58,19 +73,19 @@
   padding: 0 8px;
   font-size: 12px;
   line-height: 30px;
-  color: #fff;
+  color: var(--player-text-color, $text-color);
   text-align: center;
   white-space: nowrap;
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--player-text-wrapper-background-color, $text-wrapper-background-color);
 
   &:hover {
-    color: $main-color;
+    color: var(--player-theme, $main-color);
   }
 }
 
 .player-common-active-item {
-  color: $main-color;
+  color: var(--player-theme, $main-color);
 }
 
 .player-common-list-label {
@@ -81,13 +96,13 @@
   font-size: 13px;
   font-style: normal;
   line-height: 26px;
-  color: #fff;
+  color: var(--player-text-color, $text-color);
   text-align: center;
   cursor: pointer;
-  background-color: hsla(0, 0%, 100%, 0.2);
+  background-color: var(--player-label-background-color, $label-background-color);
   border-radius: 15px;
 
   &:hover {
-    color: $main-color;
+    color: var(--player-theme, $main-color);
   }
 }

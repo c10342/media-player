@@ -34,7 +34,7 @@
 .player-time-tip {
   margin-left: 15px;
   font-size: 12px;
-  color: #fff;
+  color: var(--player-text-color, $text-color);
   user-select: none;
 }
 
@@ -54,9 +54,9 @@
   padding: 7px 20px;
   overflow: hidden;
   font-size: 14px;
-  color: #fff;
+  color: var(--player-text-color, $text-color);
   pointer-events: none;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--player-text-wrapper-background-color, $text-wrapper-background-color);
   border-radius: 2px;
   opacity: 0;
   transition: all 0.3s ease-in-out;
