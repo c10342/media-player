@@ -18,19 +18,8 @@ export default function getBoundingClientRect(
   const scrollTop =
     document.documentElement.scrollTop || document.body.scrollTop;
   const rect = el.getBoundingClientRect();
-  let left = 0;
-  let top = 0;
-  if (rect.left > 0) {
-    left = rect.left;
-  } else {
-    left = rect.left + scrollLeft;
-  }
-
-  if (rect.top > 0) {
-    top = rect.top;
-  } else {
-    top = rect.top + scrollTop;
-  }
+  const left = rect.left + scrollLeft;
+  const top = rect.top + scrollTop;
   const width = rect.width;
   const height = rect.height;
   return {
