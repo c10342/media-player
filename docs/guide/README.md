@@ -51,20 +51,20 @@ const player = new MediaPlayer({
 
 你可以通过下面的参数来自定义你的播放器具体需要什么功能
 
-| 参数       | 说明                                               | 类型                | 可选值 | 默认值 |
-| ---------- | -------------------------------------------------- | ------------------- | ------ | ------ |
-| el         | 播放容器                                           | string，HTMLElement | —      | —      |
-| videoList  | 视频播放列表，格式见下方                           | Array               | —      | —      |
-| speedList  | 倍数列表，可选，格式见下方                         | Array               | —      | —      |
-| plugins    | 注册局部插件，可选                                 | Array               | —      | —      |
-| hotkey     | 是否开启热键（快捷键），可选                       | boolean             | —      | true   |
-| autoplay   | 是否自动播放，可选                                 | boolean             | —      | false  |
-| muted      | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean             | —      | false  |
-| customType | 自定义 esm，可选，格式见下方                       | Function            | —      | —      |
-| live       | 是否为直播，可选                                   | boolean             | —      | false  |
-| crossorigin       | 是否开启跨域，可选                                   | boolean             | —      | true  |
-| preload       | 视频预加载，可选                                   | string             | none，metadata，auto      | auto  |
-| poster       | 视频封面，可选                                   | string             | —      | —  |
+| 参数        | 说明                                               | 类型                | 可选值               | 默认值 |
+| ----------- | -------------------------------------------------- | ------------------- | -------------------- | ------ |
+| el          | 播放容器                                           | string，HTMLElement | —                    | —      |
+| videoList   | 视频播放列表，格式见下方                           | Array               | —                    | —      |
+| speedList   | 倍数列表，可选，格式见下方                         | Array               | —                    | —      |
+| plugins     | 注册局部插件，可选                                 | Array               | —                    | —      |
+| hotkey      | 是否开启热键（快捷键），可选                       | boolean             | —                    | true   |
+| autoplay    | 是否自动播放，可选                                 | boolean             | —                    | false  |
+| muted       | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean             | —                    | false  |
+| customType  | 自定义 esm，可选，格式见下方                       | Function            | —                    | —      |
+| live        | 是否为直播，可选                                   | boolean             | —                    | false  |
+| crossorigin | 是否开启跨域，可选                                 | boolean             | —                    | true   |
+| preload     | 视频预加载，可选                                   | string              | none，metadata，auto | auto   |
+| poster      | 视频封面，可选                                     | string              | —                    | —      |
 
 ### videoList 参数格式
 
@@ -274,7 +274,7 @@ const player = new MediaPlayer({
     }
   ],
   // 开启直播
-  live:true,
+  live: true,
   customType(videoElement, videoObj) {
     const hls = new Hls();
     hls.loadSource(videoObj.url);
@@ -300,9 +300,9 @@ const player = new MediaPlayer({
 - 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性（不写就默认使用构造器的 name 值），`pluginName` 是用来作为插件的唯一标识，同时外部可以通过`player.plugins[pluginName]`访问到插件实例
 
 - 构造器函数（类）会接受到两个参数：
-  
-  - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`。因为当你同时初始化了2个播放器的时候，`document.querySelector()`获取的始终是第一个元素
-  
+
+  - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`。因为当你同时初始化了 2 个播放器的时候，`document.querySelector()`获取的始终是第一个元素
+
   - instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往实例中挂载其他属性或者方法，提供给外部使用
 
 ### 插件代码示例
@@ -324,7 +324,7 @@ class Test {
     this.instance = instance;
     // 往播放器实例中添加一个sleep方法
     instance.extend({
-      sleep:()=>{
+      sleep: () => {
         console.log("sleep");
       }
     });
@@ -385,7 +385,7 @@ player.plugins.Test;
 
 - 当你需要读取原生`video`标签时，请不要缓存`video`标签，而是每次动态去读取，因为清晰度切换的时候，会删除旧的`video`标签，插入新的`video`标签。当然，出于对性能的考虑，你也可以对`video`标签进行缓存，然后监听`switch_definition_end`事件，重新刷新`video`标签的缓存
 
-- 如果 `MediaPlayer` 的 `options` 参数中出现 `key` 值为插件的唯一标识，且 `value` 值为false，那么该插件不会被初始化。这个是用来关闭一些全局注册的插件。以关闭弹幕插件为例：
+- 如果 `MediaPlayer` 的 `options` 参数中出现 `key` 值为插件的唯一标识，且 `value` 值为 false，那么该插件不会被初始化。这个是用来关闭一些全局注册的插件。以关闭弹幕插件为例：
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
@@ -394,20 +394,63 @@ MediaPlayer.use(DanmakuPlugin);
 
 const player = new MediaPlayer({
   // ...
-  Danmaku:false
+  Danmaku: false
 });
 ```
+
+## 自定义主题
+
+### 介绍
+
+跟以往实现自定义主题那些方案不同的是，我们是使用 css 原生变量来实现自定义主题的。这样做的好处有：
+
+- 通过复写 css 变量，将原有的变量进行覆盖，就可以轻松换主题色，无需进行重新打包。
+
+- 动态改变主题色，由于 css 变量可以通过 js 进行修改，所以你可以轻松的变换播放器的主题色。
+
+### 改变主题色
+
+**通过 css 改变主题色**
+
+```css
+:root {
+  --player-theme: green;
+
+  /* ... */
+}
+```
+
+**通过 js 改变主题色**
+
+```js
+document.documentElement.style.setProperty("--player-theme", "green");
+
+// ...
+```
+
+### css 变量
+
+| 变量名                                 | 说明                       | 默认值                   |
+| -------------------------------------- | -------------------------- | ------------------------ |
+| --player-theme                         | 主题色                     | #fb6640                  |
+| --player-icon-color                    | 字体图标颜色               | #fff                     |
+| --player-container-background-color    | 播放器容器背景色           | #000                     |
+| --player-text-color                    | 文本颜色                   | #fff                     |
+| --player-text-wrapper-background-color | 文本容器背景色             | rgba(0, 0, 0, 0.4)       |
+| --player-label-background-color        | 标签背景色（倍速，清晰度） | rgba(255, 255, 255, 0.2) |
+| --player-process-background-color      | 进度条背景色               | rgba(255, 255, 255, 0.2) |
+| --player-loaded-background-color       | 缓冲进度背景色             | rgba(255, 255, 255, 0.4) |
 
 
 ## 常见问题
 
 ### 自动播放
 
-由于浏览器的策略问题，很多时候就算我们设置了`autoplay`属性也无法实现自动播放的。以下提供2种思路实现自动播放，这2种思路的前提是设置了`autoplay`属性
+由于浏览器的策略问题，很多时候就算我们设置了`autoplay`属性也无法实现自动播放的。以下提供 2 种思路实现自动播放，这 2 种思路的前提是设置了`autoplay`属性
 
 - 用户与网页进行交互。浏览器是不允许在用户没有操作的的时候自动播放视频的，所以你需要想办法让用户跟网页产生交互，然后才去初始化播放器。但是这种做法基本用不上。。。
 
-- 静音播放。浏览器是不允许有声音的视频进行自动播放的，但是允许静音的视频进行播放的。所以你可以将视频的音量设置为0，然后在进行自动播放。`MediaPlayer`可以通过设置对应的参数实现这种静音自动播放的功能
+- 静音播放。浏览器是不允许有声音的视频进行自动播放的，但是允许静音的视频进行播放的。所以你可以将视频的音量设置为 0，然后在进行自动播放。`MediaPlayer`可以通过设置对应的参数实现这种静音自动播放的功能
 
 ::: warning 警告
 
@@ -417,7 +460,7 @@ const player = new MediaPlayer({
 
 ```javascript
 player.$once("canplaythrough", () => {
-  player.play()
+  player.play();
 });
 ```
 
@@ -425,9 +468,8 @@ player.$once("canplaythrough", () => {
 
 ```javascript
 player.$once("canplaythrough", () => {
-  player.setVolume(1)
+  player.setVolume(1);
 });
 ```
 
 :::
-
