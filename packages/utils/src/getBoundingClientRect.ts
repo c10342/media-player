@@ -1,16 +1,38 @@
+import { isUndef } from "./is";
+
 export default function getBoundingClientRect(
   el: HTMLElement | null | undefined
 ) {
+  if (isUndef(el)) {
+    return {
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      width: 0,
+      height: 0
+    };
+  }
+  const scrollLeft =
+    document.documentElement.scrollLeft || document.body.scrollLeft;
+  const scrollTop =
+    document.documentElement.scrollTop || document.body.scrollTop;
+  const rect = el.getBoundingClientRect();
   let left = 0;
   let top = 0;
-  const width = el?.offsetWidth || 0;
-  const height = el?.offsetHeight || 0;
-  let obj: any = el;
-  while (obj) {
-    left += obj.offsetLeft;
-    top += obj.offsetTop;
-    obj = obj.offsetParent;
+  if (rect.left > 0) {
+    left = rect.left;
+  } else {
+    left = rect.left + scrollLeft;
   }
+
+  if (rect.top > 0) {
+    top = rect.top;
+  } else {
+    top = rect.top + scrollTop;
+  }
+  const width = rect.width;
+  const height = rect.height;
   return {
     left,
     top,
