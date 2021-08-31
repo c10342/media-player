@@ -55,9 +55,7 @@ class Drag extends EventEmit {
     }
     this.eventManager = new EventManager();
   }
-  private getWrapperInfo() {
-    return getBoundingClientRect(this.options?.wrapperElement);
-  }
+
   private initDrag() {
     // 进行拖拽的元素
     const dragElement = this.options?.dragElement;
@@ -142,7 +140,9 @@ class Drag extends EventEmit {
 
   private getInfo(event: any): DataInfo {
     // 获取容器的宽度和记录页面左边的距离
-    const { left, width, top, height } = this.getWrapperInfo();
+    const { left, width, top, height } = getBoundingClientRect(
+      this.options?.wrapperElement
+    );
     if (event.touches && event.touches[0]) {
       event = event.touches[0];
     } else if (event.changedTouches && event.changedTouches[0]) {
