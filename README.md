@@ -2,6 +2,14 @@
 
 可定制，插件化，轻量灵活的视频播放器
 
+
+[![npm version](https://img.shields.io/npm/v/@lin-media/player.svg)](https://www.npmjs.org/package/@lin-media/player) 
+[![downloads](http://img.shields.io/npm/dm/@lin-media/player.svg)](https://npmcharts.com/compare/@lin-media/player?minimal=true) 
+[![gzip size](http://img.badgesize.io/https://unpkg.com/@lin-media/player/dist/index.js?compression=gzip&label=gzip%20size:%20JS)](http://img.badgesize.io/https://unpkg.com/@lin-media/player/dist/index.js?compression=gzip&label=gzip%20size:%20JS) 
+[![LICENSE](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/c10342/media-player/blob/main/LICENSE) 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/5447a8ea758644ccbf7377e1a8288368)](https://www.codacy.com/gh/c10342/media-player/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=c10342/media-player&amp;utm_campaign=Badge_Grade)
+
+
 ## 在线文档
 
 [http://player.linjiafu.top](http://player.linjiafu.top)
@@ -10,7 +18,7 @@
 
 `MediaPlayer` 是由多包架构组成的开源项目。其中`@lin-media/player`为核心包，集成了一些常用的功能，如清晰度切换，倍数播放，全屏等等；其他非常见功能通过插件的形式扩展使用，如截图，弹幕，自定义进度条提示点等等；其中，插件以第三方包的形式存在，独立于`@lin-media/player`核心包，使用的时候需要自行进行下载安装。
 
-目前有四个插件包，分别为：
+目前有六个插件包，分别为：
 
 - 弹幕插件 `@lin-media/danmaku`
 - 缩放插件 `@lin-media/zoom`
