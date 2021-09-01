@@ -113,7 +113,7 @@ npm run test
     |- index.ts        子项目的入口文件，必选
     |- package.json    package.json文件，必选
     |- README.md       说明文件，可选
-    |- \_\_tests\_\_       存放单元测试用例，可选
+    |- __tests__       存放单元测试用例，可选
     |
 ```
 
