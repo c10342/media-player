@@ -26,13 +26,9 @@ npm run dev
 
 ```
 - .vscode  eslint等插件配置
+- build    打包构建
+- docs     官网和文档
 - examples 本地开发测试demo
-    |
-    |- danmaku.ts 弹幕插件
-    |- index.html html模板
-    |- index.scss 样式
-    |- index.ts   入口文件
-    |
 - packages 播放器和插件源码
     |
     |- contextmenu  右键菜单插件
@@ -44,56 +40,95 @@ npm run dev
     |- utils        通用方法
     |- zoom         缩放插件
     |
-- types    全局类型声明文件
 - scripts  文档上传等脚本
-- docs     官网和文档
-- build    打包构建
+- tests    单元测试相关
+- types    全局类型声明文件
 ```
 
 ## 脚本
 
+提交代码：
 
-
-## 别名
-
-```typescript
-import MediaPlayer from '@lin-media/player'
+```bash
+npm run commit
 ```
 
-其他项目比较简单所以没有别名，请使用相对路径导入。
+运行本地开发测试demo：
+
+```bash
+npm run dev
+```
+
+打包构建：
+
+```bash
+npm run build
+```
+
+ts代码检查：
+
+```bash
+npm run lint-fix
+```
+
+css代码检查：
+
+```bash
+npm run lint:style-fix
+```
+
+运行文档：
+
+```bash
+npm run docs:dev
+```
+
+打包文档：
+
+```bash
+npm run docs:build
+```
+
+运行单元测试
+
+```bash
+npm run test
+```
+
+## 包名与文件夹名称
+
+为了方便`webpack`找到包的入口文件，我们对包名跟文件夹名称做出如下约定：
+
+- 包名必须以`@lin-media/`开头
+
+- 文件夹名称取`@lin-media/$1`中`$1`的名称。比如包名叫`@lin-media/demo`，那么文件夹名称就必须叫`demo`
 
 ## 代码结构
 
-每个项目都有 `src` 文件夹和其中的入口文件 `index.ts`。其他代码则在 `ts` 目录下，css 在 `scss` 目录下（本来想 css 跟着组件拆分，在一个目录，但是现在样式并不多所以直接完全拆开了）。
+每个子项目的目录结构如下：
 
-项目中除了入口文件，其他文件都不用 `export default`，因为这样可以让你不用手动写导入代码，你只需要写相关变量名 vscode 就会自动提示，回车就可以自动导入，或者用 vscode 自动修复功能里面的自动导入。
+- demo
+    |
+    |- index.ts        子项目的入口文件，必选
+    |- package.json    package.json文件，必选
+    |- README.md       说明文件，可选
+    |- \_\_tests\_\_       存放单元测试用例，可选
+    |
 
 ## 测试
 
-测试文件都在项目代码下的 `__tests__` 文件夹，测试文件名后缀是 `.test.ts`。
+单元测试文件都要分别存放在每个子项目的 `__tests__` 文件夹下，测试文件后缀名是 `.test.ts`。
 
 目前测试代码并不多，后续慢慢补上✊。
 
-## 文档 & 官网
+## 文档
 
-MediaPlayer 使用的是 [Docusaurus](http://player.linjiafu.top)。
-
-如果要编写文档或修改官网，请进入到 `website` 文件夹，运行：
+如果要编写文档，请运行：
 
 ```bash
-yarn
+npm run docs:dev
 ```
 
-安装依赖。
+文档在 `docs` 文件夹
 
-然后运行：
-
-```bash
-yarn start
-```
-
-启动本地开发，它会自动打开 [http://localhost:3000/](http://localhost:3000/)。
-
-文档在 `docs` 文件夹，官网在 `src` 文件夹。
-
-更多请参考 [Docusaurus 官方文档](http://player.linjiafu.top)。
+更多请参考 [官方文档](http://player.linjiafu.top)。
