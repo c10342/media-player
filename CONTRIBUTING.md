@@ -14,7 +14,7 @@
 npm i
 ```
 
-运行开发测试demo
+运行开发测试 demo
 
 ```bash
 npm run dev
@@ -53,7 +53,7 @@ npm run dev
 npm run commit
 ```
 
-运行本地开发测试demo：
+运行本地开发测试 demo：
 
 ```bash
 npm run dev
@@ -65,13 +65,13 @@ npm run dev
 npm run build
 ```
 
-ts代码检查：
+ts 代码检查：
 
 ```bash
 npm run lint-fix
 ```
 
-css代码检查：
+css 代码检查：
 
 ```bash
 npm run lint:style-fix
@@ -107,6 +107,7 @@ npm run test
 
 每个子项目的目录结构如下：
 
+```
 - demo
     |
     |- index.ts        子项目的入口文件，必选
@@ -114,12 +115,13 @@ npm run test
     |- README.md       说明文件，可选
     |- \_\_tests\_\_       存放单元测试用例，可选
     |
+```
 
 ## 测试
 
 单元测试文件都要分别存放在每个子项目的 `__tests__` 文件夹下，测试文件后缀名是 `.test.ts`。
 
-目前测试代码并不多，后续慢慢补上✊。
+目前测试代码并不多，后续慢慢补上 ✊。
 
 ## 文档
 
