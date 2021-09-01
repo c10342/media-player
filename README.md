@@ -7,6 +7,7 @@
 [![downloads](http://img.shields.io/npm/dm/@lin-media/player.svg)](https://npmcharts.com/compare/@lin-media/player?minimal=true) 
 [![gzip size](http://img.badgesize.io/https://unpkg.com/@lin-media/player/dist/index.js?compression=gzip&label=gzip%20size:%20JS)](http://img.badgesize.io/https://unpkg.com/@lin-media/player/dist/index.js?compression=gzip&label=gzip%20size:%20JS) 
 [![LICENSE](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/c10342/media-player/blob/main/LICENSE) 
+[![Test](https://github.com/c10342/media-player/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/c10342/media-player/actions/workflows/test.yml) 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/5447a8ea758644ccbf7377e1a8288368)](https://www.codacy.com/gh/c10342/media-player/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=c10342/media-player&amp;utm_campaign=Badge_Grade)
 
 
