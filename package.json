@@ -24,7 +24,8 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "docs:upload": "npm run docs:build && node ./scripts/qiniu.js",
-    "test-watch": "jest --watch"
+    "test-watch": "jest --watch",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
