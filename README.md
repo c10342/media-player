@@ -42,7 +42,8 @@
 - 没有第三方依赖
 - 支持插件功能，可定制一些其他的功能
 - 按需加载
-- 提供完善的文档
+- 自定义主题
+- 支持移动端和pc端
 
 ## 安装使用
 
@@ -114,9 +115,13 @@ player.danmaku.send('你好')
 
 注意：默认不支持IE浏览器，如果你有需要，请自行使用 `polyfill` 进行兼容
 
+## 问题 & 建议
+
+如果你在使用 `MediaPlayer` 时遇到问题，或者有好的建议，欢迎给我提 [Issue](https://github.com/c10342/media-player/issues/new/choose)
+
 ## 贡献
 
-如果你在使用 `MediaPlayer` 时遇到问题，或者有好的建议，欢迎给我提 [Issue](https://github.com/c10342/https://github.com/c10342/media-player/issues)
+如果想参与贡献，请查看 [CONTRIBUTING](https://github.com/c10342/media-player/blob/main/CONTRIBUTING.md) 。
 
 ## LICENSE
 
@@ -125,4 +130,4 @@ player.danmaku.send('你好')
 
 ## 其他
 
-更详细的功能请查看在线文档，[点击这里](http://media-player.linjiafu.top)
+更详细的功能请查看在线文档，[点击这里](http://player.linjiafu.top)
