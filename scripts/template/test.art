@@ -1,0 +1,9 @@
+
+// import MediaPlayer from "@lin-media/player";
+import { describe, it, expect } from "@jest/globals";
+
+describe("render", () => {
+  test("render test", () => {
+    expect(1+1).toBe(2);
+  });
+});

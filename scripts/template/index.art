@@ -1,0 +1,3 @@
+import {{importName}} from "./src/{{name}}";
+
+export default {{importName}};
