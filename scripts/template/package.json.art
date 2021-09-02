@@ -18,5 +18,7 @@
   },
   "author": "c10342",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "@lin-media/player": "^1.0.0"
+  }
 }

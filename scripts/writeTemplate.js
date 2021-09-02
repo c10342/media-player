@@ -35,67 +35,51 @@ if (fs.existsSync(compomentPath)) {
   return;
 }
 
-// 创建组件根目录
-fs.mkdirSync(compomentPath);
-// 创建src目录
-const compomentSrcPath = path.resolve(compomentPath, "src");
-fs.mkdirSync(compomentSrcPath);
-// 创建__tests__目录
-const testsSrcPath = path.resolve(compomentPath, "__tests__");
-fs.mkdirSync(testsSrcPath);
-
-function writePakcageTpl() {
-  const parmas = {
-    name: componentName
-  };
-  const result = artTemplate(
-    path.resolve(__dirname, "./template/package.art"),
-    parmas
-  );
-  fs.writeFileSync(path.resolve(compomentPath, "package.json"), result);
+function getTplFiles(fileDir) {
+  const fileArr = [];
+  const fileList = fs.readdirSync(fileDir);
+  for (let i = 0; i < fileList.length; i++) {
+    const fullPath = path.resolve(fileDir, fileList[i]);
+    const status = fs.statSync(fullPath);
+    if (status.isDirectory()) {
+      fileArr.push(...getTplFiles(fullPath));
+    } else {
+      fileArr.push(fullPath);
+    }
+  }
+  return fileArr;
 }
 
-function writeIndexTpl() {
-  const parmas = {
-    name: componentName,
-    importName: toHump(componentName)
-  };
-  const result = artTemplate(
-    path.resolve(__dirname, "./template/index.art"),
-    parmas
-  );
-  fs.writeFileSync(path.resolve(compomentPath, "index.ts"), result);
+function getCompFiles(tplSrc, fileDir) {
+  return path.join(compomentPath, tplSrc.replace(fileDir, ""));
 }
 
-function writeReadmeTpl() {
-  const parmas = {
-    name: componentName,
-    importName: toHump(componentName)
-  };
-  const result = artTemplate(
-    path.resolve(__dirname, "./template/readme.art"),
-    parmas
-  );
-  fs.writeFileSync(path.resolve(compomentPath, "README.md"), result);
-}
-
-function writeTestTpl() {
-  const parmas = {
-    name: componentName,
-    componentName: toHump(componentName)
-  };
-  const result = artTemplate(
-    path.resolve(__dirname, "./template/test.art"),
-    parmas
-  );
-  fs.writeFileSync(path.resolve(testsSrcPath, "index.test.ts"), result);
+function makeDir(dir) {
+  if (fs.existsSync(dir)) return true;
+  if (makeDir(path.dirname(dir))) {
+    fs.mkdirSync(dir);
+    return true;
+  }
 }
 
 function writeTpl() {
-  writePakcageTpl();
-  writeIndexTpl();
-  writeReadmeTpl();
-  writeTestTpl();
+  const fileDir = path.resolve(__dirname, "./template");
+  const tplList = getTplFiles(fileDir);
+  const parmas = {
+    name: componentName,
+    importName: toHump(componentName)
+  };
+
+  tplList.forEach((tplSrc) => {
+    const result = artTemplate(tplSrc, parmas);
+    let compSrc = getCompFiles(tplSrc, fileDir);
+    if (compSrc.endsWith("name.ts.art")) {
+      compSrc = compSrc.replace("name.ts.art", `${componentName}.ts.art`);
+    }
+    compSrc = compSrc.replace(".art", "");
+    makeDir(path.dirname(compSrc));
+    fs.writeFileSync(compSrc, result);
+  });
   console.log(`${componentName}模板创建成功`);
 }
 

@@ -1,14 +1,13 @@
 import MediaPlayer, { PlayerEvents } from "@lin-media/player";
+import { pluginName } from "./config/constant";
 
-interface HighlightOptions {
+interface {{importName}}Options {
   [key: string]: any;
 }
 
-const pluginName = "pluginName";
-
 const defaultOptions = {};
 
-class Highlight {
+class {{importName}} {
   // 插件名称.
   static pluginName = pluginName;
   // 播放器的dom
@@ -16,7 +15,7 @@ class Highlight {
   // 播放器实例
   private instance: MediaPlayer;
 
-  private options: HighlightOptions;
+  private options: {{importName}}Options;
 
   constructor(el: HTMLElement, instance: MediaPlayer) {
     // 保存一下播放器给来的参数
@@ -33,7 +32,7 @@ class Highlight {
   }
 
   private initMethods() {
-    Object.defineProperty(this.instance, "highlight", {
+    Object.defineProperty(this.instance, "{{importName}}", {
       get: () => {
         return {
           // ...
@@ -55,4 +54,4 @@ class Highlight {
   }
 }
 
-export default Highlight;
+export default {{importName}};
