@@ -48,11 +48,10 @@ function writePakcageTpl() {
   const parmas = {
     name: componentName
   };
-  const tplStr = fs.readFileSync(
-    path.resolve(__dirname, "./template/package.tpl"),
-    "utf-8"
+  const result = artTemplate(
+    path.resolve(__dirname, "./template/package.art"),
+    parmas
   );
-  const result = artTemplate(tplStr, parmas);
   fs.writeFileSync(path.resolve(compomentPath, "package.json"), result);
 }
 
@@ -61,24 +60,22 @@ function writeIndexTpl() {
     name: componentName,
     importName: toHump(componentName)
   };
-  const tplStr = fs.readFileSync(
-    path.resolve(__dirname, "./template/index.tpl"),
-    "utf-8"
+  const result = artTemplate(
+    path.resolve(__dirname, "./template/index.art"),
+    parmas
   );
-  const result = artTemplate(tplStr, parmas);
   fs.writeFileSync(path.resolve(compomentPath, "index.ts"), result);
 }
 
 function writeReadmeTpl() {
   const parmas = {
     name: componentName,
-    componentName: toHump(componentName)
+    importName: toHump(componentName)
   };
-  const tplStr = fs.readFileSync(
-    path.resolve(__dirname, "./template/readme.tpl"),
-    "utf-8"
+  const result = artTemplate(
+    path.resolve(__dirname, "./template/readme.art"),
+    parmas
   );
-  const result = artTemplate(tplStr, parmas);
   fs.writeFileSync(path.resolve(compomentPath, "README.md"), result);
 }
 
@@ -87,11 +84,10 @@ function writeTestTpl() {
     name: componentName,
     componentName: toHump(componentName)
   };
-  const tplStr = fs.readFileSync(
-    path.resolve(__dirname, "./template/test.tpl"),
-    "utf-8"
+  const result = artTemplate(
+    path.resolve(__dirname, "./template/test.art"),
+    parmas
   );
-  const result = artTemplate(tplStr, parmas);
   fs.writeFileSync(path.resolve(testsSrcPath, "index.test.ts"), result);
 }
 
