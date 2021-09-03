@@ -77,13 +77,6 @@ class BulletChat {
     this._totalHeight = container.offsetHeight;
     //   清屏
     this.clearScreen();
-  }
-
-  // 清除所有弹幕
-  clearScreen() {
-    this._clearRenderTimer();
-    this._clearDanmakuNodes();
-    this._resetTracks();
     //   启动定时器
     if (
       !this._renderTimer &&
@@ -92,6 +85,13 @@ class BulletChat {
     ) {
       this._render();
     }
+  }
+
+  // 清除所有弹幕
+  clearScreen() {
+    this._clearRenderTimer();
+    this._clearDanmakuNodes();
+    this._resetTracks();
   }
 
   // 添加弹幕数据到队列
@@ -164,12 +164,12 @@ class BulletChat {
   close() {
     // 标志位
     this._isClose = true;
-    // 清屏
-    this.clearScreen();
-    // 清除定时器
-    this._clearRenderTimer();
     // 清除消息数据
     this._clearQueue();
+    // 清除定时器
+    this._clearRenderTimer();
+    // 清屏
+    this.clearScreen();
   }
 
   // 开启弹幕
