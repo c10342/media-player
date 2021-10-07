@@ -46,8 +46,10 @@ export default function createLocale({ zhLang, enLang }: LangObj) {
   };
 
   // 自定义i18n处理函数
-  const i18n = function i18n(fn: Function) {
-    i18nHandler = fn;
+  const i18n = function i18n(fn: Function | null | undefined) {
+    if (isFunction(fn)) {
+      i18nHandler = fn;
+    }
   };
 
   // 设置使用哪种语言
