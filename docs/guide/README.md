@@ -51,20 +51,21 @@ const player = new MediaPlayer({
 
 你可以通过下面的参数来自定义你的播放器具体需要什么功能
 
-| 参数        | 说明                                               | 类型                | 可选值               | 默认值 |
-| ----------- | -------------------------------------------------- | ------------------- | -------------------- | ------ |
-| el          | 播放容器                                           | string，HTMLElement | —                    | —      |
-| videoList   | 视频播放列表，格式见下方                           | Array               | —                    | —      |
-| speedList   | 倍数列表，可选，格式见下方                         | Array               | —                    | —      |
-| plugins     | 注册局部插件，可选                                 | Array               | —                    | —      |
-| hotkey      | 是否开启热键（快捷键），可选                       | boolean             | —                    | true   |
-| autoplay    | 是否自动播放，可选                                 | boolean             | —                    | false  |
-| muted       | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean             | —                    | false  |
-| customType  | 自定义 esm，可选，格式见下方                       | Function            | —                    | —      |
-| live        | 是否为直播，可选                                   | boolean             | —                    | false  |
-| crossorigin | 是否开启跨域，可选                                 | boolean             | —                    | true   |
-| preload     | 视频预加载，可选                                   | string              | none，metadata，auto | auto   |
-| poster      | 视频封面，可选                                     | string              | —                    | —      |
+| 参数        | 说明                                               | 类型                               | 可选值               | 默认值      |
+| ----------- | -------------------------------------------------- | ---------------------------------- | -------------------- | ----------- |
+| el          | 播放容器                                           | string，HTMLElement                | —                    | —           |
+| videoList   | 视频播放列表，格式见下方                           | Array                              | —                    | —           |
+| speedList   | 倍数列表，可选，格式见下方                         | Array                              | —                    | —           |
+| plugins     | 注册局部插件，可选                                 | Array                              | —                    | —           |
+| hotkey      | 是否开启热键（快捷键），可选                       | boolean                            | —                    | true        |
+| autoplay    | 是否自动播放，可选                                 | boolean                            | —                    | false       |
+| muted       | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean                            | —                    | false       |
+| customType  | 自定义 esm，可选，格式见下方                       | Function                           | —                    | —           |
+| live        | 是否为直播，可选                                   | boolean                            | —                    | false       |
+| crossorigin | 是否开启跨域，可选                                 | boolean                            | —                    | true        |
+| preload     | 视频预加载，可选                                   | string                             | none，metadata，auto | auto        |
+| poster      | 视频封面，可选                                     | string                             | —                    | —           |
+| controls    | 播放器控件是否显示，可选，详细见下方                             | boolean，ControlsObj | false，ControlsObj   | ControlsObj |
 
 ### videoList 参数格式
 
@@ -88,6 +89,27 @@ const player = new MediaPlayer({
 | ------------ | ---------------- | ---------------- |
 | videoElement | video 标签       | HTMLVideoElement |
 | options      | videoList 列表项 | Object           |
+
+### controls 参数格式
+
+::: tip 注意
+当 `controls` 值为 `false` 时，所有控件将不会显示。当 `controls` 值为一个对象时（即`ControlsObj`），可根据下方的字段来选择那些控件需要显示，那些不需要显示，其中 `true` 为显示控件， `false` 为隐藏控件。所有控件默认显示
+:::
+
+| 字段             | 说明               | 类型    | 默认值 |
+| ---------------- | ------------------ | ------- | ------ |
+| playButton       | pc 端播放按钮控件  | boolean | true   |
+| volume           | 音量控件           | boolean | true   |
+| live             | 直播提示控件       | boolean | true   |
+| speed            | 倍速控件           | boolean | true   |
+| fullscreen       | 全屏控件           | boolean | true   |
+| definition       | 清晰度控件         | boolean | true   |
+| progress         | 进度条控件         | boolean | true   |
+| tip              | 通知提示控件       | boolean | true   |
+| time             | 时间控件           | boolean | true   |
+| loading          | loading 控件       | boolean | true   |
+| mobilePlayButton | 移动端播放按钮控件 | boolean | true   |
+| videoMask        | 视频遮罩层控件     | boolean | true   |
 
 ## 事件绑定
 
@@ -440,7 +462,6 @@ document.documentElement.style.setProperty("--player-theme", "green");
 | --player-label-background-color        | 标签背景色（倍速，清晰度） | rgba(255, 255, 255, 0.2) |
 | --player-process-background-color      | 进度条背景色               | rgba(255, 255, 255, 0.2) |
 | --player-loaded-background-color       | 缓冲进度背景色             | rgba(255, 255, 255, 0.4) |
-
 
 ## 常见问题
 
