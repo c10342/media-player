@@ -5,6 +5,21 @@ export type VideoListParams = Array<VideoListItem>;
 // 倍数列表项
 export type SpeedItem = { label: string; value: number; default?: boolean };
 
+export interface ControlsObj {
+  playButton?: boolean;
+  volume?: boolean;
+  live?: boolean;
+  speed?: boolean;
+  fullscreen?: boolean;
+  definition?: boolean;
+  progress?: boolean;
+  tip?: boolean;
+  time?: boolean;
+  loading?: boolean;
+  mobilePlayButton?: boolean;
+  videoMask?: boolean;
+}
+
 // 播放器参数
 export interface PlayerOptions {
   // 插入的元素
@@ -31,6 +46,8 @@ export interface PlayerOptions {
   preload?: string;
   // 视频封面
   poster?: string;
+  // 控件相关
+  controls?: false | ControlsObj;
   // 加这个是给插件使用的
   [key: string]: any;
 }

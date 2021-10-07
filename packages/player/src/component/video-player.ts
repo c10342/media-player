@@ -189,7 +189,7 @@ class VideoPlayer {
       this.playerInstance.templateInstance.definitionLabelElement;
 
     const videoList = this.playerInstance.options.videoList;
-    if (videoList.length > 0) {
+    if (videoList.length > 0 && definitionLabelElement) {
       definitionLabelElement.innerHTML = videoList[this.currentIndex].label;
     }
   }

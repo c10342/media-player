@@ -1,8 +1,10 @@
 <div class="player-container">
   {{ include './video.art' }}
-  <div class="player-video-mask"></div>
-  <div class='player-tip'></div>
+  {{if controls}}
+  {{ include './video-mask.art' }}
+  {{ include './tip.art' }}
   {{ include './loading.art' }}
   {{ include './controls.art' }}
   {{ include './mobile-play-button.art' }}
+  {{/if}}
 </div>

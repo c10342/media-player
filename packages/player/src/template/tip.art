@@ -1,0 +1,3 @@
+  {{if controls.tip}}
+  <div class='player-tip'></div>
+  {{/if}}

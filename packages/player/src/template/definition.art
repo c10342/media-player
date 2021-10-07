@@ -1,4 +1,4 @@
-{{if videoList && videoList.length>0}}
+{{if videoList && videoList.length>0 && controls.definition}}
 <div class="player-common-list-container">
   {{if videoList.length>1}}
   <ul class="player-common-list-wrapper player-definition-wrapper">

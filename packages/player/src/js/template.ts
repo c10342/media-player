@@ -86,7 +86,7 @@ class Template {
     const el = this.playerInstance.options.el as HTMLElement;
     const html = templateTpl({
       ...this.playerInstance.options,
-      liveTip: t("live"),
+      $t: t,
       isMobile: this.playerInstance.isMobile
     });
     el.innerHTML = html;

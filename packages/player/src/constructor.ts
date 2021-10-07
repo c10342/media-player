@@ -44,30 +44,56 @@ class PlayerConstructor extends EventEmit {
     this.options = options;
     // 初始化模板，dom那些
     this.initTemplate();
-    // 控制条上放的提示组件
-    this.initVideoTip();
     // 初始化video相关东西
     this.initVideoPlayer();
-    // 初始化控制条控制播放/暂停的组件
-    this.initVideoPlayButton();
-    // 初始化时间（当前时间/总时间），即音量控制组件右边那个东西
-    this.initVideoTime();
-    // 初始化进度条组件
-    this.initVideoProgress();
-    // 初始化全屏组件
-    this.initVideoFullscreen();
-    // 初始化loading组件
-    this.initVideoLoading();
-    // 初始化音量控制组件
-    this.initVideoVolume();
-    // 初始化倍数组件
-    this.initVideoSpeed();
-    // 初始化控制条组件
-    this.initVideoControls();
+    // 初始化控制条
+    this.initControls();
     // 初始化快捷键
     this.initShortcutKey();
-    // 初始化移动端播放按钮
-    this.initMobilePlayButton();
+  }
+
+  private initControls() {
+    const { controls } = this.options;
+    if (controls) {
+      if (controls.tip) {
+        // 控制条上放的提示组件
+        this.initVideoTip();
+      }
+      if (controls.playButton) {
+        // 初始化控制条控制播放/暂停的组件
+        this.initVideoPlayButton();
+      }
+      if (controls.time) {
+        // 初始化时间（当前时间/总时间），即音量控制组件右边那个东西
+        this.initVideoTime();
+      }
+      if (controls.progress) {
+        // 初始化进度条组件
+        this.initVideoProgress();
+      }
+      if (controls.fullscreen) {
+        // 初始化全屏组件
+        this.initVideoFullscreen();
+      }
+      if (controls.loading) {
+        // 初始化loading组件
+        this.initVideoLoading();
+      }
+      if (controls.volume) {
+        // 初始化音量控制组件
+        this.initVideoVolume();
+      }
+      if (controls.speed) {
+        // 初始化倍数组件
+        this.initVideoSpeed();
+      }
+      if (controls.mobilePlayButton) {
+        // 初始化移动端播放按钮
+        this.initMobilePlayButton();
+      }
+      // 初始化控制条组件
+      this.initVideoControls();
+    }
   }
 
   private initTemplate() {

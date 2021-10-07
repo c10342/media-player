@@ -7,7 +7,8 @@ import {
   isString,
   isUndef,
   LangTypeEnum,
-  logWarn
+  logWarn,
+  deepMerge
 } from "@lin-media/utils";
 
 function getPluginName(ctor: any) {
@@ -20,7 +21,21 @@ const defaultOptions = {
   autoplay: false,
   muted: false,
   preload: "auto",
-  crossorigin: true
+  crossorigin: true,
+  controls: {
+    playButton: true,
+    volume: true,
+    live: true,
+    speed: true,
+    fullscreen: true,
+    definition: true,
+    progress: true,
+    tip: true,
+    time: true,
+    loading: true,
+    mobilePlayButton: true,
+    videoMask: true
+  }
 };
 
 class MediaPlayer {
@@ -85,7 +100,9 @@ class MediaPlayer {
   // 存储插件实例
   plugins: Record<string, any> = {};
   constructor(options: PlayerOptions) {
-    this.options = { ...defaultOptions, ...options };
+    // this.options = { ...defaultOptions, ...options };
+    // 深合并
+    this.options = deepMerge(defaultOptions, options) as PlayerOptions;
     // 初始化参数
     this.initParams();
     // 检查参数

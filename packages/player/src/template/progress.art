@@ -1,5 +1,5 @@
 
-{{if !live}}
+{{if !live && controls.progress}}
 <div class='player-process-container {{if isMobile}} player-process-mobile {{/if}} {{if !isMobile}} player-process-pc {{/if}}'>
 <div class='player-process-content'>
   <div class="player-process-mask">
