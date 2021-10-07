@@ -6,17 +6,29 @@ export type VideoListParams = Array<VideoListItem>;
 export type SpeedItem = { label: string; value: number; default?: boolean };
 
 export interface ControlsObj {
+  // pc端播放按钮控件
   playButton?: boolean;
+  // 音量控件
   volume?: boolean;
+  // 直播提示控件
   live?: boolean;
+  // 倍速控件
   speed?: boolean;
+  // 全屏控件
   fullscreen?: boolean;
+  // 清晰度控件
   definition?: boolean;
+  // 进度条控件
   progress?: boolean;
+  // 通知提示控件
   tip?: boolean;
+  // 时间控件
   time?: boolean;
+  // loading控件
   loading?: boolean;
+  // 移动端播放按钮控件
   mobilePlayButton?: boolean;
+  // 视频遮罩层控件
   videoMask?: boolean;
 }
 
