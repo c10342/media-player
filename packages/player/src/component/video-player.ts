@@ -2,7 +2,7 @@ import { EventManager, isFunction, isUndef } from "@lin-media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
 import { VideoListItem } from "../types";
 import videoTpl from "../template/video.art";
-import { t } from "../locale";
+import i18n from "../locale";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import PlayerConstructor from "../constructor";
 
@@ -108,7 +108,7 @@ class VideoPlayer {
   // 判断能否进行切换,因为可能越界
   private isCanSwitchQuality(index: number) {
     if (index < 0 || index > this.playerInstance.options.videoList.length - 1) {
-      this.playerInstance.setNotice(t("invalidDefinition"));
+      this.playerInstance.setNotice(i18n.t("invalidDefinition"));
       return false;
     }
     return true;
@@ -167,7 +167,9 @@ class VideoPlayer {
       // 清晰度切换完毕
       this.playerInstance.$emit(PlayerEvents.SWITCH_DEFINITION_END, videoItem);
       // 设置通知
-      this.playerInstance.setNotice(t("switch", { quality: videoItem?.label }));
+      this.playerInstance.setNotice(
+        i18n.t("switch", { quality: videoItem?.label })
+      );
     });
   }
 

@@ -1,7 +1,7 @@
 import { EventManager, Drag } from "@lin-media/utils";
 import { DragDataInfo } from "../types";
 import { VolumeButtonIconEnum } from "../config/enum";
-import { t } from "../locale";
+import i18n from "../locale";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import PlayerConstructor from "../constructor";
 
@@ -142,7 +142,7 @@ class VideoVolume {
   // 设置通知提示
   private setNotice() {
     this.playerInstance.setNotice(
-      t("volume", {
+      i18n.t("volume", {
         volume: `${Math.round(this.playerInstance.volume * 100)}%`
       })
     );

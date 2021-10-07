@@ -7,7 +7,7 @@ import {
   getBoundingClientRect
 } from "@lin-media/utils";
 import { DragDataInfo } from "../types";
-import { t } from "../locale";
+import i18n from "../locale";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import PlayerConstructor from "../constructor";
 
@@ -202,9 +202,9 @@ class VideoProgress {
     offsetTime = Math.round(offsetTime);
     let tip = "";
     if (offsetTime > 0) {
-      tip = t("fastForward", { time: offsetTime });
+      tip = i18n.t("fastForward", { time: offsetTime });
     } else {
-      tip = t("goBack", { time: -offsetTime });
+      tip = i18n.t("goBack", { time: -offsetTime });
     }
     this.playerInstance.setNotice(tip);
   }

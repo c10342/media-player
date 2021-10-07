@@ -1,5 +1,5 @@
 import PlayerConstructor from "../constructor";
-import { t } from "../locale";
+import i18n from "../locale";
 import templateTpl from "../template/layout.art";
 import { PlayerEvents } from "../config/event";
 import { isUndef, debounce } from "@lin-media/utils";
@@ -86,7 +86,7 @@ class Template {
     const el = this.playerInstance.options.el as HTMLElement;
     const html = templateTpl({
       ...this.playerInstance.options,
-      $t: t,
+      $t: i18n.t,
       isMobile: this.playerInstance.isMobile
     });
     el.innerHTML = html;
