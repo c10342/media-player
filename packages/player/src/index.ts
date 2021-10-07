@@ -8,7 +8,8 @@ import {
   isUndef,
   LangTypeEnum,
   logWarn,
-  deepMerge
+  deepMerge,
+  deepClone
 } from "@lin-media/utils";
 import defaultOptions from "./config/default";
 
@@ -80,7 +81,11 @@ class MediaPlayer {
   constructor(options: PlayerOptions) {
     // this.options = { ...defaultOptions, ...options };
     // 深合并
-    this.options = deepMerge(defaultOptions, options) as PlayerOptions;
+    this.options = deepMerge(
+      deepClone(defaultOptions),
+      deepClone(options)
+    ) as PlayerOptions;
+
     // 初始化参数
     this.initParams();
     // 检查参数
