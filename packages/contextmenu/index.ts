@@ -1,3 +1,3 @@
-import Contextmenu from "./src/contextmenu";
+import Contextmenu from "./src/index";
 
 export default Contextmenu;

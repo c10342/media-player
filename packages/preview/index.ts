@@ -1,4 +1,4 @@
-import Preview from "./src/preview";
+import Preview from "./src/index";
 
 export default Preview;
 

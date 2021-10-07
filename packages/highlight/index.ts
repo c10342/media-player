@@ -1,4 +1,4 @@
-import Highlight from "./src/highlight";
+import Highlight from "./src/index";
 
 export default Highlight;
 

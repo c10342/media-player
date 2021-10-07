@@ -1,3 +1,3 @@
-import Danmaku from "./src/danmaku";
+import Danmaku from "./src/index";
 
 export default Danmaku;
