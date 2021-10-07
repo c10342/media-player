@@ -187,6 +187,9 @@ const player = new VideoPlayer({
     meunItemWidth: "200px",
     subMenuItemWidth: "100px"
   }
+  // controls:{
+  //   videoMask:false
+  // }
   // hotkey:true
   // live:true
   // autoplay: true,
