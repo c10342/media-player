@@ -26,7 +26,7 @@
     "docs:upload": "npm run docs:build && node ./scripts/qiniu.js",
     "test-watch": "jest --watch",
     "test": "jest",
-    "create":"node ./scripts/writeTemplate.js"
+    "create": "node ./scripts/writeTemplate.js"
   },
   "keywords": [],
   "author": "",
