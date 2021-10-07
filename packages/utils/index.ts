@@ -13,3 +13,4 @@ export { default as Drag } from "./src/drag";
 export { default as getBoundingClientRect } from "./src/get-bounding-client-rect";
 export { default as getViewPortInfo } from "./src/get-view-port-info";
 export { default as deepMerge } from "./src/deep-merge";
+export { default as createLocale } from "./src/create-locale";
