@@ -46,6 +46,21 @@ const previewList = [
   }
 ];
 
+const speedList = [
+  {
+    label: "0.5x",
+    value: 0.5
+  },
+  {
+    label: "1x",
+    value: 1,
+    default: true
+  },
+  {
+    label: "1.5x",
+    value: 1.5
+  }
+];
 const contextMenuList = [
   {
     label: "播放",
@@ -141,21 +156,7 @@ const player = new VideoPlayer({
     //   url: "https://api.dogecloud.com/player/get.m3u8?vcode=5ac682e6f8231991&userId=17&ext=.m3u8"
     // }
   ],
-  speedList: [
-    {
-      label: "0.5x",
-      value: 0.5
-    },
-    {
-      label: "1x",
-      value: 1,
-      default: true
-    },
-    {
-      label: "1.5x",
-      value: 1.5
-    }
-  ],
+  speedList,
   // plugins: [Screenshot, Zoom, Danmaku, Contextmenu],
   Highlight: {
     jump: true,
@@ -219,7 +220,9 @@ player.$on("preview-click", (item: any) => {
 document.querySelector(".setoptions")?.addEventListener("click", () => {
   // (player as any).setBarView('https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg');
   // (player as any).highlight.set(highlightList);
-  (player as any).screenshot.snapshot();
+  // (player as any).screenshot.snapshot();
+  speedList[0].label = "123";
+  console.log(speedList, player.options);
 });
 document.querySelector(".destroyoptions")?.addEventListener("click", () => {
   (player as any).destroyPreview();
