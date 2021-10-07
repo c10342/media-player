@@ -4,7 +4,7 @@ import { ClassNameEnum, CursorEnum } from "./config/enum";
 import { ZoomEvents } from "./config/event";
 import "./style/index.scss";
 import { ZoomData, ZoomOptions } from "./types";
-import MediaPlayer, { PlayerEvents } from "@lin-media/player";
+import MediaPlayer from "@lin-media/player";
 
 const defaultOptions = {
   x: true,
@@ -13,6 +13,8 @@ const defaultOptions = {
   minWidth: 0
 };
 class Zoom {
+  // 自定义事件
+  static customEvents = ZoomEvents;
   // 插件名称.
   static pluginName = pluginName;
   // 播放器实例
@@ -160,7 +162,7 @@ class Zoom {
   }
 
   private initListener() {
-    this.instance.$on(PlayerEvents.DESTROY, () => {
+    this.instance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
       this.removeClassNameToParent();
       this.setParentStyle();
       this.removeDragElement();

@@ -3,7 +3,7 @@ import { EventManager, isUndef, logError } from "@lin-media/utils";
 import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
 import { downloadPicName, pluginName } from "./config/constant";
-import MediaPlayer, { PlayerEvents } from "@lin-media/player";
+import MediaPlayer from "@lin-media/player";
 import { ScreenshotEvents } from "./config/event";
 
 const defaultOptions = {
@@ -11,6 +11,8 @@ const defaultOptions = {
 };
 
 class Screenshot {
+  // 自定义事件
+  static customEvents = ScreenshotEvents;
   // 插件名称.
   static pluginName = pluginName;
   // 播放器的dom
@@ -42,7 +44,7 @@ class Screenshot {
     // 初始化dom
     this.initElement();
     // 销毁
-    this.instance.$on(PlayerEvents.DESTROY, () => {
+    this.instance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
       this.destroy();
     });
   }

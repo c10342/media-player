@@ -2,7 +2,7 @@ import pointListTpl from "./template/point-list.art";
 import "./style/index.scss";
 import { EventManager, getBoundingClientRect, isArray } from "@lin-media/utils";
 import { HighlightList, HighlightOptions } from "./types";
-import MediaPlayer, { PlayerEvents, VideoEvents } from "@lin-media/player";
+import MediaPlayer from "@lin-media/player";
 import { HighlightEvents } from "./config/event";
 import { pluginName } from "./config/constant";
 
@@ -12,6 +12,8 @@ const defaultOptions = {
 };
 
 class Highlight {
+  // 自定义事件
+  static customEvents = HighlightEvents;
   // 插件名称.
   static pluginName = pluginName;
   // 播放器的dom
@@ -67,7 +69,7 @@ class Highlight {
 
   private initInstanceListener() {
     // 销毁
-    this.instance.$on(PlayerEvents.DESTROY, () => {
+    this.instance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
       this.destroyHighlight();
     });
   }
@@ -81,7 +83,7 @@ class Highlight {
       this.initElement();
     } else {
       // 获取不到总时长说明视频没有加载完成，需要等待加载完成在执行下一步操作
-      this.instance.$once(VideoEvents.LOADEDMETADATA, () => {
+      this.instance.$once(MediaPlayer.VideoEvents.LOADEDMETADATA, () => {
         this.load = true;
         this.initElement();
       });

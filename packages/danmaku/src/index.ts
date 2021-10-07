@@ -5,7 +5,7 @@ import { DanmakuOptions, PushData } from "./types";
 import settingTpl from "./template/setting.art";
 import "./style/index.scss";
 import i18n from "./locale";
-import MediaPlayer, { PlayerEvents } from "@lin-media/player";
+import MediaPlayer from "@lin-media/player";
 import { pluginName } from "./config/constant";
 
 interface DataInfo {
@@ -211,10 +211,10 @@ class Danmaku {
   }
 
   private _initListener() {
-    this._instance.$on(PlayerEvents.DESTROY, () => {
+    this._instance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
       this._destroy();
     });
-    this._instance.$on(PlayerEvents.RESIZE, () => {
+    this._instance.$on(MediaPlayer.PlayerEvents.RESIZE, () => {
       this._bulletChat?.resize();
     });
     this._eventManager?.addEventListener({

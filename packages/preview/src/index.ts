@@ -8,7 +8,7 @@ import {
   getBoundingClientRect
 } from "@lin-media/utils";
 import { PreviewList, PreviewOptions } from "./types";
-import MediaPlayer, { PlayerEvents, VideoEvents } from "@lin-media/player";
+import MediaPlayer from "@lin-media/player";
 import { PreviewEvents } from "./config/event";
 import { barViewImageWidth, pluginName } from "./config/constant";
 
@@ -17,6 +17,8 @@ const defaultOptions = {
 };
 
 class Preview {
+  // 自定义事件
+  static customEvents = PreviewEvents;
   // 插件名称.
   static pluginName = pluginName;
   // 播放器的dom
@@ -82,7 +84,7 @@ class Preview {
 
   private initInstanceListener() {
     // 销毁
-    this.instance.$on(PlayerEvents.DESTROY, () => {
+    this.instance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
       this.destroyPreview();
       this.destroyBarView();
     });
@@ -97,7 +99,7 @@ class Preview {
       this.initBarView();
     } else {
       // 获取不到总时长说明视频没有加载完成，需要等待加载完成在执行下一步操作
-      this.instance.$once(VideoEvents.LOADEDMETADATA, () => {
+      this.instance.$once(MediaPlayer.VideoEvents.LOADEDMETADATA, () => {
         this.load = true;
         this.initElement();
         this.initBarView();

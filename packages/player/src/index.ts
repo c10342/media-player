@@ -12,12 +12,17 @@ import {
   deepClone
 } from "@lin-media/utils";
 import defaultOptions from "./config/default";
+import { PlayerEvents, VideoEvents } from "./config/event";
 
 function getPluginName(ctor: any) {
   return ctor.pluginName || ctor.name;
 }
 
 class MediaPlayer {
+  // 播放器自定义事件
+  static PlayerEvents = PlayerEvents;
+  // 原生video标签事件
+  static VideoEvents = VideoEvents;
   // 默认语言
   static lang = LangTypeEnum.zh;
   // 自定义语言包

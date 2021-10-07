@@ -11,7 +11,6 @@ import { ContextmenuOptions, MenuItem } from "./types";
 import menuListTpl from "./template/menu-list.art";
 
 import "./style/index.scss";
-import { PlayerEvents } from "@lin-media/player";
 
 class Contextmenu {
   static pluginName = pluginName;
@@ -64,7 +63,10 @@ class Contextmenu {
       eventName: "scroll",
       handler: this._hideMenu.bind(this)
     });
-    this._instance.$on(PlayerEvents.DESTROY, this._destroy.bind(this));
+    this._instance.$on(
+      MediaPlayer.PlayerEvents.DESTROY,
+      this._destroy.bind(this)
+    );
   }
 
   private _onMenuClick(event: MouseEvent) {
