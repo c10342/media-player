@@ -73,9 +73,6 @@ function writeTpl() {
   tplList.forEach((tplSrc) => {
     const result = artTemplate(tplSrc, parmas);
     let compSrc = getCompFiles(tplSrc, fileDir);
-    if (compSrc.endsWith("name.ts.art")) {
-      compSrc = compSrc.replace("name.ts.art", `${componentName}.ts.art`);
-    }
     compSrc = compSrc.replace(".art", "");
     makeDir(path.dirname(compSrc));
     fs.writeFileSync(compSrc, result);
