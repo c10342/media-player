@@ -1,7 +1,7 @@
-import checkData from "./checkData";
+import checkData from "./check-data";
 import EventEmit from "./event-emit";
 import EventManager from "./event-manager";
-import getBoundingClientRect from "./getBoundingClientRect";
+import getBoundingClientRect from "./get-bounding-client-rect";
 import { isFunction, isMobile, isUndef } from "./is";
 import userSelect from "./user-select";
 
