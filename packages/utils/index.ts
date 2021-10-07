@@ -12,3 +12,4 @@ export { default as EventEmit } from "./src/event-emit";
 export { default as Drag } from "./src/drag";
 export { default as getBoundingClientRect } from "./src/getBoundingClientRect";
 export { default as getViewPortInfo } from "./src/getViewPortInfo";
+export { default as deepMerge } from "./src/deep-merge";
