@@ -52,6 +52,18 @@ module.exports = {
           { text: "微信小程序", link: "http://wxui.linjiafu.top/" },
           { text: "vue2组件库", link: "http://ui.linjiafu.top/" }
         ]
+      },
+      {
+        text: "更新日志",
+        items: [
+          { text: "播放器", link: "/logs/player" },
+          { text: "弹幕", link: "/logs/danmaku" },
+          { text: "截图", link: "/logs/screenshot" },
+          { text: "缩放", link: "/logs/zoom" },
+          { text: "右键菜单", link: "/logs/contextmenu" },
+          { text: "视频缩略图预览", link: "/logs/preview" },
+          { text: "自定义进度条提示点", link: "/logs/highlight" }
+        ]
       }
     ],
     sidebarDepth: 2,
