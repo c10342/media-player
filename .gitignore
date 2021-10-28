@@ -8,6 +8,7 @@ node_modules
 /scripts/userInfo.js
 package-lock.json
 yarn.lock
+lerna-debug.log
 
 
 # local env files
