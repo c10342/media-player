@@ -1,5 +1,8 @@
 ---
 home: true
+heroImage: /images/logo.png
+heroText: 欢迎使用 MediaPlayer
+tagline: 一个插件化的H5视频播放器
 actionText: 快速上手 →
 actionLink: /guide/
 features:

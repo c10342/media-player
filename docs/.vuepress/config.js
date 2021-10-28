@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-  title: "MediaPlayer",
+  title: "H5 视频播放器",
   description: "欢迎使用 MediaPlayer",
   plugins: {
     "vuepress-plugin-typescript": {
