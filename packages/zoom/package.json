@@ -1,6 +1,6 @@
 {
   "name": "@lin-media/zoom",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "zoom",
   "main": "dist/index.js",
   "doc": "index.ts",
@@ -19,7 +19,7 @@
   "author": "c10342",
   "license": "MIT",
   "dependencies": {
-    "@lin-media/player": "^1.0.0",
-    "@lin-media/utils": "^1.0.0"
+    "@lin-media/player": "^1.1.0",
+    "@lin-media/utils": "^1.0.1"
   }
 }
