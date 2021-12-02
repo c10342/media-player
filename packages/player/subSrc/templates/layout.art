@@ -1,0 +1,4 @@
+<div class="player-container">
+  <div class="player-video-wrapper"></div>
+  <div class="player-controls-slot"></div>
+</div>
