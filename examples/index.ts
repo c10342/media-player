@@ -156,7 +156,7 @@ const player: any = new VideoPlayer({
     //   url: "https://api.dogecloud.com/player/get.m3u8?vcode=5ac682e6f8231991&userId=17&ext=.m3u8"
     // }
   ],
-  speedList,
+  speedList
   // plugins: [Screenshot, Zoom, Danmaku, Contextmenu],
   // Highlight: {
   //   jump: true,
@@ -189,8 +189,8 @@ const player: any = new VideoPlayer({
   //   subMenuItemWidth: "100px"
   // }
   // controls:false
-  // hotkey:true
-  live: true
+  // hotkey:false,
+  // live: true
   // autoplay: true,
   // muted:true
   // customType(videoElement, videoObj) {
