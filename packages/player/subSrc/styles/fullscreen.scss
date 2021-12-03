@@ -1,5 +1,6 @@
 .player-fullscreen-container {
   position: relative;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,7 +20,7 @@
 
   .player-fullscreen-web {
     position: absolute;
-    top: 4px;
+    top: 0;
     left: 0;
     z-index: 20;
     display: none;

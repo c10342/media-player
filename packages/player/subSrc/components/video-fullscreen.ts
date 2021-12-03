@@ -17,8 +17,6 @@ class VideoFullscreen {
   private _playerInstance: MediaPlayer;
   // 组件根元素
   private _compRootElement: HTMLElement;
-  private _fullscreenWebElement: HTMLElement;
-  private _fullscreenBrowserElement: HTMLElement;
 
   private _isWebFullscreen = false;
   private _eventManager = new EventManager();
@@ -47,23 +45,19 @@ class VideoFullscreen {
     const html = FullscreenTpl();
     this._compRootElement = parseHtmlToDom(html);
     slotElement.appendChild(this._compRootElement);
-    this._fullscreenWebElement = this._querySelector(".player-fullscreen-web");
-    this._fullscreenBrowserElement = this._querySelector(
-      ".player-fullscreen-browser"
-    );
   }
 
   private _initListener() {
     this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
     // 网页全屏
     this._eventManager.addEventListener({
-      element: this._fullscreenWebElement,
+      element: this._querySelector(".player-fullscreen-web"),
       eventName: "click",
       handler: this._onWebFullscreen.bind(this)
     });
     // 浏览器全屏
     this._eventManager.addEventListener({
-      element: this._fullscreenBrowserElement,
+      element: this._querySelector(".player-fullscreen-browser"),
       eventName: "click",
       handler: this._onBrowserFullscreen.bind(this)
     });
