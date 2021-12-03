@@ -1,23 +1,6 @@
 
   <div class="player-video-slot">
-  <video 
-  class="player-video" 
-  webkit-playsinline
-  playsinline
-  {{if preload}}
-  preload='{{preload}}'
-  {{/if}}
-  {{if poster}}
-  poster='{{poster}}'
-  {{/if}}
-  {{if crossorigin}} 
-  crossorigin="anonymous" 
-  {{/if}} 
-  {{if autoplay}} 
-  autoplay 
-  {{/if}}
-  >
-  </video>
+{{include './video-tag.art' }}
   </div>
 
   
