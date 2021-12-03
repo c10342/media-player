@@ -32,6 +32,8 @@ export interface ControlsObj {
   mobilePlayButton?: boolean;
   // 视频遮罩层控件
   videoMask?: boolean;
+  // 下方控制条
+  controlBar?: boolean;
 }
 
 // 播放器参数
