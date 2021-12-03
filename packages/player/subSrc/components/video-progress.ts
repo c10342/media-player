@@ -22,8 +22,6 @@ class VideoProgress {
 
   private _progressMaskElement: HTMLElement;
 
-  private _progressBallElement: HTMLElement;
-
   private _videoPlayedElement: HTMLElement;
 
   private _videoLoadedElement: HTMLElement;
@@ -58,7 +56,6 @@ class VideoProgress {
     this._compRootElement = parseHtmlToDom(html);
     slotElement.appendChild(this._compRootElement);
     this._progressMaskElement = this._querySelector(".player-process-mask");
-    this._progressBallElement = this._querySelector(".player-process-ball");
     this._videoPlayedElement = this._querySelector(".player-process-played");
     this._videoLoadedElement = this._querySelector(".player-process-loaded");
     this._processTimeElement = this._querySelector(".player-process-time");
@@ -75,7 +72,7 @@ class VideoProgress {
 
   private _initDrag() {
     this._dragInstance = new Drag({
-      dragElement: this._progressBallElement,
+      dragElement: this._querySelector(".player-process-ball"),
       wrapperElement: this._progressMaskElement
     });
     // 鼠标移动
