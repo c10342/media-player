@@ -63,7 +63,7 @@ class EventEmit {
     return this;
   }
   // 移除所有事件
-  protected clear() {
+  clear() {
     this.eventMap = {};
   }
 }
