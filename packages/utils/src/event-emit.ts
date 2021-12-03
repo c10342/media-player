@@ -39,6 +39,8 @@ class EventEmit {
       handler.call(this, ...args);
       this.$off(eventName, fn);
     };
+    // 保存原有的函数，防止在没有触发前，用户取消监听
+    fn._fn = handler;
     this.$on(eventName, fn);
     return this;
   }
@@ -51,7 +53,9 @@ class EventEmit {
     if (!isFunction(handler)) {
       delete this.eventMap[eventName];
     } else {
-      const index = this.eventMap[eventName].findIndex((fn) => fn === handler);
+      const index = this.eventMap[eventName].findIndex(
+        (fn: any) => fn === handler || fn._fn == handler
+      );
       if (index > -1) {
         this.eventMap[eventName].splice(index, 1);
       }
