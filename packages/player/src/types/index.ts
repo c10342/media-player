@@ -1,3 +1,5 @@
+import { LangTypeEnum } from "@lin-media/utils";
+
 // 视频列表项
 export type VideoListItem = { label: string; url: string; default?: boolean };
 // 视频列表
@@ -30,6 +32,8 @@ export interface ControlsObj {
   mobilePlayButton?: boolean;
   // 视频遮罩层控件
   videoMask?: boolean;
+  // 下方控制条
+  controlBar?: boolean;
 }
 
 // 播放器参数
@@ -60,6 +64,13 @@ export interface PlayerOptions {
   poster?: string;
   // 控件相关
   controls?: false | ControlsObj;
+  // 语言
+  lang?: LangTypeEnum;
+  // 自定义语言包
+  customLanguage?: {
+    MediaPlayer: any;
+    [key: string]: any;
+  };
   // 加这个是给插件使用的
   [key: string]: any;
 }
