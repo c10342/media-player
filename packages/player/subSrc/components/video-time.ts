@@ -29,7 +29,9 @@ class VideoTime {
   }
 
   private _initDom(slotElement: HTMLElement) {
-    const html = TimeTpl();
+    const html = TimeTpl({
+      isMobile: this._playerInstance.$isMobile
+    });
     this._compRootElement = parseHtmlToDom(html);
     slotElement.appendChild(this._compRootElement);
     this._totalTimeElement = this._querySelector(".player-totalTime");

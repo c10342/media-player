@@ -51,6 +51,7 @@ class VideoControls {
     const leftSlotElement = this._querySelector(".player-controls-left");
     const rightSlotElement = this._querySelector(".player-controls-right");
     const controls = $options.controls as ControlsObj;
+    const isMobile = this._playerInstance.$isMobile;
     const compList = [
       {
         ctor: VideoProgress,
@@ -60,12 +61,12 @@ class VideoControls {
       {
         ctor: VideoPlayButton,
         slot: leftSlotElement,
-        init: !this._playerInstance.$isMobile && controls.playButton
+        init: !isMobile && controls.playButton
       },
       {
         ctor: VideoVolume,
         slot: leftSlotElement,
-        init: controls.volume
+        init: controls.volume && !isMobile
       },
       {
         ctor: VideoTime,
@@ -127,33 +128,42 @@ class VideoControls {
 
   // 视频播放事件处理
   private _onVideoPlay() {
-    this._hideControls();
+    this.$hideControls();
   }
   // 视频暂停事件处理
   private _onVideoPause() {
-    this._showControls();
+    this.$showControls();
   }
 
   // 鼠标进入容器事件处理
   private _onMouseenter() {
     this._isEnter = true;
-    this._showControls();
+    this.$showControls();
   }
   // 鼠标离开容器事件处理
   private _onMouseleave() {
     this._isEnter = false;
-    this._hideControls();
+    this.$hideControls();
+  }
+
+  $toggleControls() {
+    this._isEnter = !this._isEnter;
+    if (this._isEnter) {
+      this._hide();
+    } else {
+      this._show();
+    }
   }
 
   // 显示控制条
-  private _showControls() {
+  $showControls() {
     // 非播放状态，或者鼠标在播放器内，显示出来
     if (this._playerInstance.paused || this._isEnter) {
       this._show();
     }
   }
   // 隐藏控制条
-  private _hideControls(time = 4000) {
+  $hideControls(time = 4000) {
     // 销毁定时器
     this._destroyTimer();
     // 4秒后隐藏

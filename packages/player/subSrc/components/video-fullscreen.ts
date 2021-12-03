@@ -42,7 +42,9 @@ class VideoFullscreen {
   }
 
   private _initDom(slotElement: HTMLElement) {
-    const html = FullscreenTpl();
+    const html = FullscreenTpl({
+      isMobile: this._playerInstance.$isMobile
+    });
     this._compRootElement = parseHtmlToDom(html);
     slotElement.appendChild(this._compRootElement);
   }

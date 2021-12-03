@@ -3,4 +3,8 @@
   font-size: 12px;
   color: var(--player-text-color, $text-color);
   user-select: none;
+
+  &.player-time-tip-mobile {
+    margin-left: 0;
+  }
 }

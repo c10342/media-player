@@ -9,7 +9,12 @@ export enum PlayerEvents {
   EXIT_WEB_SCREEN = "exit_web_screen",
   SHOW_CONTROLS = "show_controls",
   HIDE_CONTROLS = "hide_controls",
-  RESIZE = "resize"
+  RESIZE = "resize",
+  KEYBOARD_RIGHT = "keyboard_right",
+  KEYBOARD_LEFT = "keyboard_left",
+  KEYBOARD_UP = "keyboard_up",
+  KEYBOARD_DOWN = "keyboard_down",
+  KEYBOARD_SPACE = "keyboard_space"
 }
 
 // video标签事件

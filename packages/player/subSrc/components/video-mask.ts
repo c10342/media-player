@@ -30,12 +30,19 @@ class VideoMask {
       eventName: "click",
       handler: this._onMaskClick.bind(this)
     });
+
     this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
   }
   //   点击遮罩层
   private _onMaskClick() {
-    this._playerInstance.toggle();
+    if (this._playerInstance.$isMobile) {
+      this._playerInstance.toggleControls();
+    } else {
+      // pc端处理方式
+      this._playerInstance.toggle();
+    }
   }
+
   // 事件监听
   private _on(eventName: string, handler: Function) {
     this._playerInstance.$eventBus.$on(eventName, handler);

@@ -35,6 +35,10 @@ class VideoPlayer {
     return this.$videoElement?.paused;
   }
 
+  get $currentTime() {
+    return this.$videoElement.currentTime;
+  }
+
   constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
     // 播放器实例
     this._playerInstance = playerInstance;

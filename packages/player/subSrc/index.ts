@@ -18,6 +18,8 @@ import VideoControls from "./components/video-controls";
 import VideoMask from "./components/video-mask";
 import VideoLoading from "./components/video-loading";
 import VideoTip from "./components/video-tip";
+import ShortcutKey from "./components/shortcut-key";
+import MobilePlayButton from "./components/mobile-play-button";
 import { PlayerEvents, VideoEvents } from "./config/event";
 
 interface PlayerOptionsParams extends PlayerOptions {
@@ -65,12 +67,14 @@ class MediaPlayer {
 
   $rootElement: HTMLElement;
 
-  private _videoPlayerInstance: VideoPlayer;
+  private _videoPlayerInstance: VideoPlayer | null;
 
   private _videoTipInstance: VideoTip | null;
 
+  private _videoControlsInstance: VideoControls | null;
+
   get duration() {
-    return this._videoPlayerInstance.$duration;
+    return this._videoPlayerInstance?.$duration ?? 0;
   }
 
   // 音量
@@ -80,6 +84,10 @@ class MediaPlayer {
 
   get paused() {
     return this._videoPlayerInstance?.$paused;
+  }
+
+  get currentTime() {
+    return this._videoPlayerInstance?.$currentTime ?? 0;
   }
 
   constructor(options: PlayerOptions) {
@@ -133,44 +141,54 @@ class MediaPlayer {
     this._videoPlayerInstance = new VideoPlayer(this, this.$rootElement);
     const controls = this.$options.controls;
     if (controls) {
-      if (controls.tip) {
-        this._videoTipInstance = new VideoTip(this, this.$rootElement);
-      }
       const compList = [
-        { ctor: VideoControls, init: controls.controlBar },
+        { ctor: VideoTip, init: controls.tip, key: "_videoTipInstance" },
+        {
+          ctor: VideoControls,
+          init: controls.controlBar,
+          key: "_videoControlsInstance"
+        },
         { ctor: VideoMask, init: controls.videoMask },
-        { ctor: VideoLoading, init: controls.loading }
+        { ctor: VideoLoading, init: controls.loading },
+        {
+          ctor: MobilePlayButton,
+          init: controls.mobilePlayButton && this.$isMobile
+        }
       ];
       compList.forEach((item) => {
         if (item.init) {
-          new item.ctor(this, this.$rootElement);
+          if (item.key) {
+            (this as any)[item.key] = new item.ctor(this, this.$rootElement);
+          } else {
+            new item.ctor(this, this.$rootElement);
+          }
         }
       });
     }
-  }
 
-  private _querySelector<T extends HTMLElement>(selector: string) {
-    return this.$rootElement.querySelector(selector) as T;
+    if (this.$options.hotkey && !this.$isMobile) {
+      new ShortcutKey(this);
+    }
   }
 
   seek(time: number) {
-    this._videoPlayerInstance.$seek(time);
+    this._videoPlayerInstance?.$seek(time);
   }
 
   play() {
-    this._videoPlayerInstance.$play();
+    this._videoPlayerInstance?.$play();
   }
 
   pause() {
-    this._videoPlayerInstance.$pause();
+    this._videoPlayerInstance?.$pause();
   }
 
   toggle() {
-    this._videoPlayerInstance.$toggle();
+    this._videoPlayerInstance?.$toggle();
   }
 
   setVolume(volume: number) {
-    this._videoPlayerInstance.$setVolume(volume);
+    this._videoPlayerInstance?.$setVolume(volume);
   }
 
   setNotice(tip: string, time?: number) {
@@ -178,11 +196,23 @@ class MediaPlayer {
   }
 
   setSpeed(speed: number) {
-    this._videoPlayerInstance.$setSpeed(speed);
+    this._videoPlayerInstance?.$setSpeed(speed);
   }
 
   switchDefinition(index: number) {
-    this._videoPlayerInstance.$switchDefinition(index);
+    this._videoPlayerInstance?.$switchDefinition(index);
+  }
+
+  hideControls() {
+    this._videoControlsInstance?.$hideControls();
+  }
+
+  showControls() {
+    this._videoControlsInstance?.$showControls();
+  }
+
+  toggleControls() {
+    this._videoControlsInstance?.$toggleControls();
   }
 
   // 对外的
@@ -196,6 +226,16 @@ class MediaPlayer {
 
   $once(eventName: string, handler: Function) {
     this.$eventBus.$on(eventName, handler);
+  }
+
+  $off(eventName: string, handler?: Function) {
+    this.$eventBus.$off(eventName, handler);
+  }
+
+  destroy() {
+    this.$eventBus.clear();
+    this._videoPlayerInstance = null;
+    this._videoTipInstance = null;
   }
 }
 
