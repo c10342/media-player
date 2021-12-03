@@ -1,0 +1,33 @@
+.player-fullscreen-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  .player-icon-item {
+    font-size: 22px;
+  }
+}
+
+.player-fullscreen-pc {
+  &:hover {
+    .player-fullscreen-web {
+      display: block;
+    }
+  }
+
+  .player-fullscreen-web {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    z-index: 20;
+    display: none;
+    height: 23px;
+    transform: translateY(-100%);
+  }
+}
+
+.player-fullscreen-mobile {
+  flex-direction: row;
+}

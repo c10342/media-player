@@ -4,6 +4,7 @@ import {
   EventManager,
   getBoundingClientRect,
   isNumber,
+  parseHtmlToDom,
   secondToTime
 } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
@@ -16,8 +17,8 @@ class VideoProgress {
   private _playerInstance: MediaPlayer;
   // dom事件管理器
   private _eventManager = new EventManager();
-  // 插槽
-  private _slotElement: HTMLElement;
+  // 组件根元素
+  private _compRootElement: HTMLElement;
 
   private _progressMaskElement: HTMLElement;
 
@@ -38,10 +39,8 @@ class VideoProgress {
   constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
     // 播放器实例
     this._playerInstance = playerInstance;
-    // 插槽
-    this._slotElement = slotElement;
     // 初始化dom
-    this._initDom();
+    this._initDom(slotElement);
     // 初始化拖拽事件
     this._initDrag();
     this._initListener();
@@ -49,14 +48,15 @@ class VideoProgress {
 
   // 查询元素
   private _querySelector<T extends HTMLElement>(selector: string) {
-    return this._slotElement.querySelector(selector) as T;
+    return this._compRootElement.querySelector(selector) as T;
   }
 
-  private _initDom() {
+  private _initDom(slotElement: HTMLElement) {
     const html = ProgressTpl({
       ...this._playerInstance.$options
     });
-    this._slotElement.innerHTML = html;
+    this._compRootElement = parseHtmlToDom(html);
+    slotElement.appendChild(this._compRootElement);
     this._progressMaskElement = this._querySelector(".player-process-mask");
     this._progressBallElement = this._querySelector(".player-process-ball");
     this._videoPlayedElement = this._querySelector(".player-process-played");

@@ -1,10 +1,12 @@
 import "./styles/index.scss";
 import {
   EventEmit,
+  isMobile,
   isString,
   isUndef,
   LangTypeEnum,
-  logWarn
+  logWarn,
+  parseHtmlToDom
 } from "@lin-media/utils";
 import defaultOptions from "./config/default-config";
 import { LangOptions, PlayerOptions } from "./types";
@@ -13,8 +15,9 @@ import initLocale from "./locale/index";
 import LayoutTpl from "./templates/layout.art";
 import VideoPlayer from "./components/video-player";
 import VideoControls from "./components/video-controls";
+import VideoMask from "./components/video-mask";
 
-interface PlayerOptionsParmas extends PlayerOptions {
+interface PlayerOptionsParams extends PlayerOptions {
   el: HTMLElement;
 }
 
@@ -52,11 +55,15 @@ class MediaPlayer {
     return MediaPlayer;
   }
 
-  $options: PlayerOptionsParmas;
+  $options: PlayerOptionsParams;
 
   $eventBus = new EventEmit();
 
   $i18n: any;
+
+  $isMobile = isMobile();
+
+  $rootElement: HTMLElement;
 
   private _videoPlayerInstance: VideoPlayer;
 
@@ -64,8 +71,13 @@ class MediaPlayer {
     return this._videoPlayerInstance.$duration;
   }
 
+  // 音量
+  get volume() {
+    return this._videoPlayerInstance?.$volume ?? 1;
+  }
+
   constructor(options: PlayerOptions) {
-    this.$options = options as PlayerOptionsParmas;
+    this.$options = options as PlayerOptionsParams;
     this._normalOptions();
     this._initI18n();
     this._initLayout();
@@ -102,28 +114,39 @@ class MediaPlayer {
   // 初始化布局模板
   private _initLayout() {
     const html = LayoutTpl();
-    const el = this.$options.el;
-    el.innerHTML = html;
+    this.$rootElement = parseHtmlToDom(html);
+    this.$options.el.appendChild(this.$rootElement);
   }
 
   // 初始化组件
   private _initComponents() {
-    const _querySelector = this._querySelector.bind(this);
-
-    this._videoPlayerInstance = new VideoPlayer(
-      this,
-      _querySelector(".player-video-wrapper")
-    );
-    new VideoControls(this, _querySelector(".player-controls-slot"));
+    this._videoPlayerInstance = new VideoPlayer(this, this.$rootElement);
+    new VideoControls(this, this.$rootElement);
+    new VideoMask(this, this.$rootElement);
   }
 
   private _querySelector<T extends HTMLElement>(selector: string) {
-    const el = this.$options.el;
-    return el.querySelector(selector) as T;
+    return this.$rootElement.querySelector(selector) as T;
   }
 
   seek(time: number) {
     this._videoPlayerInstance.$seek(time);
+  }
+
+  play() {
+    this._videoPlayerInstance.$play();
+  }
+
+  pause() {
+    this._videoPlayerInstance.$pause();
+  }
+
+  toggle() {
+    this._videoPlayerInstance.$toggle();
+  }
+
+  setVolume(volume: number) {
+    this._videoPlayerInstance.$setVolume(volume);
   }
 
   setNotice(tip: string) {

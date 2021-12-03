@@ -1,4 +1,5 @@
 
+  <div class="player-video-slot">
   <video 
   class="player-video" 
   webkit-playsinline
@@ -17,6 +18,6 @@
   {{/if}}
   >
   </video>
+  </div>
 
-  <div class="player-video-mask"></div>
   

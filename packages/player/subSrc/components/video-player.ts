@@ -1,4 +1,10 @@
-import { EventManager, isFunction, isUndef } from "@lin-media/utils";
+import {
+  checkData,
+  EventManager,
+  isFunction,
+  isUndef,
+  parseHtmlToDom
+} from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
 import VideoTpl from "../templates/video.art";
@@ -11,10 +17,8 @@ class VideoPlayer {
   private _eventManager = new EventManager();
   // 当前正在播放的视频索引
   private _currentIndex = 0;
-  // 插槽
-  private _slotElement: HTMLElement;
-
-  private _videoMaskElement: HTMLElement;
+  // 组件根元素
+  private _compRootElement: HTMLElement;
 
   $videoElement: HTMLVideoElement;
 
@@ -22,13 +26,15 @@ class VideoPlayer {
     return this.$videoElement?.duration;
   }
 
+  get $volume() {
+    return this.$videoElement?.volume;
+  }
+
   constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
     // 播放器实例
     this._playerInstance = playerInstance;
-    // 插槽
-    this._slotElement = slotElement;
     // 初始化dom
-    this._initDom();
+    this._initDom(slotElement);
     // 初始化video标签视频
     this._initPlayer();
     // 初始化事件监听
@@ -36,16 +42,17 @@ class VideoPlayer {
   }
   // 查询元素
   private _querySelector<T extends HTMLVideoElement>(selector: string) {
-    return this._slotElement.querySelector(selector) as T;
+    return this._compRootElement.querySelector(selector) as T;
   }
   // 初始化dom
-  private _initDom() {
+  private _initDom(slotElement: HTMLElement) {
     const { $options } = this._playerInstance;
     const html = VideoTpl($options);
+    this._compRootElement = parseHtmlToDom(html);
+
     // 将html插入到插槽中
-    this._slotElement.innerHTML = html;
+    slotElement.appendChild(this._compRootElement);
     this.$videoElement = this._querySelector(".player-video");
-    this._videoMaskElement = this._querySelector(".player-video-mask");
   }
 
   // 获取视频
@@ -109,18 +116,6 @@ class VideoPlayer {
     this._on(PlayerEvents.DESTROY, () => {
       this._destroy();
     });
-    this._eventManager.addEventListener({
-      element: this._videoMaskElement,
-      eventName: "click",
-      handler: () => {
-        this._onVideoMaskClick();
-      }
-    });
-  }
-
-  // 点击遮罩层
-  private _onVideoMaskClick() {
-    this.$toggle();
   }
 
   private _destroy() {
@@ -147,6 +142,11 @@ class VideoPlayer {
 
   $seek(time: number) {
     this.$videoElement.currentTime = time;
+  }
+
+  $setVolume(volume: number) {
+    volume = checkData(volume, 0, 1);
+    this.$videoElement.volume = volume;
   }
 }
 
