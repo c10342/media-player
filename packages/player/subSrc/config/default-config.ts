@@ -19,7 +19,8 @@ const defaultOptions = {
     time: true,
     loading: true,
     mobilePlayButton: true,
-    videoMask: true
+    videoMask: true,
+    controlBar: true
   },
   //   插件
   plugins: [] as Array<Function>,
