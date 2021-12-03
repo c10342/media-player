@@ -46,21 +46,21 @@ import "./index.scss";
 //   }
 // ];
 
-// const speedList = [
-//   {
-//     label: "0.5x",
-//     value: 0.5
-//   },
-//   {
-//     label: "1x",
-//     value: 1,
-//     default: true
-//   },
-//   {
-//     label: "1.5x",
-//     value: 1.5
-//   }
-// ];
+const speedList = [
+  {
+    label: "0.5x",
+    value: 0.5
+  },
+  {
+    label: "1x",
+    value: 1,
+    default: true
+  },
+  {
+    label: "1.5x",
+    value: 1.5
+  }
+];
 // const contextMenuList = [
 //   {
 //     label: "播放",
@@ -155,8 +155,8 @@ const player: any = new VideoPlayer({
     //   label: "超清",
     //   url: "https://api.dogecloud.com/player/get.m3u8?vcode=5ac682e6f8231991&userId=17&ext=.m3u8"
     // }
-  ]
-  // speedList,
+  ],
+  speedList,
   // plugins: [Screenshot, Zoom, Danmaku, Contextmenu],
   // Highlight: {
   //   jump: true,
@@ -188,11 +188,9 @@ const player: any = new VideoPlayer({
   //   meunItemWidth: "200px",
   //   subMenuItemWidth: "100px"
   // }
-  // controls:{
-  //   videoMask:false
-  // }
+  // controls:false
   // hotkey:true
-  // live:true
+  live: true
   // autoplay: true,
   // muted:true
   // customType(videoElement, videoObj) {
@@ -201,7 +199,7 @@ const player: any = new VideoPlayer({
   //   hls.attachMedia(videoElement);
   // }
 });
-
+(window as any).player = player;
 // (player as any).setHighlight(highlightList);
 
 player.$on("play", () => {
