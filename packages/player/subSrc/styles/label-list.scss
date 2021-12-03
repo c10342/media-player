@@ -1,0 +1,69 @@
+
+.player-label-list-container {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-right: 15px;
+  color: var(--player-text-color, $text-color);
+
+  &:hover {
+    .player-label-list-wrapper {
+      display: block;
+    }
+  }
+}
+
+.player-label-list-wrapper {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: none;
+  min-width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  transform: translate(-50%, -100%);
+}
+
+.player-label-list-item {
+  height: 30px;
+  padding: 0 8px;
+  font-size: 12px;
+  line-height: 30px;
+  color: var(--player-text-color, $text-color);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: var(--player-text-wrapper-background-color, $text-wrapper-background-color);
+
+  &:hover {
+    color: var(--player-theme, $main-color);
+  }
+}
+
+.player-label-active-item {
+  color: var(--player-theme, $main-color);
+}
+
+.player-label-list-label {
+  width: 60px;
+  height: 26px;
+  overflow: hidden;
+  font-size: 13px;
+  font-style: normal;
+  line-height: 26px;
+  color: var(--player-text-color, $text-color);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: var(--player-label-background-color, $label-background-color);
+  border-radius: 15px;
+
+  &:hover {
+    color: var(--player-theme, $main-color);
+  }
+}
