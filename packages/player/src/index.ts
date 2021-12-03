@@ -90,6 +90,10 @@ class MediaPlayer {
     return this._videoPlayerInstance?.$currentTime ?? 0;
   }
 
+  get videoElement() {
+    return this._videoPlayerInstance?.$videoElement;
+  }
+
   constructor(options: PlayerOptions) {
     this.$options = mergeConfig(
       options,
@@ -215,6 +219,18 @@ class MediaPlayer {
     this._videoControlsInstance?.$toggleControls();
   }
 
+  // 全屏
+  // get fullScreen() {
+  //   return {
+  //     request: (type: string) => {
+  //       this.?.fullScreen.request(type);
+  //     },
+  //     cancel: (type: string) => {
+  //       this.?.fullScreen.cancel(type);
+  //     }
+  //   };
+  // }
+
   // 对外的
   $on(eventName: string, handler: Function) {
     this.$eventBus.$on(eventName, handler);
@@ -233,9 +249,12 @@ class MediaPlayer {
   }
 
   destroy() {
+    this.$eventBus.$emit(PlayerEvents.DESTROY);
     this.$eventBus.clear();
     this._videoPlayerInstance = null;
     this._videoTipInstance = null;
+    this.$rootElement.remove();
+    (this as any).$rootElement = null;
   }
 }
 
