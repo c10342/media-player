@@ -10,23 +10,23 @@ import {
 } from "@lin-media/utils";
 import defaultOptions from "./config/default-config";
 import { LangOptions, PlayerOptions } from "./types";
-import { getPluginName } from "./utils/index";
+import { getPluginName, mergeConfig } from "./utils/index";
 import initLocale from "./locale/index";
 import LayoutTpl from "./templates/layout.art";
 import VideoPlayer from "./components/video-player";
 import VideoControls from "./components/video-controls";
 import VideoMask from "./components/video-mask";
+import VideoLoading from "./components/video-loading";
+import VideoTip from "./components/video-tip";
+import { PlayerEvents, VideoEvents } from "./config/event";
 
 interface PlayerOptionsParams extends PlayerOptions {
   el: HTMLElement;
 }
 
 class MediaPlayer {
-  static PlayerEvents = { DESTROY: "" };
-  static VideoEvents = { LOADEDMETADATA: "" };
-  $once(eventName: string, data: any) {
-    // todo
-  }
+  static PlayerEvents = PlayerEvents;
+  static VideoEvents = VideoEvents;
 
   // 全局配置
   static globalConfig = defaultOptions;
@@ -67,6 +67,8 @@ class MediaPlayer {
 
   private _videoPlayerInstance: VideoPlayer;
 
+  private _videoTipInstance: VideoTip | null;
+
   get duration() {
     return this._videoPlayerInstance.$duration;
   }
@@ -76,8 +78,16 @@ class MediaPlayer {
     return this._videoPlayerInstance?.$volume ?? 1;
   }
 
+  get paused() {
+    return this._videoPlayerInstance?.$paused;
+  }
+
   constructor(options: PlayerOptions) {
-    this.$options = options as PlayerOptionsParams;
+    this.$options = mergeConfig(
+      options,
+      MediaPlayer.globalConfig
+    ) as PlayerOptionsParams;
+
     this._normalOptions();
     this._initI18n();
     this._initLayout();
@@ -121,8 +131,22 @@ class MediaPlayer {
   // 初始化组件
   private _initComponents() {
     this._videoPlayerInstance = new VideoPlayer(this, this.$rootElement);
-    new VideoControls(this, this.$rootElement);
-    new VideoMask(this, this.$rootElement);
+    const controls = this.$options.controls;
+    if (controls) {
+      if (controls.tip) {
+        this._videoTipInstance = new VideoTip(this, this.$rootElement);
+      }
+      const compList = [
+        { ctor: VideoControls, init: controls.controlBar },
+        { ctor: VideoMask, init: controls.videoMask },
+        { ctor: VideoLoading, init: controls.loading }
+      ];
+      compList.forEach((item) => {
+        if (item.init) {
+          new item.ctor(this, this.$rootElement);
+        }
+      });
+    }
   }
 
   private _querySelector<T extends HTMLElement>(selector: string) {
@@ -149,8 +173,16 @@ class MediaPlayer {
     this._videoPlayerInstance.$setVolume(volume);
   }
 
-  setNotice(tip: string) {
-    // todo
+  setNotice(tip: string, time?: number) {
+    this._videoTipInstance?.$setNotice(tip, time);
+  }
+
+  setSpeed(speed: number) {
+    this._videoPlayerInstance.$setSpeed(speed);
+  }
+
+  switchDefinition(index: number) {
+    this._videoPlayerInstance.$switchDefinition(index);
   }
 
   // 对外的
@@ -160,6 +192,10 @@ class MediaPlayer {
 
   $emit(eventName: string, data?: any) {
     this.$eventBus.$emit(eventName, data);
+  }
+
+  $once(eventName: string, handler: Function) {
+    this.$eventBus.$on(eventName, handler);
   }
 }
 
