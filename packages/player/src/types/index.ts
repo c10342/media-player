@@ -1,8 +1,6 @@
 import { LangTypeEnum } from "@lin-media/utils";
 import VideoControls from "../components/video-controls";
 import VideoFullscreen from "../components/video-fullscreen";
-import VideoLoading from "../components/video-loading";
-import VideoMask from "../components/video-mask";
 import VideoPlayer from "../components/video-player";
 import VideoTip from "../components/video-tip";
 
