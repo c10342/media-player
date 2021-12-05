@@ -1,0 +1,48 @@
+.highlight-container {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3px;
+  padding: 5px 0;
+  cursor: pointer;
+  transform: translateX(-50%);
+
+  &:hover {
+    .highlight-point {
+      width: 8px;
+      height: 6px;
+    }
+
+    .highlight-point-tip {
+      opacity: 1;
+    }
+  }
+}
+
+.highlight-point {
+  width: 6px;
+  height: 3px;
+  background-color: #fff;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.highlight-point-tip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  box-sizing: border-box;
+  padding: 5px 7px;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.62);
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  transform: translate(-50%, -100%);
+}
