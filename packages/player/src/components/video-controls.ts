@@ -98,12 +98,20 @@ class VideoControls {
       {
         ctor: VideoFullscreen,
         slot: rightSlotElement,
-        init: controls.fullscreen
+        init: controls.fullscreen,
+        key: "videoFullscreen"
       }
     ];
     compList.forEach((item) => {
       if (item.init) {
-        new item.ctor(this._playerInstance, item.slot);
+        if (item.key) {
+          this._playerInstance.$plugins[item.key] = new item.ctor(
+            this._playerInstance,
+            item.slot
+          );
+        } else {
+          new item.ctor(this._playerInstance, item.slot);
+        }
       }
     });
   }

@@ -1,4 +1,10 @@
 import { LangTypeEnum } from "@lin-media/utils";
+import VideoControls from "../components/video-controls";
+import VideoFullscreen from "../components/video-fullscreen";
+import VideoLoading from "../components/video-loading";
+import VideoMask from "../components/video-mask";
+import VideoPlayer from "../components/video-player";
+import VideoTip from "../components/video-tip";
 
 // 视频列表项
 export type VideoListItem = { label: string; url: string; default?: boolean };
@@ -99,4 +105,16 @@ export interface DragDataInfo {
   offsetY: number;
   percentX: number;
   percentY: number;
+}
+
+export interface PlayerOptionsParams extends PlayerOptions {
+  el: HTMLElement;
+}
+
+export interface PluginsOptions {
+  videoTip?: VideoTip;
+  videoControls?: VideoControls;
+  videoPlayer?: VideoPlayer;
+  videoFullscreen?: VideoFullscreen;
+  [key: string]: any;
 }

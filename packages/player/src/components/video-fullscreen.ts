@@ -7,7 +7,7 @@ import {
   parseHtmlToDom
 } from "@lin-media/utils";
 import { WEBFULLSCREENCLASSNAME } from "../config/constant";
-import { KeyCodeEnum } from "../config/enum";
+import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
 import { PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
 import FullscreenTpl from "../templates/fullscreen.art";
@@ -90,7 +90,7 @@ class VideoFullscreen {
     }
   }
   // 进入浏览器全屏
-  _enterBrowserFullScreen() {
+  private _enterBrowserFullScreen() {
     if (this._isWebFullscreen) {
       // 如果是浏览器全屏需要先退出
       this._exitWebFullscreen();
@@ -102,7 +102,7 @@ class VideoFullscreen {
     }
   }
   // 退出浏览器全屏
-  _exitBrowserFullscreen() {
+  private _exitBrowserFullscreen() {
     if (this._isWebFullscreen) {
       // 如果是浏览器全屏需要先退出
       this._exitWebFullscreen();
@@ -113,7 +113,7 @@ class VideoFullscreen {
     }
   }
   // 退出网页全屏
-  _exitWebFullscreen() {
+  private _exitWebFullscreen() {
     this._isWebFullscreen = false;
     const containerElement = this._playerInstance.$rootElement;
     if (containerElement.classList.contains(WEBFULLSCREENCLASSNAME)) {
@@ -122,7 +122,7 @@ class VideoFullscreen {
     }
   }
   // 进入网页全屏
-  _enterWebFullscreen() {
+  private _enterWebFullscreen() {
     this._isWebFullscreen = true;
     const containerElement = this._playerInstance.$rootElement;
     if (!containerElement.classList.contains(WEBFULLSCREENCLASSNAME)) {
@@ -135,6 +135,22 @@ class VideoFullscreen {
     // 按下esc键，键盘左上角
     if (event.keyCode === KeyCodeEnum.esc && this._isWebFullscreen) {
       this._exitWebFullscreen();
+    }
+  }
+
+  $request(type: string) {
+    if (type === FullScreenTypeEnum.web) {
+      this._enterWebFullscreen();
+    } else if (type === FullScreenTypeEnum.browser) {
+      this._enterBrowserFullScreen();
+    }
+  }
+
+  $cancel(type: string) {
+    if (type === FullScreenTypeEnum.web) {
+      this._exitWebFullscreen();
+    } else if (type === FullScreenTypeEnum.browser) {
+      this._exitBrowserFullscreen();
     }
   }
 

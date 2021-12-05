@@ -9,7 +9,12 @@ import {
   parseHtmlToDom
 } from "@lin-media/utils";
 import defaultOptions from "./config/default-config";
-import { LangOptions, PlayerOptions } from "./types";
+import {
+  LangOptions,
+  PlayerOptions,
+  PlayerOptionsParams,
+  PluginsOptions
+} from "./types";
 import { getPluginName, mergeConfig } from "./utils/index";
 import initLocale from "./locale/index";
 import LayoutTpl from "./templates/layout.art";
@@ -21,10 +26,6 @@ import VideoTip from "./components/video-tip";
 import ShortcutKey from "./components/shortcut-key";
 import MobilePlayButton from "./components/mobile-play-button";
 import { PlayerEvents, VideoEvents } from "./config/event";
-
-interface PlayerOptionsParams extends PlayerOptions {
-  el: HTMLElement;
-}
 
 class MediaPlayer {
   static PlayerEvents = PlayerEvents;
@@ -67,31 +68,27 @@ class MediaPlayer {
 
   $rootElement: HTMLElement;
 
-  private _videoPlayerInstance: VideoPlayer | null;
-
-  private _videoTipInstance: VideoTip | null;
-
-  private _videoControlsInstance: VideoControls | null;
+  $plugins: PluginsOptions = {};
 
   get duration() {
-    return this._videoPlayerInstance?.$duration ?? 0;
+    return this.$plugins.videoPlayer?.$duration ?? 0;
   }
 
   // 音量
   get volume() {
-    return this._videoPlayerInstance?.$volume ?? 1;
+    return this.$plugins.videoPlayer?.$volume ?? 1;
   }
 
   get paused() {
-    return this._videoPlayerInstance?.$paused;
+    return this.$plugins.videoPlayer?.$paused;
   }
 
   get currentTime() {
-    return this._videoPlayerInstance?.$currentTime ?? 0;
+    return this.$plugins.videoPlayer?.$currentTime ?? 0;
   }
 
   get videoElement() {
-    return this._videoPlayerInstance?.$videoElement;
+    return this.$plugins.videoPlayer?.$videoElement;
   }
 
   constructor(options: PlayerOptions) {
@@ -104,6 +101,7 @@ class MediaPlayer {
     this._initI18n();
     this._initLayout();
     this._initComponents();
+    this._initPlugins();
   }
 
   // 格式化一些参数
@@ -142,15 +140,15 @@ class MediaPlayer {
 
   // 初始化组件
   private _initComponents() {
-    this._videoPlayerInstance = new VideoPlayer(this, this.$rootElement);
     const controls = this.$options.controls;
     if (controls) {
       const compList = [
-        { ctor: VideoTip, init: controls.tip, key: "_videoTipInstance" },
+        { ctor: VideoPlayer, init: true, key: "videoPlayer" },
+        { ctor: VideoTip, init: controls.tip, key: "videoTip" },
         {
           ctor: VideoControls,
           init: controls.controlBar,
-          key: "_videoControlsInstance"
+          key: "videoControls"
         },
         { ctor: VideoMask, init: controls.videoMask },
         { ctor: VideoLoading, init: controls.loading },
@@ -162,7 +160,7 @@ class MediaPlayer {
       compList.forEach((item) => {
         if (item.init) {
           if (item.key) {
-            (this as any)[item.key] = new item.ctor(this, this.$rootElement);
+            this.$plugins[item.key] = new item.ctor(this, this.$rootElement);
           } else {
             new item.ctor(this, this.$rootElement);
           }
@@ -175,61 +173,73 @@ class MediaPlayer {
     }
   }
 
+  // 初始化插件
+  private _initPlugins() {
+    const options = this.$options;
+    const plugins = options.plugins;
+    plugins?.forEach((ctor: any) => {
+      const pluginName = getPluginName(ctor);
+      if (pluginName && options[pluginName] !== false) {
+        this.$plugins[pluginName] = new ctor(this, this.$rootElement);
+      }
+    });
+  }
+
   seek(time: number) {
-    this._videoPlayerInstance?.$seek(time);
+    this.$plugins.videoPlayer?.$seek(time);
   }
 
   play() {
-    this._videoPlayerInstance?.$play();
+    this.$plugins.videoPlayer?.$play();
   }
 
   pause() {
-    this._videoPlayerInstance?.$pause();
+    this.$plugins.videoPlayer?.$pause();
   }
 
   toggle() {
-    this._videoPlayerInstance?.$toggle();
+    this.$plugins.videoPlayer?.$toggle();
   }
 
   setVolume(volume: number) {
-    this._videoPlayerInstance?.$setVolume(volume);
+    this.$plugins.videoPlayer?.$setVolume(volume);
   }
 
   setNotice(tip: string, time?: number) {
-    this._videoTipInstance?.$setNotice(tip, time);
+    this.$plugins.videoTip?.$setNotice(tip, time);
   }
 
   setSpeed(speed: number) {
-    this._videoPlayerInstance?.$setSpeed(speed);
+    this.$plugins.videoPlayer?.$setSpeed(speed);
   }
 
   switchDefinition(index: number) {
-    this._videoPlayerInstance?.$switchDefinition(index);
+    this.$plugins.videoPlayer?.$switchDefinition(index);
   }
 
   hideControls() {
-    this._videoControlsInstance?.$hideControls();
+    this.$plugins.videoControls?.$hideControls();
   }
 
   showControls() {
-    this._videoControlsInstance?.$showControls();
+    this.$plugins.videoControls?.$showControls();
   }
 
   toggleControls() {
-    this._videoControlsInstance?.$toggleControls();
+    this.$plugins.videoControls?.$toggleControls();
   }
 
   // 全屏
-  // get fullScreen() {
-  //   return {
-  //     request: (type: string) => {
-  //       this.?.fullScreen.request(type);
-  //     },
-  //     cancel: (type: string) => {
-  //       this.?.fullScreen.cancel(type);
-  //     }
-  //   };
-  // }
+  get fullScreen() {
+    return {
+      request: (type: string) => {
+        this.$plugins.videoFullscreen?.$request(type);
+      },
+      cancel: (type: string) => {
+        this.$plugins.videoFullscreen?.$cancel(type);
+      }
+    };
+  }
 
   // 对外的
   $on(eventName: string, handler: Function) {
@@ -251,8 +261,7 @@ class MediaPlayer {
   destroy() {
     this.$eventBus.$emit(PlayerEvents.DESTROY);
     this.$eventBus.clear();
-    this._videoPlayerInstance = null;
-    this._videoTipInstance = null;
+    this.$plugins = {};
     this.$rootElement.remove();
     (this as any).$rootElement = null;
   }
