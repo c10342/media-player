@@ -1,0 +1,19 @@
+$drag-size:8px;
+
+.zoom-relative {
+  position: relative;
+}
+
+.zoom-drag {
+  position: absolute;
+  right: -$drag-size;
+  bottom: -$drag-size;
+  width: $drag-size;
+  height: $drag-size;
+  background-color: #fb6640;
+  // 竖的
+  // cursor: n-resize;
+  // 横的
+  // cursor: e-resize;
+  // cursor: se-resize
+}
