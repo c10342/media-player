@@ -53,35 +53,37 @@ const player = new MediaPlayer({
 
 | 参数        | 说明                                               | 类型                               | 可选值               | 默认值      |
 | ----------- | -------------------------------------------------- | ---------------------------------- | -------------------- | ----------- |
-| el          | 播放容器                                           | string，HTMLElement                | —                    | —           |
+| el          | 播放容器                                           | String，HTMLElement                | —                    | —           |
 | videoList   | 视频播放列表，格式见下方                           | Array                              | —                    | —           |
 | speedList   | 倍数列表，可选，格式见下方                         | Array                              | —                    | —           |
 | plugins     | 注册局部插件，可选                                 | Array                              | —                    | —           |
-| hotkey      | 是否开启热键（快捷键），可选                       | boolean                            | —                    | true        |
-| autoplay    | 是否自动播放，可选                                 | boolean                            | —                    | false       |
-| muted       | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean                            | —                    | false       |
+| hotkey      | 是否开启热键（快捷键），可选                       | Boolean                            | —                    | true        |
+| autoplay    | 是否自动播放，可选                                 | Boolean                            | —                    | false       |
+| muted       | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | Boolean                            | —                    | false       |
 | customType  | 自定义 esm，可选，格式见下方                       | Function                           | —                    | —           |
-| live        | 是否为直播，可选                                   | boolean                            | —                    | false       |
-| crossorigin | 是否开启跨域，可选                                 | boolean                            | —                    | true        |
-| preload     | 视频预加载，可选                                   | string                             | none，metadata，auto | auto        |
-| poster      | 视频封面，可选                                     | string                             | —                    | —           |
-| controls    | 播放器控件是否显示，可选，详细见下方                             | boolean，ControlsObj | false，ControlsObj   | ControlsObj |
+| live        | 是否为直播，可选                                   | Boolean                            | —                    | false       |
+| crossorigin | 是否开启跨域，可选                                 | Boolean                            | —                    | true        |
+| preload     | 视频预加载，可选                                   | String                             | none，metadata，auto | auto        |
+| poster      | 视频封面，可选                                     | String                             | —                    | —           |
+| controls    | 播放器控件是否显示，可选，详细见下方                             | Boolean，ControlsObj | false，ControlsObj   | ControlsObj |
+| lang    | 使用的语言                     | String | zh，en   | zh |
+| customLanguage    | 自定义语言包                     | Object | —   | — |
 
 ### videoList 参数格式
 
 | 字段    | 说明                     | 类型    |
 | ------- | ------------------------ | ------- |
-| label   | 清晰度文本               | string  |
-| url     | 播放地址                 | string  |
-| default | 是否默认播放该视频，可选 | boolean |
+| label   | 清晰度文本               | String  |
+| url     | 播放地址                 | String  |
+| default | 是否默认播放该视频，可选 | Boolean |
 
 ### speedList 参数格式
 
 | 字段    | 说明                             | 类型    |
 | ------- | -------------------------------- | ------- |
-| label   | 倍数文本                         | string  |
-| value   | 倍数值，可选值 0-2               | number  |
-| default | 是否默认使用该倍数进行播放，可选 | boolean |
+| label   | 倍数文本                         | String  |
+| value   | 倍数值，可选值 0-2               | Number  |
+| default | 是否默认使用该倍数进行播放，可选 | Boolean |
 
 ### customType 函数参数
 
@@ -98,18 +100,19 @@ const player = new MediaPlayer({
 
 | 字段             | 说明               | 类型    | 默认值 |
 | ---------------- | ------------------ | ------- | ------ |
-| playButton       | pc 端播放按钮控件  | boolean | true   |
-| volume           | 音量控件           | boolean | true   |
-| live             | 直播提示控件       | boolean | true   |
-| speed            | 倍速控件           | boolean | true   |
-| fullscreen       | 全屏控件           | boolean | true   |
-| definition       | 清晰度控件         | boolean | true   |
-| progress         | 进度条控件         | boolean | true   |
-| tip              | 通知提示控件       | boolean | true   |
-| time             | 时间控件           | boolean | true   |
-| loading          | loading 控件       | boolean | true   |
-| mobilePlayButton | 移动端播放按钮控件 | boolean | true   |
-| videoMask        | 视频遮罩层控件     | boolean | true   |
+| playButton       | pc 端播放按钮控件  | Boolean | true   |
+| volume           | 音量控件           | Boolean | true   |
+| live             | 直播提示控件       | Boolean | true   |
+| speed            | 倍速控件           | Boolean | true   |
+| fullscreen       | 全屏控件           | Boolean | true   |
+| definition       | 清晰度控件         | Boolean | true   |
+| progress         | 进度条控件         | Boolean | true   |
+| tip              | 通知提示控件       | Boolean | true   |
+| time             | 时间控件           | Boolean | true   |
+| loading          | loading 控件       | Boolean | true   |
+| mobilePlayButton | 移动端播放按钮控件 | Boolean | true   |
+| videoMask        | 视频遮罩层控件     | Boolean | true   |
+| controlBar        | 视频下方控制条   | Boolean | true   |
 
 ## 事件绑定
 
@@ -135,6 +138,11 @@ player.$on("ended", function () {
 | show_controls           | 控制条显示时触发         | —        |
 | hide_controls           | 控制条隐藏时触发         | —        |
 | resize                  | 播放器大小发生变化时触发 | —        |
+| keyboard_right                  | 按下键盘 → 键时触发   | —        |
+| keyboard_left                  | 按下键盘 ← 键时触发   | —        |
+| keyboard_up                  | 按下键盘 ↑ 键时触发   | —        |
+| keyboard_down                  | 按下键盘 ↓ 键时触发   | —        |
+| keyboard_space                  | 按下键盘 空格 键时触发   | —        |
 
 - **原生 video 标签事件**
 
@@ -191,8 +199,6 @@ player.$on("ended", function () {
 
 - `player.toggle()` : 切换视频播放状态，播放/暂停
 
-- `player.extend(obj: Record<string, any>)` : 往实例上拓展方法或属性，插件会使用到
-
 - `player.fullScreen.request(type: string)` : 进入网页/浏览器全屏
 
 ```javascript
@@ -210,6 +216,14 @@ player.fullScreen.cancel("web");
 // 退出浏览器全屏
 player.fullScreen.cancel("browser");
 ```
+
+- `player.showControls()` : 显示下方控制条
+
+- `player.hideControls()` : 隐藏下方控制条
+
+- `player.toggleControls()` : 切换下方控制条显示/隐藏状态
+
+- `player.destroy()` : 销毁播放器
 
 **播放器实例属性：**
 
@@ -243,13 +257,20 @@ MediaPlayer.useLang({
 
 - `MediaPlayer.setLang(lang:string)` : 设置使用何种语言，zh/en，默认 zh
 
-- `MediaPlayer.setI18n(fn: Function)` : 自定义 i18n 处理函数
-
 - `MediaPlayer.use(ctor: Function)` : 注册全局插件
+
+
+**播放器构造函数静态属性：**
+
+- `MediaPlayer.PlayerEvents` : 播放器自定义事件
+  
+- `MediaPlayer.VideoEvents` : video标签事件
+
+- `MediaPlayer.globalConfig` : 默认的全局配置项，播放器在初始化的时候，会将用户传入的配置项跟全局的配置项进行合并，形成一个新的配置项
 
 ## 配合 MSE 库使用
 
-你可以通过 customType 参数与任何 MSE 库一起使用，比如`hls.js`，`flv.js`
+你可以通过 `customType` 参数与任何 MSE 库一起使用，比如`hls.js`，`flv.js`
 
 ```javascript
 import Hls from "hls.js";
@@ -319,13 +340,15 @@ const player = new MediaPlayer({
 
 ### 插件的构成
 
-- 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性（不写就默认使用构造器的 name 值），`pluginName` 是用来作为插件的唯一标识，同时外部可以通过`player.plugins[pluginName]`访问到插件实例
+- 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性（不写就默认使用构造器的 name 值），`pluginName` 是用来作为插件的唯一标识，同时外部可以通过`player.$plugins[pluginName]`访问到插件实例
 
 - 构造器函数（类）会接受到两个参数：
 
+  - instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法
+  
   - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`。因为当你同时初始化了 2 个播放器的时候，`document.querySelector()`获取的始终是第一个元素
 
-  - instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法，你还可以通过`instance.extend(obj: Record<string, any>)`方法往实例中挂载其他属性或者方法，提供给外部使用
+  
 
 ### 插件代码示例
 
@@ -340,16 +363,16 @@ class Test {
   el = null;
   instance = null;
 
-  constructor(el, instance) {
+  constructor(instance,el) {
     // 保存接受到的两个参数
     this.el = el;
     this.instance = instance;
     // 往播放器实例中添加一个sleep方法
-    instance.extend({
-      sleep: () => {
+    Object.defineProperty(instance,'sleep',{
+      get(){
         console.log("sleep");
       }
-    });
+    })
     // 开始实现其他的功能
     this.init();
   }
@@ -358,7 +381,7 @@ class Test {
     const div = document.createElement("div");
     div.innerHTML = "切换播放状态";
     div.addEventListener("click", () => {
-      // 播放器继承了EventEmit类，通过发布订阅模式，实现事件的监听和发射
+      // 通过发布订阅模式，实现事件的监听和发射
       this.instance.$emit("test-click");
       // 切换播放器的播放状态
       this.instance.toggle();
@@ -392,7 +415,7 @@ player.$on("test-click", () => {
 // Test插件在播放器实例上面挂载的方法
 player.sleep();
 // 访问Test插件的实例
-player.plugins.Test;
+player.$plugins.Test;
 ```
 
 ### 注意事项
@@ -407,7 +430,7 @@ player.plugins.Test;
 
 - 当你需要读取原生`video`标签时，请不要缓存`video`标签，而是每次动态去读取，因为清晰度切换的时候，会删除旧的`video`标签，插入新的`video`标签。当然，出于对性能的考虑，你也可以对`video`标签进行缓存，然后监听`switch_definition_end`事件，重新刷新`video`标签的缓存
 
-- 如果 `MediaPlayer` 的 `options` 参数中出现 `key` 值为插件的唯一标识，且 `value` 值为 false，那么该插件不会被初始化。这个是用来关闭一些全局注册的插件。以关闭弹幕插件为例：
+- 如果 `MediaPlayer` 的 `options` 参数中出现 `key` 值为插件的唯一标识，且 `value` 值为 false，那么该插件不会被初始化。这个是用来关闭插件的初始化。以关闭弹幕插件为例：
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
