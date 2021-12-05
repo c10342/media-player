@@ -1,0 +1,35 @@
+<span class="player-icon-item danmaku-icon-setting danmaku-icon-item"></span>
+<div class="danmaku-float-container">
+  <div class="danmaku-setting-area">
+    <div class="danmaku-setting-label">{{showArea}}</div>
+    <div class="danmaku-area">
+      {{each areaList}}
+      <span
+        class="danmaku-area-span {{if $value.checked}}danmaku-radio-checked{{/if}}"
+        data-position="{{ $value.position }}"
+      >
+        <span class="danmaku-radio"></span>
+        <span>{{ $value.label }}</span>
+      </span>
+      {{/each}}
+    </div>
+  </div>
+  {{each switchList}}
+  <div class="danmaku-setting-item">
+    <span class="danmaku-setting-label">{{$value.label}}</span>
+    <div
+      class="danmaku-setting-text {{if $value.open}}danmaku-setting-open{{/if}} {{if !$value.open}}danmaku-setting-close{{/if}} {{$value.className}}"
+    ></div>
+  </div>
+  {{/each}}
+  {{each progressList}}
+   <div class="danmaku-setting-item">
+    <span class="danmaku-setting-label">{{$value.label}}</span>
+    <div class="danmaku-progress {{$value.wrapperClassName}}">
+      <div class="danmaku-played {{$value.progressClassName}}">
+        <span class="danmaku-ball {{$value.ballClassName}}"></span>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+</div>
