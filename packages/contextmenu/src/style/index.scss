@@ -1,0 +1,71 @@
+@import './fonts/iconfont.css';
+
+.contextmenu-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  display: none;
+  width: 250px;
+  padding: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.contextmenu-item {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 30px;
+  padding: 0 20px;
+  font-size: 14px;
+  line-height: 30px;
+  cursor: default;
+
+  &:hover {
+    background-color: #ddd;
+
+    .contextmenu-item-desc {
+      color: #000;
+    }
+
+    .contextmenu-subMenu-container {
+      display: block;
+    }
+  }
+}
+
+.contextmenu-item-info {
+  flex: 1;
+  width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.contextmenu-line {
+  height: 1px;
+  margin: 5px 2px;
+  background-color: #ddd;
+}
+
+.contextmenu-item-desc {
+  color: #ddd;
+  pointer-events: none;
+}
+
+.contextmenu-subMenu-container {
+  position: absolute;
+  right: 0;
+  box-sizing: border-box;
+  display: none;
+  width: 80%;
+  padding: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  transform: translateX(100%);
+}

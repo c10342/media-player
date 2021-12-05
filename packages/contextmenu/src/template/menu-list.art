@@ -1,0 +1,34 @@
+{{if menuList && menuList.length>0}}
+{{each menuList}}
+{{if $value.type==='MenuItem'}}
+<div class="contextmenu-item" data-index='{{$index}}'>
+  <span class="contextmenu-item-info">{{$value.label}}</span>
+  {{if $value.desc}}
+  <span class="contextmenu-item-desc">{{$value.desc}}</span>
+  {{/if}}
+</div>
+{{/if}}
+{{if $value.type==='SubMenuItem'}}
+<div class="contextmenu-item">
+  <span class="contextmenu-item-info">{{$value.label}}</span>
+  <span class='contextmenu-icon-right'></span>
+  {{if $value.subMenuList && $value.subMenuList.length>0}}
+  <div class="contextmenu-subMenu-container" {{if subMenuItemWidth}} style='width:{{subMenuItemWidth}};' {{/if}}>
+  {{each $value.subMenuList as subMenuItem i}}
+    <div class="contextmenu-item" data-parent='{{$index}}' data-index='{{i}}'>
+      <span class="contextmenu-item-info">{{subMenuItem.label}}</span>
+        {{if subMenuItem.desc}}
+        <span class="contextmenu-item-desc">{{subMenuItem.desc}}</span>
+        {{/if}}
+    </div>
+    {{/each}}
+  </div>
+  {{/if}}
+</div>
+{{/if}}
+{{if $value.type==='MenuLine'}}
+<div class="contextmenu-line"></div>
+{{/if}}
+{{/each}}
+{{/if}}
+
