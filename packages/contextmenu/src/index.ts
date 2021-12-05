@@ -15,15 +15,13 @@ import "./style/index.scss";
 class Contextmenu {
   static pluginName = pluginName;
   private _playerInstance: MediaPlayer;
-  private _parentElement: HTMLElement;
   private _options: ContextmenuOptions;
   private _eventManager = new EventManager();
   private _el: HTMLElement;
-  private _wrapperElement: HTMLElement;
+  private _wrapperElement: HTMLElement | null;
   constructor(playerInstance: MediaPlayer, el: HTMLElement) {
     this._el = el;
     this._playerInstance = playerInstance;
-    this._parentElement = playerInstance.$options.el;
     const options = playerInstance.$options[pluginName] ?? {};
     this._options = { ...options };
     const menuList = this._options.menuList;
@@ -95,7 +93,7 @@ class Contextmenu {
 
   private _onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (!this._wrapperElement.contains(target)) {
+    if (!this._wrapperElement?.contains(target)) {
       this._hideMenu();
     }
   }
@@ -109,7 +107,7 @@ class Contextmenu {
     if (this._options.meunItemWidth) {
       div.style.width = this._options.meunItemWidth;
     }
-    this._parentElement.appendChild(div);
+    this._el.appendChild(div);
     this._wrapperElement = div;
   }
 
@@ -126,13 +124,20 @@ class Contextmenu {
   }
 
   private _showMenu() {
-    this._wrapperElement.style.display = "block";
+    if (this._wrapperElement) {
+      this._wrapperElement.style.display = "block";
+    }
   }
   private _hideMenu() {
-    this._wrapperElement.style.display = "";
+    if (this._wrapperElement) {
+      this._wrapperElement.style.display = "";
+    }
   }
 
   private _adjustPosition(event: MouseEvent) {
+    if (!this._wrapperElement) {
+      return;
+    }
     let y = event.clientY;
     let x = event.clientX;
     const scrollWidth = this._wrapperElement.scrollWidth;
@@ -156,6 +161,8 @@ class Contextmenu {
 
   private _destroy() {
     this._eventManager.removeEventListener();
+    // this._wrapperElement?.remove();
+    // this._wrapperElement = null;
   }
 }
 
