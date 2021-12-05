@@ -1,50 +1,50 @@
 import VideoPlayer from "@lin-media/player";
-// import Highlight from "@lin-media/highlight";
-// import Screenshot from "@lin-media/screenshot";
-// import Preview from "@lin-media/preview";
-// import Zoom from "@lin-media/zoom";
-// import Danmaku from "@lin-media/danmaku";
-// import Contextmenu from "@lin-media/contextmenu";
-// VideoPlayer.use(Highlight);
-// VideoPlayer.use(Preview);
-// VideoPlayer.use(Screenshot);
+import Highlight from "@lin-media/highlight";
+import Screenshot from "@lin-media/screenshot";
+import Preview from "@lin-media/preview";
+import Zoom from "@lin-media/zoom";
+import Danmaku from "@lin-media/danmaku";
+import Contextmenu from "@lin-media/contextmenu";
+VideoPlayer.use(Highlight);
+VideoPlayer.use(Preview);
+VideoPlayer.use(Screenshot);
 import "./index.scss";
 
-// import DanmukuTest from "./danmaku";
+import DanmukuTest from "./danmaku";
 // import { LangTypeEnum } from "@lin-media/utils";
 
 // VideoPlayer.setLang(LangTypeEnum.en);
 // import Hls from "hls.js";
 
-// const highlightList = [
-//   {
-//     time: 0,
-//     text: "这是第 20 秒"
-//   },
-//   {
-//     time: 20,
-//     text: "这是第 20 秒"
-//   },
-//   {
-//     time: 60,
-//     text: "这是第 60 秒"
-//   },
-//   {
-//     time: 100,
-//     text: "这是第 100 秒"
-//   }
-// ];
+const highlightList = [
+  {
+    time: 0,
+    text: "这是第 20 秒"
+  },
+  {
+    time: 20,
+    text: "这是第 20 秒"
+  },
+  {
+    time: 60,
+    text: "这是第 60 秒"
+  },
+  {
+    time: 100,
+    text: "这是第 100 秒"
+  }
+];
 
-// const previewList = [
-//   {
-//     time: 40,
-//     url: "http://xxx/demo.png"
-//   },
-//   {
-//     time: 80,
-//     url: "http://xxx/demo.png"
-//   }
-// ];
+const previewList = [
+  {
+    time: 40,
+    url: "http://xxx/demo.png"
+  },
+  {
+    time: 80,
+    url: "http://xxx/demo.png"
+  }
+];
 
 const speedList = [
   {
@@ -61,76 +61,77 @@ const speedList = [
     value: 1.5
   }
 ];
-// const contextMenuList = [
-//   {
-//     label: "播放",
-//     desc: "描述信息",
-//     type: "MenuItem",
-//     callback: () => {
-//       player.play();
-//     },
-//     eventName: "click-play"
-//   },
-//   {
-//     label: "暂停",
-//     type: "MenuItem",
-//     callback: () => {
-//       player.pause();
-//     }
-//   },
-//   {
-//     label: "播放/暂停",
-//     type: "MenuItem",
-//     callback: () => {
-//       player.toggle();
-//     }
-//   },
-//   {
-//     type: "MenuLine"
-//   },
-//   {
-//     type: "SubMenuItem",
-//     label: "倍数",
-//     subMenuList: [
-//       {
-//         label: "0.5x",
-//         callback: () => {
-//           player.setSpeed(0.5);
-//         }
-//       },
-//       {
-//         label: "1x",
-//         callback: () => {
-//           player.setSpeed(1);
-//         }
-//       },
-//       {
-//         label: "1.5x",
-//         callback: () => {
-//           player.setSpeed(1.5);
-//         }
-//       }
-//     ]
-//   },
-//   {
-//     type: "SubMenuItem",
-//     label: "清晰度",
-//     subMenuList: [
-//       {
-//         label: "标清",
-//         callback: () => {
-//           player.switchDefinition(0);
-//         }
-//       },
-//       {
-//         label: "高清",
-//         callback: () => {
-//           player.switchDefinition(1);
-//         }
-//       }
-//     ]
-//   }
-// ];
+const contextMenuList = [
+  {
+    label: "播放",
+    desc: "描述信息",
+    type: "MenuItem",
+    callback: () => {
+      player.play();
+    },
+    eventName: "click-play"
+  },
+  {
+    label: "暂停",
+    type: "MenuItem",
+    callback: () => {
+      player.pause();
+    }
+  },
+  {
+    label: "播放/暂停",
+    type: "MenuItem",
+    callback: () => {
+      player.toggle();
+    }
+  },
+  {
+    type: "MenuLine"
+  },
+  {
+    type: "SubMenuItem",
+    label: "倍数",
+    subMenuList: [
+      {
+        label: "0.5x",
+        callback: () => {
+          player.setSpeed(0.5);
+        }
+      },
+      {
+        label: "1x",
+        callback: () => {
+          player.setSpeed(1);
+        }
+      },
+      {
+        label: "1.5x",
+        callback: () => {
+          player.setSpeed(1.5);
+        }
+      }
+    ]
+  },
+  {
+    type: "SubMenuItem",
+    label: "清晰度",
+    subMenuList: [
+      {
+        label: "标清",
+        callback: () => {
+          player.switchDefinition(0);
+        }
+      },
+      {
+        label: "高清",
+        callback: () => {
+          player.switchDefinition(1);
+        }
+      }
+    ]
+  }
+];
+
 const player: any = new VideoPlayer({
   el: ".container",
   videoList: [
@@ -156,38 +157,43 @@ const player: any = new VideoPlayer({
     //   url: "https://api.dogecloud.com/player/get.m3u8?vcode=5ac682e6f8231991&userId=17&ext=.m3u8"
     // }
   ],
-  speedList
-  // plugins: [Screenshot, Zoom, Danmaku, Contextmenu],
-  // Highlight: {
-  //   jump: true,
-  //   showTip: true,
-  //   list: highlightList
-  // },
+  speedList,
+  plugins: [
+    // Screenshot,
+    Zoom,
+    Danmaku,
+    Contextmenu
+  ],
+  Highlight: {
+    jump: true,
+    showTip: true,
+    list: highlightList
+  },
   // Screenshot: {
   //   // 是否开启功能
   //   open: true,
   //   // 点击后自动下载,默认true，你可以设置为false，然后通过事件监听来自定义点击之后的操作
   //   download: true
   // },
-  // Preview: {
-  //   // list: previewList,
-  //   barPreviewUrl: "https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg"
-  // },
+  Preview: {
+    list: previewList
+    // barPreviewUrl: "https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg"
+  },
   // Zoom: {
   //   // y:false,
   //   // open:false,
   //   minWidth: 300,
   //   minHeight: 300
   // },
-  // Danmaku: {
-  //   fontColors: ["blue", "red", "green", "#fff", "yellow"],
-  //   fontSizes: [16, 18, 20, 22, 24, 26, 28]
-  // },
-  // Contextmenu: {
-  //   menuList: contextMenuList,
-  //   meunItemWidth: "200px",
-  //   subMenuItemWidth: "100px"
-  // }
+  Danmaku: {
+    fontColors: ["blue", "red", "green", "#fff", "yellow"],
+    fontSizes: [16, 18, 20, 22, 24, 26, 28]
+  },
+  Contextmenu: {
+    menuList: contextMenuList,
+    meunItemWidth: "200px",
+    subMenuItemWidth: "100px"
+  }
   // controls:false
   // hotkey:false,
   // live: true
@@ -276,4 +282,4 @@ document.querySelector(".destroy")?.addEventListener("click", function () {
   // (player as any).screenshot();
 });
 
-// DanmukuTest(player);
+DanmukuTest(player);
