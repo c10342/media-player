@@ -1,4 +1,5 @@
-import { deepClone, isPlainObject } from "@lin-media/utils";
+import { deepClone, isArray, isPlainObject } from "@lin-media/utils";
+import getPluginName from "./get-plugin-name";
 
 /**
  *
@@ -10,6 +11,7 @@ export default function mergeConfig(targetObj: any, fromObj: any) {
   const hasKey = (key: string, data: any) => {
     return key in data;
   };
+  // 先处理目标对象上面的
   for (const key in targetObj) {
     if (key === "controls") {
       if (isPlainObject(targetObj[key])) {
@@ -27,7 +29,7 @@ export default function mergeConfig(targetObj: any, fromObj: any) {
       config[key] = targetObj[key];
     }
   }
-
+  // 在处理默认配置
   for (const key in fromObj) {
     if (key === "controls") {
       if (isPlainObject(config[key])) {
@@ -66,6 +68,22 @@ export default function mergeConfig(targetObj: any, fromObj: any) {
         config[key] = fromObj[key];
       }
     }
+  }
+  // 插件去重
+  if (isArray(config.plugins) && config.plugins.length > 0) {
+    const plugins: Function[] = config.plugins.slice();
+    const pluginsArr: Function[] = [];
+    const installed = (item: Function) => {
+      return pluginsArr.some((ctor: any) => {
+        return getPluginName(ctor) === getPluginName(item);
+      });
+    };
+    plugins.forEach((item) => {
+      if (!installed(item)) {
+        pluginsArr.push(item);
+      }
+    });
+    config.plugins = pluginsArr;
   }
 
   return config;
