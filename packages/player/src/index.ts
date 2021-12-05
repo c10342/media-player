@@ -124,9 +124,9 @@ class MediaPlayer {
       // 设置语言
       i18n.setLang(lang);
     }
-    if (!isUndef(customLanguage?.MediaPlayer)) {
+    if (!isUndef(customLanguage?.player)) {
       // 使用自定义语言包
-      i18n.use(customLanguage?.MediaPlayer);
+      i18n.use(customLanguage?.player);
     }
     this.$i18n = i18n;
   }
