@@ -1,263 +1,269 @@
-import "./style/index.scss";
-import PlayerConstructor from "./constructor";
-import { LangOptions, PlayerOptions, PluginsType } from "./types";
-import i18n from "./locale";
+import "./styles/index.scss";
 import {
-  isArray,
+  EventEmit,
+  isMobile,
   isString,
   isUndef,
   LangTypeEnum,
   logWarn,
-  deepMerge,
-  deepClone
+  parseHtmlToDom
 } from "@lin-media/utils";
-import defaultOptions from "./config/default";
+import defaultOptions from "./config/default-config";
+import {
+  LangOptions,
+  PlayerOptions,
+  PlayerOptionsParams,
+  PluginsOptions
+} from "./types";
+import { getPluginName, mergeConfig } from "./utils/index";
+import initLocale from "./locale/index";
+import LayoutTpl from "./templates/layout.art";
+import VideoPlayer from "./components/video-player";
+import VideoControls from "./components/video-controls";
+import VideoMask from "./components/video-mask";
+import VideoLoading from "./components/video-loading";
+import VideoTip from "./components/video-tip";
+import ShortcutKey from "./components/shortcut-key";
+import MobilePlayButton from "./components/mobile-play-button";
 import { PlayerEvents, VideoEvents } from "./config/event";
 
-function getPluginName(ctor: any) {
-  return ctor.pluginName || ctor.name;
-}
-
 class MediaPlayer {
-  // 播放器自定义事件
   static PlayerEvents = PlayerEvents;
-  // 原生video标签事件
   static VideoEvents = VideoEvents;
-  // 默认语言
-  static lang = LangTypeEnum.zh;
-  // 自定义语言包
-  static langObject: Record<string, any> = {};
-  // 自定义i18n处理函数
-  static i18nFn: Function | null = null;
 
-  // 自定义语言包
-  static useLang(langObject: LangOptions) {
-    i18n.use(langObject.player);
-    MediaPlayer.langObject = langObject;
-    return MediaPlayer;
-  }
-  // 设置中英文，zh/en
+  // 全局配置
+  static globalConfig = defaultOptions;
+  //   设置中英文，zh/en
   static setLang(lang: LangTypeEnum) {
-    i18n.setLang(lang);
-    MediaPlayer.lang = lang;
+    this.globalConfig.lang = lang;
     return MediaPlayer;
   }
-  // 自定义i18n处理函数
-  static setI18n(i18nFn: Function) {
-    i18n.i18n(i18nFn);
-    MediaPlayer.i18nFn = i18nFn;
+  // 自定义语言包
+  static useLang(customLanguage: LangOptions) {
+    this.globalConfig.customLanguage = customLanguage;
     return MediaPlayer;
   }
-
-  // 全局插件列表
-  static pluginsList: PluginsType = [];
-
-  // 全局注册插件
+  //   全局注册插件
   static use(ctor: Function) {
-    const installed = MediaPlayer.pluginsList.some((plugin) => {
+    const plugins = this.globalConfig.plugins;
+    const installed = plugins.some((plugin) => {
       return getPluginName(plugin) === getPluginName(ctor);
     });
     if (installed) {
       logWarn("插件已经被安装了");
       return MediaPlayer;
     }
-    MediaPlayer.pluginsList.push(ctor);
+    plugins.push(ctor);
 
     return MediaPlayer;
   }
 
-  // 往实例上拓展方法或属性，原本是打算在MediaPlayer原型上面进行扩展的，但是发现new多个之后会被覆盖
-  extend(obj: Record<string, any>) {
-    Object.keys(obj).forEach((key) => {
-      Object.defineProperty(this, key, {
-        get() {
-          return obj[key];
+  $options: PlayerOptionsParams;
+
+  $eventBus = new EventEmit();
+
+  $i18n: any;
+
+  $isMobile = isMobile();
+
+  $rootElement: HTMLElement;
+
+  $plugins: PluginsOptions = {};
+
+  get duration() {
+    return this.$plugins.videoPlayer?.$duration ?? 0;
+  }
+
+  // 音量
+  get volume() {
+    return this.$plugins.videoPlayer?.$volume ?? 1;
+  }
+
+  get paused() {
+    return this.$plugins.videoPlayer?.$paused;
+  }
+
+  get currentTime() {
+    return this.$plugins.videoPlayer?.$currentTime ?? 0;
+  }
+
+  get videoElement() {
+    return this.$plugins.videoPlayer?.$videoElement;
+  }
+
+  constructor(options: PlayerOptions) {
+    this.$options = mergeConfig(
+      options,
+      MediaPlayer.globalConfig
+    ) as PlayerOptionsParams;
+
+    this._normalOptions();
+    this._initI18n();
+    this._initLayout();
+    this._initComponents();
+    this._initPlugins();
+  }
+
+  // 格式化一些参数
+  private _normalOptions() {
+    const options = this.$options;
+    if (isString(options.el)) {
+      options.el = document.querySelector(options.el) as HTMLElement;
+    }
+
+    if (isUndef(options.el)) {
+      throw new TypeError("el 不存在");
+    }
+  }
+
+  // 初始化i18n
+  private _initI18n() {
+    const i18n = initLocale();
+    const { lang, customLanguage } = this.$options;
+    if (!isUndef(lang)) {
+      // 设置语言
+      i18n.setLang(lang);
+    }
+    if (!isUndef(customLanguage?.player)) {
+      // 使用自定义语言包
+      i18n.use(customLanguage?.player);
+    }
+    this.$i18n = i18n;
+  }
+
+  // 初始化布局模板
+  private _initLayout() {
+    const html = LayoutTpl();
+    this.$rootElement = parseHtmlToDom(html);
+    this.$options.el.appendChild(this.$rootElement);
+  }
+
+  // 初始化组件
+  private _initComponents() {
+    const controls = this.$options.controls;
+    if (controls) {
+      const compList = [
+        { ctor: VideoPlayer, init: true, key: "videoPlayer" },
+        { ctor: VideoTip, init: controls.tip, key: "videoTip" },
+        {
+          ctor: VideoControls,
+          init: controls.controlBar,
+          key: "videoControls"
+        },
+        { ctor: VideoMask, init: controls.videoMask },
+        { ctor: VideoLoading, init: controls.loading },
+        {
+          ctor: MobilePlayButton,
+          init: controls.mobilePlayButton && this.$isMobile
+        }
+      ];
+      compList.forEach((item) => {
+        if (item.init) {
+          if (item.key) {
+            this.$plugins[item.key] = new item.ctor(this, this.$rootElement);
+          } else {
+            new item.ctor(this, this.$rootElement);
+          }
         }
       });
+    }
+
+    if (this.$options.hotkey && !this.$isMobile) {
+      new ShortcutKey(this);
+    }
+  }
+
+  // 初始化插件
+  private _initPlugins() {
+    const options = this.$options;
+    const plugins = options.plugins;
+    plugins?.forEach((ctor: any) => {
+      const pluginName = getPluginName(ctor);
+      if (pluginName && options[pluginName] !== false) {
+        this.$plugins[pluginName] = new ctor(this, this.$rootElement);
+      }
     });
-    return this;
   }
 
-  options: PlayerOptions;
-  // 实例
-  private playerInstance: PlayerConstructor | null;
-  // 存储插件实例
-  plugins: Record<string, any> = {};
-  constructor(options: PlayerOptions) {
-    // this.options = { ...defaultOptions, ...options };
-    // 深合并
-    this.options = deepMerge(
-      deepClone(defaultOptions),
-      deepClone(options)
-    ) as PlayerOptions;
-
-    // 初始化参数
-    this.initParams();
-    // 检查参数
-    this.checkParams();
-    // 初始化播放器
-    this.initPlayer();
-    // 初始化插件
-    this.applyPlugins();
-  }
-
-  private initPlayer() {
-    this.playerInstance = new PlayerConstructor(this.options);
-  }
-
-  // 初始化相应的参数
-  private initParams() {
-    let { el } = this.options;
-    if (isString(el)) {
-      el = document.querySelector(el) as HTMLElement;
-    }
-    if (!el) {
-      throw new TypeError("找不到 el");
-    }
-    this.options.el = el;
-  }
-  // 检查参数是否符合要求
-  private checkParams() {
-    const videoList = this.options.videoList;
-    if (isUndef(videoList)) {
-      throw new TypeError("videoList 不能为空");
-    }
-    if (!isArray(videoList)) {
-      throw new TypeError("videoList 必须是一个数组");
-    }
-    if (videoList.length === 0) {
-      throw new TypeError("videoList 长度需要大于0");
-    }
-  }
-
-  // 发布订阅
-  $on(eventName: string, handler: Function) {
-    this.playerInstance?.$on(eventName, handler);
-    return this;
-  }
-  $emit(eventName: string, data?: any) {
-    this.playerInstance?.$emit(eventName, data);
-    return this;
-  }
-  $once(eventName: string, handler: Function) {
-    this.playerInstance?.$once(eventName, handler);
-    return this;
-  }
-  $off(eventName: string, handler?: Function) {
-    this.playerInstance?.$off(eventName, handler);
-    return this;
-  }
-  // 播放
-  play() {
-    this.playerInstance?.play();
-    return this;
-  }
-  // 暂停
-  pause() {
-    this.playerInstance?.pause();
-    return this;
-  }
-  // 跳转时间
   seek(time: number) {
-    this.playerInstance?.seek(time);
-    return this;
+    this.$plugins.videoPlayer?.$seek(time);
   }
-  // 设置通知
-  setNotice(text: string, time?: number) {
-    this.playerInstance?.setNotice(text, time);
-    return this;
+
+  play() {
+    this.$plugins.videoPlayer?.$play();
   }
-  // 切换清晰度
-  switchDefinition(index: number) {
-    this.playerInstance?.switchDefinition(index);
-    return this;
+
+  pause() {
+    this.$plugins.videoPlayer?.$pause();
   }
-  // 设置倍数
-  setSpeed(playbackRate: number) {
-    this.playerInstance?.setSpeed(playbackRate);
-    return this;
-  }
-  // 设置音量
-  setVolume(volume: number) {
-    this.playerInstance?.setVolume(volume);
-    return this;
-  }
-  // 切换播放状态
+
   toggle() {
-    this.playerInstance?.toggle();
-    return this;
+    this.$plugins.videoPlayer?.$toggle();
   }
-  // video标签元素
-  get videoElement() {
-    return this.playerInstance?.videoElement;
+
+  setVolume(volume: number) {
+    this.$plugins.videoPlayer?.$setVolume(volume);
   }
-  // 视频是否处于暂停
-  get paused() {
-    return this.playerInstance?.paused;
+
+  setNotice(tip: string, time?: number) {
+    this.$plugins.videoTip?.$setNotice(tip, time);
   }
-  // 视频当前时间
-  get currentTime() {
-    return this.playerInstance?.currentTime;
+
+  setSpeed(speed: number) {
+    this.$plugins.videoPlayer?.$setSpeed(speed);
   }
-  // 视频总时长
-  get duration() {
-    return this.playerInstance?.duration;
+
+  switchDefinition(index: number) {
+    this.$plugins.videoPlayer?.$switchDefinition(index);
   }
-  // 当前音量
-  get volume() {
-    return this.playerInstance?.volume;
+
+  hideControls() {
+    this.$plugins.videoControls?.$hideControls();
+  }
+
+  showControls() {
+    this.$plugins.videoControls?.$showControls();
+  }
+
+  toggleControls() {
+    this.$plugins.videoControls?.$toggleControls();
   }
 
   // 全屏
   get fullScreen() {
     return {
       request: (type: string) => {
-        this.playerInstance?.fullScreen.request(type);
+        this.$plugins.videoFullscreen?.$request(type);
       },
       cancel: (type: string) => {
-        this.playerInstance?.fullScreen.cancel(type);
+        this.$plugins.videoFullscreen?.$cancel(type);
       }
     };
   }
 
-  private getPluginsList() {
-    const localPlugins = this.options.plugins || [];
-    const globalPlugins = MediaPlayer.pluginsList || [];
-    const pluginsList = [...globalPlugins, ...localPlugins];
-    const list: PluginsType = [];
-    for (let i = 0; i < pluginsList.length; i++) {
-      const plugin = pluginsList[i];
-      const pluginName = getPluginName(plugin);
-      const installed = list.some((ctor) => {
-        return getPluginName(ctor) === pluginName;
-      });
-      if (!installed && this.options[pluginName] !== false) {
-        list.push(plugin);
-      }
-    }
-    return list;
+  // 对外的
+  $on(eventName: string, handler: Function) {
+    this.$eventBus.$on(eventName, handler);
   }
 
-  // 应用插件
-  private applyPlugins() {
-    const el = (this.options.el as HTMLElement).querySelector(
-      ".player-container"
-    );
-
-    // 合并全局插件和局部插件
-    const plugins = this.getPluginsList();
-
-    plugins.forEach((Ctor: any) => {
-      const instance = new Ctor(el, this);
-      const pluginName = getPluginName(Ctor);
-      this.plugins[pluginName] = instance;
-    });
+  $emit(eventName: string, data?: any) {
+    this.$eventBus.$emit(eventName, data);
   }
-  // 销毁
+
+  $once(eventName: string, handler: Function) {
+    this.$eventBus.$on(eventName, handler);
+  }
+
+  $off(eventName: string, handler?: Function) {
+    this.$eventBus.$off(eventName, handler);
+  }
+
   destroy() {
-    this.playerInstance?.destroy();
-    this.playerInstance = null;
-    this.plugins = {};
+    this.$eventBus.$emit(PlayerEvents.DESTROY);
+    this.$eventBus.clear();
+    this.$plugins = {};
+    this.$rootElement.remove();
+    (this as any).$rootElement = null;
   }
 }
 

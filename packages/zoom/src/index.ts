@@ -5,108 +5,103 @@ import { ZoomEvents } from "./config/event";
 import "./style/index.scss";
 import { ZoomData, ZoomOptions } from "./types";
 import MediaPlayer from "@lin-media/player";
+import defaultOptions from "./config/default-options";
 
-const defaultOptions = {
-  x: true,
-  y: true,
-  minHeight: 0,
-  minWidth: 0
-};
 class Zoom {
   // 自定义事件
   static customEvents = ZoomEvents;
   // 插件名称.
   static pluginName = pluginName;
   // 播放器实例
-  private instance: MediaPlayer;
+  private _playerInstance: MediaPlayer;
   //   父级元素
-  private parentElement: HTMLElement;
+  private _parentElement: HTMLElement;
   //   拖拽的元素
-  private dragElement: HTMLElement | null;
+  private _dragElement: HTMLElement | null;
   // 参数
-  private options: ZoomOptions;
+  private _options: ZoomOptions;
   // 拖拽实例
-  private dragInstance: Drag | null;
+  private _dragInstance: Drag | null;
   // 记录上一个位置
-  private prevPosition: ZoomData = { width: -1, height: -1 };
-  constructor(el: HTMLElement, instance: MediaPlayer) {
-    this.instance = instance;
-    this.parentElement = instance.options.el as HTMLElement;
-    const options = instance.options[pluginName] ?? {};
-    this.options = { ...defaultOptions, ...options };
-    this.init();
-    this.initDrag();
-    this.initListener();
+  private _prevPosition: ZoomData = { width: -1, height: -1 };
+  constructor(playerInstance: MediaPlayer) {
+    this._playerInstance = playerInstance;
+    this._parentElement = playerInstance.$options.el;
+    const options = playerInstance.$options[pluginName] ?? {};
+    this._options = { ...defaultOptions, ...options };
+    this._init();
+    this._initDrag();
+    this._initListener();
   }
 
   // 初始化拖拽行为
-  private initDrag() {
-    this.dragInstance = new Drag({
-      dragElement: this.dragElement,
-      wrapperElement: this.parentElement
+  private _initDrag() {
+    this._dragInstance = new Drag({
+      dragElement: this._dragElement,
+      wrapperElement: this._parentElement
     });
     // 拖拽
-    this.dragInstance.$on("mousemove", this.onMousemove.bind(this));
+    this._dragInstance.$on("mousemove", this._onMousemove.bind(this));
   }
 
   // 判断当前宽高跟上一个宽高是否相同
-  private isChange(data: ZoomData) {
+  private _isChange(data: ZoomData) {
     if (
-      data.width === this.prevPosition.width &&
-      data.height === this.prevPosition.height
+      data.width === this._prevPosition.width &&
+      data.height === this._prevPosition.height
     ) {
       return false;
     }
     return true;
   }
 
-  private init() {
+  private _init() {
     // 往父容器中添加类名
-    this.addClassNameToParent();
+    this._addClassNameToParent();
     // 生成拖拽的元素
-    this.dragElement = this.createElement();
+    this._dragElement = this._createElement();
     // 插入拖拽元素到父容器中
-    this.parentElement.appendChild(this.dragElement);
+    this._parentElement.appendChild(this._dragElement);
   }
 
   // 移除拖拽的元素
-  private removeDragElement() {
-    if (!isUndef(this.dragElement)) {
-      this.dragElement.parentElement?.removeChild(this.dragElement);
+  private _removeDragElement() {
+    if (!isUndef(this._dragElement)) {
+      this._dragElement.parentElement?.removeChild(this._dragElement);
     }
   }
 
   // 鼠标移动事件处理,也就是拖拽事件
-  private onMousemove(data: { offsetX: number; offsetY: number }) {
-    const result = this.checkData({
+  private _onMousemove(data: { offsetX: number; offsetY: number }) {
+    const result = this._checkData({
       width: data.offsetX,
       height: data.offsetY
     });
     // 判断一下宽高是否改变了
-    if (this.isChange(result)) {
+    if (this._isChange(result)) {
       // 记录当前的宽高
-      this.prevPosition = result;
+      this._prevPosition = result;
       // 设置父容器的宽高
-      this.setParentStyle(result);
-      this.instance.$emit(ZoomEvents.ZOOM, result);
+      this._setParentStyle(result);
+      this._playerInstance.$emit(ZoomEvents.ZOOM, result);
     }
   }
 
   // 添加类名到父容器中
-  private addClassNameToParent() {
-    if (!this.parentElement.classList.contains(ClassNameEnum.ZOOMRELATIVE)) {
-      this.parentElement.classList.add(ClassNameEnum.ZOOMRELATIVE);
+  private _addClassNameToParent() {
+    if (!this._parentElement.classList.contains(ClassNameEnum.ZOOMRELATIVE)) {
+      this._parentElement.classList.add(ClassNameEnum.ZOOMRELATIVE);
     }
   }
   // 移除父容器类名
-  private removeClassNameToParent() {
-    if (this.parentElement.classList.contains(ClassNameEnum.ZOOMRELATIVE)) {
-      this.parentElement.classList.remove(ClassNameEnum.ZOOMRELATIVE);
+  private _removeClassNameToParent() {
+    if (this._parentElement.classList.contains(ClassNameEnum.ZOOMRELATIVE)) {
+      this._parentElement.classList.remove(ClassNameEnum.ZOOMRELATIVE);
     }
   }
   // 检查宽高是否越界，符合要求等
-  private checkData({ width, height }: ZoomData) {
-    const { minHeight, minWidth, maxHeight, maxWidth, x, y } = this.options;
+  private _checkData({ width, height }: ZoomData) {
+    const { minHeight, minWidth, maxHeight, maxWidth, x, y } = this._options;
     if (x) {
       if (!isUndef(minWidth)) {
         width = width <= minWidth ? minWidth : width;
@@ -128,8 +123,8 @@ class Zoom {
   }
 
   // 创建拖拽元素
-  private createElement() {
-    const { x, y } = this.options;
+  private _createElement() {
+    const { x, y } = this._options;
     const div = document.createElement("div");
     div.className = ClassNameEnum.ZOOMDRAG;
     if (x && y) {
@@ -143,30 +138,30 @@ class Zoom {
   }
 
   // 设置父容器的宽高样式
-  private setParentStyle(style?: { width: number; height: number }) {
+  private _setParentStyle(style?: { width: number; height: number }) {
     if (!isUndef(style)) {
-      const { x, y } = this.options;
+      const { x, y } = this._options;
       if (x) {
         // 开启横向拖拽才设置
-        this.parentElement.style.width = `${style.width}px`;
+        this._parentElement.style.width = `${style.width}px`;
       }
       if (y) {
         // 开始纵向拖拽才设置
-        this.parentElement.style.height = `${style.height}px`;
+        this._parentElement.style.height = `${style.height}px`;
       }
     } else {
       // 宽高样式不存在就重置样式
-      this.parentElement.style.width = "";
-      this.parentElement.style.height = "";
+      this._parentElement.style.width = "";
+      this._parentElement.style.height = "";
     }
   }
 
-  private initListener() {
-    this.instance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
-      this.removeClassNameToParent();
-      this.setParentStyle();
-      this.removeDragElement();
-      this.dragInstance?.destroy();
+  private _initListener() {
+    this._playerInstance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
+      this._removeClassNameToParent();
+      this._setParentStyle();
+      this._removeDragElement();
+      this._dragInstance?.destroy();
     });
   }
 }

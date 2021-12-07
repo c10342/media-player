@@ -17,12 +17,12 @@ class EventManager {
       );
     });
   }
-  private canReister({ element, eventName, handler }: EventItem) {
+  private canRegister({ element, eventName, handler }: EventItem) {
     return !isUndef(element) && isString(eventName) && isFunction(handler);
   }
   addEventListener(options: EventItem) {
     const index = this.findIndex(options);
-    if (index === -1 && this.canReister(options)) {
+    if (index === -1 && this.canRegister(options)) {
       const { element, eventName, handler } = options;
       this.eventList.push(options);
       element?.addEventListener(eventName, handler);

@@ -1,3 +1,0 @@
-{{if controls.videoMask}}
-  <div class="player-video-mask"></div>
-{{/if}}

@@ -17,89 +17,85 @@ class Highlight {
   // 插件名称.
   static pluginName = pluginName;
   // 播放器的dom
-  private el: HTMLElement;
+  private _el: HTMLElement;
   // 播放器实例
-  private instance: MediaPlayer;
+  private _playerInstance: MediaPlayer;
   // 是否正在加载标志位
-  private load = true;
+  private _load = true;
   // 提示点的dom元素
-  private element: HTMLElement | null;
+  private _element: HTMLElement | null;
   // 事件管理器
-  private eventManager: EventManager | null;
+  private _eventManager = new EventManager();
   // 提示点参数
-  private options: HighlightOptions;
+  private _options: HighlightOptions;
 
-  constructor(el: HTMLElement, instance: MediaPlayer) {
+  constructor(playerInstance: MediaPlayer, el: HTMLElement) {
     // 保存一下播放器给来的参数
-    this.el = el;
-    this.instance = instance;
+    this._el = el;
+    this._playerInstance = playerInstance;
     // 合并默认参数
-    const options = this.instance.options[pluginName] ?? {};
-    this.options = { ...defaultOptions, ...options };
-    this.initVar();
+    const options = playerInstance.$options[pluginName] ?? {};
+    this._options = { ...defaultOptions, ...options };
     // 开始初始化
-    this.init();
-    this.initInstanceListener();
+    this._init();
+    this._initInstanceListener();
     // 挂载方法给外部用
-    this.initMethods();
+    this._initMethods();
   }
 
-  private initMethods() {
-    Object.defineProperty(this.instance, "highlight", {
+  private _initMethods() {
+    Object.defineProperty(this._playerInstance, "highlight", {
       get: () => {
         return {
           set: (list: HighlightList) => {
-            this.setHighlight(list);
+            this._setHighlight(list);
           },
           destroy: () => {
-            this.destroyHighlight();
+            this._destroyHighlight();
           }
         };
       }
     });
   }
 
-  private initVar() {
-    this.eventManager = new EventManager();
-  }
-
   private get duration() {
-    return this.instance.duration;
+    return this._playerInstance.duration;
   }
 
-  private initInstanceListener() {
+  private _initInstanceListener() {
     // 销毁
-    this.instance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
-      this.destroyHighlight();
-    });
+    this._playerInstance.$on(
+      MediaPlayer.PlayerEvents.DESTROY,
+      this._destroyHighlight.bind(this)
+    );
   }
 
   // 初始化
-  private init() {
+  private _init() {
     // 提示点需要获取总时长，计算出提示点的位置
     if (this.duration && this.duration > 0) {
       // 总时长存在并且大于0，说明视频已经加载好了
-      this.load = true;
-      this.initElement();
+      this._load = true;
+      this._initElement();
     } else {
       // 获取不到总时长说明视频没有加载完成，需要等待加载完成在执行下一步操作
-      this.instance.$once(MediaPlayer.VideoEvents.LOADEDMETADATA, () => {
-        this.load = true;
-        this.initElement();
+      this._playerInstance.$once(MediaPlayer.VideoEvents.LOADEDMETADATA, () => {
+        this._load = true;
+        this._initElement();
       });
     }
   }
 
-  private initElement() {
-    const highlightList = this.options.list;
-    if (!this.load || !isArray(highlightList) || highlightList.length === 0) {
+  private _initElement() {
+    const highlightList = this._options.list;
+    if (!this._load || !isArray(highlightList) || highlightList.length === 0) {
       // 视频没加载完成或者提示点列表为空不做任何操作
       return;
     }
     // 为防止重复设置,每次设置需要销毁上一次的
-    this.removeElementAndListener();
+    this._removeElementAndListener();
     // 找到进度条的dom元素
-    const progressBar = this.el.querySelector(".player-process-content");
+    const progressBar = this._el.querySelector(".player-process-content");
     // 开始渲染提示点列表
     const div = document.createElement("div");
     div.innerHTML = pointListTpl({
@@ -107,26 +103,26 @@ class Highlight {
       duration: this.duration
     });
     // 保存渲染出来的提示点元素
-    this.element = div;
+    this._element = div;
     // 插入到进度条中
     progressBar?.appendChild(div);
     // 事件监听
-    this.initListener();
+    this._initListener();
     // 调整位置，有些在最右边或者最左边的可能会被隐藏掉
-    this.adjustPosition();
+    this._adjustPosition();
   }
   // 调整位置
-  private adjustPosition() {
-    const pointListElement = this.element!.querySelectorAll(
+  private _adjustPosition() {
+    const pointListElement = this._element!.querySelectorAll(
       ".highlight-point-tip"
     );
-    const { left, right } = getBoundingClientRect(this.el);
-    this.adjustLeft(pointListElement, left);
-    this.adjustRight(pointListElement, right);
+    const { left, right } = getBoundingClientRect(this._el);
+    this._adjustLeft(pointListElement, left);
+    this._adjustRight(pointListElement, right);
   }
 
   // 调整左边的距离
-  private adjustLeft(pointListElement: NodeListOf<Element>, left: number) {
+  private _adjustLeft(pointListElement: NodeListOf<Element>, left: number) {
     const length = pointListElement.length;
     for (let i = 0; i < length; i++) {
       const element = pointListElement[i] as HTMLElement;
@@ -146,7 +142,7 @@ class Highlight {
   }
 
   // 调整右边距离
-  private adjustRight(pointListElement: NodeListOf<Element>, right: number) {
+  private _adjustRight(pointListElement: NodeListOf<Element>, right: number) {
     const length = pointListElement.length;
     for (let i = length - 1; i >= 0; i--) {
       const element = pointListElement[i] as HTMLElement;
@@ -164,54 +160,54 @@ class Highlight {
     }
   }
 
-  private initListener() {
+  private _initListener() {
     // 事件委托，不要去监听单个元素的
-    this.eventManager?.addEventListener({
-      element: this.element,
+    this._eventManager?.addEventListener({
+      element: this._element,
       eventName: "click",
-      handler: this.onClick.bind(this)
+      handler: this._onClick.bind(this)
     });
   }
 
-  private onClick(event: MouseEvent) {
-    const { jump, showTip } = this.options;
+  private _onClick(event: MouseEvent) {
+    const { jump, showTip } = this._options;
     const target = event.target as HTMLElement;
     const dataset = target.dataset;
 
     if (dataset && dataset.index) {
       // 点击的是提示点
-      const highlightList = this.options.list as HighlightList;
+      const highlightList = this._options.list as HighlightList;
       const item = highlightList[dataset.index as any];
 
       if (jump) {
         // 跳转
-        this.instance.seek(item.time);
+        this._playerInstance.seek(item.time);
       }
       if (showTip) {
         // 显示提示
-        this.instance.setNotice(item.text);
+        this._playerInstance.setNotice(item.text);
       }
       // 发射自定义事件
-      this.instance.$emit(HighlightEvents.HIGHLIGHTCLICK, item);
+      this._playerInstance.$emit(HighlightEvents.HIGHLIGHTCLICK, item);
     }
   }
 
-  private removeElementAndListener() {
-    this.eventManager?.removeEventListener();
-    this.element?.remove();
-    (this.element as any) = null;
+  private _removeElementAndListener() {
+    this._eventManager?.removeEventListener();
+    this._element?.remove();
+    (this._element as any) = null;
   }
 
   // 设置提示点列表
-  setHighlight(list: HighlightList) {
-    this.options.list = list;
-    this.initElement();
+  private _setHighlight(list: HighlightList) {
+    this._options.list = list;
+    this._initElement();
   }
 
   // 销毁提示点列表
-  destroyHighlight() {
-    this.options.list = [];
-    this.removeElementAndListener();
+  private _destroyHighlight() {
+    this._options.list = [];
+    this._removeElementAndListener();
   }
 }
 

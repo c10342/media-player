@@ -47,6 +47,7 @@
 
 .danmaku-setting-container {
   position: relative;
+  z-index: 20;
   height: 100%;
 
   &:hover {

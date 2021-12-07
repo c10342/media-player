@@ -14,27 +14,21 @@ import "./style/index.scss";
 
 class Contextmenu {
   static pluginName = pluginName;
-  private _instance: MediaPlayer;
-  private _parentElement: HTMLElement;
+  private _playerInstance: MediaPlayer;
   private _options: ContextmenuOptions;
-  private _eventManager: EventManager;
+  private _eventManager = new EventManager();
   private _el: HTMLElement;
-  private _wrapperElement: HTMLElement;
-  constructor(el: HTMLElement, instance: MediaPlayer) {
+  private _wrapperElement: HTMLElement | null;
+  constructor(playerInstance: MediaPlayer, el: HTMLElement) {
     this._el = el;
-    this._instance = instance;
-    this._parentElement = instance.options.el as HTMLElement;
-    const options = instance.options[pluginName] ?? {};
+    this._playerInstance = playerInstance;
+    const options = playerInstance.$options[pluginName] ?? {};
     this._options = { ...options };
-    this._initVar();
-    if (isArray(this._options.menuList) && this._options.menuList.length > 0) {
+    const menuList = this._options.menuList;
+    if (isArray(menuList) && menuList.length > 0) {
       this._createElement();
       this._initListener();
     }
-  }
-
-  private _initVar() {
-    this._eventManager = new EventManager();
   }
 
   private _initListener() {
@@ -63,7 +57,7 @@ class Contextmenu {
       eventName: "scroll",
       handler: this._hideMenu.bind(this)
     });
-    this._instance.$on(
+    this._playerInstance.$on(
       MediaPlayer.PlayerEvents.DESTROY,
       this._destroy.bind(this)
     );
@@ -92,14 +86,14 @@ class Contextmenu {
       menuItem.callback(menuItem);
     }
     if (isString(menuItem.eventName)) {
-      this._instance.$emit(menuItem.eventName, menuItem);
+      this._playerInstance.$emit(menuItem.eventName, menuItem);
     }
     this._hideMenu();
   }
 
   private _onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (!this._wrapperElement.contains(target)) {
+    if (!this._wrapperElement?.contains(target)) {
       this._hideMenu();
     }
   }
@@ -113,7 +107,7 @@ class Contextmenu {
     if (this._options.meunItemWidth) {
       div.style.width = this._options.meunItemWidth;
     }
-    this._parentElement.appendChild(div);
+    this._el.appendChild(div);
     this._wrapperElement = div;
   }
 
@@ -130,13 +124,20 @@ class Contextmenu {
   }
 
   private _showMenu() {
-    this._wrapperElement.style.display = "block";
+    if (this._wrapperElement) {
+      this._wrapperElement.style.display = "block";
+    }
   }
   private _hideMenu() {
-    this._wrapperElement.style.display = "";
+    if (this._wrapperElement) {
+      this._wrapperElement.style.display = "";
+    }
   }
 
   private _adjustPosition(event: MouseEvent) {
+    if (!this._wrapperElement) {
+      return;
+    }
     let y = event.clientY;
     let x = event.clientX;
     const scrollWidth = this._wrapperElement.scrollWidth;
@@ -160,6 +161,8 @@ class Contextmenu {
 
   private _destroy() {
     this._eventManager.removeEventListener();
+    // this._wrapperElement?.remove();
+    // this._wrapperElement = null;
   }
 }
 

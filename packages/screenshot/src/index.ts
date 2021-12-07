@@ -16,95 +16,91 @@ class Screenshot {
   // 插件名称.
   static pluginName = pluginName;
   // 播放器的dom
-  private el: HTMLElement;
+  private _el: HTMLElement;
   // 播放器实例
-  private instance: MediaPlayer;
+  private _playerInstance: MediaPlayer;
   // dom元素
-  private element: HTMLElement | null;
+  private _element: HTMLElement | null;
   // 事件管理器
-  private eventManager: EventManager | null;
+  private _eventManager = new EventManager();
   // 参数
-  private options: ScreenshotOptions;
+  private _options: ScreenshotOptions;
 
-  constructor(el: HTMLElement, instance: MediaPlayer) {
+  constructor(playerInstance: MediaPlayer, el: HTMLElement) {
     // 保存一下播放器给来的参数
-    this.el = el;
-    this.instance = instance;
+    this._el = el;
+    this._playerInstance = playerInstance;
     // 合并默认参数
-    const options = this.instance.options[pluginName] ?? {};
-    this.options = { ...defaultOptions, ...options };
+    const _options = playerInstance.$options[pluginName] ?? {};
+    this._options = { ...defaultOptions, ..._options };
     // 初始化
-    this.handleInit();
+    this._handleInit();
     // 挂载方法给外部使用
-    this.initMethods();
+    this._initMethods();
   }
 
-  private handleInit() {
-    this.initVar();
+  private _handleInit() {
     // 初始化dom
-    this.initElement();
+    this._initElement();
     // 销毁
-    this.instance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
-      this.destroy();
-    });
+    this._playerInstance.$on(
+      MediaPlayer.PlayerEvents.DESTROY,
+      this._destroy.bind(this)
+    );
   }
 
-  private initMethods() {
+  private _initMethods() {
     Object.defineProperty(this, "screenshot", {
       get: () => {
         return {
           snapshot: () => {
-            this.onClick();
+            this._onClick();
           }
         };
       }
     });
   }
 
-  private initVar() {
-    this.eventManager = new EventManager();
-  }
-
   // 渲染小图标
-  private initElement() {
+  private _initElement() {
     const span = document.createElement("span");
     span.className =
       "screenshot-icon-screenshot player-icon-item screenshot-icon-item";
-    const parentNode = this.el.querySelector(".player-controls-right");
+    const parentNode = this._el.querySelector(".player-controls-right");
     parentNode?.insertBefore(span, parentNode?.firstElementChild);
-    this.element = span;
+    this._element = span;
     // 监听事件
-    this.initListener();
+    this._initListener();
   }
 
-  private initListener() {
-    this.eventManager?.addEventListener({
-      element: this.element,
+  private _initListener() {
+    this._eventManager?.addEventListener({
+      element: this._element,
       eventName: "click",
-      handler: this.onClick.bind(this)
+      handler: this._onClick.bind(this)
     });
   }
 
-  private removeListener() {
-    this.eventManager?.removeEventListener();
+  private _removeListener() {
+    this._eventManager?.removeEventListener();
   }
 
-  private onClick() {
-    const imageSrc = this.getVideoImage();
+  private _onClick() {
+    const imageSrc = this._getVideoImage();
     // 广播事件
-    this.instance.$emit(ScreenshotEvents.SCREENSHOT, imageSrc);
-    if (this.options.download && !isUndef(imageSrc)) {
+    this._playerInstance.$emit(ScreenshotEvents.SCREENSHOT, imageSrc);
+    if (this._options.download && !isUndef(imageSrc)) {
       // 下载图片
-      this.downloadImage(imageSrc);
+      this._downloadImage(imageSrc);
     }
   }
 
-  private downloadImage(imageSrc: string) {
-    downloadBase64(this.options.picName || downloadPicName, imageSrc);
+  private _downloadImage(imageSrc: string) {
+    downloadBase64(this._options.picName || downloadPicName, imageSrc);
   }
 
-  private getVideoImage() {
-    const videoElement = this.el.querySelector(
+  private _getVideoImage() {
+    const videoElement = this._el.querySelector(
       ".player-video"
     ) as HTMLVideoElement;
     try {
@@ -112,7 +108,7 @@ class Screenshot {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       // 获取视频宽高
-      const videoInfo = this.getVideoInfo(videoElement);
+      const videoInfo = this._getVideoInfo(videoElement);
       canvas.width = videoInfo.width;
       canvas.height = videoInfo.height;
       ctx?.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
@@ -125,7 +121,7 @@ class Screenshot {
   }
 
   // 获取视频宽高，视频的真实宽高不一定等于容器的宽高，需要通过公式计算出来
-  private getVideoInfo(videoElement: HTMLVideoElement) {
+  private _getVideoInfo(videoElement: HTMLVideoElement) {
     const videoRatio = videoElement.videoWidth / videoElement.videoHeight;
     let width = videoElement.offsetWidth;
     let height = videoElement.offsetHeight;
@@ -138,8 +134,8 @@ class Screenshot {
     };
   }
 
-  private destroy() {
-    this.removeListener();
+  private _destroy() {
+    this._removeListener();
   }
 }
 

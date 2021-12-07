@@ -1,0 +1,15 @@
+.player-tip {
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+  z-index: 20;
+  padding: 7px 20px;
+  overflow: hidden;
+  font-size: 14px;
+  color: var(--player-text-color, $text-color);
+  pointer-events: none;
+  background-color: var(--player-text-wrapper-background-color, $text-wrapper-background-color);
+  border-radius: 2px;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}

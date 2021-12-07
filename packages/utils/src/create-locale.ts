@@ -53,7 +53,10 @@ export default function createLocale({ zhLang, enLang }: LangObj) {
   };
 
   // 设置使用哪种语言
-  const setLang = function setLang(la: string) {
+  const setLang = function setLang(la: string | null | undefined) {
+    if (!la) {
+      return;
+    }
     lang = la === LangTypeEnum.en ? enLang : zhLang;
   };
 

@@ -1,0 +1,8 @@
+.player-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  background-color: var(--player-container-background-color, $container-background-color);
+}

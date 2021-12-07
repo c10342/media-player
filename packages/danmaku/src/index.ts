@@ -4,7 +4,7 @@ import BulletChat from "./js/bullet-chat";
 import { DanmakuOptions, PushData } from "./types";
 import settingTpl from "./template/setting.art";
 import "./style/index.scss";
-import i18n from "./locale";
+import initLocale from "./locale";
 import MediaPlayer from "@lin-media/player";
 import { pluginName } from "./config/constant";
 
@@ -22,8 +22,8 @@ class Danmaku {
   // 播放器的dom
   private _el: HTMLElement;
   // 播放器实例
-  private _instance: MediaPlayer;
-  private _eventManager: EventManager | null;
+  private _playerInstance: MediaPlayer;
+  private _eventManager = new EventManager();
   // 弹幕类
   private _bulletChat: BulletChat | null;
   // 弹幕容器
@@ -57,15 +57,15 @@ class Danmaku {
   private _danmakuAreaWrapperElement: HTMLElement;
   private _danmakuAreaPosition = DanmakuAreaEnum.all;
 
-  constructor(el: HTMLElement, instance: MediaPlayer) {
+  private _i18n = initLocale();
+
+  constructor(playerInstance: MediaPlayer, el: HTMLElement) {
     this._el = el;
-    this._instance = instance;
-    const options = instance.options[pluginName] ?? {};
+    this._playerInstance = playerInstance;
+    const options = playerInstance.$options[pluginName] ?? {};
     this.options = options;
     // 初始化语言
     this._initLang();
-    // 初始化变量
-    this._initVar();
     // 生成dom元素
     this._initElement();
     // 获取相关元素
@@ -83,7 +83,7 @@ class Danmaku {
   }
 
   private _initMethods() {
-    Object.defineProperty(this._instance, "danmaku", {
+    Object.defineProperty(this._playerInstance, "danmaku", {
       get: () => {
         return {
           // 发送弹幕
@@ -133,15 +133,10 @@ class Danmaku {
 
   private _initLang() {
     // 先设置中英文
-    i18n.setLang(MediaPlayer.lang);
-    // 设置i18n处理函数
-    i18n.i18n(MediaPlayer.i18nFn);
+    const options = this._playerInstance.$options;
+    this._i18n.setLang(options.lang);
     // 最后才设置自定义语言包，否则i18n.setLang会覆盖掉自定义语言包
-    i18n.use((MediaPlayer.langObject as any).danmaku);
-  }
-
-  private _initVar() {
-    this._eventManager = new EventManager();
+    this._i18n.use(options.customLanguage?.danmaku);
   }
 
   private _initElement() {
@@ -149,7 +144,7 @@ class Danmaku {
     danmuDiv.className = "danmaku-container danmaku-container-all";
     this._el.appendChild(danmuDiv);
     this._danmakuWrapperElement = danmuDiv;
-
+    const i18n = this._i18n;
     const settingDiv = document.createElement("div");
     settingDiv.className = "danmaku-setting-container";
     settingDiv.innerHTML = settingTpl({
@@ -211,10 +206,10 @@ class Danmaku {
   }
 
   private _initListener() {
-    this._instance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
+    this._playerInstance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
       this._destroy();
     });
-    this._instance.$on(MediaPlayer.PlayerEvents.RESIZE, () => {
+    this._playerInstance.$on(MediaPlayer.PlayerEvents.RESIZE, () => {
       this._bulletChat?.resize();
     });
     this._eventManager?.addEventListener({

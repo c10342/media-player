@@ -1,0 +1,6 @@
+
+  <div class="player-video-slot">
+{{include './video-tag.art' }}
+  </div>
+
+  

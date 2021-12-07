@@ -5,9 +5,9 @@ import Preview from "@lin-media/preview";
 import Zoom from "@lin-media/zoom";
 import Danmaku from "@lin-media/danmaku";
 import Contextmenu from "@lin-media/contextmenu";
-// VideoPlayer.use(Highlight);
-// VideoPlayer.use(Preview);
-// VideoPlayer.use(Screenshot);
+VideoPlayer.use(Highlight);
+VideoPlayer.use(Preview);
+VideoPlayer.use(Screenshot);
 import "./index.scss";
 
 import DanmukuTest from "./danmaku";
@@ -131,7 +131,8 @@ const contextMenuList = [
     ]
   }
 ];
-const player = new VideoPlayer({
+
+const player: any = new VideoPlayer({
   el: ".container",
   videoList: [
     {
@@ -157,28 +158,33 @@ const player = new VideoPlayer({
     // }
   ],
   speedList,
-  // plugins: [Screenshot, Zoom, Danmaku, Contextmenu],
+  plugins: [
+    // Screenshot,
+    Zoom,
+    Danmaku,
+    Contextmenu
+  ],
   Highlight: {
     jump: true,
     showTip: true,
     list: highlightList
   },
-  Screenshot: {
-    // 是否开启功能
-    open: true,
-    // 点击后自动下载,默认true，你可以设置为false，然后通过事件监听来自定义点击之后的操作
-    download: true
-  },
+  // Screenshot: {
+  //   // 是否开启功能
+  //   open: true,
+  //   // 点击后自动下载,默认true，你可以设置为false，然后通过事件监听来自定义点击之后的操作
+  //   download: true
+  // },
   Preview: {
-    // list: previewList,
-    barPreviewUrl: "https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg"
+    list: previewList
+    // barPreviewUrl: "https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg"
   },
-  Zoom: {
-    // y:false,
-    // open:false,
-    minWidth: 300,
-    minHeight: 300
-  },
+  // Zoom: {
+  //   // y:false,
+  //   // open:false,
+  //   minWidth: 300,
+  //   minHeight: 300
+  // },
   Danmaku: {
     fontColors: ["blue", "red", "green", "#fff", "yellow"],
     fontSizes: [16, 18, 20, 22, 24, 26, 28]
@@ -188,11 +194,9 @@ const player = new VideoPlayer({
     meunItemWidth: "200px",
     subMenuItemWidth: "100px"
   }
-  // controls:{
-  //   videoMask:false
-  // }
-  // hotkey:true
-  // live:true
+  // controls:false
+  // hotkey:false,
+  // live: true
   // autoplay: true,
   // muted:true
   // customType(videoElement, videoObj) {
@@ -201,7 +205,7 @@ const player = new VideoPlayer({
   //   hls.attachMedia(videoElement);
   // }
 });
-
+(window as any).player = player;
 // (player as any).setHighlight(highlightList);
 
 player.$on("play", () => {
@@ -221,8 +225,8 @@ document.querySelector(".setoptions")?.addEventListener("click", () => {
   // (player as any).setBarView('https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg');
   // (player as any).highlight.set(highlightList);
   // (player as any).screenshot.snapshot();
-  speedList[0].label = "123";
-  console.log(speedList, player.options);
+  // speedList[0].label = "123";
+  // console.log(speedList, player.options);
 });
 document.querySelector(".destroyoptions")?.addEventListener("click", () => {
   (player as any).destroyPreview();
