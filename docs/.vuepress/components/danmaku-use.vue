@@ -62,8 +62,12 @@ export default {
       },
       plugins: [Danmaku]
     });
+    window.addEventListener('resize',this.onResize)
   },
   methods: {
+    onResize(){
+      this.player.danmaku.resize()
+    },
     onInitSuccess(player) {
       this.player = player;
     },
@@ -88,6 +92,9 @@ export default {
       }
       this.player.danmaku.send(message);
     }
+  },
+  beforeDestroy(){
+    window.removeEventListener('resize',this.onResize)
   }
 };
 </script>
