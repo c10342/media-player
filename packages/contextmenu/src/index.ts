@@ -4,7 +4,8 @@ import {
   isArray,
   isFunction,
   isString,
-  getViewPortInfo
+  getViewPortInfo,
+  updateStyle
 } from "@lin-media/utils";
 import { pluginName } from "./config/constant";
 import { ContextmenuOptions, MenuItem } from "./types";
@@ -104,8 +105,10 @@ class Contextmenu {
     div.innerHTML = menuListTpl({
       ...this._options
     });
-    if (this._options.meunItemWidth) {
-      div.style.width = this._options.meunItemWidth;
+    if (this._options.menuItemWidth) {
+      updateStyle(div, {
+        width: this._options.menuItemWidth
+      });
     }
     this._el.appendChild(div);
     this._wrapperElement = div;
@@ -124,14 +127,14 @@ class Contextmenu {
   }
 
   private _showMenu() {
-    if (this._wrapperElement) {
-      this._wrapperElement.style.display = "block";
-    }
+    updateStyle(this._wrapperElement, {
+      display: "block"
+    });
   }
   private _hideMenu() {
-    if (this._wrapperElement) {
-      this._wrapperElement.style.display = "";
-    }
+    updateStyle(this._wrapperElement, {
+      display: ""
+    });
   }
 
   private _adjustPosition(event: MouseEvent) {
@@ -155,14 +158,14 @@ class Contextmenu {
     ) {
       x = event.clientX - scrollWidth;
     }
-    this._wrapperElement.style.top = `${y}px`;
-    this._wrapperElement.style.left = `${x}px`;
+    updateStyle(this._wrapperElement, {
+      top: `${y}px`,
+      left: `${x}px`
+    });
   }
 
   private _destroy() {
     this._eventManager.removeEventListener();
-    // this._wrapperElement?.remove();
-    // this._wrapperElement = null;
   }
 }
 
