@@ -5,7 +5,8 @@ import {
   isArray,
   isUndef,
   checkData,
-  getBoundingClientRect
+  getBoundingClientRect,
+  updateStyle
 } from "@lin-media/utils";
 import { PreviewList, PreviewOptions } from "./types";
 import MediaPlayer from "@lin-media/player";
@@ -152,8 +153,10 @@ class Preview {
         const parentLeft =
           getBoundingClientRect(element.parentElement).left ?? 0;
         const offsetLeft = parentLeft - left;
-        element.style.left = `${-offsetLeft}px`;
-        element.style.transform = "translate(0,-100%)";
+        updateStyle(element, {
+          left: `${-offsetLeft}px`,
+          transform: "translate(0,-100%)"
+        });
       } else {
         // 找到一个不被遮挡的元素就不用遍历后面的了
         break;
@@ -171,8 +174,10 @@ class Preview {
         const parentRight =
           getBoundingClientRect(element.parentElement).right ?? 0;
         const offsetRight = right - parentRight;
-        element.style.left = `${offsetRight}px`;
-        element.style.transform = "translate(-100%,-100%)";
+        updateStyle(element, {
+          left: `${offsetRight}px`,
+          transform: "translate(-100%,-100%)"
+        });
       } else {
         // 找到一个不被遮挡的元素就不用遍历前面的了
         break;
@@ -231,9 +236,11 @@ class Preview {
       barViewImageWidth;
     const div = document.createElement("div");
     div.className = "preview-bar-image";
-    div.style.backgroundImage = `url("${this._options.barPreviewUrl}")`;
-    div.style.width = `${barViewImageWidth}px`;
-    div.style.height = `${height}px`;
+    updateStyle(div, {
+      backgroundImage: `url("${this._options.barPreviewUrl}")`,
+      width: `${barViewImageWidth}px`,
+      height: `${height}px`
+    });
     return div;
   }
 
@@ -248,19 +255,17 @@ class Preview {
       const maxLeft = progressInfo.right - containerInfo.left - minLeft;
       // 鼠标距离容器左边的距离
       const left = event.pageX - progressInfo.left;
-      // 设置图片的位置
-      this._barViewElement.style.left = `${
-        checkData(left, minLeft, maxLeft) - minLeft
-      }px`;
       // 找到第几张背景图
       const indexPic = Math.floor(
         (checkData(left, 0, progressInfo.width) / progressInfo.width) *
           this.duration
       );
-      // 改变背景图的位置
-      this._barViewElement.style.backgroundPosition = `-${
-        indexPic * barViewImageWidth
-      }px 0`;
+      updateStyle(this._barViewElement, {
+        // 设置图片的位置
+        left: `${checkData(left, minLeft, maxLeft) - minLeft}px`,
+        // 改变背景图的位置
+        backgroundPosition: `-${indexPic * barViewImageWidth}px 0`
+      });
     }
   }
 

@@ -1,4 +1,9 @@
-import { Drag, EventManager, parseHtmlToDom } from "@lin-media/utils";
+import {
+  Drag,
+  EventManager,
+  parseHtmlToDom,
+  updateStyle
+} from "@lin-media/utils";
 import { VolumeButtonIconEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
@@ -97,11 +102,9 @@ class VideoVolume {
 
   private _toggleAnimation() {
     // 鼠标进入音量容器或者正在拖拽时，需要显示容器
-    if (this._isEnter || this._isMove) {
-      this._volumeAnimationElement.style.width = "70px";
-    } else {
-      this._volumeAnimationElement.style.width = "";
-    }
+    updateStyle(this._volumeAnimationElement, {
+      width: this._isEnter || this._isMove ? "70px" : ""
+    });
   }
 
   // 设置通知提示
@@ -128,7 +131,9 @@ class VideoVolume {
 
   // 设置音量长度
   private _setProgressWidth(volume: number) {
-    this._volumeProcessElement.style.width = `${volume * 100}%`;
+    updateStyle(this._volumeProcessElement, {
+      width: `${volume * 100}%`
+    });
     // 静音需要显示静音图标
     if (volume === 0) {
       //   静音

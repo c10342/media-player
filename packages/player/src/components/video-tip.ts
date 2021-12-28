@@ -1,4 +1,4 @@
-import { isUndef, parseHtmlToDom } from "@lin-media/utils";
+import { isUndef, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import { PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
 import TipTpl from "../templates/tip.art";
@@ -45,11 +45,15 @@ class VideoTip {
   // 显示提示
   private _showTip(tip: string) {
     this._compRootElement.innerHTML = tip;
-    this._compRootElement.style.opacity = "1";
+    updateStyle(this._compRootElement, {
+      opacity: "1"
+    });
   }
   // 隐藏提示
   private _hideTip() {
-    this._compRootElement.style.opacity = "";
+    updateStyle(this._compRootElement, {
+      opacity: ""
+    });
   }
 
   // 事件监听

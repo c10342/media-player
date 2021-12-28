@@ -191,7 +191,7 @@ const player: any = new VideoPlayer({
   },
   Contextmenu: {
     menuList: contextMenuList,
-    meunItemWidth: "200px",
+    menuItemWidth: "200px",
     subMenuItemWidth: "100px"
   }
   // controls:false

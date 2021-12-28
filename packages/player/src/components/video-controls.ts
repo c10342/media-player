@@ -1,4 +1,9 @@
-import { EventManager, isUndef, parseHtmlToDom } from "@lin-media/utils";
+import {
+  EventManager,
+  isUndef,
+  parseHtmlToDom,
+  updateStyle
+} from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
 import ControlsTpl from "../templates/controls.art";
@@ -191,12 +196,16 @@ class VideoControls {
   }
 
   private _show() {
-    this._compRootElement.style.transform = "";
+    updateStyle(this._compRootElement, {
+      transform: ""
+    });
     this._emit(PlayerEvents.SHOW_CONTROLS);
   }
 
   private _hide() {
-    this._compRootElement.style.transform = "translateY(100%)";
+    updateStyle(this._compRootElement, {
+      transform: "translateY(100%)"
+    });
     this._emit(PlayerEvents.HIDE_CONTROLS);
   }
 
