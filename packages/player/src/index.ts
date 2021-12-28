@@ -25,6 +25,7 @@ import VideoLoading from "./components/video-loading";
 import VideoTip from "./components/video-tip";
 import ShortcutKey from "./components/shortcut-key";
 import MobilePlayButton from "./components/mobile-play-button";
+import DomResizeObserver from "./components/resize-observer";
 import { PlayerEvents, VideoEvents } from "./config/event";
 
 class MediaPlayer {
@@ -168,9 +169,16 @@ class MediaPlayer {
       });
     }
 
-    if (this.$options.hotkey && !this.$isMobile) {
-      new ShortcutKey(this);
-    }
+    const extendsList = [
+      { ctor: ShortcutKey, init: this.$options.hotkey && !this.$isMobile },
+      { ctor: DomResizeObserver, init: true }
+    ];
+
+    extendsList.forEach((item) => {
+      if (item.init) {
+        new item.ctor(this);
+      }
+    });
   }
 
   // 初始化插件
