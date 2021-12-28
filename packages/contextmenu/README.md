@@ -87,7 +87,7 @@ const player = new MediaPlayer({
   // ...
   Contextmenu: {
     // 一级菜单宽度
-    meunItemWidth: "300px",
+    menuItemWidth: "300px",
     // 二级菜单宽度
     subMenuItemWidth: "100px"
   }
@@ -103,7 +103,7 @@ player.$on("click-play", (item) => {
 | 参数             | 说明                 | 类型   | 可选值 | 默认值 |
 | ---------------- | -------------------- | ------ | ------ | ------ |
 | menuList         | 菜单列表，格式见下方 | Array  | —      | —      |
-| meunItemWidth    | 一级菜单宽度         | string | —      | 250px  |
+| menuItemWidth    | 一级菜单宽度         | string | —      | 250px  |
 | subMenuItemWidth | 二级菜单宽度         | string | —      | 80%    |
 
 ## menuList 参数格式

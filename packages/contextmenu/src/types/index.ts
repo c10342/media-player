@@ -1,6 +1,6 @@
 export interface ContextmenuOptions {
   menuList: MenuList;
-  meunItemWidth?: string;
+  menuItemWidth?: string;
   subMenuItemWidth?: string;
 }
 
