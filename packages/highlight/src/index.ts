@@ -1,6 +1,11 @@
 import pointListTpl from "./template/point-list.art";
 import "./style/index.scss";
-import { EventManager, getBoundingClientRect, isArray } from "@lin-media/utils";
+import {
+  EventManager,
+  getBoundingClientRect,
+  isArray,
+  updateStyle
+} from "@lin-media/utils";
 import { HighlightList, HighlightOptions } from "./types";
 import MediaPlayer from "@lin-media/player";
 import { HighlightEvents } from "./config/event";
@@ -132,8 +137,10 @@ class Highlight {
         const parentLeft =
           getBoundingClientRect(element.parentElement).left ?? 0;
         const offsetLeft = parentLeft - left;
-        element.style.left = `${-offsetLeft}px`;
-        element.style.transform = "translate(0,-100%)";
+        updateStyle(element, {
+          left: `${-offsetLeft}px`,
+          transform: "translate(0,-100%)"
+        });
       } else {
         // 找到一个不被遮挡的元素就不用遍历后面的了
         break;
@@ -151,8 +158,10 @@ class Highlight {
         const parentRight =
           getBoundingClientRect(element.parentElement).right ?? 0;
         const offsetRight = right - parentRight;
-        element.style.left = `${offsetRight}px`;
-        element.style.transform = "translate(-100%,-100%)";
+        updateStyle(element, {
+          left: `${offsetRight}px`,
+          transform: "translate(-100%,-100%)"
+        });
       } else {
         // 找到一个不被遮挡的元素就不用遍历前面的了
         break;
