@@ -86,7 +86,7 @@ export default {
       Contextmenu: {
         menuList: this.contextMenuList,
         // 一级菜单宽度
-        meunItemWidth: "200px",
+        menuItemWidth: "200px",
         // 二级菜单宽度
         subMenuItemWidth: "100px"
       },
