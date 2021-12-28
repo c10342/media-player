@@ -1,4 +1,4 @@
-import { isUndef, Drag } from "@lin-media/utils";
+import { isUndef, Drag, updateStyle } from "@lin-media/utils";
 import { pluginName } from "./config/constant";
 import { ClassNameEnum, CursorEnum } from "./config/enum";
 import { ZoomEvents } from "./config/event";
@@ -127,12 +127,18 @@ class Zoom {
     const { x, y } = this._options;
     const div = document.createElement("div");
     div.className = ClassNameEnum.ZOOMDRAG;
+    let cursor;
     if (x && y) {
-      div.style.cursor = CursorEnum.default;
+      cursor = CursorEnum.default;
     } else if (x) {
-      div.style.cursor = CursorEnum.x;
+      cursor = CursorEnum.x;
     } else if (y) {
-      div.style.cursor = CursorEnum.y;
+      cursor = CursorEnum.y;
+    }
+    if (cursor) {
+      updateStyle(div, {
+        cursor
+      });
     }
     return div;
   }
@@ -141,18 +147,20 @@ class Zoom {
   private _setParentStyle(style?: { width: number; height: number }) {
     if (!isUndef(style)) {
       const { x, y } = this._options;
-      if (x) {
+      updateStyle(this._parentElement, {
         // 开启横向拖拽才设置
-        this._parentElement.style.width = `${style.width}px`;
-      }
-      if (y) {
+        width: x ? `${style.width}px` : undefined,
         // 开始纵向拖拽才设置
-        this._parentElement.style.height = `${style.height}px`;
-      }
+        height: y ? `${style.height}px` : undefined
+      });
     } else {
       // 宽高样式不存在就重置样式
-      this._parentElement.style.width = "";
-      this._parentElement.style.height = "";
+      updateStyle(this._parentElement, {
+        // 开启横向拖拽才设置
+        width: "",
+        // 开始纵向拖拽才设置
+        height: ""
+      });
     }
   }
 
