@@ -4,8 +4,10 @@ import {
   EventManager,
   getBoundingClientRect,
   isNumber,
+  isUndef,
   parseHtmlToDom,
-  secondToTime
+  secondToTime,
+  updateStyle
 } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
@@ -104,16 +106,16 @@ class VideoProgress {
 
   // 根据百分比设置已播放的长度
   private _setPlayedProgressByPercent(percent: number) {
-    this._videoPlayedElement.style.width = `${percent * 100}%`;
+    updateStyle(this._videoPlayedElement, {
+      width: `${percent * 100}%`
+    });
   }
 
   // 设置过度时长
   private _setTransitionDuration(duration?: number) {
-    if (isNumber(duration)) {
-      this._videoPlayedElement.style.transitionDuration = `${duration}ms`;
-    } else {
-      this._videoPlayedElement.style.transitionDuration = "";
-    }
+    updateStyle(this._videoPlayedElement, {
+      transitionDuration: isNumber(duration) ? `${duration}ms` : ""
+    });
   }
 
   // 根据百分比跳转到指定时间
@@ -153,6 +155,7 @@ class VideoProgress {
     this._on(VideoEvents.TIMEUPDATE, this._onVideoTimeupdate.bind(this));
     this._on(VideoEvents.PROGRESS, this._onVideoProgress.bind(this));
     this._on(VideoEvents.SEEKED, this._onVideoSeeked.bind(this));
+    this._on(VideoEvents.ENDED, this._onVideoEnd.bind(this));
     if (!this._playerInstance.$options.isMobile) {
       this._eventManager.addEventListener({
         element: this._progressMaskElement,
@@ -167,12 +170,23 @@ class VideoProgress {
     }
   }
 
+  // 视频播放完成
+  private _onVideoEnd(event: Event) {
+    if (!this._isMousedown) {
+      // 不是在拖拽进度条的时候需要更新进度条
+      const videoElement = event.target as HTMLVideoElement;
+      const currentTime = videoElement.currentTime || 0;
+      this._setPlayedProgress(currentTime);
+    }
+  }
+
   // 视频正在播放
   private _onVideoTimeupdate(event: Event) {
     const videoElement = event.target as HTMLVideoElement;
     const currentTime = videoElement.currentTime || 0;
     const intCurrentTime = Math.floor(currentTime);
     const intPrevTime = Math.floor(this._currentTime);
+
     // 保证每一秒触发一次，防抖
     if (intCurrentTime === intPrevTime) {
       return;
@@ -194,14 +208,18 @@ class VideoProgress {
   }
 
   // 设置已播放的进度
-  private _setPlayedProgress() {
+  private _setPlayedProgress(currentTime?: number) {
     const duration = this._playerInstance.duration;
-    const currentTime = this._currentTime;
+    if (isUndef(currentTime)) {
+      currentTime = this._currentTime;
+    }
     if (duration > 0 && currentTime > 0) {
       // 计算出百分比
       let percent = currentTime / duration;
       percent = checkData(percent, 0, 1);
-      this._videoPlayedElement.style.width = `${percent * 100}%`;
+      updateStyle(this._videoPlayedElement, {
+        width: `${percent * 100}%`
+      });
     }
   }
 
@@ -211,7 +229,9 @@ class VideoProgress {
     if (duration > 0) {
       let percent = preloadTime / duration;
       percent = checkData(percent, 0, 1);
-      this._videoLoadedElement.style.width = `${percent * 100}%`;
+      updateStyle(this._videoLoadedElement, {
+        width: `${percent * 100}%`
+      });
     }
   }
 
@@ -232,10 +252,12 @@ class VideoProgress {
     const { left, width } = this._getProcessMaskInfo();
     let offsetX = event.pageX - left;
     offsetX = checkData(offsetX, 0, width);
-    processTimeElement.style.left = `${offsetX}px`;
     const time = this._playerInstance.duration * (offsetX / width);
     processTimeElement.innerHTML = secondToTime(time);
-    processTimeElement.style.opacity = "1";
+    updateStyle(processTimeElement, {
+      left: `${offsetX}px`,
+      opacity: "1"
+    });
   }
 
   // 鼠标离开进度条容器
@@ -246,7 +268,9 @@ class VideoProgress {
 
   // 隐藏时间提示，鼠标离开进度条容器
   private _hideProcessTime() {
-    this._processTimeElement.style.opacity = "";
+    updateStyle(this._processTimeElement, {
+      opacity: ""
+    });
   }
 
   private _destroy() {

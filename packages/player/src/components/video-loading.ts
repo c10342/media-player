@@ -1,4 +1,4 @@
-import { EventManager, parseHtmlToDom } from "@lin-media/utils";
+import { EventManager, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import { VideoReadyStateEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
@@ -62,11 +62,15 @@ class VideoLoading {
   }
   // 显示loading
   private _showLoading() {
-    this._compRootElement.style.display = "flex";
+    updateStyle(this._compRootElement, {
+      display: "flex"
+    });
   }
   // 隐藏loading
   private _hideLoading() {
-    this._compRootElement.style.display = "";
+    updateStyle(this._compRootElement, {
+      display: ""
+    });
   }
 
   private _destroy() {

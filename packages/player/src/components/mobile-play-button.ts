@@ -1,4 +1,4 @@
-import { EventManager, parseHtmlToDom } from "@lin-media/utils";
+import { EventManager, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import { PlayButtonIconEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
@@ -55,13 +55,17 @@ class MobilePlayButton {
   }
   // 显示播放按钮
   private _showPlayButton() {
-    this._compRootElement.style.opacity = "";
-    this._compRootElement.style.pointerEvents = "";
+    updateStyle(this._compRootElement, {
+      opacity: "",
+      pointerEvents: ""
+    });
   }
   // 隐藏播放按钮
   private _hidePlayButton() {
-    this._compRootElement.style.opacity = "0";
-    this._compRootElement.style.pointerEvents = "none";
+    updateStyle(this._compRootElement, {
+      opacity: "0",
+      pointerEvents: "none"
+    });
   }
 
   private _on(eventName: string, handler: Function) {
