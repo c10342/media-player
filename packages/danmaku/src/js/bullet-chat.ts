@@ -1,4 +1,9 @@
-import { isPlainObject, isString, isArray } from "@lin-media/utils";
+import {
+  isPlainObject,
+  isString,
+  isArray,
+  updateStyle
+} from "@lin-media/utils";
 import { BulletChatOptions, PushData, QueueItem } from "../types";
 
 import { getRandomItem, getTranslateX } from "./utils";
@@ -132,8 +137,10 @@ class BulletChat {
       if (data) {
         data.rolledDistance = -getTranslateX(node);
         // 移除动画，计算出弹幕所在的位置，固定样式
-        node.style.transition = "";
-        node.style.transform = `translateX(-${data.rolledDistance}px)`;
+        updateStyle(node, {
+          transition: "",
+          transform: `translateX(-${data.rolledDistance}px)`
+        });
       }
     });
   }
@@ -150,8 +157,10 @@ class BulletChat {
         // 重新计算滚完剩余距离需要多少时间
         data.rollTime =
           (data.totalDistance - data.rolledDistance) / data.rollSpeed;
-        node.style.transition = `transform ${data.rollTime}s linear`;
-        node.style.transform = `translateX(-${data.totalDistance}px)`;
+        updateStyle(node, {
+          transition: `transform ${data.rollTime}s linear`,
+          transform: `translateX(-${data.totalDistance}px)`
+        });
       }
     });
     this._paused = false;
@@ -373,8 +382,10 @@ class BulletChat {
       data.node = node = document.createElement("span");
       node.innerHTML = data.text;
       node.className = "danmaku-item";
-      node.style.color = data.fontColor;
-      node.style.fontSize = `${data.fontSize}px`;
+      updateStyle(node, {
+        color: data.fontColor,
+        fontSize: `${data.fontSize}px`
+      });
       this.options.container.appendChild(node);
       // 该弹幕需要占用的轨道数量
       data.useTracks = Math.ceil(
@@ -416,9 +427,11 @@ class BulletChat {
       node.setAttribute("data-id", data.id + "");
       node.setAttribute("data-y", data.y[0] + "");
       //   设置距离顶部的距离
-      node.style.top = `${data.y[0] * (this.options.trackSize as number)}px`;
-      node.style.transition = `transform ${data.rollTime}s linear`;
-      node.style.transform = `translateX(-${data.totalDistance}px)`;
+      updateStyle(node, {
+        top: `${data.y[0] * (this.options.trackSize as number)}px`,
+        transition: `transform ${data.rollTime}s linear`,
+        transform: `translateX(-${data.totalDistance}px)`
+      });
       const onTransitionend = () => {
         this._removeFromTrack(data.y as Array<number>, data.id);
         node.remove();

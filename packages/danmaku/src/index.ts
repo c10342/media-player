@@ -1,4 +1,4 @@
-import { Drag, EventManager } from "@lin-media/utils";
+import { Drag, EventManager, updateStyle } from "@lin-media/utils";
 import { CheckboxClassNameEnum, DanmakuAreaEnum } from "./config/enum";
 import BulletChat from "./js/bullet-chat";
 import { DanmakuOptions, PushData } from "./types";
@@ -266,21 +266,31 @@ class Danmaku {
       wrapperElement: this._speedWrapperElement,
       dragElement: this._speedBallElement
     });
-    this._speedProgressElement.style.width = "50%";
+    updateStyle(this._speedProgressElement, {
+      width: "50%"
+    });
     this._speedDragInstance.$on("mousemove", (event: DataInfo) => {
-      this._speedProgressElement!.style.width = `${event.percentX * 100}%`;
+      updateStyle(this._speedProgressElement, {
+        width: `${event.percentX * 100}%`
+      });
     });
     this._speedDragInstance.$on("mouseup", this._setSpeed.bind(this));
     this._speedDragInstance.$on("click", this._setSpeed.bind(this));
   }
 
   private _setOpacity(event: DataInfo) {
-    this._opacityProgressElement.style.width = `${event.percentX * 100}%`;
-    this._danmakuWrapperElement.style.opacity = `${event.percentX}`;
+    updateStyle(this._opacityProgressElement, {
+      width: `${event.percentX * 100}%`
+    });
+    updateStyle(this._danmakuWrapperElement, {
+      opacity: `${event.percentX}`
+    });
   }
 
   private _setSpeed(event: DataInfo) {
-    this._speedProgressElement.style.width = `${event.percentX * 100}%`;
+    updateStyle(this._speedProgressElement, {
+      width: `${event.percentX * 100}%`
+    });
     this._bulletChat?.setSpeed(event.percentX * 2);
   }
 
