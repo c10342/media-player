@@ -1,6 +1,0 @@
-{{each previewList}}
-<span class='preview-container' style="left: {{ ( $value.time / duration ) * 100 }}%;" data-index='{{$index}}'>
-<span class="preview-point" data-index='{{$index}}'></span>
-<img class="preview-image" src='{{$value.url}}' {{if $value.alt}}alt='{{$value.alt}}'{{/if}} ></img>
-</span>
-{{/each}}
