@@ -1,4 +1,4 @@
-import pointListTpl from "./template/point-list.art";
+import pointListTpl from "./template/point-list";
 import "./style/index.scss";
 import {
   EventManager,
