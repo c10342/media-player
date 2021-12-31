@@ -6,7 +6,7 @@ import {
 } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
-import ControlsTpl from "../templates/controls.art";
+import ControlsTpl from "../templates/controls";
 import VideoProgress from "./video-progress";
 import VideoPlayButton from "./video-play-button";
 import VideoVolume from "./video-volume";

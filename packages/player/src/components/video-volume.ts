@@ -7,7 +7,7 @@ import {
 import { VolumeButtonIconEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
-import VolumeTpl from "../templates/volume.art";
+import VolumeTpl from "../templates/volume";
 import { DragDataInfo } from "../types";
 class VideoVolume {
   // 播放器实例

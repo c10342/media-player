@@ -2,7 +2,7 @@ import { EventManager, parseHtmlToDom } from "@lin-media/utils";
 import { PlayButtonIconEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
-import PlayButtonTpl from "../templates/play-button.art";
+import PlayButtonTpl from "../templates/play-button";
 
 class VideoPlayButton {
   // 播放器实例

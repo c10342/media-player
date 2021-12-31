@@ -7,8 +7,8 @@ import {
 } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
-import VideoTpl from "../templates/video.art";
-import VideoTagTpl from "../templates/video-tag.art";
+import VideoTpl from "../templates/video";
+import VideoTagTpl from "../templates/video-tag";
 import { VideoListItem } from "../types";
 
 class VideoPlayer {

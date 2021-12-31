@@ -2,7 +2,7 @@ import { EventManager, isFunction, parseHtmlToDom } from "@lin-media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
-import SpeedTpl from "../templates/speed.art";
+import SpeedTpl from "../templates/speed";
 class VideoSpeed {
   // 播放器实例
   private _playerInstance: MediaPlayer;
@@ -39,7 +39,8 @@ class VideoSpeed {
 
   private _initDom(slotElement: HTMLElement) {
     const html = SpeedTpl({
-      ...this._playerInstance.$options
+      // ...this._playerInstance.$options
+      speedList: this._playerInstance.$options.speedList
     });
 
     this._compRootElement = parseHtmlToDom(html);

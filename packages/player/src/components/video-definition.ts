@@ -2,7 +2,7 @@ import { EventManager, isFunction, parseHtmlToDom } from "@lin-media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
 import { PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
-import DefinitionTpl from "../templates/definition.art";
+import DefinitionTpl from "../templates/definition";
 class VideoDefinition {
   // 播放器实例
   private _playerInstance: MediaPlayer;

@@ -11,7 +11,7 @@ import {
 } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
-import ProgressTpl from "../templates/progress.art";
+import ProgressTpl from "../templates/progress";
 import { DragDataInfo } from "../types";
 
 class VideoProgress {
@@ -53,7 +53,8 @@ class VideoProgress {
 
   private _initDom(slotElement: HTMLElement) {
     const html = ProgressTpl({
-      ...this._playerInstance.$options
+      // ...this._playerInstance.$options
+      isMobile: this._playerInstance.$isMobile
     });
     this._compRootElement = parseHtmlToDom(html);
     slotElement.appendChild(this._compRootElement);

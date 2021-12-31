@@ -1,6 +1,6 @@
 import { parseHtmlToDom } from "@lin-media/utils";
 import MediaPlayer from "../index";
-import LiveTpl from "../templates/live.art";
+import LiveTpl from "../templates/live";
 class VideoLive {
   // 播放器实例
   private _playerInstance: MediaPlayer;

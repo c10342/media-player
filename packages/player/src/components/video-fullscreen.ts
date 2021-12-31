@@ -10,7 +10,7 @@ import { WEBFULLSCREENCLASSNAME } from "../config/constant";
 import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
 import { PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
-import FullscreenTpl from "../templates/fullscreen.art";
+import FullscreenTpl from "../templates/fullscreen";
 
 class VideoFullscreen {
   // 播放器实例

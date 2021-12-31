@@ -1,7 +1,7 @@
 import { isUndef, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import { PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
-import TipTpl from "../templates/tip.art";
+import TipTpl from "../templates/tip";
 class VideoTip {
   // 播放器实例
   private _playerInstance: MediaPlayer;

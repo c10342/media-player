@@ -1,7 +1,7 @@
 import { parseHtmlToDom, secondToTime } from "@lin-media/utils";
 import { VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
-import TimeTpl from "../templates/time.art";
+import TimeTpl from "../templates/time";
 
 class VideoTime {
   // 播放器实例

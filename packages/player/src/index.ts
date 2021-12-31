@@ -17,7 +17,7 @@ import {
 } from "./types";
 import { getPluginName, mergeConfig } from "./utils/index";
 import initLocale from "./locale/index";
-import LayoutTpl from "./templates/layout.art";
+import LayoutTpl from "./templates/layout";
 import VideoPlayer from "./components/video-player";
 import VideoControls from "./components/video-controls";
 import VideoMask from "./components/video-mask";

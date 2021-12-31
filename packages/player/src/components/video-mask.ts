@@ -1,7 +1,7 @@
 import { EventManager, parseHtmlToDom } from "@lin-media/utils";
 import { PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
-import MaskTpl from "../templates/mask.art";
+import MaskTpl from "../templates/mask";
 class VideoMask {
   // 播放器实例
   private _playerInstance: MediaPlayer;

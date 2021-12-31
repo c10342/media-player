@@ -2,7 +2,7 @@ import { EventManager, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import { VideoReadyStateEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
-import LoadingTpl from "../templates/loading.art";
+import LoadingTpl from "../templates/loading";
 
 class VideoLoading {
   // 播放器实例

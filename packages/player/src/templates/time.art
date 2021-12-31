@@ -1,6 +1,0 @@
-
-    <span class="player-time-tip {{if isMobile}}player-time-tip-mobile{{/if}}">
-    <span class='player-currentTime'>00:00</span>
-    <span>/</span>
-    <span class='player-totalTime'>00:00</span>
-    </span>
