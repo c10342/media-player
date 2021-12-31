@@ -142,9 +142,9 @@ class MediaPlayer {
   // 初始化组件
   private _initComponents() {
     const controls = this.$options.controls;
+    const compList = [{ ctor: VideoPlayer, init: true, key: "videoPlayer" }];
     if (controls) {
-      const compList = [
-        { ctor: VideoPlayer, init: true, key: "videoPlayer" },
+      const arr: any[] = [
         { ctor: VideoTip, init: controls.tip, key: "videoTip" },
         {
           ctor: VideoControls,
@@ -158,16 +158,17 @@ class MediaPlayer {
           init: controls.mobilePlayButton && this.$isMobile
         }
       ];
-      compList.forEach((item) => {
-        if (item.init) {
-          if (item.key) {
-            this.$plugins[item.key] = new item.ctor(this, this.$rootElement);
-          } else {
-            new item.ctor(this, this.$rootElement);
-          }
-        }
-      });
+      compList.push(...arr);
     }
+    compList.forEach((item) => {
+      if (item.init) {
+        if (item.key) {
+          this.$plugins[item.key] = new item.ctor(this, this.$rootElement);
+        } else {
+          new item.ctor(this, this.$rootElement);
+        }
+      }
+    });
 
     const extendsList = [
       { ctor: ShortcutKey, init: this.$options.hotkey && !this.$isMobile },
