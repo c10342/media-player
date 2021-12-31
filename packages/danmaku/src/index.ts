@@ -2,7 +2,7 @@ import { Drag, EventManager, updateStyle } from "@lin-media/utils";
 import { CheckboxClassNameEnum, DanmakuAreaEnum } from "./config/enum";
 import BulletChat from "./js/bullet-chat";
 import { DanmakuOptions, PushData } from "./types";
-import settingTpl from "./template/setting.art";
+import settingTpl from "./template/setting";
 import "./style/index.scss";
 import initLocale from "./locale";
 import MediaPlayer from "@lin-media/player";
