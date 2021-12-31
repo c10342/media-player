@@ -23,8 +23,10 @@ export interface MenuItemLine {
   type: "MenuLine";
 }
 
+export type SubMenuList = Omit<MenuItem, "type">[];
+
 export interface SubMenuItem {
   type: "SubMenuItem";
   label: string;
-  subMenuList: Omit<MenuItem, "type">[];
+  subMenuList: SubMenuList;
 }

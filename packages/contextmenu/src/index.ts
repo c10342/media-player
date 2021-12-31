@@ -9,7 +9,7 @@ import {
 } from "@lin-media/utils";
 import { pluginName } from "./config/constant";
 import { ContextmenuOptions, MenuItem } from "./types";
-import menuListTpl from "./template/menu-list.art";
+import menuListTpl from "./template/menu-list";
 
 import "./style/index.scss";
 
