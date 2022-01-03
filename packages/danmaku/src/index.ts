@@ -1,4 +1,4 @@
-import { Drag, EventManager, updateStyle } from "@lin-media/utils";
+import { Drag, EventManager, PLUGINNAME, updateStyle } from "@lin-media/utils";
 import { CheckboxClassNameEnum, DanmakuAreaEnum } from "./config/enum";
 import BulletChat from "./js/bullet-chat";
 import { DanmakuOptions, PushData } from "./types";
@@ -16,7 +16,7 @@ interface DataInfo {
 }
 
 class Danmaku {
-  static pluginName = pluginName;
+  static [PLUGINNAME] = pluginName;
 
   private options: DanmakuOptions;
   // 播放器的dom

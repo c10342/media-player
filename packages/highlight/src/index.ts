@@ -4,6 +4,7 @@ import {
   EventManager,
   getBoundingClientRect,
   isArray,
+  PLUGINNAME,
   updateStyle
 } from "@lin-media/utils";
 import { HighlightList, HighlightOptions } from "./types";
@@ -20,7 +21,7 @@ class Highlight {
   // 自定义事件
   static customEvents = HighlightEvents;
   // 插件名称.
-  static pluginName = pluginName;
+  static [PLUGINNAME] = pluginName;
   // 播放器的dom
   private _el: HTMLElement;
   // 播放器实例

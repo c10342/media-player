@@ -1,4 +1,10 @@
-import { isUndef, Drag, updateStyle } from "@lin-media/utils";
+import {
+  isUndef,
+  Drag,
+  updateStyle,
+  MOBILEPLUGIN,
+  PLUGINNAME
+} from "@lin-media/utils";
 import { pluginName } from "./config/constant";
 import { ClassNameEnum, CursorEnum } from "./config/enum";
 import { ZoomEvents } from "./config/event";
@@ -11,7 +17,8 @@ class Zoom {
   // 自定义事件
   static customEvents = ZoomEvents;
   // 插件名称.
-  static pluginName = pluginName;
+  static [PLUGINNAME] = pluginName;
+  static [MOBILEPLUGIN] = false;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   //   父级元素
