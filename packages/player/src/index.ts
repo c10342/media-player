@@ -1,12 +1,15 @@
 import "./styles/index.scss";
 import {
   EventEmit,
+  isBoolean,
   isMobile,
   isString,
   isUndef,
   LangTypeEnum,
   logWarn,
-  parseHtmlToDom
+  MOBILEPLUGIN,
+  parseHtmlToDom,
+  PCPLUGIN
 } from "@lin-media/utils";
 import defaultOptions from "./config/default-config";
 import {
@@ -186,12 +189,25 @@ class MediaPlayer {
   private _initPlugins() {
     const options = this.$options;
     const plugins = options.plugins;
-    plugins?.forEach((ctor: any) => {
-      const pluginName = getPluginName(ctor);
-      if (pluginName && options[pluginName] !== false) {
-        this.$plugins[pluginName] = new ctor(this, this.$rootElement);
-      }
-    });
+    const mobileEnv = this.$isMobile;
+    const pcEnv = !mobileEnv;
+    plugins
+      ?.filter((ctor: any) => {
+        const mobilePlugin = ctor[MOBILEPLUGIN];
+        const pcPlugin = ctor[PCPLUGIN];
+        if (mobileEnv) {
+          return isBoolean(mobilePlugin) ? mobilePlugin : true;
+        } else if (pcEnv) {
+          return isBoolean(pcPlugin) ? pcPlugin : true;
+        }
+        return false;
+      })
+      .forEach((ctor: any) => {
+        const pluginName = getPluginName(ctor);
+        if (pluginName && options[pluginName] !== false) {
+          this.$plugins[pluginName] = new ctor(this, this.$rootElement);
+        }
+      });
   }
 
   seek(time: number) {
