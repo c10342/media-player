@@ -32,6 +32,10 @@ export function isArray(data: any): data is Array<any> {
   return toString.call(data) === "[object Array]";
 }
 
+export function isBoolean(data: any): data is boolean {
+  return toString.call(data) === "[object Boolean]";
+}
+
 export function isMobile() {
   const u = navigator.userAgent;
   const isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //android终端
