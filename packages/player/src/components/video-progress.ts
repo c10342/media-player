@@ -53,7 +53,6 @@ class VideoProgress {
 
   private _initDom(slotElement: HTMLElement) {
     const html = ProgressTpl({
-      // ...this._playerInstance.$options
       isMobile: this._playerInstance.$isMobile
     });
     this._compRootElement = parseHtmlToDom(html);
@@ -157,7 +156,7 @@ class VideoProgress {
     this._on(VideoEvents.PROGRESS, this._onVideoProgress.bind(this));
     this._on(VideoEvents.SEEKED, this._onVideoSeeked.bind(this));
     this._on(VideoEvents.ENDED, this._onVideoEnd.bind(this));
-    if (!this._playerInstance.$options.isMobile) {
+    if (!this._playerInstance.$isMobile) {
       this._eventManager.addEventListener({
         element: this._progressMaskElement,
         eventName: "mousemove",

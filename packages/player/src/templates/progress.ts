@@ -9,7 +9,11 @@ export default function getProgressHtml({ isMobile }: Params) {
     }'>
         <div class='player-process-content'>
             <div class="player-process-mask">
-                <span class="player-process-time">00:00</span>
+                ${
+                  !isMobile
+                    ? '<span class="player-process-time">00:00</span>'
+                    : ""
+                }
                 <div class="player-process-wrapper">
                 <div class="player-process-loaded"></div>
                 <div class="player-process-played">
