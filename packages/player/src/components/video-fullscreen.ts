@@ -4,15 +4,17 @@ import {
   isBrowserFullscreen,
   EventManager,
   isUndef,
-  parseHtmlToDom
+  parseHtmlToDom,
+  PLUGINNAME
 } from "@lin-media/utils";
-import { WEBFULLSCREENCLASSNAME } from "../config/constant";
+import { VIDEOFULLSCREEN, WEBFULLSCREENCLASSNAME } from "../config/constant";
 import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
 import { MessageChannelEvents, PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
 import FullscreenTpl from "../templates/fullscreen";
 
 class VideoFullscreen {
+  static [PLUGINNAME] = VIDEOFULLSCREEN;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // 组件根元素

@@ -9,7 +9,8 @@ import {
   logWarn,
   MOBILEPLUGIN,
   parseHtmlToDom,
-  PCPLUGIN
+  PCPLUGIN,
+  PLUGINNAME
 } from "@lin-media/utils";
 import defaultOptions from "./config/default-config";
 import {
@@ -78,6 +79,10 @@ class MediaPlayer {
 
   $plugins: PluginsOptions = {};
 
+  $children: PluginsOptions = {};
+
+  videoElement: HTMLVideoElement | null;
+
   get duration() {
     return this.videoElement?.duration ?? 0;
   }
@@ -95,10 +100,6 @@ class MediaPlayer {
     return this.videoElement?.currentTime ?? 0;
   }
 
-  get videoElement(): HTMLVideoElement | null {
-    return this.$rootElement.querySelector(".player-video");
-  }
-
   constructor(options: PlayerOptions) {
     this.$options = mergeConfig(
       options,
@@ -109,6 +110,7 @@ class MediaPlayer {
     this._initI18n();
     this._initLayout();
     this._initComponents();
+    this._initVideoElement();
     this._initPlugins();
   }
 
@@ -168,7 +170,10 @@ class MediaPlayer {
     }
     compList.forEach((item) => {
       if (item.init) {
-        new item.ctor(this, this.$rootElement);
+        this.$children[item.ctor[PLUGINNAME]] = new item.ctor(
+          this,
+          this.$rootElement
+        );
       }
     });
 
@@ -207,6 +212,14 @@ class MediaPlayer {
           this.$plugins[pluginName] = new ctor(this, this.$rootElement);
         }
       });
+  }
+
+  private _initVideoElement() {
+    this.videoElement = this.$rootElement.querySelector(".player-video");
+    this.$eventBus.$on(PlayerEvents.SWITCH_DEFINITION_END, () => {
+      // 清晰度切换完成之后需要刷新videoElement
+      this.videoElement = this.$rootElement.querySelector(".player-video");
+    });
   }
 
   seek(time: number) {
@@ -286,6 +299,8 @@ class MediaPlayer {
     this.$eventBus.$emit(PlayerEvents.DESTROY);
     this.$eventBus.clear();
     this.$plugins = {};
+    this.$children = {};
+    this.videoElement = null;
     this.$rootElement.remove();
     (this as any).$rootElement = null;
   }

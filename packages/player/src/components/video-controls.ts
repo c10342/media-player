@@ -2,6 +2,7 @@ import {
   EventManager,
   isUndef,
   parseHtmlToDom,
+  PLUGINNAME,
   updateStyle
 } from "@lin-media/utils";
 import {
@@ -20,8 +21,10 @@ import VideoSpeed from "./video-speed";
 import VideoDefinition from "./video-definition";
 import VideoLive from "./video-live";
 import { ControlsObj } from "../types";
+import { VIDEOCONTROLS } from "../config/constant";
 
 class VideoControls {
+  static [PLUGINNAME] = VIDEOCONTROLS;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器
@@ -113,7 +116,10 @@ class VideoControls {
     ];
     compList.forEach((item) => {
       if (item.init) {
-        new item.ctor(this._playerInstance, item.slot);
+        this._playerInstance.$children[item.ctor[PLUGINNAME]] = new item.ctor(
+          this._playerInstance,
+          item.slot
+        );
       }
     });
   }

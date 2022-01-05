@@ -1,7 +1,9 @@
-import { parseHtmlToDom } from "@lin-media/utils";
+import { parseHtmlToDom, PLUGINNAME } from "@lin-media/utils";
+import { VIDEOLIVE } from "../config/constant";
 import MediaPlayer from "../index";
 import LiveTpl from "../templates/live";
 class VideoLive {
+  static [PLUGINNAME] = VIDEOLIVE;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {

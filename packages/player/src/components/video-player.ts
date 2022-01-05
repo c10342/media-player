@@ -3,8 +3,10 @@ import {
   EventManager,
   isFunction,
   isUndef,
-  parseHtmlToDom
+  parseHtmlToDom,
+  PLUGINNAME
 } from "@lin-media/utils";
+import { VIDEOPLAYER } from "../config/constant";
 import {
   MessageChannelEvents,
   PlayerEvents,
@@ -16,6 +18,7 @@ import VideoTagTpl from "../templates/video-tag";
 import { VideoListItem } from "../types";
 
 class VideoPlayer {
+  static [PLUGINNAME] = VIDEOPLAYER;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器

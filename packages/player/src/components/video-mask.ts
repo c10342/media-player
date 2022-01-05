@@ -1,8 +1,10 @@
-import { EventManager, parseHtmlToDom } from "@lin-media/utils";
+import { EventManager, parseHtmlToDom, PLUGINNAME } from "@lin-media/utils";
+import { VIDEOMASK } from "../config/constant";
 import { PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
 import MaskTpl from "../templates/mask";
 class VideoMask {
+  static [PLUGINNAME] = VIDEOMASK;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器

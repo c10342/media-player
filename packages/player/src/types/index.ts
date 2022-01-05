@@ -1,8 +1,4 @@
 import { LangTypeEnum } from "@lin-media/utils";
-import VideoControls from "../components/video-controls";
-import VideoFullscreen from "../components/video-fullscreen";
-import VideoPlayer from "../components/video-player";
-import VideoTip from "../components/video-tip";
 
 // 视频列表项
 export type VideoListItem = { label: string; url: string; default?: boolean };
@@ -110,9 +106,5 @@ export interface PlayerOptionsParams extends PlayerOptions {
 }
 
 export interface PluginsOptions {
-  videoTip?: VideoTip;
-  videoControls?: VideoControls;
-  videoPlayer?: VideoPlayer;
-  videoFullscreen?: VideoFullscreen;
   [key: string]: any;
 }

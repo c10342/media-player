@@ -2,14 +2,17 @@ import {
   Drag,
   EventManager,
   parseHtmlToDom,
+  PLUGINNAME,
   updateStyle
 } from "@lin-media/utils";
+import { VIDEOVOLUME } from "../config/constant";
 import { VolumeButtonIconEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
 import VolumeTpl from "../templates/volume";
 import { DragDataInfo } from "../types";
 class VideoVolume {
+  static [PLUGINNAME] = VIDEOVOLUME;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器

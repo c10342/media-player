@@ -1,9 +1,16 @@
-import { EventManager, parseHtmlToDom, updateStyle } from "@lin-media/utils";
+import {
+  EventManager,
+  parseHtmlToDom,
+  PLUGINNAME,
+  updateStyle
+} from "@lin-media/utils";
+import { MOBILEPLAYBUTTON } from "../config/constant";
 import { PlayButtonIconEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
 import MobilePlayButtonTpl from "../templates/mobile-play-button";
 class MobilePlayButton {
+  static [PLUGINNAME] = MOBILEPLAYBUTTON;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器

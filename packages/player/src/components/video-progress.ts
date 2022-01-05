@@ -6,15 +6,18 @@ import {
   isNumber,
   isUndef,
   parseHtmlToDom,
+  PLUGINNAME,
   secondToTime,
   updateStyle
 } from "@lin-media/utils";
+import { VIDEOPROGRESS } from "../config/constant";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
 import ProgressTpl from "../templates/progress";
 import { DragDataInfo } from "../types";
 
 class VideoProgress {
+  static [PLUGINNAME] = VIDEOPROGRESS;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器

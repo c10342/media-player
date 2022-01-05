@@ -1,9 +1,15 @@
-import { EventManager, isFunction, parseHtmlToDom } from "@lin-media/utils";
-import { LISTACTIVECLASSNAME } from "../config/constant";
+import {
+  EventManager,
+  isFunction,
+  parseHtmlToDom,
+  PLUGINNAME
+} from "@lin-media/utils";
+import { LISTACTIVECLASSNAME, VIDEODEFINITION } from "../config/constant";
 import { PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
 import DefinitionTpl from "../templates/definition";
 class VideoDefinition {
+  static [PLUGINNAME] = VIDEODEFINITION;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器
