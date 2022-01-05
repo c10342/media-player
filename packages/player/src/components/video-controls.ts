@@ -4,7 +4,11 @@ import {
   parseHtmlToDom,
   updateStyle
 } from "@lin-media/utils";
-import { PlayerEvents, VideoEvents } from "../config/event";
+import {
+  MessageChannelEvents,
+  PlayerEvents,
+  VideoEvents
+} from "../config/event";
 import MediaPlayer from "../index";
 import ControlsTpl from "../templates/controls";
 import VideoProgress from "./video-progress";
@@ -38,6 +42,7 @@ class VideoControls {
     // 初始化组件
     this._initComponent();
     this._initListener();
+    this._initMessageChannel();
   }
 
   // 查询元素
@@ -103,20 +108,12 @@ class VideoControls {
       {
         ctor: VideoFullscreen,
         slot: rightSlotElement,
-        init: controls.fullscreen,
-        key: "videoFullscreen"
+        init: controls.fullscreen
       }
     ];
     compList.forEach((item) => {
       if (item.init) {
-        if (item.key) {
-          this._playerInstance.$plugins[item.key] = new item.ctor(
-            this._playerInstance,
-            item.slot
-          );
-        } else {
-          new item.ctor(this._playerInstance, item.slot);
-        }
+        new item.ctor(this._playerInstance, item.slot);
       }
     });
   }
@@ -139,27 +136,36 @@ class VideoControls {
     }
   }
 
+  private _initMessageChannel() {
+    this._on(MessageChannelEvents.HIDECONTROLS, this._hideControls.bind(this));
+    this._on(MessageChannelEvents.SHOWCONTROLS, this._showControls.bind(this));
+    this._on(
+      MessageChannelEvents.TOGGLECONTROLS,
+      this._toggleControls.bind(this)
+    );
+  }
+
   // 视频播放事件处理
   private _onVideoPlay() {
-    this.$hideControls();
+    this._hideControls();
   }
   // 视频暂停事件处理
   private _onVideoPause() {
-    this.$showControls();
+    this._showControls();
   }
 
   // 鼠标进入容器事件处理
   private _onMouseenter() {
     this._isEnter = true;
-    this.$showControls();
+    this._showControls();
   }
   // 鼠标离开容器事件处理
   private _onMouseleave() {
     this._isEnter = false;
-    this.$hideControls();
+    this._hideControls();
   }
 
-  $toggleControls() {
+  private _toggleControls() {
     this._isEnter = !this._isEnter;
     if (this._isEnter) {
       this._hide();
@@ -169,14 +175,14 @@ class VideoControls {
   }
 
   // 显示控制条
-  $showControls() {
+  private _showControls() {
     // 非播放状态，或者鼠标在播放器内，显示出来
     if (this._playerInstance.paused || this._isEnter) {
       this._show();
     }
   }
   // 隐藏控制条
-  $hideControls(time = 4000) {
+  private _hideControls(time = 4000) {
     // 销毁定时器
     this._destroyTimer();
     // 4秒后隐藏

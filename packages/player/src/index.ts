@@ -29,7 +29,11 @@ import VideoTip from "./components/video-tip";
 import ShortcutKey from "./components/shortcut-key";
 import MobilePlayButton from "./components/mobile-play-button";
 import DomResizeObserver from "./components/resize-observer";
-import { PlayerEvents, VideoEvents } from "./config/event";
+import {
+  MessageChannelEvents,
+  PlayerEvents,
+  VideoEvents
+} from "./config/event";
 
 class MediaPlayer {
   static PlayerEvents = PlayerEvents;
@@ -75,24 +79,24 @@ class MediaPlayer {
   $plugins: PluginsOptions = {};
 
   get duration() {
-    return this.$plugins.videoPlayer?.$duration ?? 0;
+    return this.videoElement?.duration ?? 0;
   }
 
   // 音量
   get volume() {
-    return this.$plugins.videoPlayer?.$volume ?? 1;
+    return this.videoElement?.volume ?? 1;
   }
 
   get paused() {
-    return this.$plugins.videoPlayer?.$paused;
+    return this.videoElement?.paused ?? false;
   }
 
   get currentTime() {
-    return this.$plugins.videoPlayer?.$currentTime ?? 0;
+    return this.videoElement?.currentTime ?? 0;
   }
 
-  get videoElement() {
-    return this.$plugins.videoPlayer?.$videoElement;
+  get videoElement(): HTMLVideoElement | null {
+    return this.$rootElement.querySelector(".player-video");
   }
 
   constructor(options: PlayerOptions) {
@@ -145,14 +149,13 @@ class MediaPlayer {
   // 初始化组件
   private _initComponents() {
     const controls = this.$options.controls;
-    const compList = [{ ctor: VideoPlayer, init: true, key: "videoPlayer" }];
+    const compList = [{ ctor: VideoPlayer, init: true }];
     if (controls) {
       const arr: any[] = [
-        { ctor: VideoTip, init: controls.tip, key: "videoTip" },
+        { ctor: VideoTip, init: controls.tip },
         {
           ctor: VideoControls,
-          init: controls.controlBar,
-          key: "videoControls"
+          init: controls.controlBar
         },
         { ctor: VideoMask, init: controls.videoMask },
         { ctor: VideoLoading, init: controls.loading },
@@ -165,11 +168,7 @@ class MediaPlayer {
     }
     compList.forEach((item) => {
       if (item.init) {
-        if (item.key) {
-          this.$plugins[item.key] = new item.ctor(this, this.$rootElement);
-        } else {
-          new item.ctor(this, this.$rootElement);
-        }
+        new item.ctor(this, this.$rootElement);
       }
     });
 
@@ -211,57 +210,57 @@ class MediaPlayer {
   }
 
   seek(time: number) {
-    this.$plugins.videoPlayer?.$seek(time);
+    this.$eventBus.$emit(MessageChannelEvents.SEEK, time);
   }
 
   play() {
-    this.$plugins.videoPlayer?.$play();
+    this.$eventBus.$emit(MessageChannelEvents.PLAY);
   }
 
   pause() {
-    this.$plugins.videoPlayer?.$pause();
+    this.$eventBus.$emit(MessageChannelEvents.PAUSE);
   }
 
   toggle() {
-    this.$plugins.videoPlayer?.$toggle();
+    this.$eventBus.$emit(MessageChannelEvents.TOGGLE);
   }
 
   setVolume(volume: number) {
-    this.$plugins.videoPlayer?.$setVolume(volume);
+    this.$eventBus.$emit(MessageChannelEvents.SETVOLUME, volume);
   }
 
   setNotice(tip: string, time?: number) {
-    this.$plugins.videoTip?.$setNotice(tip, time);
+    this.$eventBus.$emit(MessageChannelEvents.SETNOTICE, tip, time);
   }
 
   setSpeed(speed: number) {
-    this.$plugins.videoPlayer?.$setSpeed(speed);
+    this.$eventBus.$emit(MessageChannelEvents.SETSPEED, speed);
   }
 
   switchDefinition(index: number) {
-    this.$plugins.videoPlayer?.$switchDefinition(index);
+    this.$eventBus.$emit(MessageChannelEvents.SWITCHDEFINITION, index);
   }
 
   hideControls() {
-    this.$plugins.videoControls?.$hideControls();
+    this.$eventBus.$emit(MessageChannelEvents.HIDECONTROLS);
   }
 
   showControls() {
-    this.$plugins.videoControls?.$showControls();
+    this.$eventBus.$emit(MessageChannelEvents.SHOWCONTROLS);
   }
 
   toggleControls() {
-    this.$plugins.videoControls?.$toggleControls();
+    this.$eventBus.$emit(MessageChannelEvents.TOGGLECONTROLS);
   }
 
   // 全屏
   get fullScreen() {
     return {
       request: (type: string) => {
-        this.$plugins.videoFullscreen?.$request(type);
+        this.$eventBus.$emit(MessageChannelEvents.FULLSCREENREQUEST, type);
       },
       cancel: (type: string) => {
-        this.$plugins.videoFullscreen?.$cancel(type);
+        this.$eventBus.$emit(MessageChannelEvents.FULLSCREENCANCEL, type);
       }
     };
   }

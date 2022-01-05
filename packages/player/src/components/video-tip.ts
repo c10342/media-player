@@ -1,5 +1,5 @@
 import { isUndef, parseHtmlToDom, updateStyle } from "@lin-media/utils";
-import { PlayerEvents } from "../config/event";
+import { MessageChannelEvents, PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
 import TipTpl from "../templates/tip";
 class VideoTip {
@@ -14,10 +14,15 @@ class VideoTip {
     this._playerInstance = playerInstance;
     this._initDom(slotElement);
     this._initListener();
+    this._initMessageChannel();
   }
 
   private _initListener() {
     this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
+  }
+
+  private _initMessageChannel() {
+    this._on(MessageChannelEvents.SETNOTICE, this._setNotice.bind(this));
   }
 
   private _initDom(slotElement: HTMLElement) {
@@ -27,7 +32,7 @@ class VideoTip {
   }
 
   // 设置通知
-  $setNotice(notice: string, time?: number) {
+  private _setNotice(notice: string, time?: number) {
     this._destroyTimer();
     this._showTip(notice);
     // 2秒后隐藏

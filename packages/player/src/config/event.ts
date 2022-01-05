@@ -42,3 +42,28 @@ export enum VideoEvents {
   VOLUMECHANGE = "volumechange",
   WAITING = "waiting"
 }
+
+export enum LifecycleEvents {
+  BEFORECREATE = "beforeCreate",
+  CREATED = "created",
+  BEFOREMOUNT = "beforeMount",
+  MOUNTED = "mounted",
+  BEFOREUNMOUNT = "beforeUnmount",
+  UNMOUNTED = "unmounted"
+}
+
+export enum MessageChannelEvents {
+  SEEK = "__seek__",
+  PLAY = "__play__",
+  PAUSE = "__pause__",
+  TOGGLE = "__toggle__",
+  SETVOLUME = "__setVolume__",
+  SETNOTICE = "__setNotice__",
+  SETSPEED = "__setSpeed__",
+  SWITCHDEFINITION = "__switchDefinition__",
+  HIDECONTROLS = "__hideControls__",
+  SHOWCONTROLS = "__showControls__",
+  TOGGLECONTROLS = "__toggleControls__",
+  FULLSCREENREQUEST = "__fullScreenRequest__",
+  FULLSCREENCANCEL = "__fullScreenCancel__"
+}

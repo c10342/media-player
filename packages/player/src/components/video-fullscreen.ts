@@ -8,7 +8,7 @@ import {
 } from "@lin-media/utils";
 import { WEBFULLSCREENCLASSNAME } from "../config/constant";
 import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
-import { PlayerEvents } from "../config/event";
+import { MessageChannelEvents, PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
 import FullscreenTpl from "../templates/fullscreen";
 
@@ -25,6 +25,7 @@ class VideoFullscreen {
     // 初始化dom
     this._initDom(slotElement);
     this._initListener();
+    this._initMessageChannel();
   }
 
   // 查询元素
@@ -68,6 +69,11 @@ class VideoFullscreen {
       eventName: "keyup",
       handler: this._onKeypress.bind(this)
     });
+  }
+
+  private _initMessageChannel() {
+    this._on(MessageChannelEvents.FULLSCREENREQUEST, this._request.bind(this));
+    this._on(MessageChannelEvents.FULLSCREENCANCEL, this._cancel.bind(this));
   }
 
   // 网页全屏事件处理
@@ -138,7 +144,7 @@ class VideoFullscreen {
     }
   }
 
-  $request(type: string) {
+  private _request(type: string) {
     if (type === FullScreenTypeEnum.web) {
       this._enterWebFullscreen();
     } else if (type === FullScreenTypeEnum.browser) {
@@ -146,7 +152,7 @@ class VideoFullscreen {
     }
   }
 
-  $cancel(type: string) {
+  private _cancel(type: string) {
     if (type === FullScreenTypeEnum.web) {
       this._exitWebFullscreen();
     } else if (type === FullScreenTypeEnum.browser) {

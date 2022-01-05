@@ -5,7 +5,11 @@ import {
   isUndef,
   parseHtmlToDom
 } from "@lin-media/utils";
-import { PlayerEvents, VideoEvents } from "../config/event";
+import {
+  MessageChannelEvents,
+  PlayerEvents,
+  VideoEvents
+} from "../config/event";
 import MediaPlayer from "../index";
 import VideoTpl from "../templates/video";
 import VideoTagTpl from "../templates/video-tag";
@@ -23,22 +27,6 @@ class VideoPlayer {
 
   $videoElement: HTMLVideoElement;
 
-  get $duration() {
-    return this.$videoElement?.duration;
-  }
-
-  get $volume() {
-    return this.$videoElement?.volume;
-  }
-
-  get $paused() {
-    return this.$videoElement?.paused;
-  }
-
-  get $currentTime() {
-    return this.$videoElement.currentTime;
-  }
-
   constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
     // 播放器实例
     this._playerInstance = playerInstance;
@@ -50,6 +38,8 @@ class VideoPlayer {
     this._initPlayer();
     // 初始化事件监听
     this._initListener();
+    // 事件通道
+    this._initMessageChannel();
   }
   // 查询元素
   private _querySelector<T extends HTMLVideoElement>(selector: string) {
@@ -138,11 +128,24 @@ class VideoPlayer {
   private _once(eventName: string, handler: Function) {
     this._playerInstance.$eventBus.$once(eventName, handler);
   }
-  // 初始化时间监听
+  // 初始化事件监听
   private _initListener() {
     this._on(PlayerEvents.DESTROY, () => {
       this._destroy();
     });
+  }
+
+  private _initMessageChannel() {
+    this._on(MessageChannelEvents.SEEK, this._seek.bind(this));
+    this._on(MessageChannelEvents.PLAY, this._play.bind(this));
+    this._on(MessageChannelEvents.PAUSE, this._pause.bind(this));
+    this._on(MessageChannelEvents.TOGGLE, this._toggle.bind(this));
+    this._on(MessageChannelEvents.SETVOLUME, this._setVolume.bind(this));
+    this._on(
+      MessageChannelEvents.SWITCHDEFINITION,
+      this._switchDefinition.bind(this)
+    );
+    this._on(MessageChannelEvents.SETSPEED, this._setSpeed.bind(this));
   }
 
   private _destroy() {
@@ -222,37 +225,37 @@ class VideoPlayer {
   }
 
   // 播放
-  $play() {
+  private _play() {
     this.$videoElement.play();
   }
   // 暂停
-  $pause() {
+  private _pause() {
     this.$videoElement.pause();
   }
   // 切换播放/暂停状态
-  $toggle() {
+  private _toggle() {
     if (this.$videoElement.paused) {
-      this.$play();
+      this._play();
     } else {
-      this.$pause();
+      this._pause();
     }
   }
 
-  $seek(time: number) {
+  private _seek(time: number) {
     this.$videoElement.currentTime = time;
   }
 
-  $setSpeed(playbackRate: number) {
+  private _setSpeed(playbackRate: number) {
     playbackRate = checkData(playbackRate, 0, 2);
     this.$videoElement.playbackRate = playbackRate;
   }
 
-  $setVolume(volume: number) {
+  private _setVolume(volume: number) {
     volume = checkData(volume, 0, 1);
     this.$videoElement.volume = volume;
   }
 
-  $switchDefinition(index: number) {
+  private _switchDefinition(index: number) {
     if (index !== this._currentIndex && this._isCanSwitchQuality(index)) {
       // 设置当前视频索引
       this._setCurrentIndex(index);
