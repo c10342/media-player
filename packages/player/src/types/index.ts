@@ -1,4 +1,21 @@
 import { LangTypeEnum } from "@lin-media/utils";
+import {
+  DOMRESIZEOBSERVER,
+  SHORTCUTKEY,
+  VIDEOCONTROLS,
+  VIDEODEFINITION,
+  VIDEOFLOATBUTTON,
+  VIDEOFULLSCREEN,
+  VIDEOLIVE,
+  VIDEOLOADING,
+  VIDEOMASK,
+  VIDEOPLAYBUTTON,
+  VIDEOPROGRESS,
+  VIDEOSPEED,
+  VIDEOTIME,
+  VIDEOTIP,
+  VIDEOVOLUME
+} from "../config/constant";
 
 // 视频列表项
 export type VideoListItem = { label: string; url: string; default?: boolean };
@@ -9,31 +26,35 @@ export type SpeedItem = { label: string; value: number; default?: boolean };
 
 export interface ControlsObj {
   // pc端播放按钮控件
-  playButton?: boolean;
+  [VIDEOPLAYBUTTON]?: boolean;
   // 音量控件
-  volume?: boolean;
+  [VIDEOVOLUME]?: boolean;
   // 直播提示控件
-  live?: boolean;
+  [VIDEOLIVE]?: boolean;
   // 倍速控件
-  speed?: boolean;
+  [VIDEOSPEED]?: boolean;
   // 全屏控件
-  fullscreen?: boolean;
+  [VIDEOFULLSCREEN]?: boolean;
   // 清晰度控件
-  definition?: boolean;
+  [VIDEODEFINITION]?: boolean;
   // 进度条控件
-  progress?: boolean;
+  [VIDEOPROGRESS]?: boolean;
   // 通知提示控件
-  tip?: boolean;
+  [VIDEOTIP]?: boolean;
   // 时间控件
-  time?: boolean;
+  [VIDEOTIME]?: boolean;
   // loading控件
-  loading?: boolean;
+  [VIDEOLOADING]?: boolean;
   // 悬浮的播放按钮控件
-  floatButton?: boolean;
+  [VIDEOFLOATBUTTON]?: boolean;
   // 视频遮罩层控件
-  videoMask?: boolean;
+  [VIDEOMASK]?: boolean;
   // 下方控制条
-  controlBar?: boolean;
+  [VIDEOCONTROLS]?: boolean;
+  // 播放器`DOM`元素大小发生变化监听
+  [DOMRESIZEOBSERVER]?: boolean;
+  // 快捷键控件功能
+  [SHORTCUTKEY]?: boolean;
 }
 
 // 播放器参数
@@ -52,8 +73,6 @@ export interface PlayerOptions {
   speedList?: Array<SpeedItem>;
   // 是否为直播
   live?: boolean;
-  // 开启热键（快捷键）
-  hotkey?: boolean;
   // 局部插件
   plugins?: Array<Function>;
   // 是否开启跨域
@@ -68,7 +87,6 @@ export interface PlayerOptions {
   lang?: LangTypeEnum;
   // 自定义语言包
   customLanguage?: {
-    MediaPlayer: any;
     [key: string]: any;
   };
   // 加这个是给插件使用的

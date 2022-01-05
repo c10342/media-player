@@ -69,54 +69,48 @@ class VideoControls {
       {
         ctor: VideoProgress,
         slot: this._querySelector(".player-controls-group"),
-        init: !$options.live && controls.progress
+        init: !$options.live
       },
       {
         ctor: VideoPlayButton,
         slot: leftSlotElement,
-        init: !isMobile && controls.playButton
+        init: !isMobile
       },
       {
         ctor: VideoVolume,
         slot: leftSlotElement,
-        init: controls.volume && !isMobile
+        init: !isMobile
       },
       {
         ctor: VideoTime,
         slot: leftSlotElement,
-        init: !$options.live && controls.time
+        init: !$options.live
       },
       {
         ctor: VideoLive,
         slot: leftSlotElement,
-        init: $options.live && controls.live
+        init: $options.live
       },
       {
         ctor: VideoSpeed,
         slot: rightSlotElement,
         init:
-          !$options.live &&
-          $options.speedList &&
-          $options.speedList.length > 0 &&
-          controls.speed
+          !$options.live && $options.speedList && $options.speedList.length > 0
       },
       {
         ctor: VideoDefinition,
         slot: rightSlotElement,
-        init:
-          $options.videoList &&
-          $options.videoList.length > 0 &&
-          controls.definition
+        init: $options.videoList && $options.videoList.length > 0
       },
       {
         ctor: VideoFullscreen,
-        slot: rightSlotElement,
-        init: controls.fullscreen
+        slot: rightSlotElement
       }
     ];
     compList.forEach((item) => {
-      if (item.init) {
-        this._playerInstance.$children[item.ctor[PLUGINNAME]] = new item.ctor(
+      const name = item.ctor[PLUGINNAME];
+      if (item.init !== false && (controls as any)[name]) {
+        this._playerInstance.$children[name] = new item.ctor(
           this._playerInstance,
           item.slot
         );

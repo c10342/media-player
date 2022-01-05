@@ -35,8 +35,7 @@ const speedList = [
 
 const playerOptions = {
   videoList,
-  speedList,
-  hotkey: true
+  speedList
 };
 
 describe("render", () => {

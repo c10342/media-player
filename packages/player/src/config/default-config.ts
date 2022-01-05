@@ -1,26 +1,45 @@
 import { LangTypeEnum } from "@lin-media/utils";
+import { PlayerOptions } from "../types";
+import {
+  DOMRESIZEOBSERVER,
+  SHORTCUTKEY,
+  VIDEOCONTROLS,
+  VIDEODEFINITION,
+  VIDEOFLOATBUTTON,
+  VIDEOFULLSCREEN,
+  VIDEOLIVE,
+  VIDEOLOADING,
+  VIDEOMASK,
+  VIDEOPLAYBUTTON,
+  VIDEOPROGRESS,
+  VIDEOSPEED,
+  VIDEOTIME,
+  VIDEOTIP,
+  VIDEOVOLUME
+} from "./constant";
 
-const defaultOptions = {
+const defaultOptions: Partial<PlayerOptions> = {
   live: false,
-  hotkey: true,
   autoplay: false,
   muted: false,
   preload: "auto",
   crossorigin: true,
   controls: {
-    playButton: true,
-    volume: true,
-    live: true,
-    speed: true,
-    fullscreen: true,
-    definition: true,
-    progress: true,
-    tip: true,
-    time: true,
-    loading: true,
-    floatButton: true,
-    videoMask: true,
-    controlBar: true
+    [VIDEOPLAYBUTTON]: true,
+    [VIDEOVOLUME]: true,
+    [VIDEOLIVE]: true,
+    [VIDEOSPEED]: true,
+    [VIDEOFULLSCREEN]: true,
+    [VIDEODEFINITION]: true,
+    [VIDEOPROGRESS]: true,
+    [VIDEOTIP]: true,
+    [VIDEOTIME]: true,
+    [VIDEOLOADING]: true,
+    [VIDEOFLOATBUTTON]: true,
+    [VIDEOMASK]: true,
+    [VIDEOCONTROLS]: true,
+    [DOMRESIZEOBSERVER]: true,
+    [SHORTCUTKEY]: true
   },
   //   插件
   plugins: [] as Array<Function>,

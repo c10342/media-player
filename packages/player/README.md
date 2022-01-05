@@ -38,7 +38,6 @@ const player = new MediaPlayer({
 | videoList      | 视频播放列表，格式见下方                           | Array                | —                    | —           |
 | speedList      | 倍数列表，可选，格式见下方                         | Array                | —                    | —           |
 | plugins        | 注册局部插件，可选                                 | Array                | —                    | —           |
-| hotkey         | 是否开启热键（快捷键），可选                       | Boolean              | —                    | true        |
 | autoplay       | 是否自动播放，可选                                 | Boolean              | —                    | false       |
 | muted          | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | Boolean              | —                    | false       |
 | customType     | 自定义 esm，可选，，格式见下方                     | Function             | —                    | —           |
@@ -81,19 +80,21 @@ const player = new MediaPlayer({
 
 | 字段             | 说明               | 类型    | 默认值 |
 | ---------------- | ------------------ | ------- | ------ |
-| playButton       | pc 端播放按钮控件  | Boolean | true   |
-| volume           | 音量控件           | Boolean | true   |
-| live             | 直播提示控件       | Boolean | true   |
-| speed            | 倍速控件           | Boolean | true   |
-| fullscreen       | 全屏控件           | Boolean | true   |
-| definition       | 清晰度控件         | Boolean | true   |
-| progress         | 进度条控件         | Boolean | true   |
-| tip              | 通知提示控件       | Boolean | true   |
-| time             | 时间控件           | Boolean | true   |
-| loading          | loading 控件       | Boolean | true   |
-| floatButton | 悬浮播放按钮控件 | Boolean | true   |
-| videoMask        | 视频遮罩层控件     | Boolean | true   |
-| controlBar       | 视频下方控制条     | Boolean | true   |
+| VideoPlayButton       | pc 端播放按钮控件  | Boolean | true   |
+| VideoVolume           | 音量控件           | Boolean | true   |
+| VideoLive             | 直播提示控件       | Boolean | true   |
+| VideoSpeed            | 倍速控件           | Boolean | true   |
+| VideoFullscreen       | 全屏控件           | Boolean | true   |
+| VideoDefinition       | 清晰度控件         | Boolean | true   |
+| VideoProgress         | 进度条控件         | Boolean | true   |
+| VideoTip              | 通知提示控件       | Boolean | true   |
+| VideoTime             | 时间控件           | Boolean | true   |
+| VideoLoading          | loading 控件       | Boolean | true   |
+| VideoFloatButton | 悬浮播放按钮控件 | Boolean | true   |
+| VideoMask        | 视频遮罩层控件     | Boolean | true   |
+| VideoControls       | 视频下方控制条     | Boolean | true   |
+| DomResizeObserver        | 播放器`DOM`元素大小发生变化监听   | Boolean | true   |
+| ShortcutKey        | 快捷键控件功能   | Boolean | true   |
 
 ## 事件
 

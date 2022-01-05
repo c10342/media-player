@@ -3,6 +3,7 @@ import {
   EventEmit,
   isBoolean,
   isMobile,
+  isPlainObject,
   isString,
   isUndef,
   LangTypeEnum,
@@ -54,15 +55,15 @@ class MediaPlayer {
   }
   //   全局注册插件
   static use(ctor: Function) {
-    const plugins = this.globalConfig.plugins;
-    const installed = plugins.some((plugin) => {
+    const plugins = this.globalConfig.plugins ?? [];
+    const installed = plugins?.some((plugin) => {
       return getPluginName(plugin) === getPluginName(ctor);
     });
     if (installed) {
       logWarn("插件已经被安装了");
       return MediaPlayer;
     }
-    plugins.push(ctor);
+    plugins?.push(ctor);
 
     return MediaPlayer;
   }
@@ -151,40 +152,30 @@ class MediaPlayer {
   // 初始化组件
   private _initComponents() {
     const controls = this.$options.controls;
-    const compList = [{ ctor: VideoPlayer, init: true }];
-    if (controls) {
-      const arr: any[] = [
-        { ctor: VideoTip, init: controls.tip },
-        {
-          ctor: VideoControls,
-          init: controls.controlBar
-        },
-        { ctor: VideoMask, init: controls.videoMask },
-        { ctor: VideoLoading, init: controls.loading },
-        {
-          ctor: VideoFloatButton,
-          init: controls.floatButton
-        }
-      ];
-      compList.push(...arr);
-    }
-    compList.forEach((item) => {
-      if (item.init) {
-        this.$children[item.ctor[PLUGINNAME]] = new item.ctor(
-          this,
-          this.$rootElement
-        );
+    const compList = [
+      { ctor: VideoPlayer, init: true },
+      { ctor: ShortcutKey, init: !this.$isMobile },
+      { ctor: DomResizeObserver },
+      { ctor: VideoTip },
+      {
+        ctor: VideoControls
+      },
+      { ctor: VideoMask },
+      { ctor: VideoLoading },
+      {
+        ctor: VideoFloatButton
       }
-    });
-
-    const extendsList = [
-      { ctor: ShortcutKey, init: this.$options.hotkey && !this.$isMobile },
-      { ctor: DomResizeObserver, init: true }
     ];
-
-    extendsList.forEach((item) => {
-      if (item.init) {
-        new item.ctor(this);
+    compList.forEach((item) => {
+      const name = item.ctor[PLUGINNAME];
+      if (
+        item.init === true ||
+        (item.init !== false &&
+          controls !== false &&
+          isPlainObject(controls) &&
+          (controls as any)[name])
+      ) {
+        this.$children[name] = new item.ctor(this, this.$rootElement);
       }
     });
   }
