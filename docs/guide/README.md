@@ -110,7 +110,7 @@ const player = new MediaPlayer({
 | tip              | 通知提示控件       | Boolean | true   |
 | time             | 时间控件           | Boolean | true   |
 | loading          | loading 控件       | Boolean | true   |
-| mobilePlayButton | 移动端播放按钮控件 | Boolean | true   |
+| floatButton | 悬浮播放按钮控件 | Boolean | true   |
 | videoMask        | 视频遮罩层控件     | Boolean | true   |
 | controlBar        | 视频下方控制条   | Boolean | true   |
 
