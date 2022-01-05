@@ -57,7 +57,6 @@ const player = new MediaPlayer({
 | videoList   | 视频播放列表，格式见下方                           | Array                              | —                    | —           |
 | speedList   | 倍数列表，可选，格式见下方                         | Array                              | —                    | —           |
 | plugins     | 注册局部插件，可选                                 | Array                              | —                    | —           |
-| hotkey      | 是否开启热键（快捷键），可选                       | Boolean                            | —                    | true        |
 | autoplay    | 是否自动播放，可选                                 | Boolean                            | —                    | false       |
 | muted       | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | Boolean                            | —                    | false       |
 | customType  | 自定义 esm，可选，格式见下方                       | Function                           | —                    | —           |
@@ -100,19 +99,21 @@ const player = new MediaPlayer({
 
 | 字段             | 说明               | 类型    | 默认值 |
 | ---------------- | ------------------ | ------- | ------ |
-| playButton       | pc 端播放按钮控件  | Boolean | true   |
-| volume           | 音量控件           | Boolean | true   |
-| live             | 直播提示控件       | Boolean | true   |
-| speed            | 倍速控件           | Boolean | true   |
-| fullscreen       | 全屏控件           | Boolean | true   |
-| definition       | 清晰度控件         | Boolean | true   |
-| progress         | 进度条控件         | Boolean | true   |
-| tip              | 通知提示控件       | Boolean | true   |
-| time             | 时间控件           | Boolean | true   |
-| loading          | loading 控件       | Boolean | true   |
-| floatButton | 悬浮播放按钮控件 | Boolean | true   |
-| videoMask        | 视频遮罩层控件     | Boolean | true   |
-| controlBar        | 视频下方控制条   | Boolean | true   |
+| VideoPlayButton       | pc 端播放按钮控件  | Boolean | true   |
+| VideoVolume           | 音量控件           | Boolean | true   |
+| VideoLive             | 直播提示控件       | Boolean | true   |
+| VideoSpeed            | 倍速控件           | Boolean | true   |
+| VideoFullscreen       | 全屏控件           | Boolean | true   |
+| VideoDefinition       | 清晰度控件         | Boolean | true   |
+| VideoProgress         | 进度条控件         | Boolean | true   |
+| VideoTip              | 通知提示控件       | Boolean | true   |
+| VideoTime             | 时间控件           | Boolean | true   |
+| VideoLoading          | loading 控件       | Boolean | true   |
+| VideoFloatButton | 悬浮播放按钮控件 | Boolean | true   |
+| VideoMask        | 视频遮罩层控件     | Boolean | true   |
+| VideoControls       | 视频下方控制条     | Boolean | true   |
+| DomResizeObserver        | 播放器`DOM`元素大小发生变化监听   | Boolean | true   |
+| ShortcutKey        | 快捷键控件功能   | Boolean | true   |
 
 ## 事件绑定
 
@@ -332,6 +333,8 @@ const player = new MediaPlayer({
 
 - 播放器提供了插件功能，可自己定制一些需求，比如自定义进度条提示点，截图，弹幕等等。
 
+- 插件的初始化时机是在播放器实例的所有东西初始化完成之后进行初始化的。这样子插件就可以访问到播放器实例上面的属性和方法，以及播放器的`DOM`元素
+
 - 插件分为全局插件和局部插件，使用全局插件时，每个播放器实例都会具备全局插件的功能。使用局部插件时，只有当前播放器实例才会存在局部插件的功能。
 
   - 全局插件是通过`MediaPlayer.use(ctor: Function)`进行注册的
@@ -485,6 +488,32 @@ document.documentElement.style.setProperty("--player-theme", "green");
 | --player-label-background-color        | 标签背景色（倍速，清晰度） | rgba(255, 255, 255, 0.2) |
 | --player-process-background-color      | 进度条背景色               | rgba(255, 255, 255, 0.2) |
 | --player-loaded-background-color       | 缓冲进度背景色             | rgba(255, 255, 255, 0.4) |
+
+## 内置组件
+
+播放器是以组件化的形式进行设计的，播放器中的每一个控件都是一个组件。如果大家想自定义组件的效果，可以关闭对应组件的初始化，然后通过自定义插件的形式去实现对应的控件效果。默认情况下，所有内置组件都是会被初始化的，可通过初始化时传入`controls`参数，关闭一些内置组件的初始化
+
+### 内置组件与插件的区别
+
+内置组件本质上也算是插件的一种。不同的是内置组件的初始化是有顺序的，比如`video-play-button`组件是`video-controls`组件的子组件，所以要先初始化`video-controls`组件，然后再初始化`video-play-button`组件。插件是在播放器的所有东西都初始化了之后才进行初始化的
+
+插件和内置组件接受的参数不一样。内置组件分别接收播放器实例和插槽元素，插槽元素是用来指定内置组件插入到的位置，这样子就可以实现组件的复用，因为内置组件插入的位置是由外部控制的，可以插入到任意的地方。插件分别接受播放器实例和整个播放器的`DOM`元素，插入的位置由插件内部控制，受限于播放器本身的`DON`元素。换句话来说，就是内置组件可以拿出来用到其他播放器中，但是插件只能在对应的播放器中使用，因为插件是针对播放器去进行设计的，内置组件是针对通用性去设计的
+
+插件和内置组件在功能上定义是不一样的。内置组件是为了给播放器提供一些基础功能，比如音量调节(通过`video-volume`内置组件提供的)，倍数切换(通过`video-speed`内置组件提供的)等等功能。插件是为了解决用户自定义需求而提出来的解决方案，插件是通过内置组件提供的一些基础功能去实现自己的功能的
+
+### 内置组件列表
+
+- **DomResizeObserver 组件**
+
+提供监听播放器`DOM`元素大小发生变化并广播的功能，`resize`自定义事件来源于该组件。可通过`controls.domResizeObserver`字段关闭该内置组件的初始化，使用插件去实现
+
+- **ShortcutKey 组件**
+
+提供快捷键的功能，`keyboard_right`，`keyboard_left`，`keyboard_up`，`keyboard_down`，`keyboard_space`自定义事件就是来源于该组件。可通过`controls.shortcutKey`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoControls 组件**
+
+提供视频控制条的显示和隐藏功能，`show_controls`和`hide_controls`自定义事件来源于该组件。该组件的子组件包含`VideoProgress`，`VideoPlayButton`，`VideoVolume`，`VideoTime`，`VideoLive`，`VideoSpeed`，`VideoDefinition`，`VideoFullscreen`。一旦关闭了该组件的初始化，其子组件也不会被初始化，子组件所提供的基础功能也将失效。所以请慎重考虑是否关闭该组件的初始化。可通过`controls.controlBar`字段关闭该内置组件的初始化，使用插件去实现
 
 ## 常见问题
 
