@@ -16,14 +16,13 @@ class EventEmit {
     return this;
   }
   // 发射事件
-  $emit(eventName: string, data?: any) {
+  $emit(eventName: string, ...data: any) {
     const eventList = this.eventMap[eventName] || [];
     const length = eventList.length;
     if (length > 0) {
       // 从最后一个开始执行，防止数组塌陷
       for (let i = length - 1; i >= 0; i--) {
-        const fn = eventList[i];
-        fn.call(this, data);
+        eventList[i](...data);
       }
     }
     return this;
@@ -36,7 +35,7 @@ class EventEmit {
       return;
     }
     const fn = (...args: any) => {
-      handler.call(this, ...args);
+      handler(...args);
       this.$off(eventName, fn);
     };
     // 保存原有的函数，防止在没有触发前，用户取消监听
