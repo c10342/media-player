@@ -195,7 +195,6 @@ const player: any = new VideoPlayer({
     subMenuItemWidth: "100px"
   }
   // controls:false
-  // hotkey:false,
   // live: true
   // autoplay: true,
   // muted:true
