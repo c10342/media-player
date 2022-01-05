@@ -99,12 +99,14 @@ class VideoFloatButton {
     this._iconElement.classList.remove(PlayButtonIconEnum.Play);
   }
   private _hidePlayButtonAnimation() {
+    this._compRootElement.classList.remove(FLOATBUTTONENTERCLASSNAME);
     this._compRootElement.classList.add(FLOATBUTTONLEAVECLASSNAME);
     this._isShow = false;
   }
 
   private __showPlayButtonAnimation() {
     this._showPlayButton();
+    this._compRootElement.classList.remove(FLOATBUTTONLEAVECLASSNAME);
     this._compRootElement.classList.add(FLOATBUTTONENTERCLASSNAME);
     this._isShow = true;
   }
