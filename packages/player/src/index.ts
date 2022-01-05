@@ -28,7 +28,7 @@ import VideoMask from "./components/video-mask";
 import VideoLoading from "./components/video-loading";
 import VideoTip from "./components/video-tip";
 import ShortcutKey from "./components/shortcut-key";
-import MobilePlayButton from "./components/mobile-play-button";
+import VideoFloatButton from "./components/video-float-button";
 import DomResizeObserver from "./components/resize-observer";
 import {
   MessageChannelEvents,
@@ -162,8 +162,8 @@ class MediaPlayer {
         { ctor: VideoMask, init: controls.videoMask },
         { ctor: VideoLoading, init: controls.loading },
         {
-          ctor: MobilePlayButton,
-          init: controls.mobilePlayButton && this.$isMobile
+          ctor: VideoFloatButton,
+          init: controls.floatButton
         }
       ];
       compList.push(...arr);

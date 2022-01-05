@@ -18,7 +18,7 @@ const defaultOptions = {
     tip: true,
     time: true,
     loading: true,
-    mobilePlayButton: true,
+    floatButton: true,
     videoMask: true,
     controlBar: true
   },

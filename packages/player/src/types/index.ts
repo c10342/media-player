@@ -28,8 +28,8 @@ export interface ControlsObj {
   time?: boolean;
   // loading控件
   loading?: boolean;
-  // 移动端播放按钮控件
-  mobilePlayButton?: boolean;
+  // 悬浮的播放按钮控件
+  floatButton?: boolean;
   // 视频遮罩层控件
   videoMask?: boolean;
   // 下方控制条
