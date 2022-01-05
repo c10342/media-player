@@ -2,11 +2,25 @@
 
 # 更新日志
 
+## `1.0.3`
+
+- `fix`：修复`menuItemWidth`字段拼写错误
+
+- `style`：代码优化，使用`updateStyle`函数统一更新样式
+
+- `style`：代码优化，使用字符串拼接的形式替换`art-template`依赖包，减少打包出来的体积
+
+- `style`：代码优化，`pluginName`静态属性名称提取成常量
+
+- `feat`：新增`mobilePlugin`静态属性，在移动端环境下不会被初始化
+
+- `chore`：升级`@lin-media/player`版本号`2.1.0`
+
 ## `1.0.2`
   
 - `chore`：升级`@lin-media/player`版本号`2.0.0`
   
-- `style`：修改右键菜单DOM插入的位置
+- `style`：修改右键菜单`DOM`插入的位置
   
 ## `1.0.1`
   
