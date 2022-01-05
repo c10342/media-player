@@ -31,8 +31,7 @@ const playerOptions = {
       label: "1.5x",
       value: 1.5
     }
-  ],
-  hotkey: true
+  ]
 };
 export default {
   created() {
