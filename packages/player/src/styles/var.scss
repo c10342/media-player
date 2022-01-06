@@ -1,5 +1,5 @@
 
-$main-color:rgb(251, 102, 64) !default;
+$theme-color:rgb(251, 102, 64) !default;
 
 $icon-color:#fff !default;
 
@@ -15,13 +15,13 @@ $process-background-color:rgba(255, 255, 255, 0.2) !default;
 
 $loaded-background-color:rgba(255, 255, 255, 0.4) !default;
 
-:root {
-  --player-theme: #fb6640;
-  --player-icon-color: #fff;
-  --player-container-background-color: #000;
-  --player-text-color: #fff;
-  --player-text-wrapper-background-color: rgba(0, 0, 0, 0.4);
-  --player-label-background-color: rgba(255, 255, 255, 0.2);
-  --player-process-background-color: rgba(255, 255, 255, 0.2);
-  --player-loaded-background-color: rgba(255, 255, 255, 0.4);
-}
+// :root {
+//   --player-theme-color: #fb6640;
+//   --player-icon-color: #fff;
+//   --player-container-background-color: #000;
+//   --player-text-color: #fff;
+//   --player-text-wrapper-background-color: rgba(0, 0, 0, 0.4);
+//   --player-label-background-color: rgba(255, 255, 255, 0.2);
+//   --player-process-background-color: rgba(255, 255, 255, 0.2);
+//   --player-loaded-background-color: rgba(255, 255, 255, 0.4);
+// }

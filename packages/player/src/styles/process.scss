@@ -71,7 +71,7 @@
   top: 0;
   left: 0;
   height: 3px;
-  background-color: var(--player-theme, $main-color);
+  background-color: var(--player-theme-color, $theme-color);
   transition: all 300ms;
 }
 
@@ -82,7 +82,7 @@
   width: 10px;
   height: 10px;
   margin-top: -5px;
-  background-color: var(--player-theme, $main-color);
+  background-color: var(--player-theme-color, $theme-color);
   border-radius: 50%;
   transition: transform 0.3s ease-in-out;
 }
