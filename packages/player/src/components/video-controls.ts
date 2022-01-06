@@ -63,53 +63,60 @@ class VideoControls {
     const { $options } = this._playerInstance;
     const leftSlotElement = this._querySelector(".player-controls-left");
     const rightSlotElement = this._querySelector(".player-controls-right");
-    const controls = $options.controls as ControlsObj;
+    const controls = $options.controls as any;
     const isMobile = this._playerInstance.$isMobile;
     const compList = [
       {
         ctor: VideoProgress,
         slot: this._querySelector(".player-controls-group"),
-        init: !$options.live
+        init: !$options.live && controls[VideoProgress[PLUGINNAME]]
       },
       {
         ctor: VideoPlayButton,
         slot: leftSlotElement,
-        init: !isMobile
+        init: !isMobile && controls[VideoPlayButton[PLUGINNAME]]
       },
       {
         ctor: VideoVolume,
         slot: leftSlotElement,
-        init: !isMobile
+        init: !isMobile && controls[VideoVolume[PLUGINNAME]]
       },
       {
         ctor: VideoTime,
         slot: leftSlotElement,
-        init: !$options.live
+        init: !$options.live && controls[VideoTime[PLUGINNAME]]
       },
       {
         ctor: VideoLive,
         slot: leftSlotElement,
-        init: $options.live
+        init: $options.live && controls[VideoLive[PLUGINNAME]]
       },
       {
         ctor: VideoSpeed,
         slot: rightSlotElement,
         init:
-          !$options.live && $options.speedList && $options.speedList.length > 0
+          !$options.live &&
+          $options.speedList &&
+          $options.speedList.length > 0 &&
+          controls[VideoSpeed[PLUGINNAME]]
       },
       {
         ctor: VideoDefinition,
         slot: rightSlotElement,
-        init: $options.videoList && $options.videoList.length > 0
+        init:
+          $options.videoList &&
+          $options.videoList.length > 0 &&
+          controls[VideoDefinition[PLUGINNAME]]
       },
       {
         ctor: VideoFullscreen,
-        slot: rightSlotElement
+        slot: rightSlotElement,
+        init: controls[VideoFullscreen[PLUGINNAME]]
       }
     ];
     compList.forEach((item) => {
-      const name = item.ctor[PLUGINNAME];
-      if (item.init !== false && (controls as any)[name]) {
+      if (item.init) {
+        const name = item.ctor[PLUGINNAME];
         this._playerInstance.$children[name] = new item.ctor(
           this._playerInstance,
           item.slot

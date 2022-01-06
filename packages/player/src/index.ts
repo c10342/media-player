@@ -106,7 +106,6 @@ class MediaPlayer {
       options,
       MediaPlayer.globalConfig
     ) as PlayerOptionsParams;
-
     this._normalOptions();
     this._initI18n();
     this._initLayout();
@@ -151,33 +150,37 @@ class MediaPlayer {
 
   // 初始化组件
   private _initComponents() {
-    const controls = this.$options.controls;
-    const compList = [
-      { ctor: VideoPlayer, init: true },
-      { ctor: ShortcutKey, init: !this.$isMobile },
-      { ctor: DomResizeObserver },
-      { ctor: VideoTip },
-      {
-        ctor: VideoControls
-      },
-      { ctor: VideoMask },
-      { ctor: VideoLoading },
-      {
-        ctor: VideoFloatButton
-      }
-    ];
-    compList.forEach((item) => {
-      const name = item.ctor[PLUGINNAME];
-      if (
-        item.init === true ||
-        (item.init !== false &&
-          controls !== false &&
-          isPlainObject(controls) &&
-          (controls as any)[name])
-      ) {
-        this.$children[name] = new item.ctor(this, this.$rootElement);
-      }
-    });
+    const controls = this.$options.controls as any;
+    if (isPlainObject(controls)) {
+      const compList = [
+        { ctor: VideoPlayer, init: controls[VideoPlayer[PLUGINNAME]] },
+        {
+          ctor: ShortcutKey,
+          init: !this.$isMobile && controls[ShortcutKey[PLUGINNAME]]
+        },
+        {
+          ctor: DomResizeObserver,
+          init: controls[DomResizeObserver[PLUGINNAME]]
+        },
+        { ctor: VideoTip, init: controls[VideoTip[PLUGINNAME]] },
+        {
+          ctor: VideoControls,
+          init: controls[VideoControls[PLUGINNAME]]
+        },
+        { ctor: VideoMask, init: controls.VideoMask },
+        { ctor: VideoLoading, init: controls.VideoLoading },
+        {
+          ctor: VideoFloatButton,
+          init: controls[VideoFloatButton[PLUGINNAME]]
+        }
+      ];
+      compList.forEach((item) => {
+        if (item.init) {
+          const name = item.ctor[PLUGINNAME];
+          this.$children[name] = new item.ctor(this, this.$rootElement);
+        }
+      });
+    }
   }
 
   // 初始化插件

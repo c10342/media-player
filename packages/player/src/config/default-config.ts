@@ -11,6 +11,7 @@ import {
   VIDEOLOADING,
   VIDEOMASK,
   VIDEOPLAYBUTTON,
+  VIDEOPLAYER,
   VIDEOPROGRESS,
   VIDEOSPEED,
   VIDEOTIME,
@@ -39,7 +40,8 @@ const defaultOptions: Partial<PlayerOptions> = {
     [VIDEOMASK]: true,
     [VIDEOCONTROLS]: true,
     [DOMRESIZEOBSERVER]: true,
-    [SHORTCUTKEY]: true
+    [SHORTCUTKEY]: true,
+    [VIDEOPLAYER]: true
   },
   //   插件
   plugins: [] as Array<Function>,

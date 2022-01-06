@@ -10,6 +10,7 @@ import {
   VIDEOLOADING,
   VIDEOMASK,
   VIDEOPLAYBUTTON,
+  VIDEOPLAYER,
   VIDEOPROGRESS,
   VIDEOSPEED,
   VIDEOTIME,
@@ -55,6 +56,8 @@ export interface ControlsObj {
   [DOMRESIZEOBSERVER]?: boolean;
   // 快捷键控件功能
   [SHORTCUTKEY]?: boolean;
+  // 播放器控件
+  [VIDEOPLAYER]?: boolean;
 }
 
 // 播放器参数

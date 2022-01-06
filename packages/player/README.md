@@ -94,7 +94,8 @@ const player = new MediaPlayer({
 | VideoMask        | 视频遮罩层控件     | Boolean | true   |
 | VideoControls       | 视频下方控制条     | Boolean | true   |
 | DomResizeObserver        | 播放器`DOM`元素大小发生变化监听   | Boolean | true   |
-| ShortcutKey        | 快捷键控件功能   | Boolean | true   |
+| ShortcutKey        | 快捷键功能控件   | Boolean | true   |
+| VideoPlayer        | 视频播放控件   | Boolean | true   |
 
 ## 事件
 
