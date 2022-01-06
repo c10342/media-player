@@ -12,8 +12,6 @@
 
 - `feat`：修改配置合并策略方法
 
-- `feat`：根据插件提供的`mobilePlugin`和`pcPlugin`静态属性，过滤不同环境的插件
-
 - `feat`：组件之间通过`$eventBus`进行通信
 
 - `feat`：组件添加`pluginName`静态属性作为组件的唯一标识
@@ -43,7 +41,6 @@
 - `style`：代码优化，使用`updateStyle`函数统一更新样式
 
 - `style`：代码优化，使用字符串拼接的形式替换`art-template`依赖包，减少打包出来的体积
-
 
 
 ## `2.0.0`

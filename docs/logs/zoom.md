@@ -6,10 +6,6 @@
 
 - `style`：代码优化，使用`updateStyle`函数统一更新样式
 
-- `style`：代码优化，`pluginName`静态属性名称提取成常量
-
-- `feat`：新增`mobilePlugin`静态属性，在移动端环境下不会被初始化
-
 - `chore`：升级`@lin-media/player`版本号`2.1.0`
 
 ## `1.0.2`

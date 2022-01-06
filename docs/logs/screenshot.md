@@ -4,8 +4,6 @@
 
 ## `1.0.3`
 
-- `style`：代码优化，`pluginName`静态属性名称提取成常量
-
 - `chore`：升级`@lin-media/player`版本号`2.1.0`
 
 ## `1.0.2`
