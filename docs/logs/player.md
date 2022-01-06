@@ -6,8 +6,6 @@
 
 - `fix`：修复网页全屏样式被覆盖的问题
 
-- `fix`：修复`video-player`组件受`controls`字段影响的问题
-
 - `fix`：修复移动端点击进度条出现时间悬浮提示
 
 - `feat`：添加`resize`自定义事件
@@ -22,11 +20,30 @@
 
 - `feat`：`mobile-play-button`组件修改为`float-button`组件，pc端和移动端通用
 
+- `feat`：`controls`参数中的字段调整，调整如下：
+    - `playButton` -> `VideoPlayButton`
+    - `volume` -> `VideoVolume`
+    - `live` -> `VideoLive`
+    - `speed` -> `VideoSpeed`
+    - `fullscreen` -> `VideoFullscreen`
+    - `definition` -> `VideoDefinition`
+    - `progress` -> `VideoProgress`
+    - `tip` -> `VideoTip`
+    - `time` -> `VideoTime`
+    - `loading` -> `VideoLoading`
+    - `mobilePlayButton` -> `VideoFloatButton`
+    - `videoMask` -> `VideoMask`
+    - `controlBar` -> `VideoControls`
+    - 新增 `DomResizeObserver`
+    - 新增 `ShortcutKey`
+    - 新增 `VideoPlayer`
+
+- `feat`：删除播放器参数的`hotkey`字段，迁移到了`controls.ShortcutKey`中
+
 - `style`：代码优化，使用`updateStyle`函数统一更新样式
 
 - `style`：代码优化，使用字符串拼接的形式替换`art-template`依赖包，减少打包出来的体积
 
-- `refactor`：`controls`参数中的`mobilePlayButton`字段修改为`floatButton`
 
 
 ## `2.0.0`
