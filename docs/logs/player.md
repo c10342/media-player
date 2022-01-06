@@ -38,9 +38,15 @@
 
 - `feat`：删除播放器参数的`hotkey`字段，迁移到了`controls.ShortcutKey`中
 
+- `feat`：自定义主题css变量`--player-theme`改成`--player-theme-color`
+
+- `feat`：插件强制要求传入`pluginName`静态属性
+
 - `style`：代码优化，使用`updateStyle`函数统一更新样式
 
 - `style`：代码优化，使用字符串拼接的形式替换`art-template`依赖包，减少打包出来的体积
+
+- `style`：升级`webpack`相关依赖，使用`webpack5`进行打包
 
 
 ## `2.0.0`

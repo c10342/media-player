@@ -340,15 +340,15 @@ const player = new MediaPlayer({
 
   - 全局插件是通过`MediaPlayer.use(ctor: Function)`进行注册的
 
-  - 局部插件是通过 options 参数中的`plugins`字段进行注册的
+  - 局部插件是通过播放器初始化时传入的配置参数`plugins`字段进行注册的
 
 ### 插件的构成
 
-- 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性（不写就默认使用构造器的 name 值），`pluginName` 是用来作为插件的唯一标识，同时外部可以通过`player.$plugins[pluginName]`访问到插件实例
+- 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性，`pluginName` 是用来作为插件的唯一标识，同时外部可以通过`player.$plugins[pluginName]`访问到插件实例
 
 - 构造器函数（类）会接受到两个参数：
 
-  - instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法和属性
+  - player：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法和属性
   
   - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`。因为当你同时初始化了 2 个播放器的时候，`document.querySelector()`获取的始终是第一个元素
 
@@ -365,14 +365,14 @@ class Test {
   // 提供一个pluginName静态属性
   static pluginName = "Test";
   el = null;
-  instance = null;
+  player = null;
 
-  constructor(instance,el) {
+  constructor(player,el) {
     // 保存接受到的两个参数
     this.el = el;
-    this.instance = instance;
+    this.player = player;
     // 往播放器实例中添加一个sleep方法
-    Object.defineProperty(instance,'sleep',{
+    Object.defineProperty(player,'sleep',{
       get(){
         console.log("sleep");
       }
@@ -386,9 +386,9 @@ class Test {
     div.innerHTML = "切换播放状态";
     div.addEventListener("click", () => {
       // 通过发布订阅模式，实现事件的监听和发射
-      this.instance.$emit("test-click");
+      this.player.$emit("test-click");
       // 切换播放器的播放状态
-      this.instance.toggle();
+      this.player.toggle();
     });
     // 添加到播放器中
     this.el.appendChild(div);
@@ -426,7 +426,7 @@ player.$plugins.Test;
 
 - 插件必须是一个构造器函数（类），因为内部是通过 `new` 的方式去初始化插件
 
-- 插件中请提供一个`pluginName`静态属性，如果不提供会默认使用构造器的 `name` 值。`pluginName` 会作为插件的唯一标识
+- 插件中必须提供一个`pluginName`静态属性。`pluginName` 会作为插件的唯一标识
 
 - 如果有其他副作用的代码，可以通过监听 `destroy` 事件来销毁这些副作用代码
 
@@ -434,7 +434,7 @@ player.$plugins.Test;
 
 - 当你需要读取原生`video`标签时，请不要缓存`video`标签，而是每次动态去读取，因为清晰度切换的时候，会删除旧的`video`标签，插入新的`video`标签。当然，出于对性能的考虑，你也可以对`video`标签进行缓存，然后监听`switch_definition_end`事件，重新刷新`video`标签的缓存
 
-- 如果 `MediaPlayer` 的 `options` 参数中出现 `key` 值为插件的唯一标识，且 `value` 值为 false，那么该插件不会被初始化。这个是用来关闭插件的初始化。以关闭弹幕插件为例：
+- 如果 `MediaPlayer` 的初始化参数中出现 `key` 值为插件的唯一标识，且 `value` 值为 false，那么该插件不会被初始化。这个是用来关闭插件的初始化。以关闭弹幕插件为例：
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
@@ -463,7 +463,7 @@ const player = new MediaPlayer({
 
 ```css
 :root {
-  --player-theme: green;
+  --player-theme-color: green;
 
   /* ... */
 }
@@ -472,7 +472,7 @@ const player = new MediaPlayer({
 **通过 js 改变主题色**
 
 ```js
-document.documentElement.style.setProperty("--player-theme", "green");
+document.documentElement.style.setProperty("--player-theme-color", "green");
 
 // ...
 ```
@@ -481,7 +481,7 @@ document.documentElement.style.setProperty("--player-theme", "green");
 
 | 变量名                                 | 说明                       | 默认值                   |
 | -------------------------------------- | -------------------------- | ------------------------ |
-| --player-theme                         | 主题色                     | #fb6640                  |
+| --player-theme-color                         | 主题色                     | #fb6640                  |
 | --player-icon-color                    | 字体图标颜色               | #fff                     |
 | --player-container-background-color    | 播放器容器背景色           | #000                     |
 | --player-text-color                    | 文本颜色                   | #fff                     |
