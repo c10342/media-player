@@ -17,4 +17,3 @@ export { default as createLocale } from "./src/create-locale";
 export { default as deepClone } from "./src/deep-clone";
 export { default as parseHtmlToDom } from "./src/parse-html-to-dom";
 export { default as updateStyle } from "./src/update-style";
-export * from "./src/constant";
