@@ -6,9 +6,7 @@ import {
   isUndef,
   checkData,
   getBoundingClientRect,
-  updateStyle,
-  PLUGINNAME,
-  MOBILEPLUGIN
+  updateStyle
 } from "@lin-media/utils";
 import { PreviewList, PreviewOptions } from "./types";
 import MediaPlayer from "@lin-media/player";
@@ -23,8 +21,7 @@ class Preview {
   // 自定义事件
   static customEvents = PreviewEvents;
   // 插件名称.
-  static [PLUGINNAME] = pluginName;
-  static [MOBILEPLUGIN] = false;
+  static pluginName = pluginName;
   // 播放器的dom
   private _el: HTMLElement;
   // 播放器实例

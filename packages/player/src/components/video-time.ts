@@ -1,11 +1,11 @@
-import { parseHtmlToDom, PLUGINNAME, secondToTime } from "@lin-media/utils";
+import { parseHtmlToDom, secondToTime } from "@lin-media/utils";
 import { VIDEOTIME } from "../config/constant";
 import { VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
 import TimeTpl from "../templates/time";
 
 class VideoTime {
-  static [PLUGINNAME] = VIDEOTIME;
+  static pluginName = VIDEOTIME;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // 组件根元素

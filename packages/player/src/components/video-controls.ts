@@ -2,7 +2,6 @@ import {
   EventManager,
   isUndef,
   parseHtmlToDom,
-  PLUGINNAME,
   updateStyle
 } from "@lin-media/utils";
 import {
@@ -20,11 +19,20 @@ import VideoFullscreen from "./video-fullscreen";
 import VideoSpeed from "./video-speed";
 import VideoDefinition from "./video-definition";
 import VideoLive from "./video-live";
-import { ControlsObj } from "../types";
-import { VIDEOCONTROLS } from "../config/constant";
+import {
+  VIDEOCONTROLS,
+  VIDEODEFINITION,
+  VIDEOFULLSCREEN,
+  VIDEOLIVE,
+  VIDEOPLAYBUTTON,
+  VIDEOPROGRESS,
+  VIDEOSPEED,
+  VIDEOTIME,
+  VIDEOVOLUME
+} from "../config/constant";
 
 class VideoControls {
-  static [PLUGINNAME] = VIDEOCONTROLS;
+  static pluginName = VIDEOCONTROLS;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器
@@ -69,27 +77,27 @@ class VideoControls {
       {
         ctor: VideoProgress,
         slot: this._querySelector(".player-controls-group"),
-        init: !$options.live && controls[VideoProgress[PLUGINNAME]]
+        init: !$options.live && controls[VIDEOPROGRESS]
       },
       {
         ctor: VideoPlayButton,
         slot: leftSlotElement,
-        init: !isMobile && controls[VideoPlayButton[PLUGINNAME]]
+        init: !isMobile && controls[VIDEOPLAYBUTTON]
       },
       {
         ctor: VideoVolume,
         slot: leftSlotElement,
-        init: !isMobile && controls[VideoVolume[PLUGINNAME]]
+        init: !isMobile && controls[VIDEOVOLUME]
       },
       {
         ctor: VideoTime,
         slot: leftSlotElement,
-        init: !$options.live && controls[VideoTime[PLUGINNAME]]
+        init: !$options.live && controls[VIDEOTIME]
       },
       {
         ctor: VideoLive,
         slot: leftSlotElement,
-        init: $options.live && controls[VideoLive[PLUGINNAME]]
+        init: $options.live && controls[VIDEOLIVE]
       },
       {
         ctor: VideoSpeed,
@@ -98,7 +106,7 @@ class VideoControls {
           !$options.live &&
           $options.speedList &&
           $options.speedList.length > 0 &&
-          controls[VideoSpeed[PLUGINNAME]]
+          controls[VIDEOSPEED]
       },
       {
         ctor: VideoDefinition,
@@ -106,17 +114,17 @@ class VideoControls {
         init:
           $options.videoList &&
           $options.videoList.length > 0 &&
-          controls[VideoDefinition[PLUGINNAME]]
+          controls[VIDEODEFINITION]
       },
       {
         ctor: VideoFullscreen,
         slot: rightSlotElement,
-        init: controls[VideoFullscreen[PLUGINNAME]]
+        init: controls[VIDEOFULLSCREEN]
       }
     ];
     compList.forEach((item) => {
       if (item.init) {
-        const name = item.ctor[PLUGINNAME];
+        const name = item.ctor.pluginName;
         this._playerInstance.$children[name] = new item.ctor(
           this._playerInstance,
           item.slot

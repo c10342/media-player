@@ -3,8 +3,7 @@ import {
   EventManager,
   isFunction,
   isUndef,
-  parseHtmlToDom,
-  PLUGINNAME
+  parseHtmlToDom
 } from "@lin-media/utils";
 import { VIDEOPLAYER } from "../config/constant";
 import {
@@ -18,7 +17,7 @@ import VideoTagTpl from "../templates/video-tag";
 import { VideoListItem } from "../types";
 
 class VideoPlayer {
-  static [PLUGINNAME] = VIDEOPLAYER;
+  static pluginName = VIDEOPLAYER;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器

@@ -1,5 +1,5 @@
 import "./style/index.scss";
-import { EventManager, isUndef, logError, PLUGINNAME } from "@lin-media/utils";
+import { EventManager, isUndef, logError } from "@lin-media/utils";
 import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
 import { downloadPicName, pluginName } from "./config/constant";
@@ -14,7 +14,7 @@ class Screenshot {
   // 自定义事件
   static customEvents = ScreenshotEvents;
   // 插件名称.
-  static [PLUGINNAME] = pluginName;
+  static pluginName = pluginName;
   // 播放器的dom
   private _el: HTMLElement;
   // 播放器实例

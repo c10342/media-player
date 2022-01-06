@@ -5,9 +5,7 @@ import {
   isFunction,
   isString,
   getViewPortInfo,
-  updateStyle,
-  PLUGINNAME,
-  MOBILEPLUGIN
+  updateStyle
 } from "@lin-media/utils";
 import { pluginName } from "./config/constant";
 import { ContextmenuOptions, MenuItem } from "./types";
@@ -16,8 +14,7 @@ import menuListTpl from "./template/menu-list";
 import "./style/index.scss";
 
 class Contextmenu {
-  static [PLUGINNAME] = pluginName;
-  static [MOBILEPLUGIN] = false;
+  static pluginName = pluginName;
   private _playerInstance: MediaPlayer;
   private _options: ContextmenuOptions;
   private _eventManager = new EventManager();

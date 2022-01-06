@@ -1,9 +1,4 @@
-import {
-  EventManager,
-  parseHtmlToDom,
-  PLUGINNAME,
-  updateStyle
-} from "@lin-media/utils";
+import { EventManager, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import { VIDEOLOADING } from "../config/constant";
 import { VideoReadyStateEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
@@ -11,7 +6,7 @@ import MediaPlayer from "../index";
 import LoadingTpl from "../templates/loading";
 
 class VideoLoading {
-  static [PLUGINNAME] = VIDEOLOADING;
+  static pluginName = VIDEOLOADING;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器

@@ -1,15 +1,10 @@
-import {
-  isUndef,
-  parseHtmlToDom,
-  PLUGINNAME,
-  updateStyle
-} from "@lin-media/utils";
+import { isUndef, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import { VIDEOTIP } from "../config/constant";
 import { MessageChannelEvents, PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
 import TipTpl from "../templates/tip";
 class VideoTip {
-  static [PLUGINNAME] = VIDEOTIP;
+  static pluginName = VIDEOTIP;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // 组件根元素

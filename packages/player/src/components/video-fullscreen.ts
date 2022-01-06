@@ -4,8 +4,7 @@ import {
   isBrowserFullscreen,
   EventManager,
   isUndef,
-  parseHtmlToDom,
-  PLUGINNAME
+  parseHtmlToDom
 } from "@lin-media/utils";
 import { VIDEOFULLSCREEN, WEBFULLSCREENCLASSNAME } from "../config/constant";
 import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
@@ -14,7 +13,7 @@ import MediaPlayer from "../index";
 import FullscreenTpl from "../templates/fullscreen";
 
 class VideoFullscreen {
-  static [PLUGINNAME] = VIDEOFULLSCREEN;
+  static pluginName = VIDEOFULLSCREEN;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // 组件根元素

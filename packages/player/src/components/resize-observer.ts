@@ -1,9 +1,9 @@
-import { debounce, isUndef, PLUGINNAME } from "@lin-media/utils";
+import { debounce, isUndef } from "@lin-media/utils";
 import { DOMRESIZEOBSERVER } from "../config/constant";
 import MediaPlayer from "../index";
 
 class DomResizeObserver {
-  static [PLUGINNAME] = DOMRESIZEOBSERVER;
+  static pluginName = DOMRESIZEOBSERVER;
   private _playerInstance: MediaPlayer;
   private _resizeObserver: ResizeObserver | null;
   constructor(playerInstance: MediaPlayer) {

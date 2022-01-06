@@ -1,11 +1,11 @@
-import { EventManager, PLUGINNAME } from "@lin-media/utils";
+import { EventManager } from "@lin-media/utils";
 import { SHORTCUTKEY } from "../config/constant";
 import { CanFocusTagEnum, KeyCodeEnum } from "../config/enum";
 import { PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
 
 class ShortcutKey {
-  static [PLUGINNAME] = SHORTCUTKEY;
+  static pluginName = SHORTCUTKEY;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // 标志位，标记用户是否点击了播放器，也就是播放器是否处于活跃状态

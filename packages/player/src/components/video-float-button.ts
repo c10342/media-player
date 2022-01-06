@@ -1,9 +1,4 @@
-import {
-  EventManager,
-  parseHtmlToDom,
-  PLUGINNAME,
-  updateStyle
-} from "@lin-media/utils";
+import { EventManager, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import {
   FLOATBUTTONENTERCLASSNAME,
   FLOATBUTTONLEAVECLASSNAME,
@@ -14,7 +9,7 @@ import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
 import FloatButtonTpl from "../templates/float-button";
 class VideoFloatButton {
-  static [PLUGINNAME] = VIDEOFLOATBUTTON;
+  static pluginName = VIDEOFLOATBUTTON;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器

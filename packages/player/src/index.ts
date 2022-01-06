@@ -1,17 +1,13 @@
 import "./styles/index.scss";
 import {
   EventEmit,
-  isBoolean,
   isMobile,
   isPlainObject,
   isString,
   isUndef,
   LangTypeEnum,
   logWarn,
-  MOBILEPLUGIN,
-  parseHtmlToDom,
-  PCPLUGIN,
-  PLUGINNAME
+  parseHtmlToDom
 } from "@lin-media/utils";
 import defaultOptions from "./config/default-config";
 import {
@@ -36,6 +32,16 @@ import {
   PlayerEvents,
   VideoEvents
 } from "./config/event";
+import {
+  DOMRESIZEOBSERVER,
+  SHORTCUTKEY,
+  VIDEOCONTROLS,
+  VIDEOFLOATBUTTON,
+  VIDEOLOADING,
+  VIDEOMASK,
+  VIDEOPLAYER,
+  VIDEOTIP
+} from "./config/constant";
 
 class MediaPlayer {
   static PlayerEvents = PlayerEvents;
@@ -150,33 +156,33 @@ class MediaPlayer {
 
   // 初始化组件
   private _initComponents() {
-    const controls = this.$options.controls as any;
+    const controls = this.$options.controls;
     if (isPlainObject(controls)) {
       const compList = [
-        { ctor: VideoPlayer, init: controls[VideoPlayer[PLUGINNAME]] },
+        { ctor: VideoPlayer, init: controls[VIDEOPLAYER] },
         {
           ctor: ShortcutKey,
-          init: !this.$isMobile && controls[ShortcutKey[PLUGINNAME]]
+          init: !this.$isMobile && controls[SHORTCUTKEY]
         },
         {
           ctor: DomResizeObserver,
-          init: controls[DomResizeObserver[PLUGINNAME]]
+          init: controls[DOMRESIZEOBSERVER]
         },
-        { ctor: VideoTip, init: controls[VideoTip[PLUGINNAME]] },
+        { ctor: VideoTip, init: controls[VIDEOTIP] },
         {
           ctor: VideoControls,
-          init: controls[VideoControls[PLUGINNAME]]
+          init: controls[VIDEOCONTROLS]
         },
-        { ctor: VideoMask, init: controls.VideoMask },
-        { ctor: VideoLoading, init: controls.VideoLoading },
+        { ctor: VideoMask, init: controls[VIDEOMASK] },
+        { ctor: VideoLoading, init: controls[VIDEOLOADING] },
         {
           ctor: VideoFloatButton,
-          init: controls[VideoFloatButton[PLUGINNAME]]
+          init: controls[VIDEOFLOATBUTTON]
         }
       ];
       compList.forEach((item) => {
         if (item.init) {
-          const name = item.ctor[PLUGINNAME];
+          const name = item.ctor.pluginName;
           this.$children[name] = new item.ctor(this, this.$rootElement);
         }
       });
@@ -187,25 +193,12 @@ class MediaPlayer {
   private _initPlugins() {
     const options = this.$options;
     const plugins = options.plugins;
-    const mobileEnv = this.$isMobile;
-    const pcEnv = !mobileEnv;
-    plugins
-      ?.filter((ctor: any) => {
-        const mobilePlugin = ctor[MOBILEPLUGIN];
-        const pcPlugin = ctor[PCPLUGIN];
-        if (mobileEnv) {
-          return isBoolean(mobilePlugin) ? mobilePlugin : true;
-        } else if (pcEnv) {
-          return isBoolean(pcPlugin) ? pcPlugin : true;
-        }
-        return false;
-      })
-      .forEach((ctor: any) => {
-        const pluginName = getPluginName(ctor);
-        if (pluginName && options[pluginName] !== false) {
-          this.$plugins[pluginName] = new ctor(this, this.$rootElement);
-        }
-      });
+    plugins?.forEach((ctor: any) => {
+      const pluginName = getPluginName(ctor);
+      if (pluginName && options[pluginName] !== false) {
+        this.$plugins[pluginName] = new ctor(this, this.$rootElement);
+      }
+    });
   }
 
   private _initVideoElement() {

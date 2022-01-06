@@ -1,15 +1,10 @@
-import {
-  EventManager,
-  isFunction,
-  parseHtmlToDom,
-  PLUGINNAME
-} from "@lin-media/utils";
+import { EventManager, isFunction, parseHtmlToDom } from "@lin-media/utils";
 import { LISTACTIVECLASSNAME, VIDEOSPEED } from "../config/constant";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import MediaPlayer from "../index";
 import SpeedTpl from "../templates/speed";
 class VideoSpeed {
-  static [PLUGINNAME] = VIDEOSPEED;
+  static pluginName = VIDEOSPEED;
   // 播放器实例
   private _playerInstance: MediaPlayer;
   // dom事件管理器
