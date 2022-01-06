@@ -348,13 +348,13 @@ const player = new MediaPlayer({
 
 - 构造器函数（类）会接受到两个参数：
 
-  - instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法
+  - instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法和属性
   
   - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`。因为当你同时初始化了 2 个播放器的时候，`document.querySelector()`获取的始终是第一个元素
 
   
 
-### 插件代码示例
+### 插件开发示例
 
 **Test 插件：**
 
@@ -498,7 +498,7 @@ document.documentElement.style.setProperty("--player-theme", "green");
 
 内置组件本质上也算是插件的一种。不同的是内置组件的初始化是有顺序的，比如`video-play-button`组件是`video-controls`组件的子组件，所以要先初始化`video-controls`组件，然后再初始化`video-play-button`组件。插件是在播放器的所有东西都初始化了之后才进行初始化的
 
-插件和内置组件接受的参数不一样。内置组件分别接收播放器实例和插槽元素，插槽元素是用来指定内置组件插入到的位置，这样子就可以实现组件的复用，因为内置组件插入的位置是由外部控制的，可以插入到任意的地方。插件分别接受播放器实例和整个播放器的`DOM`元素，插入的位置由插件内部控制，受限于播放器本身的`DON`元素。换句话来说，就是内置组件可以拿出来用到其他播放器中，但是插件只能在对应的播放器中使用，因为插件是针对播放器去进行设计的，内置组件是针对通用性去设计的
+插件和内置组件接受的参数不一样。内置组件分别接收播放器实例和插槽元素，插槽元素是用来指定内置组件插入到的位置，这样子就可以实现组件的复用，因为内置组件插入的位置是由外部控制的，可以插入到任意的地方。插件分别接受播放器实例和整个播放器的`DOM`元素，插入的位置由插件内部控制，受限于播放器本身的`DOM`元素。换句话来说，就是内置组件可以拿出来用到其他播放器中，但是插件只能在对应的播放器中使用，因为插件是针对播放器去进行设计的，内置组件是针对通用性去设计的
 
 插件和内置组件在功能上定义是不一样的。内置组件是为了给播放器提供一些基础功能，比如音量调节(通过`video-volume`内置组件提供的)，倍数切换(通过`video-speed`内置组件提供的)等等功能。插件是为了解决用户自定义需求而提出来的解决方案，插件是通过内置组件提供的一些基础功能去实现自己的功能的
 
@@ -506,15 +506,75 @@ document.documentElement.style.setProperty("--player-theme", "green");
 
 - **DomResizeObserver 组件**
 
-提供监听播放器`DOM`元素大小发生变化并广播的功能，`resize`自定义事件来源于该组件。可通过`controls.domResizeObserver`字段关闭该内置组件的初始化，使用插件去实现
+提供监听播放器`DOM`元素大小发生变化并广播的功能，`resize`自定义事件来源于该组件。可通过`controls.DomResizeObserver`字段关闭该内置组件的初始化，使用插件去实现
 
 - **ShortcutKey 组件**
 
-提供快捷键的功能，`keyboard_right`，`keyboard_left`，`keyboard_up`，`keyboard_down`，`keyboard_space`自定义事件就是来源于该组件。可通过`controls.shortcutKey`字段关闭该内置组件的初始化，使用插件去实现
+提供快捷键的功能，`keyboard_right`，`keyboard_left`，`keyboard_up`，`keyboard_down`，`keyboard_space`自定义事件就是来源于该组件。移动端环境下不会被初始化。可通过`controls.ShortcutKey`字段关闭该内置组件的初始化，使用插件去实现
 
 - **VideoControls 组件**
 
-提供视频控制条的显示和隐藏功能，`show_controls`和`hide_controls`自定义事件来源于该组件。该组件的子组件包含`VideoProgress`，`VideoPlayButton`，`VideoVolume`，`VideoTime`，`VideoLive`，`VideoSpeed`，`VideoDefinition`，`VideoFullscreen`。一旦关闭了该组件的初始化，其子组件也不会被初始化，子组件所提供的基础功能也将失效。所以请慎重考虑是否关闭该组件的初始化。可通过`controls.controlBar`字段关闭该内置组件的初始化，使用插件去实现
+提供视频控制条的显示和隐藏功能，`show_controls`和`hide_controls`自定义事件来源于该组件。该组件的子组件包含`VideoProgress`，`VideoPlayButton`，`VideoVolume`，`VideoTime`，`VideoLive`，`VideoSpeed`，`VideoDefinition`，`VideoFullscreen`。一旦关闭了该组件的初始化，其子组件也不会被初始化，子组件所提供的基础功能也将失效。所以请慎重考虑是否关闭该组件的初始化。可通过`controls.VideoControls`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoDefinition 组件**
+
+提供视频清晰度切换控件，传入的`videoList`参数长度要大于1才会被初始化。可通过`controls.VideoDefinition`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoFloatButton 组件**
+
+播放器中间的悬浮按钮控件，点击可以切换视频的`播放/暂停`状态。可通过`controls.VideoFloatButton`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoFullscreen 组件**
+
+提供播放器网页全屏和浏览器全屏的功能，`enter_browser_screen`，`exit_browser_screen`，`enter_web_screen`，`exit_web_screen`自定义事件来源于该组件。可通过`controls.VideoFullscreen`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoLive 组件**
+
+直播提示控件。非直播环境(`live=false`)下不会被初始化。可通过`controls.VideoLive`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoLoading 组件**
+
+loading控件，视频发生卡顿时会被显示出来，用来提高用户的体验度。可通过`controls.VideoLoading`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoMask 组件**
+
+视频遮罩层，位于`video`标签上方，用来禁止用户在`video`标签中的右键功能。pc端点击可以切换视频的`播放/暂停`状态，移动端点击可以切换`VideoControls`组件的`显示/隐藏`状态。可通过`controls.VideoMask`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoPlayButton 组件**
+
+`播放/暂停`按钮控件，点击可以切换视频的`播放/暂停`状态，移动端环境下不会被初始化。可通过`controls.VideoPlayButton`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoPlayer 组件**
+
+`video`标签控件，一个非常重要的核心内置组件。所有跟`video`标签相关的属性，事件和操作，都是由该组件提供的。其中，`video`标签的原生事件和`switch_definition_start`，`switch_definition_end`自定义事件都是由改组件提供的。可通过`controls.VideoPlayer`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoProgress 组件**
+
+进度条控件，直播环境下(`live=true`)不会被初始化。可通过`controls.VideoProgress`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoSpeed 组件**
+
+视频倍数控件，传入的`speedList`参数长度要大于1才会被初始化。可通过`controls.VideoSpeed`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoTime 组件**
+
+时间控件，直播环境下(`live=true`)不会被初始化。可通过`controls.VideoTime`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoTip 组件**
+
+提示通知控件。可通过`controls.VideoTip`字段关闭该内置组件的初始化，使用插件去实现
+
+- **VideoVolume 组件**
+
+视频音量控制控件，移动端环境下不会被初始化。可通过`controls.VideoVolume`字段关闭该内置组件的初始化，使用插件去实现
+
+
+::: warning 警告
+
+一般情况下，不推荐直接关闭内置组件的初始化，因为一旦关闭了某些内置组件，将会丧失部分基础功能，部分依赖于内置组件的插件也将会无法运行。比如`highlight`插件依赖于`VideoProgress`内置组件。当然，如果插件也提供了对应的基础功能和`DOM`元素，`highlight`插件依旧可以运行
+
+:::
+
 
 ## 常见问题
 
