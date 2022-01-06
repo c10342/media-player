@@ -17,6 +17,7 @@ import {
   VIDEOTIP,
   VIDEOVOLUME
 } from "../config/constant";
+import MediaPlayer from "../index";
 
 // 视频列表项
 export type VideoListItem = { label: string; url: string; default?: boolean };
@@ -77,7 +78,7 @@ export interface PlayerOptions {
   // 是否为直播
   live?: boolean;
   // 局部插件
-  plugins?: Array<Function>;
+  plugins?: Array<PluginClass>;
   // 是否开启跨域
   crossorigin?: boolean;
   // 视频预加载
@@ -128,4 +129,10 @@ export interface PlayerOptionsParams extends PlayerOptions {
 
 export interface PluginsOptions {
   [key: string]: any;
+}
+
+// 插件的定义
+export interface PluginClass {
+  new (player: MediaPlayer, el: HTMLElement): Object;
+  pluginName: string;
 }

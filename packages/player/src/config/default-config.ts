@@ -44,7 +44,7 @@ const defaultOptions: Partial<PlayerOptions> = {
     [VIDEOPLAYER]: true
   },
   //   插件
-  plugins: [] as Array<Function>,
+  plugins: [],
   // 语言
   lang: LangTypeEnum.zh,
   // 自定义语言包

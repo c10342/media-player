@@ -1,6 +1,7 @@
 import "./styles/index.scss";
 import {
   EventEmit,
+  isArray,
   isMobile,
   isPlainObject,
   isString,
@@ -14,9 +15,10 @@ import {
   LangOptions,
   PlayerOptions,
   PlayerOptionsParams,
+  PluginClass,
   PluginsOptions
 } from "./types";
-import { getPluginName, mergeConfig } from "./utils/index";
+import { mergeConfig } from "./utils/index";
 import initLocale from "./locale/index";
 import LayoutTpl from "./templates/layout";
 import VideoPlayer from "./components/video-player";
@@ -60,16 +62,24 @@ class MediaPlayer {
     return MediaPlayer;
   }
   //   全局注册插件
-  static use(ctor: Function) {
+  static use(ctor: PluginClass) {
+    if (!ctor.pluginName) {
+      logWarn(`${ctor} 必须要提供 pluginName 静态属性`);
+      return;
+    }
     const plugins = this.globalConfig.plugins ?? [];
     const installed = plugins?.some((plugin) => {
-      return getPluginName(plugin) === getPluginName(ctor);
+      return plugin.pluginName === ctor.pluginName;
     });
     if (installed) {
-      logWarn("插件已经被安装了");
+      logWarn(`${ctor.pluginName} 插件已经被安装了`);
       return MediaPlayer;
     }
     plugins?.push(ctor);
+
+    if (!isArray(this.globalConfig.plugins)) {
+      this.globalConfig.plugins = plugins;
+    }
 
     return MediaPlayer;
   }
@@ -129,6 +139,14 @@ class MediaPlayer {
 
     if (isUndef(options.el)) {
       throw new TypeError("el 不存在");
+    }
+
+    if (isArray(options.plugins)) {
+      options.plugins.forEach((plugin) => {
+        if (!plugin.pluginName) {
+          logWarn(`${plugin} 必须要提供 pluginName 静态属性`);
+        }
+      });
     }
   }
 
@@ -193,8 +211,8 @@ class MediaPlayer {
   private _initPlugins() {
     const options = this.$options;
     const plugins = options.plugins;
-    plugins?.forEach((ctor: any) => {
-      const pluginName = getPluginName(ctor);
+    plugins?.forEach((ctor: PluginClass) => {
+      const pluginName = ctor.pluginName;
       if (pluginName && options[pluginName] !== false) {
         this.$plugins[pluginName] = new ctor(this, this.$rootElement);
       }

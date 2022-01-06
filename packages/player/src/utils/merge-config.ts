@@ -1,6 +1,5 @@
 import { deepClone, isArray, isPlainObject } from "@lin-media/utils";
-import { PlayerOptions } from "../types";
-import getPluginName from "./get-plugin-name";
+import { PlayerOptions, PluginClass } from "../types";
 
 function hasKey(key: string, data: any) {
   return key in data;
@@ -17,11 +16,11 @@ function isNeedMerge(data: any) {
 // 插件去重
 function uniquePlugins(config: PlayerOptions) {
   if (isArray(config.plugins) && config.plugins.length > 0) {
-    const plugins: Function[] = config.plugins.slice();
-    const pluginsArr: Function[] = [];
-    const installed = (item: Function) => {
-      return pluginsArr.some((ctor: any) => {
-        return getPluginName(ctor) === getPluginName(item);
+    const plugins: PluginClass[] = config.plugins.slice();
+    const pluginsArr: PluginClass[] = [];
+    const installed = (item: PluginClass) => {
+      return pluginsArr.some((ctor) => {
+        return ctor.pluginName === item.pluginName;
       });
     };
     plugins.forEach((item) => {
