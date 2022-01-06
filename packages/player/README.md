@@ -245,11 +245,11 @@ MediaPlayer.useLang({
 
 局部插件是通过 options 参数中的`plugins`字段进行注册的
 
-每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性（不写就默认使用构造器的 name），这是为了外部可以通过`player.$plugins[pluginName]`访问到插件实例
+每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性，这是为了外部可以通过`player.$plugins[pluginName]`访问到插件实例
 
 构造器函数（类）会接受到三个参数：
 
-- instance：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法
+- player：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法
 - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`
 
 插件代码示例：
@@ -257,25 +257,24 @@ MediaPlayer.useLang({
 Test 插件
 
 ```javascript
+import MediaPlayer from "@lin-media/player";
+
 class Test {
   // 提供一个pluginName静态属性
   static pluginName = "Test";
-
   el = null;
-  instance = null;
-  MediaPlayer = null;
+  player = null;
 
-  constructor(el, instance, MediaPlayer) {
-    // 保存接受到的三个参数
+  constructor(player,el) {
+    // 保存接受到的两个参数
     this.el = el;
-    this.instance = instance;
-    this.MediaPlayer = MediaPlayer;
+    this.player = player;
     // 往播放器实例中添加一个sleep方法
-    Object.defineProperty(instance, "sleep", {
-      get() {
+    Object.defineProperty(player,'sleep',{
+      get(){
         console.log("sleep");
       }
-    });
+    })
     // 开始实现其他的功能
     this.init();
   }
@@ -284,10 +283,10 @@ class Test {
     const div = document.createElement("div");
     div.innerHTML = "切换播放状态";
     div.addEventListener("click", () => {
-      // 播放器继承了EventEmit类，通过发布订阅模式，实现事件的监听和发射
-      this.instance.$emit("test-click");
+      // 通过发布订阅模式，实现事件的监听和发射
+      this.player.$emit("test-click");
       // 切换播放器的播放状态
-      this.instance.toggle();
+      this.player.toggle();
     });
     // 添加到播放器中
     this.el.appendChild(div);
