@@ -245,6 +245,11 @@ class VideoProgress {
 
   // 视频完成跳转，seek的时候
   private _onVideoSeeked() {
+    // fix:修复调用seek方法跳转到0时刻的时候进度条显示不正确
+    if (this._currentTime === 0) {
+      this._setPlayedProgressByPercent(0);
+    }
+
     this._isMousedown = false;
   }
 
