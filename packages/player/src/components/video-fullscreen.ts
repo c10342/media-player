@@ -6,7 +6,11 @@ import {
   isUndef,
   parseHtmlToDom
 } from "@lin-media/utils";
-import { VIDEOFULLSCREEN, WEBFULLSCREENCLASSNAME } from "../config/constant";
+import {
+  BODYHIDDENCLASSNAME,
+  VIDEOFULLSCREEN,
+  WEBFULLSCREENCLASSNAME
+} from "../config/constant";
 import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
 import { MessageChannelEvents, PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
@@ -125,6 +129,7 @@ class VideoFullscreen {
     const containerElement = this._playerInstance.$rootElement;
     if (containerElement.classList.contains(WEBFULLSCREENCLASSNAME)) {
       containerElement.classList.remove(WEBFULLSCREENCLASSNAME);
+      document.body.classList.remove(BODYHIDDENCLASSNAME);
       this._emit(PlayerEvents.EXIT_WEB_SCREEN);
     }
   }
@@ -134,6 +139,7 @@ class VideoFullscreen {
     const containerElement = this._playerInstance.$rootElement;
     if (!containerElement.classList.contains(WEBFULLSCREENCLASSNAME)) {
       containerElement.classList.add(WEBFULLSCREENCLASSNAME);
+      document.body.classList.add(BODYHIDDENCLASSNAME);
       this._emit(PlayerEvents.ENTER_WEB_SCREEN);
     }
   }
