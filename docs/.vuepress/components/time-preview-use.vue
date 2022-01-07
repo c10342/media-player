@@ -8,16 +8,24 @@ import Preview from "@lin-media/preview";
 
 const previewList = [
   {
+    time: 5,
+    url: "/images/preview-5.png"
+  },
+  {
+    time: 10,
+    url: "/images/preview-10.png"
+  },
+  {
+    time: 15,
+    url: "/images/preview-15.png"
+  },
+  {
     time: 20,
     url: "/images/preview-20.png"
   },
   {
-    time: 40,
-    url: "/images/preview-40.png"
-  },
-  {
-    time: 60,
-    url: "/images/preview-60.png"
+    time: 25,
+    url: "/images/preview-25.png"
   }
 ];
 
