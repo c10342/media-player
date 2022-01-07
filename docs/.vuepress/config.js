@@ -76,14 +76,6 @@ module.exports = {
         "@lin-media": path.resolve(__dirname, "../../packages")
       },
       mainFields: ["doc", "main"]
-    },
-    module: {
-      rules: [
-        {
-          test: /\.art$/,
-          loader: "art-template-loader"
-        }
-      ]
     }
   }
 };
