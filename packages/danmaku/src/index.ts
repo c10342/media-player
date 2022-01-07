@@ -136,7 +136,7 @@ class Danmaku {
     const options = this._playerInstance.$options;
     this._i18n.setLang(options.lang);
     // 最后才设置自定义语言包，否则i18n.setLang会覆盖掉自定义语言包
-    this._i18n.use(options.customLanguage?.danmaku);
+    this._i18n.use(options.customLanguage?.Danmaku);
   }
 
   private _initElement() {
