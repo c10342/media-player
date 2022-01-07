@@ -127,8 +127,8 @@ describe("render", () => {
     const playButton = div.querySelector(".player-status-button");
     expect(playButton).toBeFalsy();
     // 移动端播放按钮
-    const mobilePlayButton = div.querySelector(".player-mobile-play-button");
-    expect(mobilePlayButton).toBeTruthy();
+    // const mobilePlayButton = div.querySelector(".player-mobile-play-button");
+    // expect(mobilePlayButton).toBeTruthy();
     // 音量
     const volumeElement = div.querySelector(".player-volume-container");
     expect(volumeElement).toBeFalsy();
