@@ -120,7 +120,8 @@ class Preview {
     // 开始渲染预览点列表
     const div = document.createElement("div");
     div.innerHTML = pointListTpl({
-      previewList,
+      // fix:过滤掉那些超出总时长的时间点
+      previewList: previewList.filter((item) => item.time <= this.duration),
       duration: this.duration
     });
     // 保存渲染出来的预览点元素
