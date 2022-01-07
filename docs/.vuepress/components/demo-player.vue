@@ -10,11 +10,11 @@ const playerOptions = {
   videoList: [
     {
       label: "标清",
-      url: "/demo.mp4"
+      url: "/test.mp4"
     },
     {
       label: "高清",
-      url: "/demo.mp4"
+      url: "/test.mp4"
     }
   ],
   speedList: [
