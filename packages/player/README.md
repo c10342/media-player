@@ -212,7 +212,7 @@ player.fullScreen.cancel("browser");
 
 ```javascript
 MediaPlayer.useLang({
-  player: {
+  Player: {
     live: "直播",
     goBack: "快退{time}秒",
     fastForward: "快进{time}秒",
@@ -231,6 +231,7 @@ MediaPlayer.useLang({
 **静态属性**
 
 - `MediaPlayer.PlayerEvents` : 播放器自定义事件
+
 - `MediaPlayer.VideoEvents` : video 标签事件
 
 - `MediaPlayer.globalConfig` : 默认的全局配置项，播放器在初始化的时候，会将用户传入的配置项跟全局的配置项进行合并，形成一个新的配置项
