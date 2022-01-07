@@ -46,6 +46,8 @@
 
 - `feat`：`ShortcutKey`组件监听全局快捷键改成`keydown`事件
 
+- `feat`：自定义语言包修改为`Player`字段获取
+
 - `style`：代码优化，使用`updateStyle`函数统一更新样式
 
 - `style`：代码优化，使用字符串拼接的形式替换`art-template`依赖包，减少打包出来的体积

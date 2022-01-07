@@ -245,7 +245,7 @@ player.fullScreen.cancel("browser");
 
 ```javascript
 MediaPlayer.useLang({
-  player: {
+  Player: {
     live: "直播",
     goBack: "快退{time}秒",
     fastForward: "快进{time}秒",

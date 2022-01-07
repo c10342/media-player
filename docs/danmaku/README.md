@@ -82,7 +82,7 @@ Danmaku 参数设置为 `false` 可关闭插件功能
 
 ```javascript
 MediaPlayer.useLang({
-  danmaku: {
+  Danmaku: {
     full: "全屏",
     top: "顶部",
     bottom: "底部",
