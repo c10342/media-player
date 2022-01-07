@@ -30,8 +30,8 @@ class ShortcutKey {
     });
     this._eventManager.addEventListener({
       element: document,
-      eventName: "keyup",
-      handler: this._onDocumentKeyup.bind(this)
+      eventName: "keydown",
+      handler: this._onDocumentKeydown.bind(this)
     });
     this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
   }
@@ -48,7 +48,7 @@ class ShortcutKey {
     this._isFocus = true;
   }
   // 键盘事件处理
-  private _onDocumentKeyup(event: KeyboardEvent) {
+  private _onDocumentKeydown(event: KeyboardEvent) {
     // 获取获得焦点的元素
     const activeTag: any = document.activeElement?.nodeName.toUpperCase();
     // 获取元素是否可编辑
