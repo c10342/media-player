@@ -8,33 +8,25 @@ import Highlight from "@lin-media/highlight";
 
 const highlightList = [
   {
+    time: 5,
+    text: "这是第 5 秒"
+  },
+  {
     time: 10,
     text: "这是第 10 秒"
+  },
+  {
+    time: 15,
+    text: "这是第 15 秒"
   },
   {
     time: 20,
     text: "这是第 20 秒"
   },
   {
-    time: 30,
-    text: "这是第 30 秒"
-  },
-  {
-    time: 40,
-    text: "这是第 40 秒"
-  },
-  {
-    time: 50,
-    text: "这是第 60 秒"
-  },
-  {
-    time: 60,
-    text: "这是第 60 秒"
-  },
-  {
-    time: 70,
-    text: "这是第 70 秒"
-  },
+    time: 25,
+    text: "这是第 25 秒"
+  }
 ];
 
 export default {
