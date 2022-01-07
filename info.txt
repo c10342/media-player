@@ -1,1 +1,5 @@
 git push --follow-tags --no-verify --atomic origin main
+
+删除本地分支： git branch -d dev20181018
+
+删除远程分支：git push origin --delete dev20181018
