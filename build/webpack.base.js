@@ -71,10 +71,6 @@ const baseConfig = {
             esModule: false
           }
         }
-      },
-      {
-        test: /\.art$/,
-        loader: "art-template-loader"
       }
     ]
   }
