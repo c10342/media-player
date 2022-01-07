@@ -104,7 +104,8 @@ class Highlight {
     // 开始渲染提示点列表
     const div = document.createElement("div");
     div.innerHTML = pointListTpl({
-      highlightList,
+      // fix:修复时间点超出总时长的问题
+      highlightList: highlightList.filter((item) => item.time <= this.duration),
       duration: this.duration
     });
     // 保存渲染出来的提示点元素
