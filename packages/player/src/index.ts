@@ -56,20 +56,20 @@ class MediaPlayer {
   //   设置中英文，zh/en
   static setLang(lang: LangTypeEnum) {
     this.globalConfig.lang = lang;
-    return MediaPlayer;
+    return this;
   }
 
   // 自定义语言包
   static useLang(customLanguage: LangOptions) {
     this.globalConfig.customLanguage = customLanguage;
-    return MediaPlayer;
+    return this;
   }
 
   //   全局注册插件
   static use(ctor: PluginClass) {
     if (!ctor.pluginName) {
       logWarn(`${ctor} 必须要提供 pluginName 静态属性`);
-      return;
+      return this;
     }
     const plugins = this.globalConfig.plugins ?? [];
     const installed = plugins?.some((plugin) => {
@@ -77,7 +77,7 @@ class MediaPlayer {
     });
     if (installed) {
       logWarn(`${ctor.pluginName} 插件已经被安装了`);
-      return MediaPlayer;
+      return this;
     }
     plugins?.push(ctor);
 
@@ -85,7 +85,7 @@ class MediaPlayer {
       this.globalConfig.plugins = plugins;
     }
 
-    return MediaPlayer;
+    return this;
   }
 
   $options: PlayerOptionsParams;
@@ -233,71 +233,88 @@ class MediaPlayer {
 
   seek(time: number) {
     this.$eventBus.$emit(MessageChannelEvents.SEEK, time);
+    return this;
   }
 
   play() {
     this.$eventBus.$emit(MessageChannelEvents.PLAY);
+    return this;
   }
 
   pause() {
     this.$eventBus.$emit(MessageChannelEvents.PAUSE);
+    return this;
   }
 
   toggle() {
     this.$eventBus.$emit(MessageChannelEvents.TOGGLE);
+    return this;
   }
 
   setVolume(volume: number) {
     this.$eventBus.$emit(MessageChannelEvents.SETVOLUME, volume);
+    return this;
   }
 
   setNotice(tip: string, time?: number) {
     this.$eventBus.$emit(MessageChannelEvents.SETNOTICE, tip, time);
+    return this;
   }
 
   setSpeed(speed: number) {
     this.$eventBus.$emit(MessageChannelEvents.SETSPEED, speed);
+    return this;
   }
 
   switchDefinition(index: number) {
     this.$eventBus.$emit(MessageChannelEvents.SWITCHDEFINITION, index);
+    return this;
   }
 
   hideControls() {
     this.$eventBus.$emit(MessageChannelEvents.HIDECONTROLS);
+    return this;
   }
 
   showControls() {
     this.$eventBus.$emit(MessageChannelEvents.SHOWCONTROLS);
+    return this;
   }
 
   toggleControls() {
     this.$eventBus.$emit(MessageChannelEvents.TOGGLECONTROLS);
+    return this;
   }
 
   requestFullscreen(type: FullScreenTypeEnum) {
     this.$eventBus.$emit(MessageChannelEvents.FULLSCREENREQUEST, type);
+    return this;
   }
 
   cancelFullscreen(type: FullScreenTypeEnum) {
     this.$eventBus.$emit(MessageChannelEvents.FULLSCREENCANCEL, type);
+    return this;
   }
 
   // 对外的
   $on(eventName: string, handler: Function) {
     this.$eventBus.$on(eventName, handler);
+    return this;
   }
 
   $emit(eventName: string, ...data: any) {
     this.$eventBus.$emit(eventName, ...data);
+    return this;
   }
 
   $once(eventName: string, handler: Function) {
     this.$eventBus.$on(eventName, handler);
+    return this;
   }
 
   $off(eventName: string, handler?: Function) {
     this.$eventBus.$off(eventName, handler);
+    return this;
   }
 
   destroy() {
