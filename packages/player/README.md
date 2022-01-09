@@ -80,7 +80,7 @@ const player = new MediaPlayer({
 
 | 字段             | 说明               | 类型    | 默认值 |
 | ---------------- | ------------------ | ------- | ------ |
-| VideoPlayButton       | pc 端播放按钮控件  | Boolean | true   |
+| VideoPlayButton       | 播放按钮控件  | Boolean | true   |
 | VideoVolume           | 音量控件           | Boolean | true   |
 | VideoLive             | 直播提示控件       | Boolean | true   |
 | VideoSpeed            | 倍速控件           | Boolean | true   |
@@ -152,7 +152,7 @@ const player = new MediaPlayer({
 
 - `player.$on(eventName: string, handler: Function)` : 事件监听
 
-- `player.$emit(eventName: string, data?: any)` : 触发事件
+- `player.$emit(eventName: string, ...data: any)` : 触发事件
 
 - `player.$once(eventName: string, handler: Function)` : 事件监听，只触发一次
 
@@ -174,19 +174,9 @@ const player = new MediaPlayer({
 
 - `player.toggle()` : 切换播放状态
 
-- `player.fullScreen.request(type: string)` : 进入全屏
+- `player.requestFullscreen(type: 'web'|'browser')` : 进入网页/浏览器全屏
 
-```javascript
-player.fullScreen.request("web");
-player.fullScreen.request("browser");
-```
-
-- `player.fullScreen.cancel(type: string)` : 退出全屏
-
-```javascript
-player.fullScreen.cancel("web");
-player.fullScreen.cancel("browser");
-```
+- `player.cancelFullscreen(type: 'web'|'browser')` : 退出网页/浏览器全屏
 
 - `player.showControls()` : 显示下方控制条
 
