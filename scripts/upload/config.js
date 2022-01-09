@@ -6,5 +6,5 @@ module.exports = {
   secretKey: userInfo.secretKey,
   bucket: "lin-player",
   // 上传到七牛云的目录
-  basePath: path.join(__dirname, "../docs/.vuepress/dist")
+  basePath: path.join(__dirname, "../../docs/.vuepress/dist")
 };

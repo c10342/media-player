@@ -2,7 +2,7 @@ const artTemplate = require("art-template");
 const fs = require("fs");
 const path = require("path");
 
-const packageRoot = path.resolve(__dirname, "../packages");
+const packageRoot = path.resolve(__dirname, "../../packages");
 
 const argv = process.argv;
 

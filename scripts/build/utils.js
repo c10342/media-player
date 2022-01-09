@@ -21,7 +21,7 @@ function resolveRoot(...data) {
 }
 
 function getExternals(name) {
-  const dir = path.resolve(root, name);
+  const dir = resolvePackages(name);
   const pck = require(path.resolve(dir, "./package.json"));
 
   const dependencies = pck.dependencies || {};
