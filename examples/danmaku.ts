@@ -1,3 +1,5 @@
+import MediaPlayer from "@lin-media/player";
+
 const inputElement = document.querySelector(".input") as HTMLInputElement;
 const buttonElement = document.querySelector(".send-button");
 const moreElement = document.querySelector(".more-button");
