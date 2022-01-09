@@ -1,9 +1,6 @@
-import MediaPlayer, { PlayerEvents } from "@lin-media/player";
+import MediaPlayer from "@lin-media/player";
 import { pluginName } from "./config/constant";
-
-interface {{importName}}Options {
-  [key: string]: any;
-}
+import { {{importName}}Options } from "./types";
 
 const defaultOptions = {};
 
@@ -13,16 +10,16 @@ class {{importName}} {
   // 播放器的dom
   private el: HTMLElement;
   // 播放器实例
-  private instance: MediaPlayer;
+  private playerInstance: MediaPlayer;
 
   private options: {{importName}}Options;
 
-  constructor(el: HTMLElement, instance: MediaPlayer) {
+  constructor(playerInstance: MediaPlayer, el: HTMLElement) {
     // 保存一下播放器给来的参数
     this.el = el;
-    this.instance = instance;
+    this.playerInstance = playerInstance;
     // 合并默认参数
-    const options = this.instance.options[pluginName] ?? {};
+    const options = this.playerInstance.$options[pluginName] ?? {};
     this.options = { ...defaultOptions, ...options };
     // 开始初始化
     this.init();
@@ -32,7 +29,7 @@ class {{importName}} {
   }
 
   private initMethods() {
-    Object.defineProperty(this.instance, "{{importName}}", {
+    Object.defineProperty(this.playerInstance, "{{importName}}", {
       get: () => {
         return {
           // ...
@@ -43,7 +40,7 @@ class {{importName}} {
 
   private initListener() {
     // 销毁
-    this.instance.$on(PlayerEvents.DESTROY, () => {
+    this.playerInstance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
       // ...
     });
   }

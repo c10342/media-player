@@ -1,0 +1,3 @@
+export interface {{importName}}Options {
+  [key: string]: any;
+}
