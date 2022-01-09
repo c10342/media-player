@@ -5,7 +5,7 @@ node_modules
 /coverage
 /temp_types
 /packages/*/types
-/scripts/userInfo.js
+/scripts/*/userInfo.js
 package-lock.json
 yarn.lock
 lerna-debug.log
