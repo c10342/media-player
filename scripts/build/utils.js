@@ -1,8 +1,24 @@
 const path = require("path");
 
-const root = path.resolve(__dirname, "../packages");
-
 const del = require("del");
+
+const root = path.resolve(__dirname, "../../");
+
+const packagesRoot = path.resolve(root, "./packages");
+
+const examplesRoot = path.resolve(root, "./examples");
+
+function resolvePackages(...data) {
+  return path.resolve(packagesRoot, ...data);
+}
+
+function resolveExamples(...data) {
+  return path.resolve(examplesRoot, ...data);
+}
+
+function resolveRoot(...data) {
+  return path.resolve(root, ...data);
+}
 
 function getExternals(name) {
   const dir = path.resolve(root, name);
@@ -33,5 +49,11 @@ const clean = (cleanPath) => {
 
 module.exports = {
   getExternals,
-  clean
+  clean,
+  root,
+  packagesRoot,
+  examplesRoot,
+  resolveRoot,
+  resolvePackages,
+  resolveExamples
 };

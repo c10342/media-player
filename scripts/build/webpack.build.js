@@ -2,30 +2,30 @@ const webpack = require("webpack");
 
 const { merge } = require("webpack-merge");
 
-const baseConfig = require("./webpack.base.js");
-
 const path = require("path");
 
 const fs = require("fs");
 
-const { getExternals, clean } = require("./utils.js");
+const baseConfig = require("./webpack.base.js");
 
-const root = path.resolve(__dirname, "../packages");
+const {
+  getExternals,
+  clean,
+  packagesRoot,
+  resolveRoot,
+  resolvePackages
+} = require("./utils.js");
 
-const tempTypesDir = path.resolve(__dirname, "../temp_types");
-
-const resolve = (...args) => {
-  return path.resolve(root, ...args);
-};
+const tempTypesDir = resolveRoot("./temp_types");
 
 function createConfig(name) {
   const config = {
-    entry: resolve(`./${name}/index.ts`),
+    entry: resolvePackages(`./${name}/index.ts`),
     externals: {
       ...getExternals(name)
     },
     output: {
-      path: resolve(`./${name}/dist`),
+      path: resolvePackages(`./${name}/dist`),
       filename: "index.js",
       libraryTarget: "commonjs2"
     }
@@ -35,8 +35,8 @@ function createConfig(name) {
 
 function buildOne(name) {
   return new Promise(async (re, reject) => {
-    await clean(resolve(`./${name}/dist`));
-    await clean(resolve(`./${name}/types`));
+    await clean(resolvePackages(`./${name}/dist`));
+    await clean(resolvePackages(`./${name}/types`));
     const options = merge(baseConfig, createConfig(name));
     webpack(options, (err, stats) => {
       if (err || stats.hasErrors()) {
@@ -54,13 +54,13 @@ function buildOne(name) {
 function moveDTS(name) {
   fs.renameSync(
     path.join(tempTypesDir, `./packages/${name}`),
-    resolve(`./${name}/types`)
+    resolvePackages(`./${name}/types`)
   );
 }
 
 async function build() {
   const task = [];
-  const list = fs.readdirSync(root);
+  const list = fs.readdirSync(packagesRoot);
   list.forEach((name) => {
     task.push(buildOne(name));
   });

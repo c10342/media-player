@@ -1,4 +1,4 @@
-const path = require("path");
+const { packagesRoot } = require("./utils");
 
 const baseConfig = {
   mode: "production",
@@ -14,7 +14,7 @@ const baseConfig = {
   resolve: {
     extensions: [".ts", ".js"],
     alias: {
-      "@lin-media": path.join(__dirname, "../packages")
+      "@lin-media": packagesRoot
     },
     mainFields: ["doc", "main"]
   },

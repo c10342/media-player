@@ -1,23 +1,21 @@
-const path = require("path");
-
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
-const baseConfig = require("./webpack.base.js");
 
 const { merge } = require("webpack-merge");
 
 const webpack = require("webpack");
 
-const output = path.resolve(__dirname, "../examples-dist");
+const baseConfig = require("./webpack.base.js");
 
-const entry = path.resolve(__dirname, "../examples/index.ts");
+const { resolveExamples } = require("./utils");
+
+const output = resolveExamples("./dist");
 
 const devConfig = {
   mode: "development",
   resolve: {
     extensions: [".ts", ".js"]
   },
-  entry,
+  entry: resolveExamples("./index.ts"),
   output: {
     path: output,
     filename: "js/[name].js"
@@ -32,7 +30,7 @@ const devConfig = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "../examples/index.html"),
+      template: resolveExamples("./index.html"),
       filename: "index.html"
     }),
     new webpack.NamedChunksPlugin(),
