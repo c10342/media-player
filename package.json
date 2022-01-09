@@ -12,8 +12,8 @@
   },
   "scripts": {
     "commit": "git cz",
-    "dev": "webpack-dev-server --config ./build/webpack.examples.js",
-    "build": "node ./build/webpack.build.js",
+    "dev": "webpack-dev-server --config ./scripts/build/webpack.examples.js",
+    "build": "node ./scripts/build/webpack.build.js",
     "lint-fix": "eslint --fix --ext .ts,.js ./",
     "lint": "eslint --ext .ts,.js ./",
     "lint-staged": "lint-staged --config lint-staged.config.js",
@@ -23,10 +23,10 @@
     "prepare": "husky install",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "docs:upload": "npm run docs:build && node ./scripts/qiniu.js",
+    "docs:upload": "npm run docs:build && node ./scripts/upload/index.js",
     "test-watch": "jest --watch",
     "test": "jest",
-    "create": "node ./scripts/writeTemplate.js"
+    "create": "node ./scripts/write/index.js"
   },
   "keywords": [],
   "author": "",
