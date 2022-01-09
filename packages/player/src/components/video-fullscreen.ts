@@ -15,6 +15,7 @@ import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
 import { MessageChannelEvents, PlayerEvents } from "../config/event";
 import MediaPlayer from "../index";
 import FullscreenTpl from "../templates/fullscreen";
+import { FullscreenType } from "../types";
 
 class VideoFullscreen {
   static pluginName = VIDEOFULLSCREEN;
@@ -151,7 +152,7 @@ class VideoFullscreen {
     }
   }
 
-  private _request(type: FullScreenTypeEnum) {
+  private _request(type: FullscreenType) {
     if (type === FullScreenTypeEnum.web) {
       this._enterWebFullscreen();
     } else if (type === FullScreenTypeEnum.browser) {
@@ -159,7 +160,7 @@ class VideoFullscreen {
     }
   }
 
-  private _cancel(type: FullScreenTypeEnum) {
+  private _cancel(type: FullscreenType) {
     if (type === FullScreenTypeEnum.web) {
       this._exitWebFullscreen();
     } else if (type === FullScreenTypeEnum.browser) {

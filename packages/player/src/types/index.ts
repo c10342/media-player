@@ -136,3 +136,5 @@ export interface PluginClass {
   new (player: MediaPlayer, el: HTMLElement): Object;
   pluginName: string;
 }
+
+export type FullscreenType = "web" | "browser";

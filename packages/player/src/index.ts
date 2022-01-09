@@ -12,6 +12,7 @@ import {
 } from "@lin-media/utils";
 import defaultOptions from "./config/default-config";
 import {
+  FullscreenType,
   LangOptions,
   PlayerOptions,
   PlayerOptionsParams,
@@ -286,12 +287,12 @@ class MediaPlayer {
     return this;
   }
 
-  requestFullscreen(type: FullScreenTypeEnum) {
+  requestFullscreen(type: FullscreenType) {
     this.$eventBus.$emit(MessageChannelEvents.FULLSCREENREQUEST, type);
     return this;
   }
 
-  cancelFullscreen(type: FullScreenTypeEnum) {
+  cancelFullscreen(type: FullscreenType) {
     this.$eventBus.$emit(MessageChannelEvents.FULLSCREENCANCEL, type);
     return this;
   }
