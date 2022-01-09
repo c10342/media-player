@@ -44,9 +44,11 @@ import {
   VIDEOPLAYER,
   VIDEOTIP
 } from "./config/constant";
+import { FullScreenTypeEnum } from "./config/enum";
 
 class MediaPlayer {
   static PlayerEvents = PlayerEvents;
+
   static VideoEvents = VideoEvents;
 
   // 全局配置
@@ -56,11 +58,13 @@ class MediaPlayer {
     this.globalConfig.lang = lang;
     return MediaPlayer;
   }
+
   // 自定义语言包
   static useLang(customLanguage: LangOptions) {
     this.globalConfig.customLanguage = customLanguage;
     return MediaPlayer;
   }
+
   //   全局注册插件
   static use(ctor: PluginClass) {
     if (!ctor.pluginName) {
@@ -271,16 +275,12 @@ class MediaPlayer {
     this.$eventBus.$emit(MessageChannelEvents.TOGGLECONTROLS);
   }
 
-  // 全屏
-  get fullScreen() {
-    return {
-      request: (type: string) => {
-        this.$eventBus.$emit(MessageChannelEvents.FULLSCREENREQUEST, type);
-      },
-      cancel: (type: string) => {
-        this.$eventBus.$emit(MessageChannelEvents.FULLSCREENCANCEL, type);
-      }
-    };
+  requestFullscreen(type: FullScreenTypeEnum) {
+    this.$eventBus.$emit(MessageChannelEvents.FULLSCREENREQUEST, type);
+  }
+
+  cancelFullscreen(type: FullScreenTypeEnum) {
+    this.$eventBus.$emit(MessageChannelEvents.FULLSCREENCANCEL, type);
   }
 
   // 对外的
@@ -288,8 +288,8 @@ class MediaPlayer {
     this.$eventBus.$on(eventName, handler);
   }
 
-  $emit(eventName: string, data?: any) {
-    this.$eventBus.$emit(eventName, data);
+  $emit(eventName: string, ...data: any) {
+    this.$eventBus.$emit(eventName, ...data);
   }
 
   $once(eventName: string, handler: Function) {
