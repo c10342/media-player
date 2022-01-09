@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.png
 heroText: 欢迎使用 MediaPlayer
-tagline: 一个插件化的H5视频播放器
+tagline: 一个插件化、组件化的H5视频播放器
 actionText: 快速上手 →
 actionLink: /guide/
 features:
