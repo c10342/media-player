@@ -151,7 +151,7 @@ class VideoFullscreen {
     }
   }
 
-  private _request(type: string) {
+  private _request(type: FullScreenTypeEnum) {
     if (type === FullScreenTypeEnum.web) {
       this._enterWebFullscreen();
     } else if (type === FullScreenTypeEnum.browser) {
@@ -159,7 +159,7 @@ class VideoFullscreen {
     }
   }
 
-  private _cancel(type: string) {
+  private _cancel(type: FullScreenTypeEnum) {
     if (type === FullScreenTypeEnum.web) {
       this._exitWebFullscreen();
     } else if (type === FullScreenTypeEnum.browser) {
