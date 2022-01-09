@@ -21,21 +21,37 @@
 - `feat`：`mobile-play-button`组件修改为`float-button`组件，pc端和移动端通用
 
 - `feat`：`controls`参数中的字段调整，调整如下：
+    
     - `playButton` -> `VideoPlayButton`
+    
     - `volume` -> `VideoVolume`
+    
     - `live` -> `VideoLive`
+    
     - `speed` -> `VideoSpeed`
+    
     - `fullscreen` -> `VideoFullscreen`
+    
     - `definition` -> `VideoDefinition`
+    
     - `progress` -> `VideoProgress`
+    
     - `tip` -> `VideoTip`
+    
     - `time` -> `VideoTime`
+    
     - `loading` -> `VideoLoading`
+    
     - `mobilePlayButton` -> `VideoFloatButton`
+    
     - `videoMask` -> `VideoMask`
+    
     - `controlBar` -> `VideoControls`
+    
     - 新增 `DomResizeObserver`
+    
     - 新增 `ShortcutKey`
+    
     - 新增 `VideoPlayer`
 
 - `feat`：删除播放器参数的`hotkey`字段，迁移到了`controls.ShortcutKey`中
@@ -47,6 +63,10 @@
 - `feat`：`ShortcutKey`组件监听全局快捷键改成`keydown`事件
 
 - `feat`：自定义语言包修改为`Player`字段获取
+  
+- `feat`：`fullScreen.request/cancel`方法分别调整为`requestFullscreen`和`cancelFullscreen`
+  
+- `feat`：所有对外暴露的方法都返回`this`，实现链式调用
 
 - `style`：代码优化，使用`updateStyle`函数统一更新样式
 
