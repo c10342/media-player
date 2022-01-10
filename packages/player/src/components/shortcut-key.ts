@@ -62,16 +62,17 @@ class ShortcutKey {
   }
 
   private _handleKey(event: KeyboardEvent) {
-    event.preventDefault();
     const { live } = this._playerInstance.$options;
     const playerInstance = this._playerInstance;
     switch (event.keyCode) {
       case KeyCodeEnum.space:
+        event.preventDefault();
         // 按下空格键切换播放状态
         playerInstance.toggle();
         this._emit(PlayerEvents.KEYBOARD_SPACE);
         break;
       case KeyCodeEnum.left:
+        event.preventDefault();
         // 按下左箭头，时间后退5秒
         if (!live) {
           // 直播不能后退
@@ -80,6 +81,7 @@ class ShortcutKey {
         this._emit(PlayerEvents.KEYBOARD_LEFT);
         break;
       case KeyCodeEnum.right:
+        event.preventDefault();
         if (!live) {
           // 按下右箭头，时间前进5秒
           playerInstance.seek(playerInstance.currentTime + 5);
@@ -87,11 +89,13 @@ class ShortcutKey {
         this._emit(PlayerEvents.KEYBOARD_RIGHT);
         break;
       case KeyCodeEnum.up:
+        event.preventDefault();
         // 按下上箭头，音量增大
         playerInstance.setVolume(playerInstance.volume + 0.1);
         this._emit(PlayerEvents.KEYBOARD_UP);
         break;
       case KeyCodeEnum.down:
+        event.preventDefault();
         // 按下下箭头，音量减少
         playerInstance.setVolume(playerInstance.volume - 0.1);
         this._emit(PlayerEvents.KEYBOARD_DOWN);
