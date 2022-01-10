@@ -275,12 +275,24 @@ class VideoPlayer {
   }
 
   private _requestPictureInPicture() {
-    this.$videoElement.requestPictureInPicture();
+    this.$videoElement
+      .requestPictureInPicture()
+      .then((pictureInPictureWindow) => {
+        pictureInPictureWindow.addEventListener(
+          "resize",
+          () => {
+            this._emit(PlayerEvents.PICTURE_IN_PICTURE_WINDOW_RESIZE);
+          },
+          false
+        );
+      });
   }
 
   private _exitPictureInPicture() {
-    // @ts-ignore
-    this.$videoElement.exitPictureInPicture();
+    if (document.pictureInPictureElement) {
+      // 存在画中画才能关闭，否则会报错
+      document.exitPictureInPicture();
+    }
   }
 }
 
