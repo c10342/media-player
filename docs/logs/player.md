@@ -67,6 +67,10 @@
 - `feat`：`fullScreen.request/cancel`方法分别调整为`requestFullscreen`和`cancelFullscreen`
   
 - `feat`：所有对外暴露的方法都返回`this`，实现链式调用
+  
+- `feat`：新增画中画功能，API：`requestPictureInPicture`和`exitPictureInPicture`
+  
+- `feat`：新增`video`标签原生事件`enterpictureinpicture`和`leavepictureinpicture`，播放器自定义事件`picture_in_picture_window_resize`
 
 - `style`：代码优化，使用`updateStyle`函数统一更新样式
 

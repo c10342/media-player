@@ -145,6 +145,7 @@ player.$on("ended", function () {
 | keyboard_up                  | 按下键盘 ↑ 键时触发   | —        |
 | keyboard_down                  | 按下键盘 ↓ 键时触发   | —        |
 | keyboard_space                  | 按下键盘 空格 键时触发   | —        |
+| picture_in_picture_window_resize          | 画中画窗口发生变化时触发   | —        |
 
 - **原生 video 标签事件**
 
@@ -172,6 +173,9 @@ player.$on("ended", function () {
 | timeupdate     | 播放位置发生变化时触发                                  | event    |
 | volumechange   | 视频音量发生变化时触发                                  | event    |
 | waiting        | 正在播放，但是因为缓冲而卡顿时触发                      | event    |
+| enterpictureinpicture        | 进入画中画时触发                      | event    |
+| leavepictureinpicture        | 退出画中画时触发                      | event    |
+
 
 ## API
 
@@ -212,6 +216,10 @@ player.$on("ended", function () {
 - `player.toggleControls()` : 切换下方控制条显示/隐藏状态
 
 - `player.destroy()` : 销毁播放器
+  
+- `player.requestPictureInPicture()` : 进入画中画
+  
+- `player.exitPictureInPicture()` : 退出画中画
 
 **播放器实例属性：**
 
