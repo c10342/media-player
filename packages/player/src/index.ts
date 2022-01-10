@@ -268,6 +268,7 @@ class MediaPlayer {
   }
 
   switchDefinition(index: number) {
+    this.exitPictureInPicture();
     this.$eventBus.$emit(MessageChannelEvents.SWITCHDEFINITION, index);
     return this;
   }
