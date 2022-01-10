@@ -33,6 +33,12 @@ const volumeButton = document.querySelector(".volume");
 const pausedButton = document.querySelector(".paused");
 
 const destroyButton = document.querySelector(".destroy");
+const requestPictureInPictureButton = document.querySelector(
+  ".requestPictureInPicture"
+);
+const exitPictureInPictureButton = document.querySelector(
+  ".exitPictureInPicture"
+);
 
 function addEventListener(player: MediaPlayer) {
   setoptionsButton?.addEventListener("click", () => {
@@ -95,6 +101,13 @@ function addEventListener(player: MediaPlayer) {
 
   destroyButton?.addEventListener("click", function () {
     player.destroy();
+  });
+
+  requestPictureInPictureButton?.addEventListener("click", function () {
+    player.requestPictureInPicture();
+  });
+  exitPictureInPictureButton?.addEventListener("click", function () {
+    player.exitPictureInPicture();
   });
 }
 
