@@ -14,7 +14,8 @@ export enum PlayerEvents {
   KEYBOARD_LEFT = "keyboard_left",
   KEYBOARD_UP = "keyboard_up",
   KEYBOARD_DOWN = "keyboard_down",
-  KEYBOARD_SPACE = "keyboard_space"
+  KEYBOARD_SPACE = "keyboard_space",
+  PICTURE_IN_PICTURE_WINDOW_RESIZE = "picture_in_picture_window_resize"
 }
 
 // video标签事件
@@ -40,7 +41,9 @@ export enum VideoEvents {
   SUSPEND = "suspend",
   TIMEUPDATE = "timeupdate",
   VOLUMECHANGE = "volumechange",
-  WAITING = "waiting"
+  WAITING = "waiting",
+  ENTERPICTUREINPICTURE = "enterpictureinpicture",
+  LEAVEPICTUREINPICTURE = "leavepictureinpicture"
 }
 
 export enum LifecycleEvents {
