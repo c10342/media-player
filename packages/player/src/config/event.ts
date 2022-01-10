@@ -65,5 +65,7 @@ export enum MessageChannelEvents {
   SHOWCONTROLS = "__showControls__",
   TOGGLECONTROLS = "__toggleControls__",
   FULLSCREENREQUEST = "__fullScreenRequest__",
-  FULLSCREENCANCEL = "__fullScreenCancel__"
+  FULLSCREENCANCEL = "__fullScreenCancel__",
+  REQUESTPICTUREINPICTURE = "__requestPictureInPicture__",
+  EXITPICTUREINPICTURE = "__exitPictureInPicture__"
 }

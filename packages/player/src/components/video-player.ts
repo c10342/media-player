@@ -148,6 +148,14 @@ class VideoPlayer {
       this._switchDefinition.bind(this)
     );
     this._on(MessageChannelEvents.SETSPEED, this._setSpeed.bind(this));
+    this._on(
+      MessageChannelEvents.REQUESTPICTUREINPICTURE,
+      this._requestPictureInPicture.bind(this)
+    );
+    this._on(
+      MessageChannelEvents.EXITPICTUREINPICTURE,
+      this._exitPictureInPicture.bind(this)
+    );
   }
 
   private _destroy() {
@@ -264,6 +272,15 @@ class VideoPlayer {
       // 切换video标签
       this._switchVideo();
     }
+  }
+
+  private _requestPictureInPicture() {
+    this.$videoElement.requestPictureInPicture();
+  }
+
+  private _exitPictureInPicture() {
+    // @ts-ignore
+    this.$videoElement.exitPictureInPicture();
   }
 }
 

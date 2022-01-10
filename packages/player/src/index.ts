@@ -297,6 +297,16 @@ class MediaPlayer {
     return this;
   }
 
+  requestPictureInPicture() {
+    this.$eventBus.$emit(MessageChannelEvents.REQUESTPICTUREINPICTURE);
+    return this;
+  }
+
+  exitPictureInPicture() {
+    this.$eventBus.$emit(MessageChannelEvents.EXITPICTUREINPICTURE);
+    return this;
+  }
+
   // 对外的
   $on(eventName: string, handler: Function) {
     this.$eventBus.$on(eventName, handler);
