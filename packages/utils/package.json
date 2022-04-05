@@ -1,6 +1,6 @@
 {
   "name": "@lin-media/utils",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "utils",
   "main": "dist/index.js",
   "doc": "index.ts",

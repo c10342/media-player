@@ -1,6 +1,6 @@
 {
   "name": "@lin-media/preview",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "preview",
   "main": "dist/index.js",
   "doc": "index.ts",
@@ -19,7 +19,7 @@
   "author": "c10342",
   "license": "MIT",
   "dependencies": {
-    "@lin-media/player": "^2.0.0",
-    "@lin-media/utils": "^1.0.2"
+    "@lin-media/player": "^2.1.0",
+    "@lin-media/utils": "^1.0.3"
   }
 }
