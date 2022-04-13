@@ -31,7 +31,8 @@
     "resolveJsonModule": true,
     "importHelpers": true,
     "declaration": true,
-    "declarationDir": "temp_types"
+    "declarationDir": "temp_types",
+    "downlevelIteration":true
   },
   "exclude": [
     "node_modules",
