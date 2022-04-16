@@ -3,141 +3,144 @@ import {
   Drag,
   EventManager,
   getBoundingClientRect,
+  isMobile,
   isNumber,
   isUndef,
   parseHtmlToDom,
   secondToTime,
   updateStyle
 } from "@lin-media/utils";
-import { VIDEOPROGRESS } from "../config/constant";
-import { PlayerEvents, VideoEvents } from "../config/event";
-import MediaPlayer from "../index";
+import { VideoEvents } from "../config/event";
+import Player from "../player";
 import ProgressTpl from "../templates/progress";
-import { DragDataInfo } from "../types";
+import { DragDataInfo, ComponentApi, PlayerConfig } from "../types";
 
-class VideoProgress {
-  static pluginName = VIDEOPROGRESS;
+class VideoProgress implements ComponentApi {
+  static shouldInit(options: PlayerConfig) {
+    return !options.live;
+  }
   // 播放器实例
-  private _playerInstance: MediaPlayer;
+  private player: Player;
   // dom事件管理器
-  private _eventManager = new EventManager();
+  private eventManager = new EventManager();
   // 组件根元素
-  private _compRootElement: HTMLElement;
+  private rootElement: HTMLElement;
 
-  private _progressMaskElement: HTMLElement;
+  private progressMaskElement: HTMLElement;
 
-  private _videoPlayedElement: HTMLElement;
+  private videoPlayedElement: HTMLElement;
 
-  private _videoLoadedElement: HTMLElement;
+  private videoLoadedElement: HTMLElement;
 
-  private _processTimeElement: HTMLElement;
+  private processTimeElement: HTMLElement;
 
-  private _dragInstance: Drag;
+  private dragInstance: Drag;
 
-  private _isMousedown = false;
+  private isMousedown = false;
 
-  private _currentTime = 0;
+  private currentTime = 0;
 
-  constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
+  constructor(player: Player, slotElement: HTMLElement) {
     // 播放器实例
-    this._playerInstance = playerInstance;
+    this.player = player;
     // 初始化dom
-    this._initDom(slotElement);
+    this.initDom(slotElement);
     // 初始化拖拽事件
-    this._initDrag();
-    this._initListener();
+    this.initDrag();
+    this.initListener();
   }
 
   // 查询元素
-  private _querySelector<T extends HTMLElement>(selector: string) {
-    return this._compRootElement.querySelector(selector) as T;
+  private querySelector<T extends HTMLElement>(selector: string) {
+    return this.rootElement.querySelector(selector) as T;
   }
 
-  private _initDom(slotElement: HTMLElement) {
+  private initDom(slotElement: HTMLElement) {
+    const parentElement = slotElement.querySelector(".player-controls-group")!;
     const html = ProgressTpl({
-      isMobile: this._playerInstance.$isMobile
+      isMobile: isMobile()
     });
-    this._compRootElement = parseHtmlToDom(html);
-    slotElement.appendChild(this._compRootElement);
-    this._progressMaskElement = this._querySelector(".player-process-mask");
-    this._videoPlayedElement = this._querySelector(".player-process-played");
-    this._videoLoadedElement = this._querySelector(".player-process-loaded");
-    this._processTimeElement = this._querySelector(".player-process-time");
+    this.rootElement = parseHtmlToDom(html);
+    parentElement.appendChild(this.rootElement);
+    this.progressMaskElement = this.querySelector(".player-process-mask");
+    this.videoPlayedElement = this.querySelector(".player-process-played");
+    this.videoLoadedElement = this.querySelector(".player-process-loaded");
+    this.processTimeElement = this.querySelector(".player-process-time");
   }
 
   // 获取进度条容器信息
-  private _getProcessMaskInfo() {
-    const clientRect = getBoundingClientRect(this._progressMaskElement);
+  private getProcessMaskInfo() {
+    const clientRect = getBoundingClientRect(this.progressMaskElement);
     return {
       left: clientRect.left || 0,
       width: clientRect.width || 0
     };
   }
 
-  private _initDrag() {
-    this._dragInstance = new Drag({
-      dragElement: this._querySelector(".player-process-ball"),
-      wrapperElement: this._progressMaskElement
+  private initDrag() {
+    this.dragInstance = new Drag({
+      dragElement: this.querySelector(".player-process-ball"),
+      wrapperElement: this.progressMaskElement
     });
     // 鼠标移动
-    this._dragInstance?.$on("mousemove", (data: DragDataInfo) => {
+    this.dragInstance?.$on("mousemove", (data: DragDataInfo) => {
       // 设置进度条
-      this._setPlayedProgressByPercent(data.percentX);
+      this.setPlayedProgressByPercent(data.percentX);
     });
     // 鼠标按下
-    this._dragInstance?.$on("mousedown", () => {
-      this._isMousedown = true;
+    this.dragInstance?.$on("mousedown", () => {
+      this.isMousedown = true;
       // 禁止进行过渡动画
-      this._setTransitionDuration(0);
+      this.setTransitionDuration(0);
     });
     // 鼠标抬起
-    this._dragInstance?.$on("mouseup", (data: DragDataInfo) => {
+    this.dragInstance?.$on("mouseup", (data: DragDataInfo) => {
       // 回复过度动画
-      this._setTransitionDuration();
+      this.setTransitionDuration();
       // 跳转到时间
-      this._seekByPercent(data.percentX);
+      this.seekByPercent(data.percentX);
     });
     // 点击事件
-    this._dragInstance?.$on("click", (data: DragDataInfo) => {
-      this._isMousedown = true;
-      this._setPlayedProgressByPercent(data.percentX);
+    this.dragInstance?.$on("click", (data: DragDataInfo) => {
+      this.isMousedown = true;
+      this.setPlayedProgressByPercent(data.percentX);
       // 跳转时间
-      this._seekByPercent(data.percentX);
+      this.seekByPercent(data.percentX);
     });
   }
 
   // 根据百分比设置已播放的长度
-  private _setPlayedProgressByPercent(percent: number) {
-    updateStyle(this._videoPlayedElement, {
+  private setPlayedProgressByPercent(percent: number) {
+    updateStyle(this.videoPlayedElement, {
       width: `${percent * 100}%`
     });
   }
 
   // 设置过度时长
-  private _setTransitionDuration(duration?: number) {
-    updateStyle(this._videoPlayedElement, {
+  private setTransitionDuration(duration?: number) {
+    updateStyle(this.videoPlayedElement, {
       transitionDuration: isNumber(duration) ? `${duration}ms` : ""
     });
   }
 
   // 根据百分比跳转到指定时间
-  private _seekByPercent(percent: number) {
-    const duration = this._playerInstance.duration;
+  private seekByPercent(percent: number) {
+    const duration = this.player.duration;
     if (duration > 0) {
       percent = checkData(percent, 0, 1);
       // 时间点
       const time = duration * percent;
       // 计算前进或者后退了多少秒
-      const offsetTime = time - this._currentTime;
-      this._setTip(offsetTime);
+      const offsetTime = time - this.currentTime;
+      this.setTip(offsetTime);
       // 跳转
-      this._playerInstance.seek(time);
+      this.player.seek(time);
     }
   }
 
   // 显示通知
-  private _setTip(offsetTime: number) {
-    const i18n = this._playerInstance.$i18n;
+  private setTip(offsetTime: number) {
+    const i18n = this.player.i18n;
     offsetTime = Math.round(offsetTime);
     let tip = "";
     if (offsetTime > 0) {
@@ -145,121 +148,117 @@ class VideoProgress {
     } else {
       tip = i18n.t("goBack", { time: -offsetTime });
     }
-    this._playerInstance.setNotice(tip);
+    this.player.setNotice(tip);
   }
 
-  private _on(eventName: string, handler: Function) {
-    this._playerInstance.$eventBus.$on(eventName, handler);
-  }
-
-  private _initListener() {
-    this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
-    this._on(VideoEvents.TIMEUPDATE, this._onVideoTimeupdate.bind(this));
-    this._on(VideoEvents.PROGRESS, this._onVideoProgress.bind(this));
-    this._on(VideoEvents.SEEKED, this._onVideoSeeked.bind(this));
-    this._on(VideoEvents.ENDED, this._onVideoEnd.bind(this));
-    if (!this._playerInstance.$isMobile) {
-      this._eventManager.addEventListener({
-        element: this._progressMaskElement,
+  private initListener() {
+    this.player.$on(VideoEvents.TIMEUPDATE, this.onVideoTimeupdate.bind(this));
+    this.player.$on(VideoEvents.PROGRESS, this.onVideoProgress.bind(this));
+    this.player.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
+    this.player.$on(VideoEvents.ENDED, this.onVideoEnd.bind(this));
+    if (!isMobile()) {
+      this.eventManager.addEventListener({
+        element: this.progressMaskElement,
         eventName: "mousemove",
-        handler: this._onMaskMousemove.bind(this)
+        handler: this.onMaskMousemove.bind(this)
       });
-      this._eventManager.addEventListener({
-        element: this._progressMaskElement,
+      this.eventManager.addEventListener({
+        element: this.progressMaskElement,
         eventName: "mouseleave",
-        handler: this._onMaskMouseleave.bind(this)
+        handler: this.onMaskMouseleave.bind(this)
       });
     }
   }
 
   // 视频播放完成
-  private _onVideoEnd(event: Event) {
-    if (!this._isMousedown) {
+  private onVideoEnd(event: Event) {
+    if (!this.isMousedown) {
       // 不是在拖拽进度条的时候需要更新进度条
       const videoElement = event.target as HTMLVideoElement;
       const currentTime = videoElement.currentTime || 0;
-      this._setPlayedProgress(currentTime);
+      this.setPlayedProgress(currentTime);
     }
   }
 
   // 视频正在播放
-  private _onVideoTimeupdate(event: Event) {
+  private onVideoTimeupdate(event: Event) {
     const videoElement = event.target as HTMLVideoElement;
     const currentTime = videoElement.currentTime || 0;
     const intCurrentTime = Math.floor(currentTime);
-    const intPrevTime = Math.floor(this._currentTime);
+    const intPrevTime = Math.floor(this.currentTime);
 
     // 保证每一秒触发一次，防抖
     if (intCurrentTime === intPrevTime) {
       return;
     }
-    this._currentTime = currentTime;
-    if (!this._isMousedown) {
+    this.currentTime = currentTime;
+    if (!this.isMousedown) {
       // 不是在拖拽进度条的时候需要更新进度条
-      this._setPlayedProgress();
+      this.setPlayedProgress();
     }
   }
 
   // 视频缓冲事件
-  private _onVideoProgress(event: Event) {
+  private onVideoProgress(event: Event) {
     const videoElement = event.target as HTMLVideoElement;
     if (videoElement.buffered?.length !== 0) {
       const preloadTime = videoElement.buffered.end(0) || 0;
-      this._setLoadedProgress(preloadTime);
+      this.setLoadedProgress(preloadTime);
     }
   }
 
   // 设置已播放的进度
-  private _setPlayedProgress(currentTime?: number) {
-    const duration = this._playerInstance.duration;
+  private setPlayedProgress(currentTime?: number) {
+    const duration = this.player.duration;
+
     if (isUndef(currentTime)) {
-      currentTime = this._currentTime;
+      currentTime = this.currentTime;
     }
     if (duration > 0 && currentTime > 0) {
       // 计算出百分比
       let percent = currentTime / duration;
       percent = checkData(percent, 0, 1);
-      updateStyle(this._videoPlayedElement, {
+      updateStyle(this.videoPlayedElement, {
         width: `${percent * 100}%`
       });
     }
   }
 
   // 设置缓冲的进度
-  private _setLoadedProgress(preloadTime: number) {
-    const duration = this._playerInstance.duration;
+  private setLoadedProgress(preloadTime: number) {
+    const duration = this.player.duration;
     if (duration > 0) {
       let percent = preloadTime / duration;
       percent = checkData(percent, 0, 1);
-      updateStyle(this._videoLoadedElement, {
+      updateStyle(this.videoLoadedElement, {
         width: `${percent * 100}%`
       });
     }
   }
 
   // 鼠标进入进度条容器
-  private _onMaskMousemove(event: MouseEvent) {
+  private onMaskMousemove(event: MouseEvent) {
     // 显示时间提示
-    this._showProcessTime(event);
+    this.showProcessTime(event);
   }
 
   // 视频完成跳转，seek的时候
-  private _onVideoSeeked() {
+  private onVideoSeeked() {
     // fix:修复调用seek方法跳转到0时刻的时候进度条显示不正确
-    if (this._currentTime === 0) {
-      this._setPlayedProgressByPercent(0);
+    if (this.currentTime === 0) {
+      this.setPlayedProgressByPercent(0);
     }
 
-    this._isMousedown = false;
+    this.isMousedown = false;
   }
 
   // 显示时间提示，鼠标悬浮在进度条容器时
-  private _showProcessTime(event: MouseEvent) {
-    const processTimeElement = this._processTimeElement;
-    const { left, width } = this._getProcessMaskInfo();
+  private showProcessTime(event: MouseEvent) {
+    const processTimeElement = this.processTimeElement;
+    const { left, width } = this.getProcessMaskInfo();
     let offsetX = event.pageX - left;
     offsetX = checkData(offsetX, 0, width);
-    const time = this._playerInstance.duration * (offsetX / width);
+    const time = this.player.duration * (offsetX / width);
     processTimeElement.innerHTML = secondToTime(time);
     updateStyle(processTimeElement, {
       left: `${offsetX}px`,
@@ -268,21 +267,21 @@ class VideoProgress {
   }
 
   // 鼠标离开进度条容器
-  private _onMaskMouseleave() {
+  private onMaskMouseleave() {
     // 隐藏时间提示
-    this._hideProcessTime();
+    this.hideProcessTime();
   }
 
   // 隐藏时间提示，鼠标离开进度条容器
-  private _hideProcessTime() {
-    updateStyle(this._processTimeElement, {
+  private hideProcessTime() {
+    updateStyle(this.processTimeElement, {
       opacity: ""
     });
   }
 
-  private _destroy() {
-    this._dragInstance.destroy();
-    this._eventManager.removeEventListener();
+  destroy() {
+    this.dragInstance.destroy();
+    this.eventManager.removeEventListener();
   }
 }
 

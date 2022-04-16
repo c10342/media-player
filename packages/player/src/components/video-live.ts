@@ -1,23 +1,30 @@
 import { parseHtmlToDom } from "@lin-media/utils";
-import { VIDEOLIVE } from "../config/constant";
-import MediaPlayer from "../index";
+import Player from "../index";
 import LiveTpl from "../templates/live";
-class VideoLive {
-  static pluginName = VIDEOLIVE;
+import { ComponentApi, PlayerConfig } from "../types";
+class VideoLive implements ComponentApi {
+  static shouldInit(options: PlayerConfig) {
+    return options.live;
+  }
   // 播放器实例
-  private _playerInstance: MediaPlayer;
-  constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
+  private player: Player;
+  constructor(player: Player, slotElement: HTMLElement) {
     // 播放器实例
-    this._playerInstance = playerInstance;
+    this.player = player;
     // 初始化dom
-    this._initDom(slotElement);
+    this.initDom(slotElement);
   }
 
-  private _initDom(slotElement: HTMLElement) {
+  private initDom(slotElement: HTMLElement) {
+    const parentElement = slotElement.querySelector(".player-controls-left")!;
     const html = LiveTpl({
-      $t: this._playerInstance.$i18n.t
+      $t: this.player.$i18n.t
     });
-    slotElement.appendChild(parseHtmlToDom(html));
+    parentElement.appendChild(parseHtmlToDom(html));
+  }
+
+  destroy() {
+    //todo
   }
 }
 

@@ -1,58 +1,54 @@
-import { EventManager, parseHtmlToDom } from "@lin-media/utils";
-import { VIDEOMASK } from "../config/constant";
-import { PlayerEvents } from "../config/event";
-import MediaPlayer from "../index";
+import { EventManager, isMobile, parseHtmlToDom } from "@lin-media/utils";
+import Player from "../player";
 import MaskTpl from "../templates/mask";
-class VideoMask {
-  static pluginName = VIDEOMASK;
+import { ComponentApi } from "../types";
+
+class VideoMask implements ComponentApi {
   // 播放器实例
-  private _playerInstance: MediaPlayer;
+  private player: Player;
   // dom事件管理器
-  private _eventManager = new EventManager();
+  private eventManager = new EventManager();
   // 组件根元素
-  private _compRootElement: HTMLElement;
+  private rootElement: HTMLElement;
 
-  constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
+  constructor(player: Player, slotElement: HTMLElement) {
     // 播放器实例
-    this._playerInstance = playerInstance;
+    this.player = player;
     // 初始化dom
-    this._initDom(slotElement);
-    this._initListener();
+    this.initDom(slotElement);
+    this.initListener();
   }
 
-  private _initDom(slotElement: HTMLElement) {
+  private initDom(slotElement: HTMLElement) {
     const html = MaskTpl();
-    this._compRootElement = parseHtmlToDom(html);
-    slotElement.appendChild(this._compRootElement);
+    this.rootElement = parseHtmlToDom(html);
+    slotElement.appendChild(this.rootElement);
   }
 
-  private _initListener() {
-    this._eventManager.addEventListener({
-      element: this._compRootElement,
+  private initListener() {
+    this.eventManager.addEventListener({
+      element: this.rootElement,
       eventName: "click",
-      handler: this._onMaskClick.bind(this)
+      handler: this.onMaskClick.bind(this)
     });
-
-    this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
   }
   //   点击遮罩层
-  private _onMaskClick() {
-    if (this._playerInstance.$isMobile) {
-      this._playerInstance.toggleControls();
+  private onMaskClick() {
+    if (isMobile()) {
+      this.player.toggleControls();
     } else {
       // pc端处理方式
-      this._playerInstance.toggle();
+      this.player.toggle();
     }
   }
 
-  // 事件监听
-  private _on(eventName: string, handler: Function) {
-    this._playerInstance.$eventBus.$on(eventName, handler);
-  }
   // 销毁
-  private _destroy() {
-    this._eventManager.removeEventListener();
+  destroy() {
+    this.eventManager.removeEventListener();
   }
 }
+Player.registerComponent("VideoMask", VideoMask, {
+  init: true
+});
 
 export default VideoMask;

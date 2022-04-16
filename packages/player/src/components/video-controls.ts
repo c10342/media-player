@@ -1,15 +1,14 @@
 import {
   EventManager,
+  isFunction,
+  isMobile,
   isUndef,
   parseHtmlToDom,
   updateStyle
 } from "@lin-media/utils";
-import {
-  MessageChannelEvents,
-  PlayerEvents,
-  VideoEvents
-} from "../config/event";
-import MediaPlayer from "../index";
+import { PlayerEvents, VideoEvents } from "../config/event";
+import createComponent from "../global-api/component";
+import Player from "../player";
 import ControlsTpl from "../templates/controls";
 import VideoProgress from "./video-progress";
 import VideoPlayButton from "./video-play-button";
@@ -19,230 +18,203 @@ import VideoFullscreen from "./video-fullscreen";
 import VideoSpeed from "./video-speed";
 import VideoDefinition from "./video-definition";
 import VideoLive from "./video-live";
-import {
-  VIDEOCONTROLS,
-  VIDEODEFINITION,
-  VIDEOFULLSCREEN,
-  VIDEOLIVE,
-  VIDEOPLAYBUTTON,
-  VIDEOPROGRESS,
-  VIDEOSPEED,
-  VIDEOTIME,
-  VIDEOVOLUME
-} from "../config/constant";
 
-class VideoControls {
-  static pluginName = VIDEOCONTROLS;
+import { ClassType, ComponentApi, DefaultComponentOptions } from "../types";
+import { definePlayerMethods, initComponents } from "../utils/helper";
+
+const cmp = createComponent();
+
+class VideoControls implements ComponentApi {
+  static registerComponent(
+    name: string,
+    component: ClassType<ComponentApi>,
+    options?: DefaultComponentOptions
+  ) {
+    cmp.registerComponent(name, component, options);
+    return this;
+  }
+
+  static removeComponent(name: string) {
+    cmp.removeComponent(name);
+    return this;
+  }
+
+  static getComponent(name: string) {
+    return cmp.getComponent(name);
+  }
+
   // 播放器实例
-  private _playerInstance: MediaPlayer;
+  private player: Player;
   // dom事件管理器
-  private _eventManager = new EventManager();
+  private eventManager = new EventManager();
   // 组件根元素
-  private _compRootElement: HTMLElement;
+  private rootElement: HTMLElement;
 
   // 是否进入播放器标志位
-  private _isEnter = false;
+  private isEnter = false;
   // 定时器
-  private _timer: number | null;
+  private timer: number | null;
 
-  constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
+  options: Record<string, any> = {};
+
+  children: { [key: string]: ComponentApi } = {};
+
+  constructor(
+    player: Player,
+    slotElement: HTMLElement,
+    options: Record<string, any>
+  ) {
     // 播放器实例
-    this._playerInstance = playerInstance;
+    this.player = player;
+    this.options = options;
     // 初始化dom
-    this._initDom(slotElement);
+    this.initDom(slotElement);
     // 初始化组件
-    this._initComponent();
-    this._initListener();
-    this._initMessageChannel();
+    this.initComponent();
+    this.initListener();
+    this.initPlayerMethods();
   }
 
-  // 查询元素
-  private _querySelector<T extends HTMLElement>(selector: string) {
-    return this._compRootElement.querySelector(selector) as T;
-  }
-
-  private _initDom(slotElement: HTMLElement) {
+  private initDom(slotElement: HTMLElement) {
     const html = ControlsTpl();
-    this._compRootElement = parseHtmlToDom(html);
-    slotElement.appendChild(this._compRootElement);
+    this.rootElement = parseHtmlToDom(html);
+    slotElement.appendChild(this.rootElement);
   }
 
-  private _initComponent() {
-    const { $options } = this._playerInstance;
-    const leftSlotElement = this._querySelector(".player-controls-left");
-    const rightSlotElement = this._querySelector(".player-controls-right");
-    const controls = $options.controls as any;
-    const isMobile = this._playerInstance.$isMobile;
-    const compList = [
-      {
-        ctor: VideoProgress,
-        slot: this._querySelector(".player-controls-group"),
-        init: !$options.live && controls[VIDEOPROGRESS]
-      },
-      {
-        ctor: VideoPlayButton,
-        slot: leftSlotElement,
-        init: !isMobile && controls[VIDEOPLAYBUTTON]
-      },
-      {
-        ctor: VideoVolume,
-        slot: leftSlotElement,
-        init: !isMobile && controls[VIDEOVOLUME]
-      },
-      {
-        ctor: VideoTime,
-        slot: leftSlotElement,
-        init: !$options.live && controls[VIDEOTIME]
-      },
-      {
-        ctor: VideoLive,
-        slot: leftSlotElement,
-        init: $options.live && controls[VIDEOLIVE]
-      },
-      {
-        ctor: VideoSpeed,
-        slot: rightSlotElement,
-        init:
-          !$options.live &&
-          $options.speedList &&
-          $options.speedList.length > 0 &&
-          controls[VIDEOSPEED]
-      },
-      {
-        ctor: VideoDefinition,
-        slot: rightSlotElement,
-        init:
-          $options.videoList &&
-          $options.videoList.length > 0 &&
-          controls[VIDEODEFINITION]
-      },
-      {
-        ctor: VideoFullscreen,
-        slot: rightSlotElement,
-        init: controls[VIDEOFULLSCREEN]
-      }
-    ];
-    compList.forEach((item) => {
-      if (item.init) {
-        const name = item.ctor.pluginName;
-        this._playerInstance.$children[name] = new item.ctor(
-          this._playerInstance,
-          item.slot
-        );
-      }
-    });
+  private initComponent() {
+    initComponents(
+      cmp.forEachComponent,
+      this.player,
+      this.rootElement,
+      this.children,
+      this.options.children || {}
+    );
   }
-  private _initListener() {
-    this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
-
-    if (!this._playerInstance.$isMobile) {
-      this._on(VideoEvents.PLAY, this._onVideoPlay.bind(this));
-      this._on(VideoEvents.PAUSE, this._onVideoPause.bind(this));
-      this._eventManager.addEventListener({
-        element: this._playerInstance.$rootElement,
+  private initListener() {
+    if (!isMobile()) {
+      this.player.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
+      this.player.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
+      this.eventManager.addEventListener({
+        element: this.player.rootElement,
         eventName: "mouseenter",
         handler: this._onMouseenter.bind(this)
       });
-      this._eventManager.addEventListener({
-        element: this._playerInstance.$rootElement,
+      this.eventManager.addEventListener({
+        element: this.player.rootElement,
         eventName: "mouseleave",
-        handler: this._onMouseleave.bind(this)
+        handler: this.onMouseleave.bind(this)
       });
     }
   }
 
-  private _initMessageChannel() {
-    this._on(MessageChannelEvents.HIDECONTROLS, this._hideControls.bind(this));
-    this._on(MessageChannelEvents.SHOWCONTROLS, this._showControls.bind(this));
-    this._on(
-      MessageChannelEvents.TOGGLECONTROLS,
-      this._toggleControls.bind(this)
-    );
+  private initPlayerMethods() {
+    const methods: any = {
+      hideControls: this.hideControls.bind(this),
+      showControls: this.showControls.bind(this),
+      toggleControls: this.toggleControls.bind(this)
+    };
+    definePlayerMethods(this.player, methods);
   }
 
   // 视频播放事件处理
-  private _onVideoPlay() {
-    this._hideControls();
+  private onVideoPlay() {
+    this.hideControls();
   }
   // 视频暂停事件处理
-  private _onVideoPause() {
-    this._showControls();
+  private onVideoPause() {
+    this.showControls();
   }
 
   // 鼠标进入容器事件处理
   private _onMouseenter() {
-    this._isEnter = true;
-    this._showControls();
+    this.isEnter = true;
+    this.showControls();
   }
   // 鼠标离开容器事件处理
-  private _onMouseleave() {
-    this._isEnter = false;
-    this._hideControls();
+  private onMouseleave() {
+    this.isEnter = false;
+    this.hideControls();
   }
 
-  private _toggleControls() {
-    this._isEnter = !this._isEnter;
-    if (this._isEnter) {
-      this._hide();
+  private toggleControls() {
+    this.isEnter = !this.isEnter;
+    if (this.isEnter) {
+      this.hide();
     } else {
-      this._show();
+      this.show();
     }
   }
 
   // 显示控制条
-  private _showControls() {
+  private showControls() {
     // 非播放状态，或者鼠标在播放器内，显示出来
-    if (this._playerInstance.paused || this._isEnter) {
-      this._show();
+    if (this.player.paused || this.isEnter) {
+      this.show();
     }
   }
   // 隐藏控制条
-  private _hideControls(time = 4000) {
+  private hideControls(time = 4000) {
     // 销毁定时器
-    this._destroyTimer();
+    this.destroyTimer();
     // 4秒后隐藏
-    this._timer = window.setTimeout(() => {
-      if (!this._playerInstance.paused && !this._isEnter) {
-        this._hide();
+    this.timer = window.setTimeout(() => {
+      if (!this.player.paused && !this.isEnter) {
+        this.hide();
       }
     }, time);
   }
 
   // 销毁定时器
-  private _destroyTimer() {
-    if (!isUndef(this._timer)) {
-      clearTimeout(this._timer);
-      this._timer = null;
+  private destroyTimer() {
+    if (!isUndef(this.timer)) {
+      clearTimeout(this.timer);
+      this.timer = null;
     }
   }
 
-  private _show() {
-    updateStyle(this._compRootElement, {
+  private show() {
+    updateStyle(this.rootElement, {
       transform: ""
     });
-    this._emit(PlayerEvents.SHOW_CONTROLS);
+    this.player.$emit(PlayerEvents.SHOW_CONTROLS);
   }
 
-  private _hide() {
-    updateStyle(this._compRootElement, {
+  private hide() {
+    updateStyle(this.rootElement, {
       transform: "translateY(100%)"
     });
-    this._emit(PlayerEvents.HIDE_CONTROLS);
+    this.player.$emit(PlayerEvents.HIDE_CONTROLS);
   }
 
-  // 事件监听
-  private _on(eventName: string, handler: Function) {
-    this._playerInstance.$eventBus.$on(eventName, handler);
+  private destroyComponent() {
+    Object.keys(this.children).forEach((name) => {
+      const component = this.children[name];
+      if (isFunction(component.destroy)) {
+        component.destroy();
+      }
+    });
   }
 
-  private _emit(eventName: string, data?: any) {
-    this._playerInstance.$eventBus.$emit(eventName, data);
-  }
-
-  private _destroy() {
-    this._eventManager.removeEventListener();
-    this._destroyTimer();
+  destroy() {
+    this.eventManager.removeEventListener();
+    this.destroyTimer();
+    this.destroyComponent();
   }
 }
+
+const options = {
+  init: true
+};
+
+Player.registerComponent("VideoControls", VideoControls, options);
+
+VideoControls.registerComponent("VideoProgress", VideoProgress, options);
+VideoControls.registerComponent("VideoPlayButton", VideoPlayButton, options);
+VideoControls.registerComponent("VideoVolume", VideoVolume, options);
+VideoControls.registerComponent("VideoTime", VideoTime, options);
+VideoControls.registerComponent("VideoLive", VideoLive, options);
+VideoControls.registerComponent("VideoSpeed", VideoSpeed, options);
+VideoControls.registerComponent("VideoDefinition", VideoDefinition, options);
+VideoControls.registerComponent("VideoFullscreen", VideoFullscreen, options);
 
 export default VideoControls;

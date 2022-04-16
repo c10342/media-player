@@ -4,172 +4,166 @@ import {
   isBrowserFullscreen,
   EventManager,
   isUndef,
-  parseHtmlToDom
+  parseHtmlToDom,
+  isMobile
 } from "@lin-media/utils";
 import {
   BODYHIDDENCLASSNAME,
-  VIDEOFULLSCREEN,
   WEBFULLSCREENCLASSNAME
 } from "../config/constant";
 import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
-import { MessageChannelEvents, PlayerEvents } from "../config/event";
-import MediaPlayer from "../index";
+import { PlayerEvents } from "../config/event";
+import Player from "../player";
 import FullscreenTpl from "../templates/fullscreen";
-import { FullscreenType } from "../types";
+import { ComponentApi, FullscreenType } from "../types";
+import { definePlayerMethods } from "../utils/helper";
 
-class VideoFullscreen {
-  static pluginName = VIDEOFULLSCREEN;
+class VideoFullscreen implements ComponentApi {
   // 播放器实例
-  private _playerInstance: MediaPlayer;
+  private player: Player;
   // 组件根元素
-  private _compRootElement: HTMLElement;
+  private rootElement: HTMLElement;
 
-  private _isWebFullscreen = false;
-  private _eventManager = new EventManager();
-  constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
-    this._playerInstance = playerInstance;
+  private isWebFullscreen = false;
+  private eventManager = new EventManager();
+  constructor(player: Player, slotElement: HTMLElement) {
+    this.player = player;
     // 初始化dom
-    this._initDom(slotElement);
-    this._initListener();
-    this._initMessageChannel();
+    this.initDom(slotElement);
+    this.initListener();
+    this.initPlayerMethods();
   }
 
   // 查询元素
-  private _querySelector<T extends HTMLElement>(selector: string) {
-    return this._compRootElement.querySelector(selector) as T;
+  private querySelector<T extends HTMLElement>(selector: string) {
+    return this.rootElement.querySelector(selector) as T;
   }
 
-  // 事件监听
-  private _on(eventName: string, handler: Function) {
-    this._playerInstance.$eventBus.$on(eventName, handler);
-  }
-
-  private _emit(eventName: string, data?: any) {
-    this._playerInstance.$eventBus.$emit(eventName, data);
-  }
-
-  private _initDom(slotElement: HTMLElement) {
+  private initDom(slotElement: HTMLElement) {
+    const parentElement = slotElement.querySelector(".player-controls-right")!;
     const html = FullscreenTpl({
-      isMobile: this._playerInstance.$isMobile
+      isMobile: isMobile()
     });
-    this._compRootElement = parseHtmlToDom(html);
-    slotElement.appendChild(this._compRootElement);
+    this.rootElement = parseHtmlToDom(html);
+    parentElement.appendChild(this.rootElement);
   }
 
-  private _initListener() {
-    this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
+  private initListener() {
     // 网页全屏
-    this._eventManager.addEventListener({
-      element: this._querySelector(".player-fullscreen-web"),
+    this.eventManager.addEventListener({
+      element: this.querySelector(".player-fullscreen-web"),
       eventName: "click",
-      handler: this._onWebFullscreen.bind(this)
+      handler: this.onWebFullscreen.bind(this)
     });
     // 浏览器全屏
-    this._eventManager.addEventListener({
-      element: this._querySelector(".player-fullscreen-browser"),
+    this.eventManager.addEventListener({
+      element: this.querySelector(".player-fullscreen-browser"),
       eventName: "click",
-      handler: this._onBrowserFullscreen.bind(this)
+      handler: this.onBrowserFullscreen.bind(this)
     });
-    this._eventManager.addEventListener({
+    this.eventManager.addEventListener({
       element: document,
       eventName: "keyup",
-      handler: this._onKeypress.bind(this)
+      handler: this.onKeypress.bind(this)
     });
   }
 
-  private _initMessageChannel() {
-    this._on(MessageChannelEvents.FULLSCREENREQUEST, this._request.bind(this));
-    this._on(MessageChannelEvents.FULLSCREENCANCEL, this._cancel.bind(this));
+  private initPlayerMethods() {
+    const methods: any = {
+      requestFullscreen: this.request.bind(this),
+      cancelFullscreen: this.cancel.bind(this)
+    };
+    definePlayerMethods(this.player, methods);
   }
 
   // 网页全屏事件处理
-  private _onWebFullscreen() {
+  private onWebFullscreen() {
     if (isBrowserFullscreen()) {
       exitBrowserFullscreen();
     }
-    if (this._isWebFullscreen) {
-      this._exitWebFullscreen();
+    if (this.isWebFullscreen) {
+      this.exitWebFullscreen();
     } else {
-      this._enterWebFullscreen();
+      this.enterWebFullscreen();
     }
   }
   // 浏览器全屏事件处理
-  private _onBrowserFullscreen() {
+  private onBrowserFullscreen() {
     if (!isBrowserFullscreen()) {
-      this._enterBrowserFullScreen();
+      this.enterBrowserFullScreen();
     } else {
-      this._exitBrowserFullscreen();
+      this.exitBrowserFullscreen();
     }
   }
   // 进入浏览器全屏
-  private _enterBrowserFullScreen() {
-    if (this._isWebFullscreen) {
+  private enterBrowserFullScreen() {
+    if (this.isWebFullscreen) {
       // 如果是浏览器全屏需要先退出
-      this._exitWebFullscreen();
+      this.exitWebFullscreen();
     }
-    const containerElement = this._playerInstance.$rootElement;
+    const containerElement = this.player.rootElement;
     if (!isUndef(containerElement) && !isBrowserFullscreen()) {
       enterBrowserFullScreen(containerElement);
-      this._emit(PlayerEvents.ENTER_BROWSER_SCREEN);
+      this.player.$emit(PlayerEvents.ENTER_BROWSER_SCREEN);
     }
   }
   // 退出浏览器全屏
-  private _exitBrowserFullscreen() {
-    if (this._isWebFullscreen) {
+  private exitBrowserFullscreen() {
+    if (this.isWebFullscreen) {
       // 如果是浏览器全屏需要先退出
-      this._exitWebFullscreen();
+      this.exitWebFullscreen();
     }
     if (isBrowserFullscreen()) {
       exitBrowserFullscreen();
-      this._emit(PlayerEvents.EXIT_BROWSER_SCREEN);
+      this.player.$emit(PlayerEvents.EXIT_BROWSER_SCREEN);
     }
   }
   // 退出网页全屏
-  private _exitWebFullscreen() {
-    this._isWebFullscreen = false;
-    const containerElement = this._playerInstance.$rootElement;
+  private exitWebFullscreen() {
+    this.isWebFullscreen = false;
+    const containerElement = this.player.rootElement;
     if (containerElement.classList.contains(WEBFULLSCREENCLASSNAME)) {
       containerElement.classList.remove(WEBFULLSCREENCLASSNAME);
       document.body.classList.remove(BODYHIDDENCLASSNAME);
-      this._emit(PlayerEvents.EXIT_WEB_SCREEN);
+      this.player.$emit(PlayerEvents.EXIT_WEB_SCREEN);
     }
   }
   // 进入网页全屏
-  private _enterWebFullscreen() {
-    this._isWebFullscreen = true;
-    const containerElement = this._playerInstance.$rootElement;
+  private enterWebFullscreen() {
+    this.isWebFullscreen = true;
+    const containerElement = this.player.rootElement;
     if (!containerElement.classList.contains(WEBFULLSCREENCLASSNAME)) {
       containerElement.classList.add(WEBFULLSCREENCLASSNAME);
       document.body.classList.add(BODYHIDDENCLASSNAME);
-      this._emit(PlayerEvents.ENTER_WEB_SCREEN);
+      this.player.$emit(PlayerEvents.ENTER_WEB_SCREEN);
     }
   }
 
-  private _onKeypress(event: KeyboardEvent) {
+  private onKeypress(event: KeyboardEvent) {
     // 按下esc键，键盘左上角
-    if (event.keyCode === KeyCodeEnum.esc && this._isWebFullscreen) {
-      this._exitWebFullscreen();
+    if (event.keyCode === KeyCodeEnum.esc && this.isWebFullscreen) {
+      this.exitWebFullscreen();
     }
   }
 
-  private _request(type: FullscreenType) {
+  private request(type: FullscreenType) {
     if (type === FullScreenTypeEnum.web) {
-      this._enterWebFullscreen();
+      this.enterWebFullscreen();
     } else if (type === FullScreenTypeEnum.browser) {
-      this._enterBrowserFullScreen();
+      this.enterBrowserFullScreen();
     }
   }
 
-  private _cancel(type: FullscreenType) {
+  private cancel(type: FullscreenType) {
     if (type === FullScreenTypeEnum.web) {
-      this._exitWebFullscreen();
+      this.exitWebFullscreen();
     } else if (type === FullScreenTypeEnum.browser) {
-      this._exitBrowserFullscreen();
+      this.exitBrowserFullscreen();
     }
   }
 
-  private _destroy() {
-    this._eventManager.removeEventListener();
+  destroy() {
+    this.eventManager.removeEventListener();
   }
 }
 

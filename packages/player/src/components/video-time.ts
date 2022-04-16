@@ -1,87 +1,85 @@
-import { parseHtmlToDom, secondToTime } from "@lin-media/utils";
-import { VIDEOTIME } from "../config/constant";
+import { isMobile, parseHtmlToDom, secondToTime } from "@lin-media/utils";
 import { VideoEvents } from "../config/event";
-import MediaPlayer from "../index";
+import Player from "../player";
 import TimeTpl from "../templates/time";
+import { ComponentApi } from "../types";
 
-class VideoTime {
-  static pluginName = VIDEOTIME;
+class VideoTime implements ComponentApi {
   // 播放器实例
-  private _playerInstance: MediaPlayer;
+  private player: Player;
   // 组件根元素
-  private _compRootElement: HTMLElement;
+  private rootElement: HTMLElement;
   // 当前播放时间
-  private _currentTime = 0;
+  private currentTime = 0;
 
-  private _totalTimeElement: HTMLElement;
+  private totalTimeElement: HTMLElement;
 
-  private _currentTimeElement: HTMLElement;
+  private currentTimeElement: HTMLElement;
 
-  constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
+  constructor(player: Player, slotElement: HTMLElement) {
     // 播放器实例
-    this._playerInstance = playerInstance;
+    this.player = player;
     // 初始化dom
-    this._initDom(slotElement);
+    this.initDom(slotElement);
     // 初始化事件
-    this._initListener();
+    this.initListener();
   }
   // 查询元素
-  private _querySelector<T extends HTMLElement>(selector: string) {
-    return this._compRootElement.querySelector(selector) as T;
+  private querySelector<T extends HTMLElement>(selector: string) {
+    return this.rootElement.querySelector(selector) as T;
   }
 
-  private _initDom(slotElement: HTMLElement) {
+  private initDom(slotElement: HTMLElement) {
+    const parentElement = slotElement.querySelector(".player-controls-left")!;
     const html = TimeTpl({
-      isMobile: this._playerInstance.$isMobile
+      isMobile: isMobile()
     });
-    this._compRootElement = parseHtmlToDom(html);
-    slotElement.appendChild(this._compRootElement);
-    this._totalTimeElement = this._querySelector(".player-totalTime");
-    this._currentTimeElement = this._querySelector(".player-currentTime");
+    this.rootElement = parseHtmlToDom(html);
+    parentElement.appendChild(this.rootElement);
+    this.totalTimeElement = this.querySelector(".player-totalTime");
+    this.currentTimeElement = this.querySelector(".player-currentTime");
   }
 
-  // 事件监听
-  private _on(eventName: string, handler: Function) {
-    this._playerInstance.$eventBus.$on(eventName, handler);
-  }
-
-  private _initListener() {
-    this._on(
+  private initListener() {
+    this.player.$on(
       VideoEvents.LOADEDMETADATA,
-      this._onVideoLoadedmetadata.bind(this)
+      this.onVideoLoadedmetadata.bind(this)
     );
-    this._on(VideoEvents.TIMEUPDATE, this._onVideoTimeupdate.bind(this));
+    this.player.$on(VideoEvents.TIMEUPDATE, this.onVideoTimeupdate.bind(this));
   }
   // video标签获取媒体数据事件
-  private _onVideoLoadedmetadata(event: Event) {
+  private onVideoLoadedmetadata(event: Event) {
     const videoElement = event.target as HTMLVideoElement;
     const duration = videoElement.duration || 0;
     // 设置总时长
-    this._setTotalTime(duration);
+    this.setTotalTime(duration);
   }
   // video标签正在播放事件
-  private _onVideoTimeupdate(event: Event) {
+  private onVideoTimeupdate(event: Event) {
     const videoElement = event.target as HTMLVideoElement;
     const currentTime = videoElement.currentTime || 0;
 
     const intCurrentTime = Math.floor(currentTime);
-    const intPrevTime = Math.floor(this._currentTime);
+    const intPrevTime = Math.floor(this.currentTime);
     // 保证每一秒执行一次
     if (intCurrentTime === intPrevTime) {
       return;
     }
 
-    this._currentTime = currentTime;
+    this.currentTime = currentTime;
     // 设置当前时间
-    this._setCurrentTime(currentTime);
+    this.setCurrentTime(currentTime);
   }
   // 设置总时长
-  private _setTotalTime(duration: number) {
-    this._totalTimeElement.innerHTML = secondToTime(duration);
+  private setTotalTime(duration: number) {
+    this.totalTimeElement.innerHTML = secondToTime(duration);
   }
   // 设置当前时长
-  private _setCurrentTime(currentTime: number) {
-    this._currentTimeElement.innerHTML = secondToTime(currentTime);
+  private setCurrentTime(currentTime: number) {
+    this.currentTimeElement.innerHTML = secondToTime(currentTime);
+  }
+  destroy() {
+    // todo
   }
 }
 

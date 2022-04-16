@@ -1,80 +1,77 @@
-import { EventManager, parseHtmlToDom } from "@lin-media/utils";
-import { VIDEOPLAYBUTTON } from "../config/constant";
+import { EventManager, isMobile, parseHtmlToDom } from "@lin-media/utils";
 import { PlayButtonIconEnum } from "../config/enum";
-import { PlayerEvents, VideoEvents } from "../config/event";
-import MediaPlayer from "../index";
+import { VideoEvents } from "../config/event";
+import Player from "../player";
 import PlayButtonTpl from "../templates/play-button";
+import { ComponentApi } from "../types";
 
-class VideoPlayButton {
-  static pluginName = VIDEOPLAYBUTTON;
+class VideoPlayButton implements ComponentApi {
+  static shouldInit() {
+    return !isMobile();
+  }
   // 播放器实例
-  private _playerInstance: MediaPlayer;
+  private player: Player;
   // dom事件管理器
-  private _eventManager = new EventManager();
+  private eventManager = new EventManager();
   // 组件根元素
-  private _compRootElement: HTMLElement;
+  private rootElement: HTMLElement;
 
-  constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
+  constructor(player: Player, slotElement: HTMLElement) {
     // 播放器实例
-    this._playerInstance = playerInstance;
+    this.player = player;
     // 初始化dom
-    this._initDom(slotElement);
-    this._initListener();
+    this.initDom(slotElement);
+    this.initListener();
   }
 
-  private _initDom(slotElement: HTMLElement) {
+  private initDom(slotElement: HTMLElement) {
+    const parentElement = slotElement.querySelector(".player-controls-left")!;
     const html = PlayButtonTpl();
-    this._compRootElement = parseHtmlToDom(html);
-    slotElement.appendChild(this._compRootElement);
+    this.rootElement = parseHtmlToDom(html);
+    parentElement.appendChild(this.rootElement);
   }
 
-  private _initListener() {
-    this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
-    this._on(VideoEvents.PLAY, this._onVideoPlay.bind(this));
-    this._on(VideoEvents.PAUSE, this._onVideoPause.bind(this));
-    this._eventManager.addEventListener({
-      element: this._compRootElement,
+  private initListener() {
+    this.player.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
+    this.player.$on(VideoEvents.PAUSE, this.onVideoPause.bind(this));
+    this.eventManager.addEventListener({
+      element: this.rootElement,
       eventName: "click",
-      handler: this._onPlayButtClick.bind(this)
+      handler: this.onPlayButtClick.bind(this)
     });
   }
 
   // 视频播放事件处理
-  private _onVideoPlay() {
+  private onVideoPlay() {
     // 显示播放图标
-    this._showPlayIcon();
+    this.showPlayIcon();
   }
   // 视频暂停事件处理
-  private _onVideoPause() {
+  private onVideoPause() {
     // 显示暂停图标
-    this._showPauseIcon();
+    this.showPauseIcon();
   }
 
   // 显示播放图标
-  private _showPlayIcon() {
-    this._compRootElement.classList.remove(PlayButtonIconEnum.Pause);
+  private showPlayIcon() {
+    this.rootElement.classList.remove(PlayButtonIconEnum.Pause);
 
-    this._compRootElement.classList.add(PlayButtonIconEnum.Play);
+    this.rootElement.classList.add(PlayButtonIconEnum.Play);
   }
   // 显示暂停图标
-  private _showPauseIcon() {
-    this._compRootElement.classList.remove(PlayButtonIconEnum.Play);
-    this._compRootElement.classList.add(PlayButtonIconEnum.Pause);
+  private showPauseIcon() {
+    this.rootElement.classList.remove(PlayButtonIconEnum.Play);
+    this.rootElement.classList.add(PlayButtonIconEnum.Pause);
   }
 
-  private _onPlayButtClick(event: MouseEvent) {
+  private onPlayButtClick(event: MouseEvent) {
     event.stopPropagation();
     // 切换播放状态
-    this._playerInstance.toggle();
+    this.player.toggle();
   }
 
-  // 事件监听
-  private _on(eventName: string, handler: Function) {
-    this._playerInstance.$eventBus.$on(eventName, handler);
-  }
-
-  private _destroy() {
-    this._eventManager.removeEventListener();
+  destroy() {
+    this.eventManager.removeEventListener();
   }
 }
 

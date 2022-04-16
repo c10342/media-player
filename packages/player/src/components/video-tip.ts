@@ -1,76 +1,72 @@
 import { isUndef, parseHtmlToDom, updateStyle } from "@lin-media/utils";
-import { VIDEOTIP } from "../config/constant";
-import { MessageChannelEvents, PlayerEvents } from "../config/event";
-import MediaPlayer from "../index";
+import Player from "../player";
 import TipTpl from "../templates/tip";
-class VideoTip {
-  static pluginName = VIDEOTIP;
+import { ComponentApi } from "../types";
+import { definePlayerMethods } from "../utils/helper";
+class VideoTip implements ComponentApi {
   // 播放器实例
-  private _playerInstance: MediaPlayer;
+  private player: Player;
   // 组件根元素
-  private _compRootElement: HTMLElement;
+  private rootElement: HTMLElement;
   // 定时器
   private timer: number | null;
-  constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
+  constructor(player: Player, slotElement: HTMLElement) {
     // 播放器实例
-    this._playerInstance = playerInstance;
-    this._initDom(slotElement);
-    this._initListener();
-    this._initMessageChannel();
+    this.player = player;
+    this.initDom(slotElement);
+    this.initPlayerMethods();
   }
 
-  private _initListener() {
-    this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
+  private initPlayerMethods() {
+    const methods = {
+      setNotice: this.setNotice.bind(this)
+    };
+    definePlayerMethods(this.player, methods);
   }
 
-  private _initMessageChannel() {
-    this._on(MessageChannelEvents.SETNOTICE, this._setNotice.bind(this));
-  }
-
-  private _initDom(slotElement: HTMLElement) {
+  private initDom(slotElement: HTMLElement) {
     const html = TipTpl();
-    this._compRootElement = parseHtmlToDom(html);
-    slotElement.appendChild(this._compRootElement);
+    this.rootElement = parseHtmlToDom(html);
+    slotElement.appendChild(this.rootElement);
   }
 
   // 设置通知
-  private _setNotice(notice: string, time?: number) {
-    this._destroyTimer();
-    this._showTip(notice);
+  private setNotice(notice: string, time?: number) {
+    this.destroyTimer();
+    this.showTip(notice);
     // 2秒后隐藏
     this.timer = window.setTimeout(() => {
-      this._hideTip();
+      this.hideTip();
     }, time || 2000);
   }
   // 销毁定时器
-  private _destroyTimer() {
+  private destroyTimer() {
     if (!isUndef(this.timer)) {
       clearTimeout(this.timer);
       this.timer = null;
     }
   }
   // 显示提示
-  private _showTip(tip: string) {
-    this._compRootElement.innerHTML = tip;
-    updateStyle(this._compRootElement, {
+  private showTip(tip: string) {
+    this.rootElement.innerHTML = tip;
+    updateStyle(this.rootElement, {
       opacity: "1"
     });
   }
   // 隐藏提示
-  private _hideTip() {
-    updateStyle(this._compRootElement, {
+  private hideTip() {
+    updateStyle(this.rootElement, {
       opacity: ""
     });
   }
 
-  // 事件监听
-  private _on(eventName: string, handler: Function) {
-    this._playerInstance.$eventBus.$on(eventName, handler);
-  }
-
-  private _destroy() {
-    this._destroyTimer();
+  destroy() {
+    this.destroyTimer();
   }
 }
+
+Player.registerComponent("VideoTip", VideoTip, {
+  init: true
+});
 
 export default VideoTip;

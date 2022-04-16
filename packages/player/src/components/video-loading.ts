@@ -1,83 +1,81 @@
 import { EventManager, parseHtmlToDom, updateStyle } from "@lin-media/utils";
-import { VIDEOLOADING } from "../config/constant";
+
 import { VideoReadyStateEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
-import MediaPlayer from "../index";
+import Player from "../player";
 import LoadingTpl from "../templates/loading";
+import { ComponentApi } from "../types";
 
-class VideoLoading {
-  static pluginName = VIDEOLOADING;
+class VideoLoading implements ComponentApi {
   // 播放器实例
-  private _playerInstance: MediaPlayer;
+  private player: Player;
   // dom事件管理器
-  private _eventManager = new EventManager();
+  private eventManager = new EventManager();
   // 组件根元素
-  private _compRootElement: HTMLElement;
+  private rootElement: HTMLElement;
 
-  constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
+  constructor(player: Player, slotElement: HTMLElement) {
     // 播放器实例
-    this._playerInstance = playerInstance;
+    this.player = player;
     // 初始化dom
-    this._initDom(slotElement);
-    this._initListener();
+    this.initDom(slotElement);
+    this.initListener();
   }
 
-  // 事件监听
-  private _on(eventName: string, handler: Function) {
-    this._playerInstance.$eventBus.$on(eventName, handler);
-  }
-
-  private _initDom(slotElement: HTMLElement) {
+  private initDom(slotElement: HTMLElement) {
     const html = LoadingTpl();
-    this._compRootElement = parseHtmlToDom(html);
-    slotElement.appendChild(this._compRootElement);
+    this.rootElement = parseHtmlToDom(html);
+    slotElement.appendChild(this.rootElement);
   }
 
-  private _initListener() {
-    this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
+  private initListener() {
     // 切换清晰度前
-    this._on(
+    this.player.$on(
       PlayerEvents.SWITCH_DEFINITION_START,
-      this._onBeforeSwitchDefinition.bind(this)
+      this.onBeforeSwitchDefinition.bind(this)
     );
-    this._on(VideoEvents.WAITING, this._onVideoWaiting.bind(this));
-    this._on(VideoEvents.CANPLAY, this._onVideoCanplay.bind(this));
+    this.player.$on(VideoEvents.WAITING, this.onVideoWaiting.bind(this));
+    this.player.$on(VideoEvents.CANPLAY, this.onVideoCanplay.bind(this));
   }
 
   // 视频缓冲事件
-  private _onVideoWaiting(event: Event) {
+  private onVideoWaiting(event: Event) {
     const target = event.target as HTMLVideoElement;
     if (target.readyState !== VideoReadyStateEnum.complete) {
       // 显示loading
-      this._showLoading();
+      this.showLoading();
     }
   }
 
   // 视频可播放事件
-  private _onVideoCanplay() {
-    this._hideLoading();
+  private onVideoCanplay() {
+    this.hideLoading();
   }
 
   // 切换清晰度的时候也要显示loading
-  private _onBeforeSwitchDefinition() {
-    this._showLoading();
+  private onBeforeSwitchDefinition() {
+    this.showLoading();
   }
   // 显示loading
-  private _showLoading() {
-    updateStyle(this._compRootElement, {
+  private showLoading() {
+    updateStyle(this.rootElement, {
       display: "flex"
     });
   }
   // 隐藏loading
-  private _hideLoading() {
-    updateStyle(this._compRootElement, {
+  private hideLoading() {
+    updateStyle(this.rootElement, {
       display: ""
     });
   }
 
-  private _destroy() {
-    this._eventManager.removeEventListener();
+  destroy() {
+    this.eventManager.removeEventListener();
   }
 }
+
+Player.registerComponent("VideoLoading", VideoLoading, {
+  init: true
+});
 
 export default VideoLoading;

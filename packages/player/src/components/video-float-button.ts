@@ -1,142 +1,148 @@
-import { EventManager, parseHtmlToDom, updateStyle } from "@lin-media/utils";
+import {
+  EventManager,
+  isMobile,
+  parseHtmlToDom,
+  updateStyle
+} from "@lin-media/utils";
 import {
   FLOATBUTTONENTERCLASSNAME,
-  FLOATBUTTONLEAVECLASSNAME,
-  VIDEOFLOATBUTTON
+  FLOATBUTTONLEAVECLASSNAME
 } from "../config/constant";
 import { PlayButtonIconEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
-import MediaPlayer from "../index";
+import Player from "../player";
 import FloatButtonTpl from "../templates/float-button";
-class VideoFloatButton {
-  static pluginName = VIDEOFLOATBUTTON;
+import { ComponentApi } from "../types";
+
+const isPhone = isMobile();
+
+class VideoFloatButton implements ComponentApi {
   // 播放器实例
-  private _playerInstance: MediaPlayer;
+  private player: Player;
   // dom事件管理器
-  private _eventManager = new EventManager();
+  private eventManager = new EventManager();
 
-  private _compRootElement: HTMLElement;
+  private rootElement: HTMLElement;
 
-  private _iconElement: HTMLElement;
+  private iconElement: HTMLElement;
 
-  private _isShow = true;
+  private isShow = true;
 
-  constructor(playerInstance: MediaPlayer, slotElement: HTMLElement) {
+  constructor(player: Player, slotElement: HTMLElement) {
     // 播放器实例
-    this._playerInstance = playerInstance;
+    this.player = player;
     // 初始化dom
-    this._initDom(slotElement);
-    this._initListener();
+    this.initDom(slotElement);
+    this.initListener();
   }
 
-  private _initDom(slotElement: HTMLElement) {
+  private initDom(slotElement: HTMLElement) {
     const html = FloatButtonTpl();
-    this._compRootElement = parseHtmlToDom(html);
-    slotElement.appendChild(this._compRootElement);
-    this._iconElement = this._compRootElement.querySelector(
+    this.rootElement = parseHtmlToDom(html);
+    slotElement.appendChild(this.rootElement);
+    this.iconElement = this.rootElement.querySelector(
       ".player-float-button-icon"
     )!;
   }
 
-  private _initListener() {
-    this._on(VideoEvents.PLAY, this._onPlay.bind(this));
-    this._on(VideoEvents.PAUSE, this._onPause.bind(this));
-    if (this._playerInstance.$isMobile) {
-      this._on(
+  private initListener() {
+    this.player.$on(VideoEvents.PLAY, this.onPlay.bind(this));
+    this.player.$on(VideoEvents.PAUSE, this.onPause.bind(this));
+    if (isPhone) {
+      this.player.$on(
         PlayerEvents.SHOW_CONTROLS,
-        this.__showPlayButtonAnimation.bind(this)
+        this.showPlayButtonAnimation.bind(this)
       );
-      this._on(
+      this.player.$on(
         PlayerEvents.HIDE_CONTROLS,
-        this._hidePlayButtonAnimation.bind(this)
+        this.hidePlayButtonAnimation.bind(this)
       );
     }
-    this._on(PlayerEvents.DESTROY, this._destroy.bind(this));
-    this._eventManager.addEventListener({
-      element: this._compRootElement,
+    this.eventManager.addEventListener({
+      element: this.rootElement,
       eventName: "click",
-      handler: this._onPlayButtonClick.bind(this)
+      handler: this.onPlayButtonClick.bind(this)
     });
-    this._eventManager.addEventListener({
-      element: this._compRootElement,
+    this.eventManager.addEventListener({
+      element: this.rootElement,
       eventName: "animationend",
-      handler: this._onAnimationend.bind(this)
+      handler: this.onAnimationend.bind(this)
     });
   }
 
-  private _onPlayButtonClick(event: MouseEvent) {
+  private onPlayButtonClick(event: MouseEvent) {
     event.stopPropagation();
-    this._playerInstance.toggle();
+    this.player.toggle();
   }
 
-  private _onPlay() {
-    this._showPlayIcon();
-    if (!this._playerInstance.$isMobile) {
-      this._hidePlayButtonAnimation();
+  private onPlay() {
+    this.showPlayIcon();
+    if (!isPhone) {
+      this.hidePlayButtonAnimation();
     }
   }
 
-  private _onPause() {
-    this._showPauseIcon();
-    if (!this._playerInstance.$isMobile) {
-      this.__showPlayButtonAnimation();
+  private onPause() {
+    this.showPauseIcon();
+    if (!isPhone) {
+      this.showPlayButtonAnimation();
     }
   }
 
   // 显示播放图标
-  private _showPlayIcon() {
-    this._iconElement.classList.remove(PlayButtonIconEnum.Pause);
-    this._iconElement.classList.add(PlayButtonIconEnum.Play);
+  private showPlayIcon() {
+    this.iconElement.classList.remove(PlayButtonIconEnum.Pause);
+    this.iconElement.classList.add(PlayButtonIconEnum.Play);
   }
   // 显示暂停图标
-  private _showPauseIcon() {
-    this._iconElement.classList.add(PlayButtonIconEnum.Pause);
-    this._iconElement.classList.remove(PlayButtonIconEnum.Play);
+  private showPauseIcon() {
+    this.iconElement.classList.add(PlayButtonIconEnum.Pause);
+    this.iconElement.classList.remove(PlayButtonIconEnum.Play);
   }
-  private _hidePlayButtonAnimation() {
-    this._compRootElement.classList.remove(FLOATBUTTONENTERCLASSNAME);
-    this._compRootElement.classList.add(FLOATBUTTONLEAVECLASSNAME);
-    this._isShow = false;
+  private hidePlayButtonAnimation() {
+    this.rootElement.classList.remove(FLOATBUTTONENTERCLASSNAME);
+    this.rootElement.classList.add(FLOATBUTTONLEAVECLASSNAME);
+    this.isShow = false;
   }
 
-  private __showPlayButtonAnimation() {
-    this._showPlayButton();
-    this._compRootElement.classList.remove(FLOATBUTTONLEAVECLASSNAME);
-    this._compRootElement.classList.add(FLOATBUTTONENTERCLASSNAME);
-    this._isShow = true;
+  private showPlayButtonAnimation() {
+    this.showPlayButton();
+    this.rootElement.classList.remove(FLOATBUTTONLEAVECLASSNAME);
+    this.rootElement.classList.add(FLOATBUTTONENTERCLASSNAME);
+    this.isShow = true;
   }
   // 显示播放按钮
-  private _showPlayButton() {
-    updateStyle(this._compRootElement, {
+  private showPlayButton() {
+    updateStyle(this.rootElement, {
       opacity: "",
       pointerEvents: ""
     });
   }
   // 隐藏播放按钮
-  private _hidePlayButton() {
-    updateStyle(this._compRootElement, {
+  private hidePlayButton() {
+    updateStyle(this.rootElement, {
       opacity: "0",
       pointerEvents: "none"
     });
   }
 
-  private _onAnimationend(event: Event) {
+  private onAnimationend(event: Event) {
     const target = event.target as HTMLElement;
-    if (this._isShow) {
+    if (this.isShow) {
       target.classList.remove(FLOATBUTTONENTERCLASSNAME);
     } else {
-      this._hidePlayButton();
+      this.hidePlayButton();
       target.classList.remove(FLOATBUTTONLEAVECLASSNAME);
     }
   }
 
-  private _on(eventName: string, handler: Function) {
-    this._playerInstance.$eventBus.$on(eventName, handler);
-  }
-
-  private _destroy() {
-    this._eventManager.removeEventListener();
+  destroy() {
+    this.eventManager.removeEventListener();
   }
 }
+
+Player.registerComponent("VideoFloatButton", VideoFloatButton, {
+  init: true
+});
 
 export default VideoFloatButton;
