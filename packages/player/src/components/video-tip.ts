@@ -65,8 +65,4 @@ class VideoTip implements ComponentApi {
   }
 }
 
-Player.registerComponent("VideoTip", VideoTip, {
-  init: true
-});
-
 export default VideoTip;

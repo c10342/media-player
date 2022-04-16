@@ -47,8 +47,5 @@ class VideoMask implements ComponentApi {
     this.eventManager.removeEventListener();
   }
 }
-Player.registerComponent("VideoMask", VideoMask, {
-  init: true
-});
 
 export default VideoMask;

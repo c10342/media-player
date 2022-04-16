@@ -276,8 +276,4 @@ class VideoPlayer implements ComponentApi {
   }
 }
 
-Player.registerComponent("VideoPlayer", VideoPlayer, {
-  init: true
-});
-
 export default VideoPlayer;

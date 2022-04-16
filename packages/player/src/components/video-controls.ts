@@ -10,14 +10,6 @@ import { PlayerEvents, VideoEvents } from "../config/event";
 import createComponent from "../global-api/component";
 import Player from "../player";
 import ControlsTpl from "../templates/controls";
-import VideoProgress from "./video-progress";
-import VideoPlayButton from "./video-play-button";
-import VideoVolume from "./video-volume";
-import VideoTime from "./video-time";
-import VideoFullscreen from "./video-fullscreen";
-import VideoSpeed from "./video-speed";
-import VideoDefinition from "./video-definition";
-import VideoLive from "./video-live";
 
 import { ClassType } from "../types";
 import { definePlayerMethods, initComponents } from "../utils/helper";
@@ -202,20 +194,5 @@ class VideoControls implements ComponentApi {
     this.destroyComponent();
   }
 }
-
-const options = {
-  init: true
-};
-
-Player.registerComponent("VideoControls", VideoControls, options);
-
-VideoControls.registerComponent("VideoProgress", VideoProgress, options);
-VideoControls.registerComponent("VideoPlayButton", VideoPlayButton, options);
-VideoControls.registerComponent("VideoVolume", VideoVolume, options);
-VideoControls.registerComponent("VideoTime", VideoTime, options);
-VideoControls.registerComponent("VideoLive", VideoLive, options);
-VideoControls.registerComponent("VideoSpeed", VideoSpeed, options);
-VideoControls.registerComponent("VideoDefinition", VideoDefinition, options);
-VideoControls.registerComponent("VideoFullscreen", VideoFullscreen, options);
 
 export default VideoControls;

@@ -74,8 +74,4 @@ class VideoLoading implements ComponentApi {
   }
 }
 
-Player.registerComponent("VideoLoading", VideoLoading, {
-  init: true
-});
-
 export default VideoLoading;

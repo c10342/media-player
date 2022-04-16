@@ -141,8 +141,4 @@ class VideoFloatButton implements ComponentApi {
   }
 }
 
-Player.registerComponent("VideoFloatButton", VideoFloatButton, {
-  init: true
-});
-
 export default VideoFloatButton;
