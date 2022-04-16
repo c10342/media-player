@@ -46,29 +46,29 @@ export const speedList = [
   }
 ];
 
-export function getContextMenuList(player: MediaPlayer) {
+export function getContextMenuList() {
   return [
     {
       label: "播放",
       desc: "描述信息",
       type: "MenuItem",
-      callback: () => {
-        player.play();
+      callback() {
+        (this as any).play();
       },
       eventName: "click-play"
     },
     {
       label: "暂停",
       type: "MenuItem",
-      callback: () => {
-        player.pause();
+      callback() {
+        (this as any).pause();
       }
     },
     {
       label: "播放/暂停",
       type: "MenuItem",
-      callback: () => {
-        player.toggle();
+      callback() {
+        (this as any).toggle();
       }
     },
     {
@@ -80,20 +80,20 @@ export function getContextMenuList(player: MediaPlayer) {
       subMenuList: [
         {
           label: "0.5x",
-          callback: () => {
-            player.setSpeed(0.5);
+          callback() {
+            (this as any).setSpeed(0.5);
           }
         },
         {
           label: "1x",
-          callback: () => {
-            player.setSpeed(1);
+          callback() {
+            (this as any).setSpeed(1);
           }
         },
         {
           label: "1.5x",
-          callback: () => {
-            player.setSpeed(1.5);
+          callback() {
+            (this as any).setSpeed(1.5);
           }
         }
       ]
@@ -104,14 +104,14 @@ export function getContextMenuList(player: MediaPlayer) {
       subMenuList: [
         {
           label: "标清",
-          callback: () => {
-            player.switchDefinition(0);
+          callback() {
+            (this as any).switchDefinition(0);
           }
         },
         {
           label: "高清",
-          callback: () => {
-            player.switchDefinition(1);
+          callback() {
+            (this as any).switchDefinition(1);
           }
         }
       ]

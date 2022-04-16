@@ -84,7 +84,7 @@ function addEventListener(player: MediaPlayer) {
     player.requestFullscreen("web");
   });
   videoElementButton?.addEventListener("click", function () {
-    console.log(player.videoElement);
+    // todo
   });
   currentTimeButton?.addEventListener("click", function () {
     console.log(player.currentTime);
