@@ -15,7 +15,8 @@ export enum PlayerEvents {
   KEYBOARD_UP = "keyboard_up",
   KEYBOARD_DOWN = "keyboard_down",
   KEYBOARD_SPACE = "keyboard_space",
-  PICTURE_IN_PICTURE_WINDOW_RESIZE = "picture_in_picture_window_resize"
+  PICTURE_IN_PICTURE_WINDOW_RESIZE = "picture_in_picture_window_resize",
+  TECHCHANGED = "techChanged"
 }
 
 // video标签事件
@@ -44,31 +45,4 @@ export enum VideoEvents {
   WAITING = "waiting",
   ENTERPICTUREINPICTURE = "enterpictureinpicture",
   LEAVEPICTUREINPICTURE = "leavepictureinpicture"
-}
-
-export enum LifecycleEvents {
-  BEFORECREATE = "beforeCreate",
-  CREATED = "created",
-  BEFOREMOUNT = "beforeMount",
-  MOUNTED = "mounted",
-  BEFOREUNMOUNT = "beforeUnmount",
-  UNMOUNTED = "unmounted"
-}
-
-export enum MessageChannelEvents {
-  SEEK = "__seek__",
-  PLAY = "__play__",
-  PAUSE = "__pause__",
-  TOGGLE = "__toggle__",
-  SETVOLUME = "__setVolume__",
-  SETNOTICE = "__setNotice__",
-  SETSPEED = "__setSpeed__",
-  SWITCHDEFINITION = "__switchDefinition__",
-  HIDECONTROLS = "__hideControls__",
-  SHOWCONTROLS = "__showControls__",
-  TOGGLECONTROLS = "__toggleControls__",
-  FULLSCREENREQUEST = "__fullScreenRequest__",
-  FULLSCREENCANCEL = "__fullScreenCancel__",
-  REQUESTPICTUREINPICTURE = "__requestPictureInPicture__",
-  EXITPICTUREINPICTURE = "__exitPictureInPicture__"
 }
