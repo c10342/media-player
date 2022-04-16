@@ -29,7 +29,5 @@ class DomResizeObserver implements PluginApi {
     this.resizeObserver?.disconnect();
   }
 }
-registerPlugin("DomResizeObserver", DomResizeObserver, {
-  init: true
-});
+
 export default DomResizeObserver;

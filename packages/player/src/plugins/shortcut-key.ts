@@ -109,8 +109,4 @@ class ShortcutKey implements PluginApi {
   }
 }
 
-registerPlugin("ShortcutKey", ShortcutKey, {
-  init: true
-});
-
 export default ShortcutKey;
