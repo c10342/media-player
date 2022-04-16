@@ -14,7 +14,9 @@ class ShortcutKey implements PluginApi {
   constructor(player: Player) {
     this.player = player;
     // 初始化事件监听
-    this.initListener();
+    this.player.ready(() => {
+      this.initListener();
+    });
   }
 
   private initListener() {
