@@ -19,7 +19,7 @@ import { registerPlugin, removePlugin, getPlugin } from "./global-api/plugin";
 import LayoutTpl from "./templates/layout";
 
 import { PlayerEvents } from "./config/event";
-import defaultOptions from "./config/default-config";
+import defaultOptions from "./config/defaults";
 import mergeConfig from "./utils/merge-config";
 import initLocale from "./locale";
 import { initComponents, initPlugins } from "./utils/helper";
