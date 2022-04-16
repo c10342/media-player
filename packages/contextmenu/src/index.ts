@@ -1,4 +1,4 @@
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 import {
   EventManager,
   isArray,
@@ -7,68 +7,68 @@ import {
   getViewPortInfo,
   updateStyle
 } from "@lin-media/utils";
-import { pluginName } from "./config/constant";
 import { ContextmenuOptions, MenuItem } from "./types";
 import menuListTpl from "./template/menu-list";
 
 import "./style/index.scss";
+import { ComponentApi } from "@lin-media/player";
 
-class Contextmenu {
-  static pluginName = pluginName;
-  private _playerInstance: MediaPlayer;
-  private _options: ContextmenuOptions;
-  private _eventManager = new EventManager();
-  private _el: HTMLElement;
-  private _wrapperElement: HTMLElement | null;
-  constructor(playerInstance: MediaPlayer, el: HTMLElement) {
-    this._el = el;
-    this._playerInstance = playerInstance;
-    const options = playerInstance.$options[pluginName] ?? {};
-    this._options = { ...options };
-    const menuList = this._options.menuList;
+class Contextmenu implements ComponentApi {
+  private player: Player;
+  private options: ContextmenuOptions;
+  private eventManager = new EventManager();
+  private slotElement: HTMLElement;
+  private wrapperElement: HTMLElement | null;
+  constructor(
+    player: Player,
+    slotElement: HTMLElement,
+    options: ContextmenuOptions = { menuList: [] }
+  ) {
+    this.slotElement = slotElement;
+    this.player = player;
+    this.options = options;
+    const menuList = this.options.menuList;
     if (isArray(menuList) && menuList.length > 0) {
-      this._createElement();
-      this._initListener();
+      this.createElement();
+      this.initListener();
     }
   }
 
-  private _initListener() {
-    this._eventManager.addEventListener({
+  private initListener() {
+    this.eventManager.addEventListener({
       element: document,
       eventName: "click",
-      handler: this._onDocumentClick.bind(this)
+      handler: this.onDocumentClick.bind(this)
     });
-    this._eventManager.addEventListener({
+    this.eventManager.addEventListener({
       element: document,
       eventName: "contextmenu",
-      handler: this._onContextmenu.bind(this)
+      handler: this.onContextmenu.bind(this)
     });
-    this._eventManager.addEventListener({
-      element: this._el.querySelector(".player-video-mask") as HTMLElement,
+    this.eventManager.addEventListener({
+      element: this.slotElement.querySelector(
+        ".player-video-mask"
+      ) as HTMLElement,
       eventName: "click",
-      handler: this._onDocumentClick.bind(this)
+      handler: this.onDocumentClick.bind(this)
     });
-    this._eventManager.addEventListener({
-      element: this._wrapperElement,
+    this.eventManager.addEventListener({
+      element: this.wrapperElement,
       eventName: "click",
-      handler: this._onMenuClick.bind(this)
+      handler: this.onMenuClick.bind(this)
     });
-    this._eventManager.addEventListener({
+    this.eventManager.addEventListener({
       element: window,
       eventName: "scroll",
-      handler: this._hideMenu.bind(this)
+      handler: this.hideMenu.bind(this)
     });
-    this._playerInstance.$on(
-      MediaPlayer.PlayerEvents.DESTROY,
-      this._destroy.bind(this)
-    );
   }
 
-  private _onMenuClick(event: MouseEvent) {
+  private onMenuClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     const dataset = target.dataset;
     if (dataset) {
-      const menuList = this._options.menuList as any;
+      const menuList = this.options.menuList as any;
       let menuItem = null;
 
       if (dataset.parent && dataset.index) {
@@ -77,74 +77,74 @@ class Contextmenu {
         menuItem = menuList[dataset.index];
       }
       if (menuItem) {
-        this._handelMenuItemClick(menuItem);
+        this.handelMenuItemClick(menuItem);
       }
     }
   }
 
-  private _handelMenuItemClick(menuItem: MenuItem) {
+  private handelMenuItemClick(menuItem: MenuItem) {
     if (isFunction(menuItem.callback)) {
-      menuItem.callback(menuItem);
+      menuItem.callback.apply(this.player, [menuItem]);
     }
     if (isString(menuItem.eventName)) {
-      this._playerInstance.$emit(menuItem.eventName, menuItem);
+      this.player.$emit(menuItem.eventName, menuItem);
     }
-    this._hideMenu();
+    this.hideMenu();
   }
 
-  private _onDocumentClick(event: MouseEvent) {
+  private onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (!this._wrapperElement?.contains(target)) {
-      this._hideMenu();
+    if (!this.wrapperElement?.contains(target)) {
+      this.hideMenu();
     }
   }
 
-  private _createElement() {
+  private createElement() {
     const div = document.createElement("div");
     div.className = "contextmenu-container";
     div.innerHTML = menuListTpl({
-      ...this._options
+      ...this.options
     });
-    if (this._options.menuItemWidth) {
+    if (this.options.menuItemWidth) {
       updateStyle(div, {
-        width: this._options.menuItemWidth
+        width: this.options.menuItemWidth
       });
     }
-    this._el.appendChild(div);
-    this._wrapperElement = div;
+    this.slotElement.appendChild(div);
+    this.wrapperElement = div;
   }
 
-  private _onContextmenu(event: MouseEvent) {
+  private onContextmenu(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (!this._el.contains(target)) {
-      this._hideMenu();
+    if (!this.slotElement.contains(target)) {
+      this.hideMenu();
       return;
     }
     event.preventDefault();
     event.stopPropagation();
-    this._showMenu();
-    this._adjustPosition(event);
+    this.showMenu();
+    this.adjustPosition(event);
   }
 
-  private _showMenu() {
-    updateStyle(this._wrapperElement, {
+  private showMenu() {
+    updateStyle(this.wrapperElement, {
       display: "block"
     });
   }
-  private _hideMenu() {
-    updateStyle(this._wrapperElement, {
+  private hideMenu() {
+    updateStyle(this.wrapperElement, {
       display: ""
     });
   }
 
-  private _adjustPosition(event: MouseEvent) {
-    if (!this._wrapperElement) {
+  private adjustPosition(event: MouseEvent) {
+    if (!this.wrapperElement) {
       return;
     }
     let y = event.clientY;
     let x = event.clientX;
-    const scrollWidth = this._wrapperElement.scrollWidth;
-    const scrollHeight = this._wrapperElement.scrollHeight;
+    const scrollWidth = this.wrapperElement.scrollWidth;
+    const scrollHeight = this.wrapperElement.scrollHeight;
     const viewPortInfo = getViewPortInfo();
     if (
       scrollHeight > viewPortInfo.clientHeight - event.clientY &&
@@ -158,14 +158,14 @@ class Contextmenu {
     ) {
       x = event.clientX - scrollWidth;
     }
-    updateStyle(this._wrapperElement, {
+    updateStyle(this.wrapperElement, {
       top: `${y}px`,
       left: `${x}px`
     });
   }
 
-  private _destroy() {
-    this._eventManager.removeEventListener();
+  destroy() {
+    this.eventManager.removeEventListener();
   }
 }
 
