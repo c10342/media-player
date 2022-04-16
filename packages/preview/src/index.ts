@@ -9,114 +9,103 @@ import {
   updateStyle
 } from "@lin-media/utils";
 import { PreviewList, PreviewOptions } from "./types";
-import MediaPlayer from "@lin-media/player";
+import Player, { ComponentApi } from "@lin-media/player";
 import { PreviewEvents } from "./config/event";
-import { barViewImageWidth, pluginName } from "./config/constant";
+import { barViewImageWidth } from "./config/constant";
 
 const defaultOptions = {
   barPreview: false
 };
 
-class Preview {
+class Preview implements ComponentApi {
   // 自定义事件
   static customEvents = PreviewEvents;
-  // 插件名称.
-  static pluginName = pluginName;
   // 播放器的dom
-  private _el: HTMLElement;
+  private slotElement: HTMLElement;
   // 播放器实例
-  private _playerInstance: MediaPlayer;
+  private player: Player;
   // 是否正在加载标志位
-  private _load = true;
+  private load = true;
   // 预览点的dom元素
-  private _element: HTMLElement | null;
+  private element: HTMLElement | null;
   // 事件管理器
-  private _eventManager = new EventManager();
+  private eventManager = new EventManager();
   // 参数
-  private _options: PreviewOptions;
+  private options: PreviewOptions;
   // 进度条预览图片元素
-  private _barViewElement: HTMLElement | null;
+  private barViewElement: HTMLElement | null;
   // 进度条容器
-  private _progressElement: HTMLElement | null;
+  private progressElement: HTMLElement | null;
 
-  constructor(playerInstance: MediaPlayer, el: HTMLElement) {
+  constructor(player: Player, el: HTMLElement, options: PreviewOptions = {}) {
     // 保存一下播放器给来的参数
-    this._el = el;
-    this._playerInstance = playerInstance;
+    this.slotElement = el;
+    this.player = player;
     // 参数
-    const options = playerInstance.$options[pluginName] ?? {};
-    this._options = { ...defaultOptions, ...options };
+    this.options = { ...defaultOptions, ...options };
     // 开始初始化
-    this._initList();
-    this._initInstanceListener();
+    this.initList();
     // 挂载方法给外部使用
-    this._initMethods();
+    this.initMethods();
   }
 
   private get duration() {
-    return this._playerInstance.duration || 0;
+    return this.player.duration || 0;
   }
 
-  private _initMethods() {
-    Object.defineProperty(this._playerInstance, "preview", {
+  private initMethods() {
+    Object.defineProperty(this.player, "preview", {
       get: () => {
         return {
           // 设置预览点列表
           setPreview: (list: PreviewList) => {
-            this._setPreview(list);
+            this.setPreview(list);
           },
           // 销毁预览点列表
           destroyPreview: () => {
-            this._destroyPreview();
+            this.destroyPreview();
           },
           // 设置进度条预览
           setBarView: (barPreviewUrl: string) => {
-            this._setBarView(barPreviewUrl);
+            this.setBarView(barPreviewUrl);
           },
           // 销毁进度条预览
           destroyBarView: () => {
-            this._destroyBarView();
+            this.destroyBarView();
           }
         };
       }
     });
   }
 
-  private _initInstanceListener() {
-    // 销毁
-    this._playerInstance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
-      this._destroyPreview();
-      this._destroyBarView();
-    });
-  }
   // 初始化
-  private _initList() {
+  private initList() {
     // 预览点需要获取总时长，计算出预览点的位置
     if (this.duration && this.duration > 0) {
       // 总时长存在并且大于0，说明视频已经加载好了
-      this._load = true;
-      this._initElement();
-      this._initBarView();
+      this.load = true;
+      this.initElement();
+      this.initBarView();
     } else {
       // 获取不到总时长说明视频没有加载完成，需要等待加载完成在执行下一步操作
-      this._playerInstance.$once(MediaPlayer.VideoEvents.LOADEDMETADATA, () => {
-        this._load = true;
-        this._initElement();
-        this._initBarView();
+      this.player.$once(Player.Events.LOADEDMETADATA, () => {
+        this.load = true;
+        this.initElement();
+        this.initBarView();
       });
     }
   }
 
-  private _initElement() {
-    const previewList = this._options.list;
-    if (!this._load || !isArray(previewList) || previewList.length === 0) {
+  private initElement() {
+    const previewList = this.options.list;
+    if (!this.load || !isArray(previewList) || previewList.length === 0) {
       // 视频没加载完成或者预览点列表为空不做任何操作
       return;
     }
     // 为防止重复设置,每次设置需要销毁上一次的
-    this._removePreviewElementAndListener();
+    this.removePreviewElementAndListener();
     // 找到进度条的dom元素
-    const progressBar = this._el.querySelector(".player-process-mask");
+    const progressBar = this.slotElement.querySelector(".player-process-mask");
     // 开始渲染预览点列表
     const div = document.createElement("div");
     div.innerHTML = pointListTpl({
@@ -125,26 +114,26 @@ class Preview {
       duration: this.duration
     });
     // 保存渲染出来的预览点元素
-    this._element = div;
+    this.element = div;
     // 插入到进度条中
     progressBar?.appendChild(div);
     // 事件监听
-    this._initListener();
+    this.initListener();
     // 调整位置，有些在最右边或者最左边的可能会被隐藏掉
-    this._adjustPosition();
+    this.adjustPosition();
   }
   // 调整位置
-  private _adjustPosition() {
-    const imageListElement = this._element?.querySelectorAll(".preview-image");
-    const { left, right } = getBoundingClientRect(this._el);
+  private adjustPosition() {
+    const imageListElement = this.element?.querySelectorAll(".preview-image");
+    const { left, right } = getBoundingClientRect(this.slotElement);
     if (!isUndef(imageListElement)) {
-      this._adjustLeft(imageListElement, left);
-      this._adjustRight(imageListElement, right);
+      this.adjustLeft(imageListElement, left);
+      this.adjustRight(imageListElement, right);
     }
   }
 
   // 调整左边的距离
-  private _adjustLeft(imageListElement: NodeListOf<Element>, left: number) {
+  private adjustLeft(imageListElement: NodeListOf<Element>, left: number) {
     const length = imageListElement.length;
     for (let i = 0; i < length; i++) {
       const element = imageListElement[i] as HTMLElement;
@@ -166,7 +155,7 @@ class Preview {
   }
 
   // 调整右边距离
-  private _adjustRight(imageListElement: NodeListOf<Element>, right: number) {
+  private adjustRight(imageListElement: NodeListOf<Element>, right: number) {
     const length = imageListElement.length;
     for (let i = length - 1; i >= 0; i--) {
       const element = imageListElement[i] as HTMLElement;
@@ -186,10 +175,10 @@ class Preview {
     }
   }
 
-  private _initListener() {
+  private initListener() {
     // 事件委托，不要去监听单个元素的
-    this._eventManager?.addEventListener({
-      element: this._element,
+    this.eventManager?.addEventListener({
+      element: this.element,
       eventName: "click",
       handler: this._onClick.bind(this)
     });
@@ -200,29 +189,29 @@ class Preview {
     const dataset = target.dataset;
     if (dataset && dataset.index) {
       // 点击的是预览点
-      const previewList = this._options.list as PreviewList;
+      const previewList = this.options.list as PreviewList;
       const item = previewList[dataset.index as any];
       // 发射自定义事件
-      this._playerInstance.$emit(PreviewEvents.PREVIEWCLICK, item);
+      this.player.$emit(PreviewEvents.PREVIEWCLICK, item);
     }
   }
 
   // 初始化进度条的图片预览
-  private _initBarView() {
-    const barPreviewUrl = this._options.barPreviewUrl;
+  private initBarView() {
+    const barPreviewUrl = this.options.barPreviewUrl;
     if (!isUndef(barPreviewUrl)) {
       // 创建一个div出来，图片使用背景图
-      const div = this._createBarViewWrapper();
+      const div = this.createBarViewWrapper();
       // 找到进度条容器
-      this._progressElement = this._el.querySelector(
+      this.progressElement = this.slotElement.querySelector(
         ".player-process-content"
       ) as HTMLElement;
       // 插入到容器中
-      this._progressElement?.appendChild(div);
-      this._barViewElement = div;
+      this.progressElement?.appendChild(div);
+      this.barViewElement = div;
       // 监听移动事件
-      this._eventManager?.addEventListener({
-        element: this._progressElement,
+      this.eventManager?.addEventListener({
+        element: this.progressElement,
         eventName: "mousemove",
         handler: this.onMousemove.bind(this)
       });
@@ -230,15 +219,17 @@ class Preview {
   }
 
   // 创建一个进度条预览的div出来
-  private _createBarViewWrapper() {
-    const videoElement = this._playerInstance.videoElement;
+  private createBarViewWrapper() {
+    const videoElement = this.slotElement.querySelector(
+      ".player-video"
+    ) as HTMLVideoElement;
     const height =
       (videoElement!.videoHeight / videoElement!.videoWidth) *
       barViewImageWidth;
     const div = document.createElement("div");
     div.className = "preview-bar-image";
     updateStyle(div, {
-      backgroundImage: `url("${this._options.barPreviewUrl}")`,
+      backgroundImage: `url("${this.options.barPreviewUrl}")`,
       width: `${barViewImageWidth}px`,
       height: `${height}px`
     });
@@ -247,9 +238,9 @@ class Preview {
 
   // 鼠标移动事件
   private onMousemove(event: MouseEvent) {
-    if (!isUndef(this._barViewElement) && !isUndef(this._progressElement)) {
-      const progressInfo = getBoundingClientRect(this._progressElement);
-      const containerInfo = getBoundingClientRect(this._el);
+    if (!isUndef(this.barViewElement) && !isUndef(this.progressElement)) {
+      const progressInfo = getBoundingClientRect(this.progressElement);
+      const containerInfo = getBoundingClientRect(this.slotElement);
       // 鼠标距离左边最小的距离
       const minLeft = barViewImageWidth / 2;
       // 鼠标距离最左边的最大距离
@@ -261,7 +252,7 @@ class Preview {
         (checkData(left, 0, progressInfo.width) / progressInfo.width) *
           this.duration
       );
-      updateStyle(this._barViewElement, {
+      updateStyle(this.barViewElement, {
         // 设置图片的位置
         left: `${checkData(left, minLeft, maxLeft) - minLeft}px`,
         // 改变背景图的位置
@@ -270,44 +261,48 @@ class Preview {
     }
   }
 
-  private _removeBarViewElementAndListener() {
-    this._eventManager?.removeElementEventListener(this._progressElement);
-    if (this._barViewElement) {
-      this._barViewElement.parentNode?.removeChild(this._barViewElement);
-      this._barViewElement = null;
+  private removeBarViewElementAndListener() {
+    this.eventManager?.removeElementEventListener(this.progressElement);
+    if (this.barViewElement) {
+      this.barViewElement.parentNode?.removeChild(this.barViewElement);
+      this.barViewElement = null;
     }
   }
 
-  private _removePreviewElementAndListener() {
-    this._eventManager?.removeElementEventListener(this._element);
-    if (this._element) {
-      this._element.parentNode?.removeChild(this._element);
-      this._element = null;
+  private removePreviewElementAndListener() {
+    this.eventManager?.removeElementEventListener(this.element);
+    if (this.element) {
+      this.element.parentNode?.removeChild(this.element);
+      this.element = null;
     }
   }
 
   // 设置进度条预览
-  private _setBarView(barPreviewUrl: string) {
-    this._options.barPreviewUrl = barPreviewUrl;
-    this._initBarView();
+  private setBarView(barPreviewUrl: string) {
+    this.options.barPreviewUrl = barPreviewUrl;
+    this.initBarView();
   }
 
   // 销毁进度条预览
-  private _destroyBarView() {
-    this._options.barPreviewUrl = undefined;
-    this._removeBarViewElementAndListener();
+  private destroyBarView() {
+    this.options.barPreviewUrl = undefined;
+    this.removeBarViewElementAndListener();
   }
 
   // 设置预览点列表
-  private _setPreview(list: PreviewList) {
-    this._options.list = list;
-    this._initElement();
+  private setPreview(list: PreviewList) {
+    this.options.list = list;
+    this.initElement();
   }
 
   // 销毁预览点列表
-  private _destroyPreview() {
-    this._options.list = [];
-    this._removePreviewElementAndListener();
+  private destroyPreview() {
+    this.options.list = [];
+    this.removePreviewElementAndListener();
+  }
+  destroy() {
+    this.destroyPreview();
+    this.destroyBarView();
   }
 }
 
