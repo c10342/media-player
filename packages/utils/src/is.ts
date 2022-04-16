@@ -42,3 +42,7 @@ export function isMobile() {
   const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
   return isAndroid || isiOS;
 }
+
+export function isKeyInObject(key: string, object: Object) {
+  return key in object;
+}
