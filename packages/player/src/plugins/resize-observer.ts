@@ -2,7 +2,7 @@ import { debounce, isUndef } from "@lin-media/utils";
 import { PlayerEvents } from "../config/event";
 import { registerPlugin } from "../global-api/plugin";
 import Player from "../player";
-import { PluginApi } from "../types";
+import { PluginApi } from "../types/plugin";
 
 class DomResizeObserver implements PluginApi {
   private player: Player;

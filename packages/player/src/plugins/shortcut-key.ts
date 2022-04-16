@@ -3,7 +3,7 @@ import { CanFocusTagEnum, KeyCodeEnum } from "../config/enum";
 import { PlayerEvents } from "../config/event";
 import { registerPlugin } from "../global-api/plugin";
 import Player from "../player";
-import { PluginApi } from "../types";
+import { PluginApi } from "../types/plugin";
 
 class ShortcutKey implements PluginApi {
   // 播放器实例

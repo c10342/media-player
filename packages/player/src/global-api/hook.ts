@@ -1,5 +1,6 @@
 import { logWarn } from "@lin-media/utils";
-import { HookCallback, HooksMap, HookType, PlayerOptions } from "../types";
+import { HookCallback, HooksMap, HookType } from "../types/hook";
+import { PlayerConfig } from "../types/player";
 
 const hooksMap: HooksMap = {
   beforeSetup: [],
@@ -42,7 +43,7 @@ export function registerHookOnce(hook: HookType, callback: HookCallback) {
   if (!keyInMap(hook)) {
     return;
   }
-  const fn = (data: PlayerOptions) => {
+  const fn = (data: PlayerConfig) => {
     const result = callback(data);
     removeHook(hook, fn);
     return result;

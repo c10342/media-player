@@ -1,10 +1,10 @@
 import { logWarn } from "@lin-media/utils";
+import { ClassType } from "../types";
 import {
-  ClassType,
   ComponentApi,
   ComponentItem,
   DefaultComponentOptions
-} from "../types";
+} from "../types/component";
 
 const defaults: DefaultComponentOptions = {
   level: 0

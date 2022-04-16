@@ -1,10 +1,6 @@
 import { logWarn } from "@lin-media/utils";
-import {
-  PluginItem,
-  ClassType,
-  PluginApi,
-  DefaultPluginOptions
-} from "../types";
+import { ClassType } from "../types";
+import { DefaultPluginOptions, PluginApi, PluginItem } from "../types/plugin";
 
 const pluginArray: Array<PluginItem> = [];
 

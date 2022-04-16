@@ -1,7 +1,7 @@
-import { VideoListParams } from "../types";
+import { SourceItem } from "../types/player";
 
 interface Params {
-  source: VideoListParams;
+  source: SourceItem[];
 }
 
 function getListHtml({ source }: Params) {
