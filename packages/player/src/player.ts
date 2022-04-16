@@ -18,7 +18,7 @@ import { registerPlugin, removePlugin, getPlugin } from "./global-api/plugin";
 
 import LayoutTpl from "./templates/layout";
 
-import { PlayerEvents } from "./config/event";
+import { PlayerEvents, VideoEvents } from "./config/event";
 import defaultOptions from "./config/defaults";
 import mergeConfig from "./utils/merge-config";
 import initLocale from "./locale";
@@ -36,6 +36,10 @@ import { PlayerConfig } from "./types/player";
 const cmp = createComponent();
 
 class Player extends EventEmit {
+  static Events = {
+    ...PlayerEvents,
+    ...VideoEvents
+  };
   // 全局配置
   static defaults = defaultOptions;
   //   设置中英文，zh/en
