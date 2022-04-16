@@ -1,5 +1,6 @@
 import { logWarn } from "@lin-media/utils";
-import { ClassType, TechsMap } from "../types";
+import { ClassType } from "../types";
+import { TechsMap } from "../types/tech";
 
 const techsMap: TechsMap = {};
 
