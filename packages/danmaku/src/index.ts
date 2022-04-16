@@ -5,8 +5,7 @@ import { DanmakuOptions, PushData } from "./types";
 import settingTpl from "./template/setting";
 import "./style/index.scss";
 import initLocale from "./locale";
-import MediaPlayer from "@lin-media/player";
-import { pluginName } from "./config/constant";
+import Player, { ComponentApi } from "@lin-media/player";
 
 interface DataInfo {
   offsetX: number;
@@ -15,136 +14,138 @@ interface DataInfo {
   percentY: number;
 }
 
-class Danmaku {
-  static pluginName = pluginName;
-
+class Danmaku implements ComponentApi {
   private options: DanmakuOptions;
   // 播放器的dom
-  private _el: HTMLElement;
+  private slotElement: HTMLElement;
   // 播放器实例
-  private _playerInstance: MediaPlayer;
-  private _eventManager = new EventManager();
+  private player: Player;
+  private eventManager = new EventManager();
   // 弹幕类
-  private _bulletChat: BulletChat | null;
+  private bulletChat: BulletChat | null;
   // 弹幕容器
-  private _danmakuWrapperElement: HTMLElement;
+  private danmakuWrapperElement: HTMLElement;
   // 弹幕设置容器
-  private _settingWrapperElement: HTMLElement;
+  private settingWrapperElement: HTMLElement;
   // 透明度进度条容器
-  private _opacityWrapperElement: HTMLElement;
+  private opacityWrapperElement: HTMLElement;
   // 透明度进度条
-  private _opacityProgressElement: HTMLElement;
+  private opacityProgressElement: HTMLElement;
   // 透明度小球
-  private _opacityBallElement: HTMLElement;
+  private opacityBallElement: HTMLElement;
   // 透明度小球
-  private _opacityDragInstance: Drag | null;
+  private opacityDragInstance: Drag | null;
 
   // 弹幕速度相关
-  private _speedWrapperElement: HTMLElement;
-  private _speedProgressElement: HTMLElement;
-  private _speedBallElement: HTMLElement;
-  private _speedDragInstance: Drag | null;
+  private speedWrapperElement: HTMLElement;
+  private speedProgressElement: HTMLElement;
+  private speedBallElement: HTMLElement;
+  private speedDragInstance: Drag | null;
 
   // 显示或者隐藏弹幕相关
-  private _showLabelElement: HTMLElement;
-  private _isShowDanmaku = true;
+  private showLabelElement: HTMLElement;
+  private isShowDanmaku = true;
 
   // 暂停或者显示弹幕相关
-  private _pauseLabelElement: HTMLElement;
-  private _isPauseDanmaku = false;
+  private pauseLabelElement: HTMLElement;
+  private isPauseDanmaku = false;
 
   // 弹幕显示区域相关
-  private _danmakuAreaWrapperElement: HTMLElement;
-  private _danmakuAreaPosition = DanmakuAreaEnum.all;
+  private danmakuAreaWrapperElement: HTMLElement;
+  private danmakuAreaPosition = DanmakuAreaEnum.all;
 
-  private _i18n = initLocale();
+  private i18n = initLocale();
 
-  constructor(playerInstance: MediaPlayer, el: HTMLElement) {
-    this._el = el;
-    this._playerInstance = playerInstance;
-    const options = playerInstance.$options[pluginName] ?? {};
+  constructor(
+    player: Player,
+    slotElement: HTMLElement,
+    options: DanmakuOptions = {}
+  ) {
+    this.slotElement = slotElement;
+    this.player = player;
     this.options = options;
     // 初始化语言
-    this._initLang();
+    this.initLang();
     // 生成dom元素
-    this._initElement();
+    this.initElement();
     // 获取相关元素
-    this._initHTMLElement();
+    this.initHTMLElement();
     // 初始化弹幕
-    this._initDanmaku();
+    this.initDanmaku();
     // 初始化弹幕透明度
-    this._initOpacitySetting();
+    this.initOpacitySetting();
     // 初始化弹幕速度
-    this._initSpeedSetting();
+    this.initSpeedSetting();
     // 初始化监听
-    this._initListener();
+    this.initListener();
     // 挂载方法给外部用
-    this._initMethods();
+    this.initMethods();
   }
 
-  private _initMethods() {
-    Object.defineProperty(this._playerInstance, "danmaku", {
+  private initMethods() {
+    Object.defineProperty(this.player, "danmaku", {
       get: () => {
         return {
           // 发送弹幕
           send: (data: string | PushData | Array<PushData>) => {
-            this._bulletChat?.add(data);
+            this.bulletChat?.add(data);
           },
           // 开始弹幕
           play: () => {
-            this._bulletChat?.play();
-            this._isPauseDanmaku = false;
-            this._switchPlayOrPause();
+            this.bulletChat?.play();
+            this.isPauseDanmaku = false;
+            this.switchPlayOrPause();
           },
           // 暂停弹幕
           pause: () => {
-            this._bulletChat?.pause();
-            this._isPauseDanmaku = true;
-            this._switchPlayOrPause();
+            this.bulletChat?.pause();
+            this.isPauseDanmaku = true;
+            this.switchPlayOrPause();
           },
           // 容器发生变化
           resize: () => {
-            this._bulletChat?.resize();
+            this.bulletChat?.resize();
           },
           // 清屏
           clearScreen: () => {
-            this._bulletChat?.clearScreen();
+            this.bulletChat?.clearScreen();
           },
           // 设置速度
           setSpeed: (percent: number) => {
-            this._bulletChat?.setSpeed(percent);
+            this.bulletChat?.setSpeed(percent);
           },
           // 关闭弹幕
           close: () => {
-            this._bulletChat?.close();
-            this._isShowDanmaku = false;
-            this._switchShowOrHide();
+            this.bulletChat?.close();
+            this.isShowDanmaku = false;
+            this.switchShowOrHide();
           },
           // 打开弹幕
           open: () => {
-            this._bulletChat?.open();
-            this._isShowDanmaku = true;
-            this._switchShowOrHide();
+            this.bulletChat?.open();
+            this.isShowDanmaku = true;
+            this.switchShowOrHide();
           }
         };
       }
     });
   }
 
-  private _initLang() {
+  private initLang() {
     // 先设置中英文
-    const options = this._playerInstance.$options;
-    this._i18n.setLang(options.lang);
+    const options = this.player.options;
+    this.i18n.setLang(options.lang);
     // 最后才设置自定义语言包，否则i18n.setLang会覆盖掉自定义语言包
-    this._i18n.use(options.customLanguage?.Danmaku);
+    this.i18n.use(options.customLanguage?.Danmaku);
   }
 
-  private _initElement() {
+  private initElement() {
     const danmuDiv = document.createElement("div");
     danmuDiv.className = "danmaku-container danmaku-container-all";
-    this._el.appendChild(danmuDiv);
-    this._danmakuWrapperElement = danmuDiv;
-    const i18n = this._i18n;
+
+    this.player.rootElement.appendChild(danmuDiv);
+    this.danmakuWrapperElement = danmuDiv;
+    const i18n = this.i18n;
     const settingDiv = document.createElement("div");
     settingDiv.className = "danmaku-setting-container";
     settingDiv.innerHTML = settingTpl({
@@ -191,152 +192,147 @@ class Danmaku {
       ],
       showArea: i18n.t("showArea")
     });
-    const parentNode = this._el.querySelector(
+    const parentElement = this.slotElement.querySelector(
       ".player-controls-right"
     ) as HTMLElement;
-    parentNode.insertBefore(settingDiv, parentNode?.firstElementChild);
-    this._settingWrapperElement = settingDiv;
+    parentElement.insertBefore(settingDiv, parentElement?.firstElementChild);
+    this.settingWrapperElement = settingDiv;
   }
 
-  private _initDanmaku() {
-    this._bulletChat = new BulletChat({
+  private initDanmaku() {
+    this.bulletChat = new BulletChat({
       ...this.options,
-      container: this._danmakuWrapperElement
+      container: this.danmakuWrapperElement
     });
   }
 
-  private _initListener() {
-    this._playerInstance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
-      this._destroy();
+  private initListener() {
+    this.player.$on(Player.Events.RESIZE, () => {
+      this.bulletChat?.resize();
     });
-    this._playerInstance.$on(MediaPlayer.PlayerEvents.RESIZE, () => {
-      this._bulletChat?.resize();
-    });
-    this._eventManager?.addEventListener({
-      element: this._showLabelElement,
+    this.eventManager?.addEventListener({
+      element: this.showLabelElement,
       eventName: "click",
-      handler: this._onShowOrHideChange.bind(this)
+      handler: this.onShowOrHideChange.bind(this)
     });
-    this._eventManager?.addEventListener({
-      element: this._pauseLabelElement,
+    this.eventManager?.addEventListener({
+      element: this.pauseLabelElement,
       eventName: "click",
-      handler: this._onPlayOrPauseChange.bind(this)
+      handler: this.onPlayOrPauseChange.bind(this)
     });
-    this._eventManager?.addEventListener({
-      element: this._danmakuAreaWrapperElement,
+    this.eventManager?.addEventListener({
+      element: this.danmakuAreaWrapperElement,
       eventName: "click",
-      handler: this._onAreaClick.bind(this)
+      handler: this.onAreaClick.bind(this)
     });
   }
 
-  private _getSettingElement(selector: string) {
-    return this._settingWrapperElement.querySelector(selector) as HTMLElement;
+  private getSettingElement(selector: string) {
+    return this.settingWrapperElement.querySelector(selector) as HTMLElement;
   }
 
-  private _initHTMLElement() {
-    this._opacityWrapperElement = this._getSettingElement(
+  private initHTMLElement() {
+    this.opacityWrapperElement = this.getSettingElement(
       ".danmu-opacity-wrapper"
     );
-    this._opacityProgressElement = this._getSettingElement(
+    this.opacityProgressElement = this.getSettingElement(
       ".danmu-opacity-progress"
     );
-    this._opacityBallElement = this._getSettingElement(".danmu-opacity-ball");
-    this._showLabelElement = this._getSettingElement(".danmaku-show-label");
-    this._pauseLabelElement = this._getSettingElement(".danmaku-pause-label");
-    this._danmakuAreaWrapperElement = this._getSettingElement(".danmaku-area");
+    this.opacityBallElement = this.getSettingElement(".danmu-opacity-ball");
+    this.showLabelElement = this.getSettingElement(".danmaku-show-label");
+    this.pauseLabelElement = this.getSettingElement(".danmaku-pause-label");
+    this.danmakuAreaWrapperElement = this.getSettingElement(".danmaku-area");
 
-    this._speedWrapperElement = this._getSettingElement(".danmu-speed-wrapper");
-    this._speedProgressElement = this._getSettingElement(
-      ".danmu-speed-progress"
-    );
-    this._speedBallElement = this._getSettingElement(".danmu-speed-ball");
+    this.speedWrapperElement = this.getSettingElement(".danmu-speed-wrapper");
+    this.speedProgressElement = this.getSettingElement(".danmu-speed-progress");
+    this.speedBallElement = this.getSettingElement(".danmu-speed-ball");
   }
 
-  private _initOpacitySetting() {
-    this._opacityDragInstance = new Drag({
-      wrapperElement: this._opacityWrapperElement,
-      dragElement: this._opacityBallElement
+  private initOpacitySetting() {
+    this.opacityDragInstance = new Drag({
+      wrapperElement: this.opacityWrapperElement,
+      dragElement: this.opacityBallElement
     });
-    this._opacityDragInstance.$on("mousemove", this._setOpacity.bind(this));
-    this._opacityDragInstance.$on("click", this._setOpacity.bind(this));
+    this.opacityDragInstance.$on("mousemove", this.setOpacity.bind(this));
+    this.opacityDragInstance.$on("click", this.setOpacity.bind(this));
   }
 
-  private _initSpeedSetting() {
-    this._speedDragInstance = new Drag({
-      wrapperElement: this._speedWrapperElement,
-      dragElement: this._speedBallElement
+  private initSpeedSetting() {
+    this.speedDragInstance = new Drag({
+      wrapperElement: this.speedWrapperElement,
+      dragElement: this.speedBallElement
     });
-    updateStyle(this._speedProgressElement, {
+    updateStyle(this.speedProgressElement, {
       width: "50%"
     });
-    this._speedDragInstance.$on("mousemove", (event: DataInfo) => {
-      updateStyle(this._speedProgressElement, {
+    this.speedDragInstance.$on("mousemove", (event: DataInfo) => {
+      updateStyle(this.speedProgressElement, {
         width: `${event.percentX * 100}%`
       });
     });
-    this._speedDragInstance.$on("mouseup", this._setSpeed.bind(this));
-    this._speedDragInstance.$on("click", this._setSpeed.bind(this));
+    this.speedDragInstance.$on("mouseup", this.setSpeed.bind(this));
+    this.speedDragInstance.$on("click", this.setSpeed.bind(this));
   }
 
-  private _setOpacity(event: DataInfo) {
-    updateStyle(this._opacityProgressElement, {
+  private setOpacity(event: DataInfo) {
+    updateStyle(this.opacityProgressElement, {
       width: `${event.percentX * 100}%`
     });
-    updateStyle(this._danmakuWrapperElement, {
+    updateStyle(this.danmakuWrapperElement, {
       opacity: `${event.percentX}`
     });
   }
 
-  private _setSpeed(event: DataInfo) {
-    updateStyle(this._speedProgressElement, {
+  private setSpeed(event: DataInfo) {
+    updateStyle(this.speedProgressElement, {
       width: `${event.percentX * 100}%`
     });
-    this._bulletChat?.setSpeed(event.percentX * 2);
+    this.bulletChat?.setSpeed(event.percentX * 2);
   }
 
-  private _onShowOrHideChange() {
-    this._isShowDanmaku = !this._isShowDanmaku;
-    this._switchShowOrHide();
+  private onShowOrHideChange() {
+    this.isShowDanmaku = !this.isShowDanmaku;
+    this.switchShowOrHide();
   }
 
-  private _onPlayOrPauseChange() {
-    this._isPauseDanmaku = !this._isPauseDanmaku;
-    this._switchPlayOrPause();
+  private onPlayOrPauseChange() {
+    this.isPauseDanmaku = !this.isPauseDanmaku;
+    this.switchPlayOrPause();
   }
 
   // 切换播放/暂停弹幕状态
-  private _switchPlayOrPause() {
-    if (this._isPauseDanmaku) {
-      this._pauseLabelElement.classList.remove(CheckboxClassNameEnum.close);
-      this._pauseLabelElement.classList.add(CheckboxClassNameEnum.open);
-      this._bulletChat?.pause();
+  private switchPlayOrPause() {
+    if (this.isPauseDanmaku) {
+      this.pauseLabelElement.classList.remove(CheckboxClassNameEnum.close);
+      this.pauseLabelElement.classList.add(CheckboxClassNameEnum.open);
+      this.bulletChat?.pause();
     } else {
-      this._pauseLabelElement.classList.remove(CheckboxClassNameEnum.open);
-      this._pauseLabelElement.classList.add(CheckboxClassNameEnum.close);
-      this._bulletChat?.play();
+      this.pauseLabelElement.classList.remove(CheckboxClassNameEnum.open);
+      this.pauseLabelElement.classList.add(CheckboxClassNameEnum.close);
+      this.bulletChat?.play();
     }
   }
 
   // 切换显示/隐藏弹幕状态
-  private _switchShowOrHide() {
-    if (this._isShowDanmaku) {
-      this._showLabelElement.classList.remove(CheckboxClassNameEnum.close);
-      this._showLabelElement.classList.add(CheckboxClassNameEnum.open);
-      this._bulletChat?.open();
+  private switchShowOrHide() {
+    if (this.isShowDanmaku) {
+      this.showLabelElement.classList.remove(CheckboxClassNameEnum.close);
+      this.showLabelElement.classList.add(CheckboxClassNameEnum.open);
+      this.bulletChat?.open();
     } else {
-      this._showLabelElement.classList.remove(CheckboxClassNameEnum.open);
-      this._showLabelElement.classList.add(CheckboxClassNameEnum.close);
-      this._bulletChat?.close();
+      this.showLabelElement.classList.remove(CheckboxClassNameEnum.open);
+      this.showLabelElement.classList.add(CheckboxClassNameEnum.close);
+      this.bulletChat?.close();
     }
   }
 
-  private _onAreaClick(event: MouseEvent) {
+  private onAreaClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     const dataset = target.dataset;
     if (
       dataset &&
       dataset.position &&
-      this._danmakuAreaPosition !== dataset.position
+      this.danmakuAreaPosition !== dataset.position
     ) {
       let className = "danmaku-container ";
       switch (dataset.position) {
@@ -350,16 +346,16 @@ class Danmaku {
           className += " danmaku-container-bottom";
           break;
       }
-      this._danmakuWrapperElement.className = className;
-      this._switchAreaActive(dataset.position);
-      this._danmakuAreaPosition = dataset.position as DanmakuAreaEnum;
-      this._bulletChat?.resize();
+      this.danmakuWrapperElement.className = className;
+      this.switchAreaActive(dataset.position);
+      this.danmakuAreaPosition = dataset.position as DanmakuAreaEnum;
+      this.bulletChat?.resize();
     }
   }
 
-  private _switchAreaActive(position: string) {
+  private switchAreaActive(position: string) {
     const list =
-      this._danmakuAreaWrapperElement.querySelectorAll(".danmaku-area-span");
+      this.danmakuAreaWrapperElement.querySelectorAll(".danmaku-area-span");
     const length = list.length;
     for (let i = 0; i < length; i++) {
       const element = list[i] as HTMLElement;
@@ -372,13 +368,13 @@ class Danmaku {
     }
   }
 
-  private _destroy() {
-    this._bulletChat?.destroy();
-    this._danmakuWrapperElement.remove();
-    this._settingWrapperElement.remove();
-    this._opacityDragInstance?.destroy();
-    this._bulletChat = null;
-    this._eventManager?.removeEventListener();
+  destroy() {
+    this.bulletChat?.destroy();
+    this.danmakuWrapperElement.remove();
+    this.settingWrapperElement.remove();
+    this.opacityDragInstance?.destroy();
+    this.bulletChat = null;
+    this.eventManager?.removeEventListener();
   }
 }
 
