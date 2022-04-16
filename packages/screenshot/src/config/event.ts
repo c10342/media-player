@@ -1,4 +1,4 @@
 // 截图插件事件
-export enum ScreenshotEvents {
+export enum Events {
   SCREENSHOT = "screenshot"
 }
