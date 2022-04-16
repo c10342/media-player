@@ -1,3 +1,3 @@
-import MediaPlayer from "./src/index";
+import MediaPlayer from "./src/player";
 
 export default MediaPlayer;
