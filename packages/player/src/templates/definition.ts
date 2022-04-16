@@ -1,14 +1,14 @@
 import { VideoListParams } from "../types";
 
 interface Params {
-  videoList: VideoListParams;
+  source: VideoListParams;
 }
 
-function getListHtml({ videoList }: Params) {
-  if (videoList.length > 1) {
+function getListHtml({ source }: Params) {
+  if (source.length > 1) {
     return `
         <ul class="player-label-list-wrapper player-definition-wrapper">
-        ${videoList
+        ${source
           .map((value, index) => {
             return `
             <li class="player-label-list-item player-definition-item" data-index="${index}">
