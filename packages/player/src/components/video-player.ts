@@ -9,7 +9,8 @@ import { forEachTech } from "../global-api/tech";
 import Player from "../player";
 import VideoTpl from "../templates/video";
 import VideoTagTpl from "../templates/video-tag";
-import { ComponentApi, VideoListItem } from "../types";
+import { ComponentApi } from "../types/component";
+import { SourceItem } from "../types/player";
 import { definePlayerMethods } from "../utils/helper";
 
 class VideoPlayer implements ComponentApi {
@@ -84,7 +85,7 @@ class VideoPlayer implements ComponentApi {
 
   private initESM(
     videoElement: HTMLVideoElement,
-    videoItem: VideoListItem | null
+    videoItem: SourceItem | null
   ) {
     if (!isUndef(videoItem)) {
       forEachTech((name, tech) => {

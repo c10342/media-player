@@ -9,7 +9,8 @@ import { VolumeButtonIconEnum } from "../config/enum";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import VolumeTpl from "../templates/volume";
-import { DragDataInfo, ComponentApi } from "../types";
+import { DragDataInfo } from "../types";
+import { ComponentApi } from "../types/component";
 
 class VideoVolume implements ComponentApi {
   static shouldInit() {

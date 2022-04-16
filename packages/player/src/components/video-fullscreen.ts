@@ -15,7 +15,7 @@ import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
 import { PlayerEvents } from "../config/event";
 import Player from "../player";
 import FullscreenTpl from "../templates/fullscreen";
-import { ComponentApi, FullscreenType } from "../types";
+import { ComponentApi, FullscreenType } from "../types/component";
 import { definePlayerMethods } from "../utils/helper";
 
 class VideoFullscreen implements ComponentApi {

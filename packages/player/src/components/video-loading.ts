@@ -4,7 +4,7 @@ import { VideoReadyStateEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import Player from "../player";
 import LoadingTpl from "../templates/loading";
-import { ComponentApi } from "../types";
+import { ComponentApi } from "../types/component";
 
 class VideoLoading implements ComponentApi {
   // 播放器实例

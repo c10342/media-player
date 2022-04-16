@@ -1,7 +1,7 @@
 import { EventManager, isMobile, parseHtmlToDom } from "@lin-media/utils";
 import Player from "../player";
 import MaskTpl from "../templates/mask";
-import { ComponentApi } from "../types";
+import { ComponentApi } from "../types/component";
 
 class VideoMask implements ComponentApi {
   // 播放器实例

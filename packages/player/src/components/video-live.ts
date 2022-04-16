@@ -1,7 +1,8 @@
 import { parseHtmlToDom } from "@lin-media/utils";
-import Player from "../index";
+import Player from "../player";
 import LiveTpl from "../templates/live";
-import { ComponentApi, PlayerConfig } from "../types";
+import { ComponentApi } from "../types/component";
+import { PlayerConfig } from "../types/player";
 class VideoLive implements ComponentApi {
   static shouldInit(options: PlayerConfig) {
     return options.live;
@@ -18,7 +19,7 @@ class VideoLive implements ComponentApi {
   private initDom(slotElement: HTMLElement) {
     const parentElement = slotElement.querySelector(".player-controls-left")!;
     const html = LiveTpl({
-      $t: this.player.$i18n.t
+      $t: this.player.i18n.t
     });
     parentElement.appendChild(parseHtmlToDom(html));
   }

@@ -3,7 +3,7 @@ import { PlayButtonIconEnum } from "../config/enum";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import PlayButtonTpl from "../templates/play-button";
-import { ComponentApi } from "../types";
+import { ComponentApi } from "../types/component";
 
 class VideoPlayButton implements ComponentApi {
   static shouldInit() {

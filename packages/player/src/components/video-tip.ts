@@ -1,7 +1,7 @@
 import { isUndef, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import Player from "../player";
 import TipTpl from "../templates/tip";
-import { ComponentApi } from "../types";
+import { ComponentApi } from "../types/component";
 import { definePlayerMethods } from "../utils/helper";
 class VideoTip implements ComponentApi {
   // 播放器实例

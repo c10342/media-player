@@ -19,8 +19,9 @@ import VideoSpeed from "./video-speed";
 import VideoDefinition from "./video-definition";
 import VideoLive from "./video-live";
 
-import { ClassType, ComponentApi, DefaultComponentOptions } from "../types";
+import { ClassType } from "../types";
 import { definePlayerMethods, initComponents } from "../utils/helper";
+import { ComponentApi, DefaultComponentOptions } from "../types/component";
 
 const cmp = createComponent();
 

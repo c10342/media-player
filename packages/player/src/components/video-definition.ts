@@ -3,7 +3,8 @@ import { LISTACTIVECLASSNAME } from "../config/constant";
 import { PlayerEvents } from "../config/event";
 import Player from "../player";
 import DefinitionTpl from "../templates/definition";
-import { ComponentApi, PlayerConfig } from "../types";
+import { ComponentApi } from "../types/component";
+import { PlayerConfig } from "../types/player";
 class VideoDefinition implements ComponentApi {
   static shouldInit(options: PlayerConfig) {
     return options.source && options.source.length > 0;

@@ -12,7 +12,7 @@ import { PlayButtonIconEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import Player from "../player";
 import FloatButtonTpl from "../templates/float-button";
-import { ComponentApi } from "../types";
+import { ComponentApi } from "../types/component";
 
 const isPhone = isMobile();
 

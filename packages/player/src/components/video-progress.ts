@@ -13,7 +13,9 @@ import {
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import ProgressTpl from "../templates/progress";
-import { DragDataInfo, ComponentApi, PlayerConfig } from "../types";
+import { DragDataInfo } from "../types";
+import { ComponentApi } from "../types/component";
+import { PlayerConfig } from "../types/player";
 
 class VideoProgress implements ComponentApi {
   static shouldInit(options: PlayerConfig) {

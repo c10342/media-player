@@ -3,7 +3,8 @@ import { LISTACTIVECLASSNAME } from "../config/constant";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import SpeedTpl from "../templates/speed";
-import { ComponentApi, PlayerConfig } from "../types";
+import { ComponentApi } from "../types/component";
+import { PlayerConfig } from "../types/player";
 class VideoSpeed implements ComponentApi {
   static shouldInit(options: PlayerConfig) {
     return !options.live && options.speedList && options.speedList.length > 0;
