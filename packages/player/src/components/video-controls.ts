@@ -7,7 +7,7 @@ import {
   updateStyle
 } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
-import createComponent from "../global-api/component";
+import { registerComponent } from "../global-api/component";
 import Player from "../player";
 import ControlsTpl from "../templates/controls";
 
@@ -15,25 +15,17 @@ import { ClassType } from "../types";
 import { definePlayerMethods, initComponents } from "../utils/helper";
 import { ComponentApi, DefaultComponentOptions } from "../types/component";
 
-const cmp = createComponent();
-
 class VideoControls implements ComponentApi {
   static registerComponent(
     name: string,
     component: ClassType<ComponentApi>,
     options?: DefaultComponentOptions
   ) {
-    cmp.registerComponent(name, component, options);
+    registerComponent(name, component, {
+      ...options,
+      parentComponent: "VideoControls"
+    });
     return this;
-  }
-
-  static removeComponent(name: string) {
-    cmp.removeComponent(name);
-    return this;
-  }
-
-  static getComponent(name: string) {
-    return cmp.getComponent(name);
   }
 
   // 播放器实例
@@ -48,18 +40,11 @@ class VideoControls implements ComponentApi {
   // 定时器
   private timer: number | null;
 
-  options: Record<string, any> = {};
-
   children: { [key: string]: ComponentApi } = {};
 
-  constructor(
-    player: Player,
-    slotElement: HTMLElement,
-    options: Record<string, any>
-  ) {
+  constructor(player: Player, slotElement: HTMLElement) {
     // 播放器实例
     this.player = player;
-    this.options = options;
     // 初始化dom
     this.initDom(slotElement);
     // 初始化组件
@@ -76,11 +61,10 @@ class VideoControls implements ComponentApi {
 
   private initComponent() {
     initComponents(
-      cmp.forEachComponent,
+      "VideoControls",
       this.player,
       this.rootElement,
-      this.children,
-      this.options.children || {}
+      this.children
     );
   }
   private initListener() {

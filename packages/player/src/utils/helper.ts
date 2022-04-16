@@ -1,27 +1,21 @@
 import { isFunction, isKeyInObject, isPlainObject } from "@lin-media/utils";
+import { forEachComponent } from "../global-api/component";
 import { forEachPlugins } from "../global-api/plugin";
 import Player from "../player";
-import { ClassType } from "../types";
-import { ComponentApi, DefaultComponentOptions } from "../types/component";
+import { ComponentApi } from "../types/component";
 
 export function canVideoPlayType(type: string) {
   return document.createElement("video").canPlayType(type);
 }
 
 export function initComponents(
-  forEachComponent: (
-    fn: (
-      name: string,
-      component: ClassType<ComponentApi>,
-      options: DefaultComponentOptions
-    ) => void
-  ) => void,
+  name: string,
   player: Player,
   rootElement: HTMLElement,
-  components: { [key: string]: ComponentApi } = {},
-  opts: Record<string, any> = {}
+  components: { [key: string]: ComponentApi } = {}
 ) {
-  forEachComponent((name, component, options) => {
+  const opts = player.options.components ?? {};
+  forEachComponent(name, (name, component, options) => {
     const init = (config: Record<string, any> = {}) => {
       const defaults = options.defaults;
       player.$emit(`beforeComponentSetup:${name}`);

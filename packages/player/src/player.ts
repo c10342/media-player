@@ -7,7 +7,11 @@ import {
   parseHtmlToDom
 } from "@lin-media/utils";
 import "./styles/index.scss";
-import createComponent from "./global-api/component";
+import {
+  registerComponent,
+  removeComponent,
+  getComponent
+} from "./global-api/component";
 import {
   registerHook,
   removeHook,
@@ -32,8 +36,6 @@ import {
   FullscreenType
 } from "./types/component";
 import { PlayerConfig } from "./types/player";
-
-const cmp = createComponent();
 
 class Player extends EventEmit {
   static Events = {
@@ -90,17 +92,20 @@ class Player extends EventEmit {
     component: ClassType<ComponentApi>,
     options: DefaultComponentOptions = {}
   ) {
-    cmp.registerComponent(name, component, options);
+    registerComponent(name, component, {
+      ...options,
+      parentComponent: "Player"
+    });
     return this;
   }
 
   static removeComponent(name: string) {
-    cmp.removeComponent(name);
+    removeComponent(name);
     return this;
   }
 
   static getComponent(name: string) {
-    return cmp.getComponent(name);
+    return getComponent(name);
   }
 
   plugins: { [key: string]: PluginApi } = {};
@@ -175,13 +180,7 @@ class Player extends EventEmit {
   }
 
   private initComponent() {
-    initComponents(
-      cmp.forEachComponent,
-      this,
-      this.rootElement,
-      this.components,
-      this.options.components || {}
-    );
+    initComponents("Player", this, this.rootElement, this.components);
     return this;
   }
 

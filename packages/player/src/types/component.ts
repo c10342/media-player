@@ -8,6 +8,7 @@ export interface DefaultComponentOptions {
   init?: boolean;
   defaults?: { [key: string]: any };
   level?: number;
+  parentComponent?: string;
 }
 
 export interface ComponentItem {
