@@ -20,8 +20,8 @@ function isNeedMerge(data: any) {
  * @param fromObj 默认值来源
  */
 export default function mergeConfig(
-  targetObj: PlayerConfig,
-  fromObj: PlayerConfig
+  targetObj: Record<string, any>,
+  fromObj: Record<string, any>
 ) {
   // 先进行深拷贝，防止对原数据进行污染
   targetObj = deepClone(targetObj);
