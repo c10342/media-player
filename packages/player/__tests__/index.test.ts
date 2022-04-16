@@ -10,11 +10,13 @@ function createEvent(eventName: string) {
 const videoList = [
   {
     label: "标清",
-    url: "/demo1.mp4"
+    url: "/demo1.mp4",
+    type: "video/mp4"
   },
   {
     label: "高清",
-    url: "/demo2.mp4"
+    url: "/demo2.mp4",
+    type: "video/mp4"
   }
 ];
 const speedList = [
@@ -34,7 +36,7 @@ const speedList = [
 ];
 
 const playerOptions = {
-  videoList,
+  source: videoList,
   speedList
 };
 
