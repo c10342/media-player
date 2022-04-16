@@ -1,4 +1,4 @@
 // 高亮插件事件
-export enum HighlightEvents {
+export enum Events {
   HIGHLIGHTCLICK = "highlight-click"
 }
