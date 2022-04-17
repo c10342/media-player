@@ -4,10 +4,6 @@ import { forEachPlugins } from "../global-api/plugin";
 import Player from "../player";
 import { ComponentApi } from "../types/component";
 
-export function canVideoPlayType(type: string) {
-  return document.createElement("video").canPlayType(type);
-}
-
 export function initComponents(
   name: string,
   player: Player,
