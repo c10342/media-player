@@ -12,3 +12,7 @@ HTMLMediaElement.prototype.play = function () {
   this.dispatchEvent(createEvent("play"));
   return Promise.resolve();
 };
+
+HTMLMediaElement.prototype.canPlayType = function () {
+  return "maybe";
+};
