@@ -3,8 +3,12 @@ import { VideoEvents } from "../config/event";
 import Player from "../player";
 import TimeTpl from "../templates/time";
 import { ComponentApi } from "../types/component";
+import { PlayerConfig } from "../types/player";
 
 class VideoTime implements ComponentApi {
+  static shouldInit(options: PlayerConfig) {
+    return !options.live;
+  }
   // 播放器实例
   private player: Player;
   // 组件根元素
