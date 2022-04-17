@@ -7,6 +7,12 @@ function createEvent(eventName: string) {
   return event;
 }
 
+function nextTick(time = 0) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+}
+
 const videoList = [
   {
     label: "标清",
@@ -41,14 +47,17 @@ const playerOptions = {
 };
 
 describe("render", () => {
-  it("base", () => {
+  it("base", async () => {
     const div = document.createElement("div");
     const player = new MediaPlayer({
       el: div,
       ...playerOptions
     });
+    await nextTick();
+
     // 检查video标签是否存在
     const videoElement = div.querySelector(".player-video") as HTMLVideoElement;
+
     expect(videoElement).toBeTruthy();
     // 检查video的播放地址
     expect(videoElement.src).toContain(videoList[0].url);
@@ -93,13 +102,14 @@ describe("render", () => {
     const liveElement = div.querySelector(".player-live-tip-container");
     expect(liveElement).toBeFalsy();
   });
-  it("live", () => {
+  it("live", async () => {
     const div = document.createElement("div");
     const player = new MediaPlayer({
       el: div,
       ...playerOptions,
       live: true
     });
+    await nextTick();
     // 时间
     const timeElement = div.querySelector(".player-time-tip");
     expect(timeElement).toBeFalsy();
@@ -114,7 +124,7 @@ describe("render", () => {
     expect(speedElement).toBeFalsy();
   });
 
-  it("mobile", () => {
+  it("mobile", async () => {
     Object.defineProperty(global.window.navigator, "userAgent", {
       get() {
         return "Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/7.0.4(0x17000428) NetType/4G Language/zh_CN";
@@ -125,6 +135,7 @@ describe("render", () => {
       el: div,
       ...playerOptions
     });
+    await nextTick();
     // pc端播放按钮
     const playButton = div.querySelector(".player-status-button");
     expect(playButton).toBeFalsy();
