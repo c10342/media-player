@@ -1,6 +1,5 @@
 import Player from "@lin-media/player";
 import {
-  EventManager,
   isArray,
   isFunction,
   isString,
@@ -11,22 +10,17 @@ import { ContextmenuOptions, MenuItem } from "./types";
 import menuListTpl from "./template/menu-list";
 
 import "./style/index.scss";
-import { ComponentApi } from "@lin-media/player";
 
-class Contextmenu implements ComponentApi {
-  private player: Player;
-  private options: ContextmenuOptions;
-  private eventManager = new EventManager();
-  private slotElement: HTMLElement;
+const Component = Player.getComponent<ContextmenuOptions>("Component");
+
+class Contextmenu extends Component {
   private wrapperElement: HTMLElement | null;
   constructor(
     player: Player,
     slotElement: HTMLElement,
-    options: ContextmenuOptions = { menuList: [] }
+    options: ContextmenuOptions
   ) {
-    this.slotElement = slotElement;
-    this.player = player;
-    this.options = options;
+    super(player, slotElement, options);
     const menuList = this.options.menuList;
     if (isArray(menuList) && menuList.length > 0) {
       this.createElement();
@@ -165,7 +159,8 @@ class Contextmenu implements ComponentApi {
   }
 
   destroy() {
-    this.eventManager.removeEventListener();
+    // this.eventManager.removeEventListener();
+    super.destroy();
   }
 }
 
