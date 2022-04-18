@@ -10,6 +10,11 @@ export interface ComponentClass<Options = any> {
   ): Component<Options>;
   componentName: string;
   shouldInit?: (options: PlayerConfig) => boolean;
+  registerComponent: (
+    name: string,
+    component: ComponentClass,
+    options?: DefaultComponentOptions
+  ) => ThisType<ComponentClass>;
 }
 
 export interface DefaultComponentOptions {

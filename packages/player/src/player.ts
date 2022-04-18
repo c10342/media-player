@@ -42,6 +42,7 @@ import {
   removeSource
 } from "./global-api/source";
 import { SourceHandleCallback } from "./types/source";
+import Component from "./components/component";
 
 class Player extends EventEmit {
   static Events = {
@@ -130,7 +131,7 @@ class Player extends EventEmit {
   }
 
   plugins: { [key: string]: PluginApi } = {};
-  components: { [key: string]: ComponentClass } = {};
+  components: { [key: string]: Component } = {};
   options: PlayerConfig = {} as any;
   rootElement: HTMLElement;
   tech: any = null;

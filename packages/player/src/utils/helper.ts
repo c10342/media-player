@@ -1,14 +1,14 @@
 import { isFunction, isKeyInObject, isPlainObject } from "@lin-media/utils";
+import Component from "../components/component";
 import { forEachComponent } from "../global-api/component";
 import { forEachPlugins } from "../global-api/plugin";
 import Player from "../player";
-import { ComponentApi } from "../types/component";
 
 export function initComponents(
   name: string,
   player: Player,
   rootElement: HTMLElement,
-  components: { [key: string]: ComponentApi } = {}
+  components: { [key: string]: Component } = {}
 ) {
   const opts = player.options.components ?? {};
   forEachComponent(name, (name, component, options) => {
@@ -43,7 +43,7 @@ export function initComponents(
 }
 
 export function destroyComponents(
-  components: { [key: string]: ComponentApi },
+  components: { [key: string]: Component },
   player: Player
 ) {
   Object.keys(components).forEach((name) => {
