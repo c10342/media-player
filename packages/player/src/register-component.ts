@@ -14,23 +14,49 @@ import VideoFullscreen from "./components/video-fullscreen";
 import VideoSpeed from "./components/video-speed";
 import VideoDefinition from "./components/video-definition";
 import VideoLive from "./components/video-live";
+import Component from "./components/component";
 
 const options = {
   init: true
 };
 
-Player.registerComponent("VideoPlayer", VideoPlayer, options);
-Player.registerComponent("VideoMask", VideoMask, options);
-Player.registerComponent("VideoFloatButton", VideoFloatButton, options);
-Player.registerComponent("VideoControls", VideoControls, options);
-Player.registerComponent("VideoLoading", VideoLoading, options);
-Player.registerComponent("VideoTip", VideoTip, options);
+Player.registerComponent(Component.componentName, Component);
+Player.registerComponent(VideoPlayer.componentName, VideoPlayer, options);
+Player.registerComponent(VideoMask.componentName, VideoMask, options);
+Player.registerComponent(
+  VideoFloatButton.componentName,
+  VideoFloatButton,
+  options
+);
+Player.registerComponent(VideoControls.componentName, VideoControls, options);
+Player.registerComponent(VideoLoading.componentName, VideoLoading, options);
+Player.registerComponent(VideoTip.componentName, VideoTip, options);
 
-VideoControls.registerComponent("VideoProgress", VideoProgress, options);
-VideoControls.registerComponent("VideoPlayButton", VideoPlayButton, options);
-VideoControls.registerComponent("VideoVolume", VideoVolume, options);
-VideoControls.registerComponent("VideoTime", VideoTime, options);
-VideoControls.registerComponent("VideoLive", VideoLive, options);
-VideoControls.registerComponent("VideoSpeed", VideoSpeed, options);
-VideoControls.registerComponent("VideoDefinition", VideoDefinition, options);
-VideoControls.registerComponent("VideoFullscreen", VideoFullscreen, options);
+VideoControls.registerComponent(
+  VideoProgress.componentName,
+  VideoProgress,
+  options
+);
+VideoControls.registerComponent(
+  VideoPlayButton.componentName,
+  VideoPlayButton,
+  options
+);
+VideoControls.registerComponent(
+  VideoVolume.componentName,
+  VideoVolume,
+  options
+);
+VideoControls.registerComponent(VideoTime.componentName, VideoTime, options);
+VideoControls.registerComponent(VideoLive.componentName, VideoLive, options);
+VideoControls.registerComponent(VideoSpeed.componentName, VideoSpeed, options);
+VideoControls.registerComponent(
+  VideoDefinition.componentName,
+  VideoDefinition,
+  options
+);
+VideoControls.registerComponent(
+  VideoFullscreen.componentName,
+  VideoFullscreen,
+  options
+);
