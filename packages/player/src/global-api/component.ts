@@ -1,7 +1,7 @@
-import { logWarn } from "@lin-media/utils";
-import { ClassType } from "../types";
+import { isFunction, logError, logWarn } from "@lin-media/utils";
+
 import {
-  ComponentApi,
+  ComponentClass,
   ComponentItem,
   DefaultComponentOptions
 } from "../types/component";
@@ -18,11 +18,15 @@ const keyInArray = (name: string) => {
 };
 export function registerComponent(
   name: string,
-  component: ClassType<ComponentApi>,
+  component: ComponentClass,
   options: DefaultComponentOptions = {}
 ) {
   if (keyInArray(name) > -1) {
     logWarn(`component: ${name} is registered`);
+    return;
+  }
+  if (!isFunction(component.prototype.destroy)) {
+    logError(`component:${name} should provide a destroy function`);
     return;
   }
   componentArray.push({
@@ -32,9 +36,9 @@ export function registerComponent(
   });
 }
 
-export function getComponent(name: string) {
+export function getComponent<T>(name: string) {
   const index = keyInArray(name);
-  return componentArray[index]?.handler;
+  return componentArray[index]?.handler as ComponentClass<T>;
 }
 
 export function removeComponent(name: string) {
@@ -49,7 +53,7 @@ export function forEachComponent(
   parentComponent = "Player",
   cb: (
     name: string,
-    component: ClassType<ComponentApi>,
+    component: ComponentClass,
     options: DefaultComponentOptions
   ) => void
 ) {

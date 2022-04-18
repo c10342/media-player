@@ -1,4 +1,4 @@
-import { logWarn } from "@lin-media/utils";
+import { isFunction, logError, logWarn } from "@lin-media/utils";
 import { ClassType } from "../types";
 import { TechsMap } from "../types/tech";
 
@@ -13,6 +13,11 @@ function keyInMap(key: string) {
 export function registerTech(name: string, tech: ClassType) {
   if (keyInMap(name)) {
     logWarn(`tech: ${name} is registered`);
+    return;
+  }
+
+  if (!isFunction(tech.prototype.destroy)) {
+    logError(`tech:${name} should provide a destroy function`);
     return;
   }
 

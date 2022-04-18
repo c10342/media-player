@@ -1,4 +1,4 @@
-import { logWarn } from "@lin-media/utils";
+import { isFunction, logError, logWarn } from "@lin-media/utils";
 import { ClassType } from "../types";
 import { DefaultPluginOptions, PluginApi, PluginItem } from "../types/plugin";
 
@@ -17,6 +17,12 @@ export function registerPlugin(
     logWarn(`plugin: ${name} is registered`);
     return;
   }
+
+  if (!isFunction(plugin.prototype.destroy)) {
+    logError(`plugin:${name} should provide a destroy function`);
+    return;
+  }
+
   pluginArray.push({
     name,
     handler: plugin,
