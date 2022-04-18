@@ -60,7 +60,7 @@ export function initPlugins(player: Player) {
   const plugins = player.options.plugins || {};
   forEachPlugins((name, plugin, options) => {
     const init = (config: Record<string, any> = {}) => {
-      const defaults = options.defaultOptions;
+      const defaults = options.defaults;
       player.$emit(`beforePluginSetup:${name}`);
       const instance = new plugin(player, { ...defaults, ...config });
       player.plugins[name] = instance;

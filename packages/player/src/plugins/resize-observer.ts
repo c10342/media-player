@@ -1,17 +1,17 @@
 import { debounce, isUndef } from "@lin-media/utils";
 import { PlayerEvents } from "../config/event";
-import { registerPlugin } from "../global-api/plugin";
 import Player from "../player";
-import { PluginApi } from "../types/plugin";
+import Plugin from "./plugin";
 
-class DomResizeObserver implements PluginApi {
-  private player: Player;
+class DomResizeObserver extends Plugin {
   private resizeObserver: ResizeObserver | null;
-  constructor(player: Player) {
+  constructor(player: Player, options: any) {
+    super(player, options);
     this.player = player;
-    this.player.ready(() => {
-      this.initDomResizeObserver();
-    });
+  }
+
+  onPlayerReady() {
+    this.initDomResizeObserver();
   }
 
   private initDomResizeObserver() {

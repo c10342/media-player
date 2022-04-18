@@ -1,6 +1,6 @@
 import { isFunction, logError, logWarn } from "@lin-media/utils";
-import { ClassType } from "../types";
-import { DefaultPluginOptions, PluginApi, PluginItem } from "../types/plugin";
+
+import { DefaultPluginOptions, PluginClass, PluginItem } from "../types/plugin";
 
 const pluginArray: Array<PluginItem> = [];
 
@@ -10,7 +10,7 @@ function keyInArray(key: string) {
 
 export function registerPlugin(
   name: string,
-  plugin: ClassType<PluginApi>,
+  plugin: PluginClass,
   options: DefaultPluginOptions = {}
 ) {
   if (keyInArray(name) > -1) {
@@ -38,17 +38,13 @@ export function removePlugin(name: string) {
   pluginArray.splice(index, 1);
 }
 
-export function getPlugin(name: string) {
+export function getPlugin<Options = any>(name: string) {
   const index = keyInArray(name);
-  return pluginArray[index]?.handler;
+  return pluginArray[index]?.handler as PluginClass<Options>;
 }
 
 export function forEachPlugins(
-  cb: (
-    name: string,
-    plugin: ClassType<PluginApi>,
-    options: DefaultPluginOptions
-  ) => any
+  cb: (name: string, plugin: PluginClass, options: DefaultPluginOptions) => any
 ) {
   pluginArray.forEach((plugin) => {
     cb(plugin.name, plugin.handler, plugin.options);

@@ -1,22 +1,19 @@
 import { EventManager } from "@lin-media/utils";
 import { CanFocusTagEnum, KeyCodeEnum } from "../config/enum";
 import { PlayerEvents } from "../config/event";
-import { registerPlugin } from "../global-api/plugin";
 import Player from "../player";
-import { PluginApi } from "../types/plugin";
+import Plugin from "./plugin";
 
-class ShortcutKey implements PluginApi {
-  // 播放器实例
-  private player: Player;
+class ShortcutKey extends Plugin {
   // 标志位，标记用户是否点击了播放器，也就是播放器是否处于活跃状态
   private isFocus = false;
   private eventManager = new EventManager();
-  constructor(player: Player) {
-    this.player = player;
-    // 初始化事件监听
-    this.player.ready(() => {
-      this.initListener();
-    });
+  constructor(player: Player, options: any) {
+    super(player, options);
+  }
+
+  onPlayerReady() {
+    this.initListener();
   }
 
   private initListener() {
