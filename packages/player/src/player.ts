@@ -28,7 +28,7 @@ import mergeConfig from "./utils/merge-config";
 import initLocale from "./locale";
 import { destroyComponents, initComponents, initPlugins } from "./utils/helper";
 import { HookCallback, HookType } from "./types/hook";
-import { DefaultPluginOptions, PluginApi } from "./types/plugin";
+import { DefaultPluginOptions, PluginClass } from "./types/plugin";
 import { ClassType } from "./types";
 import {
   ComponentClass,
@@ -43,6 +43,7 @@ import {
 } from "./global-api/source";
 import { SourceHandleCallback } from "./types/source";
 import Component from "./components/component";
+import Plugin from "./plugins/plugin";
 
 class Player extends EventEmit {
   static Events = {
@@ -78,7 +79,7 @@ class Player extends EventEmit {
 
   static registerPlugin(
     name: string,
-    plugin: ClassType<PluginApi>,
+    plugin: PluginClass,
     options: DefaultPluginOptions = {}
   ) {
     registerPlugin(name, plugin, options);
@@ -90,8 +91,8 @@ class Player extends EventEmit {
     return this;
   }
 
-  static getPlugin(name: string) {
-    return getPlugin(name);
+  static getPlugin<Options>(name: string) {
+    return getPlugin<Options>(name);
   }
 
   static registerComponent(
@@ -130,7 +131,7 @@ class Player extends EventEmit {
     return this;
   }
 
-  plugins: { [key: string]: PluginApi } = {};
+  plugins: { [key: string]: Plugin } = {};
   components: { [key: string]: Component } = {};
   options: PlayerConfig = {} as any;
   rootElement: HTMLElement;
