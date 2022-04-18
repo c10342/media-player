@@ -26,16 +26,22 @@ import { PlayerEvents, VideoEvents } from "./config/event";
 import defaultOptions from "./config/defaults";
 import mergeConfig from "./utils/merge-config";
 import initLocale from "./locale";
-import { initComponents, initPlugins } from "./utils/helper";
+import { destroyComponents, initComponents, initPlugins } from "./utils/helper";
 import { HookCallback, HookType } from "./types/hook";
 import { DefaultPluginOptions, PluginApi } from "./types/plugin";
 import { ClassType } from "./types";
 import {
-  ComponentApi,
+  ComponentClass,
   DefaultComponentOptions,
   FullscreenType
 } from "./types/component";
 import { PlayerConfig } from "./types/player";
+import {
+  registerOnceSource,
+  registerSource,
+  removeSource
+} from "./global-api/source";
+import { SourceHandleCallback } from "./types/source";
 
 class Player extends EventEmit {
   static Events = {
@@ -89,7 +95,7 @@ class Player extends EventEmit {
 
   static registerComponent(
     name: string,
-    component: ClassType<ComponentApi>,
+    component: ComponentClass,
     options: DefaultComponentOptions = {}
   ) {
     registerComponent(name, component, {
@@ -104,12 +110,27 @@ class Player extends EventEmit {
     return this;
   }
 
-  static getComponent(name: string) {
-    return getComponent(name);
+  static getComponent<Options = any>(name: string) {
+    return getComponent<Options>(name);
+  }
+
+  static registerSource(type: string, callback: SourceHandleCallback) {
+    registerSource(type, callback);
+    return this;
+  }
+
+  static registerOnceSource(type: string, callback: SourceHandleCallback) {
+    registerOnceSource(type, callback);
+    return this;
+  }
+
+  static removeSource(type: string, callback?: SourceHandleCallback) {
+    removeSource(type, callback);
+    return this;
   }
 
   plugins: { [key: string]: PluginApi } = {};
-  components: { [key: string]: ComponentApi } = {};
+  components: { [key: string]: ComponentClass } = {};
   options: PlayerConfig = {} as any;
   rootElement: HTMLElement;
   tech: any = null;
@@ -187,19 +208,16 @@ class Player extends EventEmit {
   private destroyPlugins() {
     Object.keys(this.plugins).forEach((name) => {
       const plugin = this.plugins[name];
+      this.$emit(`beforePluginDestroy:${name}`, plugin);
       if (isFunction(plugin.destroy)) {
         plugin.destroy();
       }
+      this.$emit(`afterPluginDestroy:${name}`);
     });
     this.plugins = {};
   }
   private destroyComponents() {
-    Object.keys(this.components).forEach((name) => {
-      const component = this.components[name];
-      if (isFunction(component.destroy)) {
-        component.destroy();
-      }
-    });
+    destroyComponents(this.components, this);
     this.components = {};
   }
 
@@ -216,6 +234,15 @@ class Player extends EventEmit {
     this.$emit("ready");
     this.runReadyCallback();
     return this;
+  }
+
+  private resetData() {
+    this.readyCallback = [];
+    this.rootElement.remove();
+    this.rootElement = null as any;
+    this.tech = null;
+    this.i18n = null;
+    this.options = {} as any;
   }
 
   ready(fn: Function) {
@@ -301,12 +328,13 @@ class Player extends EventEmit {
     logError("method exitPictureInPicture is not defined");
     return this;
   }
+
   destroy() {
     this.$emit(PlayerEvents.DESTROY);
     this.destroyPlugins();
     this.destroyComponents();
     this.clear();
-    this.readyCallback = [];
+    this.resetData();
   }
 }
 
