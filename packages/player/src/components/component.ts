@@ -1,4 +1,4 @@
-import { EventEmit, EventManager } from "@lin-media/utils";
+import { EventEmit, EventManager, isFunction } from "@lin-media/utils";
 import { registerComponent } from "../global-api/component";
 import Player from "../player";
 import { ComponentClass, DefaultComponentOptions } from "../types/component";
@@ -38,6 +38,10 @@ class Component<T extends Record<string, any> = {}> extends EventEmit {
     this.player = player;
     this.slotElement = slotElement;
     this.options = options;
+    const onPlayerReady = (this as any).onPlayerReady;
+    if (isFunction(onPlayerReady)) {
+      this.player.ready(onPlayerReady.bind(this));
+    }
   }
   destroyComponents() {
     destroyComponents(this.components, this.player);
