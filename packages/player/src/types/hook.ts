@@ -2,7 +2,9 @@ import { PlayerConfig } from "./player";
 
 export type HookType = "beforeSetup" | "afterSetup";
 
-export type BeforeSetupCallback = (data: PlayerConfig) => PlayerConfig;
+export type BeforeSetupCallback = (
+  data: PlayerConfig
+) => PlayerConfig | Promise<PlayerConfig>;
 
 export type AfterSetupCallback = (player: any) => void;
 

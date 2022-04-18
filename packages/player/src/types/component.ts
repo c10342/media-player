@@ -1,9 +1,17 @@
-import { ClassType } from "./index";
+import Component from "../components/component";
+import Player from "../player";
+import { PlayerConfig } from "./player";
 
-export interface ComponentApi {
-  destroy: () => void;
-  [key: string]: any;
+export interface ComponentClass<Options = any> {
+  new (
+    player: Player,
+    rootElement: HTMLElement,
+    options: Options
+  ): Component<Options>;
+  componentName: string;
+  shouldInit?: (options: PlayerConfig) => boolean;
 }
+
 export interface DefaultComponentOptions {
   init?: boolean;
   defaults?: { [key: string]: any };
@@ -14,7 +22,7 @@ export interface DefaultComponentOptions {
 export interface ComponentItem {
   name: string;
   options: DefaultComponentOptions;
-  handler: ClassType<ComponentApi>;
+  handler: ComponentClass;
 }
 
 export type FullscreenType = "web" | "browser";
