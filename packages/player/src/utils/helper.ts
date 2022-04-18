@@ -42,6 +42,20 @@ export function initComponents(
   });
 }
 
+export function destroyComponents(
+  components: { [key: string]: ComponentApi },
+  player: Player
+) {
+  Object.keys(components).forEach((name) => {
+    const component = components[name];
+    player.$emit(`beforeComponentDestroy:${name}`, component);
+    if (isFunction(component.destroy)) {
+      component.destroy();
+    }
+    player.$emit(`afterComponentDestroy:${name}`);
+  });
+}
+
 export function initPlugins(player: Player) {
   const plugins = player.options.plugins || {};
   forEachPlugins((name, plugin, options) => {
