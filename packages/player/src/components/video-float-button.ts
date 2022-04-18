@@ -1,9 +1,4 @@
-import {
-  EventManager,
-  isMobile,
-  parseHtmlToDom,
-  updateStyle
-} from "@lin-media/utils";
+import { isMobile, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import {
   FLOATBUTTONENTERCLASSNAME,
   FLOATBUTTONLEAVECLASSNAME
@@ -12,28 +7,23 @@ import { PlayButtonIconEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import Player from "../player";
 import FloatButtonTpl from "../templates/float-button";
-import { ComponentApi } from "../types/component";
+import Component from "./component";
 
 const isPhone = isMobile();
 
-class VideoFloatButton implements ComponentApi {
-  // 播放器实例
-  private player: Player;
-  // dom事件管理器
-  private eventManager = new EventManager();
-
-  private rootElement: HTMLElement;
+class VideoFloatButton extends Component {
+  static componentName = "VideoFloatButton";
 
   private iconElement: HTMLElement;
 
   private isShow = true;
 
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
+    this.initComponent(VideoFloatButton.componentName);
   }
 
   private initDom(slotElement: HTMLElement) {
@@ -134,10 +124,6 @@ class VideoFloatButton implements ComponentApi {
       this.hidePlayButton();
       target.classList.remove(FLOATBUTTONLEAVECLASSNAME);
     }
-  }
-
-  destroy() {
-    this.eventManager.removeEventListener();
   }
 }
 

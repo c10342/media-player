@@ -2,17 +2,15 @@ import { isMobile, parseHtmlToDom, secondToTime } from "@lin-media/utils";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import TimeTpl from "../templates/time";
-import { ComponentApi } from "../types/component";
 import { PlayerConfig } from "../types/player";
+import Component from "./component";
 
-class VideoTime implements ComponentApi {
+class VideoTime extends Component {
   static shouldInit(options: PlayerConfig) {
     return !options.live;
   }
-  // 播放器实例
-  private player: Player;
-  // 组件根元素
-  private rootElement: HTMLElement;
+  static componentName = "VideoTime";
+
   // 当前播放时间
   private currentTime = 0;
 
@@ -20,13 +18,13 @@ class VideoTime implements ComponentApi {
 
   private currentTimeElement: HTMLElement;
 
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
     // 初始化dom
     this.initDom(slotElement);
     // 初始化事件
     this.initListener();
+    this.initComponent(VideoTime.componentName);
   }
   // 查询元素
   private querySelector<T extends HTMLElement>(selector: string) {
@@ -81,9 +79,6 @@ class VideoTime implements ComponentApi {
   // 设置当前时长
   private setCurrentTime(currentTime: number) {
     this.currentTimeElement.innerHTML = secondToTime(currentTime);
-  }
-  destroy() {
-    // todo
   }
 }
 

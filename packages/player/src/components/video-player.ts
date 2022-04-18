@@ -1,33 +1,24 @@
-import {
-  checkData,
-  EventManager,
-  isUndef,
-  parseHtmlToDom
-} from "@lin-media/utils";
+import { checkData, isUndef, logError, parseHtmlToDom } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
+import { forEachSource } from "../global-api/source";
 import { forEachTech } from "../global-api/tech";
 import Player from "../player";
 import VideoTpl from "../templates/video";
 import VideoTagTpl from "../templates/video-tag";
-import { ComponentApi } from "../types/component";
 import { SourceItem } from "../types/player";
 import { definePlayerMethods } from "../utils/helper";
+import Component from "./component";
 
-class VideoPlayer implements ComponentApi {
-  // 播放器实例
-  private player: Player;
-  // dom事件管理器
-  private eventManager = new EventManager();
+class VideoPlayer extends Component {
+  static componentName = "VideoPlayer";
   // 当前正在播放的视频索引
   private currentIndex = -1;
-  // 组件根元素
-  private rootElement: HTMLElement;
 
   videoElement: HTMLVideoElement;
 
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
+
     // 初始化dom
     this.initDom(slotElement);
     // 设置索引，播放的是哪个视频
@@ -36,9 +27,10 @@ class VideoPlayer implements ComponentApi {
     this.initPlayer();
     // 添加事件
     this.initPlayerMethods();
+    this.initComponent(VideoPlayer.componentName);
   }
   // 查询元素
-  private _querySelector<T extends HTMLVideoElement>(selector: string) {
+  private querySelector<T extends HTMLVideoElement>(selector: string) {
     return this.rootElement.querySelector(selector) as T;
   }
   // 初始化dom
@@ -49,7 +41,7 @@ class VideoPlayer implements ComponentApi {
 
     // 将html插入到插槽中
     slotElement.appendChild(this.rootElement);
-    this.videoElement = this._querySelector(".player-video");
+    this.videoElement = this.querySelector(".player-video");
   }
 
   // 获取默认播放的视频，有default的就是默认得了
@@ -85,19 +77,42 @@ class VideoPlayer implements ComponentApi {
 
   private initESM(
     videoElement: HTMLVideoElement,
-    videoItem: SourceItem | null
+    sourceItem: SourceItem | null
   ) {
-    if (!isUndef(videoItem)) {
+    if (isUndef(sourceItem)) {
+      return;
+    }
+    const initTech = (data: SourceItem) => {
       forEachTech((name, tech) => {
-        if (tech.canHandleSource(videoItem, this.player.options)) {
-          this.player.tech = new tech(this.player, videoElement, videoItem);
+        if (tech.canHandleSource(data, this.player.options)) {
+          this.player.tech = new tech(this.player, videoElement, data);
           this.player.$emit(PlayerEvents.TECHCHANGED, this.player.tech);
           return true;
         }
         return false;
       });
       this.initVideoEvents(videoElement);
+    };
+    const chain: Function[] = [];
+
+    forEachSource("*", (fn) => {
+      chain.push(fn);
+    });
+    forEachSource(sourceItem.type, (fn) => {
+      chain.push(fn);
+    });
+    chain.push(initTech);
+
+    let p: Promise<any> = Promise.resolve(sourceItem);
+
+    while (chain.length) {
+      p = p.then(chain.shift() as any);
     }
+    p = p.catch((error: any) => {
+      this.player.$emit("error", error);
+      logError(error);
+    });
+    return p;
   }
 
   // 初始化video标签事件
@@ -156,7 +171,7 @@ class VideoPlayer implements ComponentApi {
     }
   }
 
-  private switchVideo() {
+  private async switchVideo() {
     const player = this.player;
     // 先获取原来的video标签
     const prevVideoElement = this.videoElement;
@@ -185,7 +200,7 @@ class VideoPlayer implements ComponentApi {
     // 新的video标签插入到旧的video标签前，也就是新的video标签在旧的video标签下方
     this.rootElement.insertBefore(nextVideoElement, prevVideoElement);
     // 初始化新的video标签视频
-    this.initESM(nextVideoElement, videoItem);
+    await this.initESM(nextVideoElement, videoItem);
     // 设置新video标签的状态
     nextVideoElement.currentTime = prevStatus.currentTime;
     nextVideoElement.volume = prevStatus.volume;
@@ -268,11 +283,6 @@ class VideoPlayer implements ComponentApi {
       // 存在画中画才能关闭，否则会报错
       document.exitPictureInPicture();
     }
-  }
-
-  destroy() {
-    // 清除video的事件监听
-    this.eventManager.removeEventListener();
   }
 }
 

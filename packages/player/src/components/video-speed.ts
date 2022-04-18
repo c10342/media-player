@@ -1,28 +1,28 @@
-import { EventManager, isFunction, parseHtmlToDom } from "@lin-media/utils";
+import { isFunction, parseHtmlToDom } from "@lin-media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import SpeedTpl from "../templates/speed";
-import { ComponentApi } from "../types/component";
 import { PlayerConfig } from "../types/player";
-class VideoSpeed implements ComponentApi {
+import Component from "./component";
+class VideoSpeed extends Component {
   static shouldInit(options: PlayerConfig) {
-    return !options.live && options.speedList && options.speedList.length > 0;
+    return !!(
+      !options.live &&
+      options.speedList &&
+      options.speedList.length > 0
+    );
   }
-  // 播放器实例
-  private player: Player;
-  // dom事件管理器
-  private eventManager = new EventManager();
-  // 组件根元素
-  private rootElement: HTMLElement;
+  static componentName = "VideoSpeed";
+
   // 倍数索引，当前是那个倍数
   private currentIndex = 0;
   private speedItemsElement: NodeListOf<Element>;
   private speedLabelElement: HTMLElement;
 
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
+
     // 初始化dom
     this.initDom(slotElement);
     // 初始化索引，即是那个倍数
@@ -30,6 +30,7 @@ class VideoSpeed implements ComponentApi {
     // 设置video标签倍数
     this.initDefaultRate();
     this.initListener();
+    this.initComponent(VideoSpeed.componentName);
   }
 
   // 查询元素
@@ -169,10 +170,6 @@ class VideoSpeed implements ComponentApi {
     if (!element.classList.contains(LISTACTIVECLASSNAME)) {
       element.classList.add(LISTACTIVECLASSNAME);
     }
-  }
-
-  destroy() {
-    this.eventManager.removeEventListener();
   }
 }
 

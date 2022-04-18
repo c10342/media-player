@@ -1,27 +1,22 @@
-import { EventManager, isMobile, parseHtmlToDom } from "@lin-media/utils";
+import { isMobile, parseHtmlToDom } from "@lin-media/utils";
 import { PlayButtonIconEnum } from "../config/enum";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import PlayButtonTpl from "../templates/play-button";
-import { ComponentApi } from "../types/component";
+import Component from "./component";
 
-class VideoPlayButton implements ComponentApi {
+class VideoPlayButton extends Component {
   static shouldInit() {
     return !isMobile();
   }
-  // 播放器实例
-  private player: Player;
-  // dom事件管理器
-  private eventManager = new EventManager();
-  // 组件根元素
-  private rootElement: HTMLElement;
+  static componentName = "VideoPlayButton";
 
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
+    this.initComponent(VideoPlayButton.componentName);
   }
 
   private initDom(slotElement: HTMLElement) {
@@ -68,10 +63,6 @@ class VideoPlayButton implements ComponentApi {
     event.stopPropagation();
     // 切换播放状态
     this.player.toggle();
-  }
-
-  destroy() {
-    this.eventManager.removeEventListener();
   }
 }
 

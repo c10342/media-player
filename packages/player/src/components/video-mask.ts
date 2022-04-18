@@ -1,22 +1,18 @@
-import { EventManager, isMobile, parseHtmlToDom } from "@lin-media/utils";
+import { isMobile, parseHtmlToDom } from "@lin-media/utils";
 import Player from "../player";
 import MaskTpl from "../templates/mask";
-import { ComponentApi } from "../types/component";
+import Component from "./component";
 
-class VideoMask implements ComponentApi {
-  // 播放器实例
-  private player: Player;
-  // dom事件管理器
-  private eventManager = new EventManager();
-  // 组件根元素
-  private rootElement: HTMLElement;
+class VideoMask extends Component {
+  static componentName = "VideoMask";
 
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
+
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
+    this.initComponent(VideoMask.componentName);
   }
 
   private initDom(slotElement: HTMLElement) {
@@ -40,11 +36,6 @@ class VideoMask implements ComponentApi {
       // pc端处理方式
       this.player.toggle();
     }
-  }
-
-  // 销毁
-  destroy() {
-    this.eventManager.removeEventListener();
   }
 }
 

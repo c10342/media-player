@@ -1,19 +1,20 @@
 import { parseHtmlToDom } from "@lin-media/utils";
 import Player from "../player";
 import LiveTpl from "../templates/live";
-import { ComponentApi } from "../types/component";
 import { PlayerConfig } from "../types/player";
-class VideoLive implements ComponentApi {
+import Component from "./component";
+class VideoLive extends Component {
   static shouldInit(options: PlayerConfig) {
-    return options.live;
+    return !!options.live;
   }
-  // 播放器实例
-  private player: Player;
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  static componentName = "VideoLive";
+
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
+
     // 初始化dom
     this.initDom(slotElement);
+    this.initComponent(VideoLive.componentName);
   }
 
   private initDom(slotElement: HTMLElement) {
@@ -22,10 +23,6 @@ class VideoLive implements ComponentApi {
       $t: this.player.i18n.t
     });
     parentElement.appendChild(parseHtmlToDom(html));
-  }
-
-  destroy() {
-    //todo
   }
 }
 

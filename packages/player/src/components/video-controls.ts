@@ -1,56 +1,32 @@
 import {
-  EventManager,
-  isFunction,
   isMobile,
   isUndef,
   parseHtmlToDom,
   updateStyle
 } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
-import { registerComponent } from "../global-api/component";
 import Player from "../player";
 import ControlsTpl from "../templates/controls";
 
-import { ClassType } from "../types";
-import { definePlayerMethods, initComponents } from "../utils/helper";
-import { ComponentApi, DefaultComponentOptions } from "../types/component";
+import { definePlayerMethods } from "../utils/helper";
+import Component from "./component";
 
-class VideoControls implements ComponentApi {
-  static registerComponent(
-    name: string,
-    component: ClassType<ComponentApi>,
-    options?: DefaultComponentOptions
-  ) {
-    registerComponent(name, component, {
-      ...options,
-      parentComponent: "VideoControls"
-    });
-    return this;
-  }
-
-  // 播放器实例
-  private player: Player;
-  // dom事件管理器
-  private eventManager = new EventManager();
-  // 组件根元素
-  private rootElement: HTMLElement;
+class VideoControls extends Component {
+  static componentName = "VideoControls";
 
   // 是否进入播放器标志位
   private isEnter = false;
   // 定时器
   private timer: number | null;
 
-  children: { [key: string]: ComponentApi } = {};
-
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
     // 初始化dom
     this.initDom(slotElement);
-    // 初始化组件
-    this.initComponent();
     this.initListener();
     this.initPlayerMethods();
+    // 初始化组件
+    this.initComponent(VideoControls.componentName);
   }
 
   private initDom(slotElement: HTMLElement) {
@@ -59,14 +35,6 @@ class VideoControls implements ComponentApi {
     slotElement.appendChild(this.rootElement);
   }
 
-  private initComponent() {
-    initComponents(
-      "VideoControls",
-      this.player,
-      this.rootElement,
-      this.children
-    );
-  }
   private initListener() {
     if (!isMobile()) {
       this.player.$on(VideoEvents.PLAY, this.onVideoPlay.bind(this));
@@ -163,19 +131,9 @@ class VideoControls implements ComponentApi {
     this.player.$emit(PlayerEvents.HIDE_CONTROLS);
   }
 
-  private destroyComponent() {
-    Object.keys(this.children).forEach((name) => {
-      const component = this.children[name];
-      if (isFunction(component.destroy)) {
-        component.destroy();
-      }
-    });
-  }
-
   destroy() {
-    this.eventManager.removeEventListener();
     this.destroyTimer();
-    this.destroyComponent();
+    super.destroy();
   }
 }
 

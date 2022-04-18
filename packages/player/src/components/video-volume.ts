@@ -1,27 +1,16 @@
-import {
-  Drag,
-  EventManager,
-  isMobile,
-  parseHtmlToDom,
-  updateStyle
-} from "@lin-media/utils";
+import { Drag, isMobile, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import { VolumeButtonIconEnum } from "../config/enum";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import VolumeTpl from "../templates/volume";
 import { DragDataInfo } from "../types";
-import { ComponentApi } from "../types/component";
+import Component from "./component";
 
-class VideoVolume implements ComponentApi {
+class VideoVolume extends Component {
   static shouldInit() {
     return !isMobile();
   }
-  // 播放器实例
-  private player: Player;
-  // dom事件管理器
-  private eventManager = new EventManager();
-  // 组件根元素
-  private rootElement: HTMLElement;
+  static componentName = "VideoVolume";
 
   private volumeProcessElement: HTMLElement;
 
@@ -34,9 +23,9 @@ class VideoVolume implements ComponentApi {
   private isMove = false;
   private isEnter = false;
 
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
+
     // 初始化dom
     this.initDom(slotElement);
     // 处理静音自动播放
@@ -47,6 +36,7 @@ class VideoVolume implements ComponentApi {
     this.initDrag();
     // 初始化事件
     this.initListener();
+    this.initComponent(VideoVolume.componentName);
   }
 
   private initDom(slotElement: HTMLElement) {
@@ -217,8 +207,8 @@ class VideoVolume implements ComponentApi {
   }
 
   destroy() {
-    this.eventManager.removeEventListener();
     this.dragInstance.destroy();
+    super.destroy();
   }
 }
 

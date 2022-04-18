@@ -2,7 +2,6 @@ import {
   enterBrowserFullScreen,
   exitBrowserFullscreen,
   isBrowserFullscreen,
-  EventManager,
   isUndef,
   parseHtmlToDom,
   isMobile
@@ -15,23 +14,21 @@ import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
 import { PlayerEvents } from "../config/event";
 import Player from "../player";
 import FullscreenTpl from "../templates/fullscreen";
-import { ComponentApi, FullscreenType } from "../types/component";
+import { FullscreenType } from "../types/component";
 import { definePlayerMethods } from "../utils/helper";
+import Component from "./component";
 
-class VideoFullscreen implements ComponentApi {
-  // 播放器实例
-  private player: Player;
-  // 组件根元素
-  private rootElement: HTMLElement;
+class VideoFullscreen extends Component {
+  static componentName = "VideoFullscreen";
 
   private isWebFullscreen = false;
-  private eventManager = new EventManager();
-  constructor(player: Player, slotElement: HTMLElement) {
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
     this.initPlayerMethods();
+    this.initComponent(VideoFullscreen.componentName);
   }
 
   // 查询元素
@@ -160,10 +157,6 @@ class VideoFullscreen implements ComponentApi {
     } else if (type === FullScreenTypeEnum.browser) {
       this.exitBrowserFullscreen();
     }
-  }
-
-  destroy() {
-    this.eventManager.removeEventListener();
   }
 }
 

@@ -1,25 +1,21 @@
-import { EventManager, parseHtmlToDom, updateStyle } from "@lin-media/utils";
+import { parseHtmlToDom, updateStyle } from "@lin-media/utils";
 
 import { VideoReadyStateEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import Player from "../player";
 import LoadingTpl from "../templates/loading";
-import { ComponentApi } from "../types/component";
+import Component from "./component";
 
-class VideoLoading implements ComponentApi {
-  // 播放器实例
-  private player: Player;
-  // dom事件管理器
-  private eventManager = new EventManager();
-  // 组件根元素
-  private rootElement: HTMLElement;
+class VideoLoading extends Component {
+  static componentName = "VideoLoading";
 
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
+
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
+    this.initComponent(VideoLoading.componentName);
   }
 
   private initDom(slotElement: HTMLElement) {
@@ -67,10 +63,6 @@ class VideoLoading implements ComponentApi {
     updateStyle(this.rootElement, {
       display: ""
     });
-  }
-
-  destroy() {
-    this.eventManager.removeEventListener();
   }
 }
 

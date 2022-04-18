@@ -1,20 +1,16 @@
-import { EventManager, isFunction, parseHtmlToDom } from "@lin-media/utils";
+import { isFunction, parseHtmlToDom } from "@lin-media/utils";
 import { LISTACTIVECLASSNAME } from "../config/constant";
 import { PlayerEvents } from "../config/event";
 import Player from "../player";
 import DefinitionTpl from "../templates/definition";
-import { ComponentApi } from "../types/component";
 import { PlayerConfig } from "../types/player";
-class VideoDefinition implements ComponentApi {
+import Component from "./component";
+class VideoDefinition extends Component {
   static shouldInit(options: PlayerConfig) {
     return options.source && options.source.length > 0;
   }
-  // 播放器实例
-  private player: Player;
-  // dom事件管理器
-  private eventManager = new EventManager();
-  // 组件根元素
-  private rootElement: HTMLElement;
+  static componentName = "VideoDefinition";
+
   // 当前正在播放的视频索引
   private currentIndex = -1;
 
@@ -29,14 +25,15 @@ class VideoDefinition implements ComponentApi {
     return this.rootElement.querySelectorAll(selector) as NodeListOf<Element>;
   }
 
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
+
     // 初始化dom
     this.initDom(slotElement);
     // 设置索引，播放的是哪个视频
     this.setCurrentIndex(this.getDefaultIndex());
     this.initListener();
+    this.initComponent(VideoDefinition.componentName);
   }
 
   private initDom(slotElement: HTMLElement) {
@@ -168,10 +165,6 @@ class VideoDefinition implements ComponentApi {
     if (!element.classList.contains(LISTACTIVECLASSNAME)) {
       element.classList.add(LISTACTIVECLASSNAME);
     }
-  }
-
-  destroy() {
-    this.eventManager.removeEventListener();
   }
 }
 

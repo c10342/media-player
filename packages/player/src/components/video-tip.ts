@@ -1,20 +1,18 @@
 import { isUndef, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import Player from "../player";
 import TipTpl from "../templates/tip";
-import { ComponentApi } from "../types/component";
 import { definePlayerMethods } from "../utils/helper";
-class VideoTip implements ComponentApi {
-  // 播放器实例
-  private player: Player;
-  // 组件根元素
-  private rootElement: HTMLElement;
+import Component from "./component";
+class VideoTip extends Component {
+  static componentName = "VideoTip";
+
   // 定时器
   private timer: number | null;
-  constructor(player: Player, slotElement: HTMLElement) {
-    // 播放器实例
-    this.player = player;
+  constructor(player: Player, slotElement: HTMLElement, options = {}) {
+    super(player, slotElement, options);
     this.initDom(slotElement);
     this.initPlayerMethods();
+    this.initComponent(VideoTip.componentName);
   }
 
   private initPlayerMethods() {
@@ -62,6 +60,7 @@ class VideoTip implements ComponentApi {
 
   destroy() {
     this.destroyTimer();
+    super.destroy();
   }
 }
 

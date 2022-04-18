@@ -1,7 +1,6 @@
 import {
   checkData,
   Drag,
-  EventManager,
   getBoundingClientRect,
   isMobile,
   isNumber,
@@ -11,36 +10,17 @@ import {
   updateStyle
 } from "@lin-media/utils";
 import { VideoEvents } from "../config/event";
-import { registerComponent } from "../global-api/component";
 import Player from "../player";
 import ProgressTpl from "../templates/progress";
-import { ClassType, DragDataInfo } from "../types";
-import { ComponentApi, DefaultComponentOptions } from "../types/component";
+import { DragDataInfo } from "../types";
 import { PlayerConfig } from "../types/player";
-import { initComponents } from "../utils/helper";
+import Component from "./component";
 
-class VideoProgress implements ComponentApi {
+class VideoProgress extends Component {
   static shouldInit(options: PlayerConfig) {
     return !options.live;
   }
-  static registerComponent(
-    name: string,
-    component: ClassType<ComponentApi>,
-    options?: DefaultComponentOptions
-  ) {
-    registerComponent(name, component, {
-      ...options,
-      parentComponent: "VideoProgress"
-    });
-    return this;
-  }
-
-  // 播放器实例
-  private player: Player;
-  // dom事件管理器
-  private eventManager = new EventManager();
-  // 组件根元素
-  private rootElement: HTMLElement;
+  static componentName = "VideoProgress";
 
   private progressMaskElement: HTMLElement;
 
@@ -56,33 +36,19 @@ class VideoProgress implements ComponentApi {
 
   private currentTime = 0;
 
-  children: { [key: string]: ComponentApi } = {};
-
-  options: Record<string, any> = {};
-
   constructor(
     player: Player,
     slotElement: HTMLElement,
     options: Record<string, any>
   ) {
-    // 播放器实例
-    this.player = player;
-    this.options = options;
+    super(player, slotElement, options);
+
     // 初始化dom
     this.initDom(slotElement);
-    this.initComponent();
     // 初始化拖拽事件
     this.initDrag();
     this.initListener();
-  }
-
-  private initComponent() {
-    initComponents(
-      "VideoProgress",
-      this.player,
-      this.rootElement,
-      this.children
-    );
+    this.initComponent(VideoProgress.componentName);
   }
 
   // 查询元素
@@ -316,7 +282,7 @@ class VideoProgress implements ComponentApi {
 
   destroy() {
     this.dragInstance.destroy();
-    this.eventManager.removeEventListener();
+    super.destroy();
   }
 }
 
