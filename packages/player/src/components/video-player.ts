@@ -153,6 +153,17 @@ class VideoPlayer extends Component {
         }
       });
     });
+
+    Object.defineProperty(this.player, "videoElement", {
+      get: () => {
+        return this.videoElement;
+      }
+    });
+    Object.defineProperty(this.player, "sourceItem", {
+      get: () => {
+        return this.getVideoItem();
+      }
+    });
   }
 
   // 判断能否进行切换,因为可能越界

@@ -15,6 +15,7 @@ import VideoSpeed from "./components/video-speed";
 import VideoDefinition from "./components/video-definition";
 import VideoLive from "./components/video-live";
 import Component from "./components/component";
+import { isMobile } from "@lin-media/utils";
 
 const options = {
   init: true
@@ -40,13 +41,11 @@ VideoControls.registerComponent(
 VideoControls.registerComponent(
   VideoPlayButton.componentName,
   VideoPlayButton,
-  options
+  { init: !isMobile() }
 );
-VideoControls.registerComponent(
-  VideoVolume.componentName,
-  VideoVolume,
-  options
-);
+VideoControls.registerComponent(VideoVolume.componentName, VideoVolume, {
+  init: !isMobile()
+});
 VideoControls.registerComponent(VideoTime.componentName, VideoTime, options);
 VideoControls.registerComponent(VideoLive.componentName, VideoLive, options);
 VideoControls.registerComponent(VideoSpeed.componentName, VideoSpeed, options);

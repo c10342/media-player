@@ -1,4 +1,4 @@
-import { isMobile, parseHtmlToDom } from "@lin-media/utils";
+import { parseHtmlToDom } from "@lin-media/utils";
 import { PlayButtonIconEnum } from "../config/enum";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
@@ -6,9 +6,6 @@ import PlayButtonTpl from "../templates/play-button";
 import Component from "./component";
 
 class VideoPlayButton extends Component {
-  static shouldInit() {
-    return !isMobile();
-  }
   static componentName = "VideoPlayButton";
 
   constructor(player: Player, slotElement: HTMLElement, options = {}) {

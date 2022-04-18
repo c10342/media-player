@@ -1,4 +1,4 @@
-import { Drag, isMobile, parseHtmlToDom, updateStyle } from "@lin-media/utils";
+import { Drag, parseHtmlToDom, updateStyle } from "@lin-media/utils";
 import { VolumeButtonIconEnum } from "../config/enum";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
@@ -7,9 +7,6 @@ import { DragDataInfo } from "../types";
 import Component from "./component";
 
 class VideoVolume extends Component {
-  static shouldInit() {
-    return !isMobile();
-  }
   static componentName = "VideoVolume";
 
   private volumeProcessElement: HTMLElement;
