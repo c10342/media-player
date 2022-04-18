@@ -3,36 +3,29 @@ import { EventManager, isUndef, logError } from "@lin-media/utils";
 import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
 import { downloadPicName } from "./config/constant";
-import Player, { ComponentApi } from "@lin-media/player";
+import Player from "@lin-media/player";
 import { Events } from "./config/event";
 
 const defaultOptions = {
   download: true
 };
 
-class Screenshot implements ComponentApi {
+const Component = Player.getComponent<ScreenshotOptions>("Component");
+
+class Screenshot extends Component {
   // 自定义事件
   static customEvents = Events;
-  // 播放器的dom
-  private slotElement: HTMLElement;
-  // 播放器实例
-  private player: Player;
+
   // dom元素
   private element: HTMLElement | null;
-  // 事件管理器
-  private eventManager = new EventManager();
-  // 参数
-  private options: ScreenshotOptions;
 
   constructor(
     player: Player,
     slotElement: HTMLElement,
     options: ScreenshotOptions
   ) {
-    // 保存一下播放器给来的参数
-    this.slotElement = slotElement;
-    this.player = player;
-    this.options = { ...defaultOptions, ...options };
+    super(player, slotElement, { ...defaultOptions, ...options });
+
     // 初始化
     this.handleInit();
     // 挂载方法给外部使用
@@ -130,6 +123,7 @@ class Screenshot implements ComponentApi {
 
   destroy() {
     this.removeListener();
+    super.destroy();
   }
 }
 

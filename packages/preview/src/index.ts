@@ -9,7 +9,7 @@ import {
   updateStyle
 } from "@lin-media/utils";
 import { PreviewList, PreviewOptions } from "./types";
-import Player, { ComponentApi } from "@lin-media/player";
+import Player from "@lin-media/player";
 import { PreviewEvents } from "./config/event";
 import { barViewImageWidth } from "./config/constant";
 
@@ -17,32 +17,26 @@ const defaultOptions = {
   barPreview: false
 };
 
-class Preview implements ComponentApi {
+const Component = Player.getComponent<PreviewOptions>("Component");
+
+class Preview extends Component {
   // 自定义事件
   static customEvents = PreviewEvents;
-  // 播放器的dom
-  private slotElement: HTMLElement;
-  // 播放器实例
-  private player: Player;
   // 是否正在加载标志位
   private load = true;
   // 预览点的dom元素
   private element: HTMLElement | null;
-  // 事件管理器
-  private eventManager = new EventManager();
-  // 参数
-  private options: PreviewOptions;
   // 进度条预览图片元素
   private barViewElement: HTMLElement | null;
   // 进度条容器
   private progressElement: HTMLElement | null;
 
-  constructor(player: Player, el: HTMLElement, options: PreviewOptions = {}) {
-    // 保存一下播放器给来的参数
-    this.slotElement = el;
-    this.player = player;
-    // 参数
-    this.options = { ...defaultOptions, ...options };
+  constructor(
+    player: Player,
+    slotElement: HTMLElement,
+    options: PreviewOptions = {}
+  ) {
+    super(player, slotElement, { ...defaultOptions, ...options });
     // 开始初始化
     this.initList();
     // 挂载方法给外部使用
@@ -303,6 +297,7 @@ class Preview implements ComponentApi {
   destroy() {
     this.destroyPreview();
     this.destroyBarView();
+    super.destroy();
   }
 }
 

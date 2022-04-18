@@ -5,7 +5,7 @@ import { DanmakuOptions, PushData } from "./types";
 import settingTpl from "./template/setting";
 import "./style/index.scss";
 import initLocale from "./locale";
-import Player, { ComponentApi } from "@lin-media/player";
+import Player from "@lin-media/player";
 
 interface DataInfo {
   offsetX: number;
@@ -14,13 +14,9 @@ interface DataInfo {
   percentY: number;
 }
 
-class Danmaku implements ComponentApi {
-  private options: DanmakuOptions;
-  // 播放器的dom
-  private slotElement: HTMLElement;
-  // 播放器实例
-  private player: Player;
-  private eventManager = new EventManager();
+const Component = Player.getComponent<DanmakuOptions>("Component");
+
+class Danmaku extends Component {
   // 弹幕类
   private bulletChat: BulletChat | null;
   // 弹幕容器
@@ -61,9 +57,8 @@ class Danmaku implements ComponentApi {
     slotElement: HTMLElement,
     options: DanmakuOptions = {}
   ) {
-    this.slotElement = slotElement;
-    this.player = player;
-    this.options = options;
+    super(player, slotElement, options);
+
     // 初始化语言
     this.initLang();
     // 生成dom元素
@@ -374,7 +369,7 @@ class Danmaku implements ComponentApi {
     this.settingWrapperElement.remove();
     this.opacityDragInstance?.destroy();
     this.bulletChat = null;
-    this.eventManager?.removeEventListener();
+    super.destroy();
   }
 }
 

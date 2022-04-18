@@ -3,20 +3,20 @@ import { ClassNameEnum, CursorEnum } from "./config/enum";
 import { Events } from "./config/event";
 import "./style/index.scss";
 import { ZoomData, ZoomOptions } from "./types";
-import Player, { ComponentApi } from "@lin-media/player";
+import Player from "@lin-media/player";
 import defaultOptions from "./config/default-options";
 
-class Zoom implements ComponentApi {
+const Component = Player.getComponent<ZoomOptions>("Component");
+
+class Zoom extends Component {
   // 自定义事件
   static customEvents = Events;
-  // 播放器实例
-  private player: Player;
+
   //   父级元素
   private parentElement: HTMLElement;
   //   拖拽的元素
   private dragElement: HTMLElement | null;
-  // 参数
-  private options: ZoomOptions;
+
   // 拖拽实例
   private dragInstance: Drag | null;
   // 记录上一个位置
@@ -26,9 +26,8 @@ class Zoom implements ComponentApi {
     slotElement: HTMLElement,
     options: ZoomOptions = {}
   ) {
-    this.player = player;
+    super(player, slotElement, { ...defaultOptions, ...options });
     this.parentElement = player.options.el;
-    this.options = { ...defaultOptions, ...options };
     this.init();
     this.initDrag();
   }
@@ -168,6 +167,7 @@ class Zoom implements ComponentApi {
     this.setParentStyle();
     this.removeDragElement();
     this.dragInstance?.destroy();
+    super.destroy();
   }
 }
 

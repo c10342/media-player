@@ -1,13 +1,8 @@
 import pointListTpl from "./template/point-list";
 import "./style/index.scss";
-import {
-  EventManager,
-  getBoundingClientRect,
-  isArray,
-  updateStyle
-} from "@lin-media/utils";
+import { getBoundingClientRect, isArray, updateStyle } from "@lin-media/utils";
 import { HighlightList, HighlightOptions } from "./types";
-import Player, { ComponentApi } from "@lin-media/player";
+import Player from "@lin-media/player";
 import { Events } from "./config/event";
 
 const defaultOptions = {
@@ -15,32 +10,24 @@ const defaultOptions = {
   showTip: true
 };
 
-class Highlight implements ComponentApi {
+const Component = Player.getComponent<HighlightOptions>("Component");
+
+class Highlight extends Component {
   // 自定义事件
   static Events = Events;
-  // 播放器的dom
-  private slotElement: HTMLElement;
-  // 播放器实例
-  private player: Player;
+
   // 是否正在加载标志位
   private load = true;
   // 提示点的dom元素
   private element: HTMLElement | null;
-  // 事件管理器
-  private eventManager = new EventManager();
-  // 提示点参数
-  private options: HighlightOptions;
 
   constructor(
-    playerInstance: Player,
+    player: Player,
     slotElement: HTMLElement,
     options: HighlightOptions = {}
   ) {
-    // 保存一下播放器给来的参数
-    this.slotElement = slotElement;
-    this.player = playerInstance;
-    // 合并默认参数
-    this.options = { ...defaultOptions, ...options };
+    super(player, slotElement, { ...defaultOptions, ...options });
+
     // 开始初始化
     this.init();
     // 挂载方法给外部用
@@ -216,6 +203,7 @@ class Highlight implements ComponentApi {
 
   destroy() {
     this.destroyHighlight();
+    super.destroy();
   }
 }
 
