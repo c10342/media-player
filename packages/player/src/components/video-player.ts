@@ -223,15 +223,15 @@ class VideoPlayer extends Component {
     this.player.$once(VideoEvents.CANPLAY, () => {
       // 这个时候说明新的video标签已经准备好了，可以移除旧的video标签了，这样子就可以完美解决切换清晰度闪屏的问题了
       this.rootElement.removeChild(prevVideoElement);
+      // 切换完记得更新video标签
+      this.videoElement = nextVideoElement;
+      // 设置通知
+      player.setNotice(player.i18n.t("switch", { quality: videoItem?.label }));
       // 清晰度切换完毕
       this.player.$emit(PlayerEvents.SWITCH_DEFINITION_END, {
         ...videoItem,
         index: this.currentIndex
       });
-      // 切换完记得更新video标签
-      this.videoElement = nextVideoElement;
-      // 设置通知
-      player.setNotice(player.i18n.t("switch", { quality: videoItem?.label }));
     });
   }
 
