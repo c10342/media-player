@@ -18,6 +18,8 @@ class VideoFloatButton extends Component {
 
   private isShow = true;
 
+  private isSwitching = false;
+
   constructor(player: Player, slotElement: HTMLElement, options = {}) {
     super(player, slotElement, options);
     // 初始化dom
@@ -38,6 +40,14 @@ class VideoFloatButton extends Component {
   private initListener() {
     this.player.$on(VideoEvents.PLAY, this.onPlay.bind(this));
     this.player.$on(VideoEvents.PAUSE, this.onPause.bind(this));
+    this.player.$on(
+      PlayerEvents.SWITCH_DEFINITION_START,
+      this.onSwitchDefinitionStart.bind(this)
+    );
+    this.player.$on(
+      PlayerEvents.SWITCH_DEFINITION_END,
+      this.onSwitchDefinitionEnd.bind(this)
+    );
     if (isPhone) {
       this.player.$on(
         PlayerEvents.SHOW_CONTROLS,
@@ -60,6 +70,14 @@ class VideoFloatButton extends Component {
     });
   }
 
+  private onSwitchDefinitionStart() {
+    this.isSwitching = true;
+  }
+
+  private onSwitchDefinitionEnd() {
+    this.isSwitching = false;
+  }
+
   private onPlayButtonClick(event: MouseEvent) {
     event.stopPropagation();
     this.player.toggle();
@@ -67,14 +85,14 @@ class VideoFloatButton extends Component {
 
   private onPlay() {
     this.showPlayIcon();
-    if (!isPhone) {
+    if (!isPhone && !this.isSwitching) {
       this.hidePlayButtonAnimation();
     }
   }
 
   private onPause() {
     this.showPauseIcon();
-    if (!isPhone) {
+    if (!isPhone && !this.isSwitching) {
       this.showPlayButtonAnimation();
     }
   }
