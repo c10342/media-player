@@ -12,19 +12,17 @@ class EventEmit {
     if (!isArray(this.eventMap[eventName])) {
       this.eventMap[eventName] = [];
     }
+
     this.eventMap[eventName].push(handler);
     return this;
   }
   // 发射事件
   $emit(eventName: string, ...data: any) {
-    const eventList = this.eventMap[eventName] || [];
-    const length = eventList.length;
-    if (length > 0) {
-      // 从最后一个开始执行，防止数组塌陷
-      for (let i = length - 1; i >= 0; i--) {
-        eventList[i](...data);
-      }
-    }
+    const eventList = (this.eventMap[eventName] || []).slice();
+    eventList.forEach((fn) => {
+      fn(...data);
+    });
+
     return this;
   }
 
