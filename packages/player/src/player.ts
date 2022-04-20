@@ -29,7 +29,6 @@ import initLocale from "./locale";
 import { destroyComponents, initComponents, initPlugins } from "./utils/helper";
 import { HookCallback, HookType } from "./types/hook";
 import { DefaultPluginOptions, PluginClass } from "./types/plugin";
-import { ClassType } from "./types";
 import {
   ComponentClass,
   DefaultComponentOptions,
@@ -336,6 +335,7 @@ class Player extends EventEmit {
     this.destroyPlugins();
     this.destroyComponents();
     this.clear();
+    this.tech?.destroy();
     this.resetData();
   }
 }
