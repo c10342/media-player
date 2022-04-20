@@ -4,14 +4,14 @@ heroImage: /logo.png
 heroText: 欢迎使用 MediaPlayer
 tagline: 一个插件化、组件化的H5视频播放器
 actionText: 快速上手 →
-actionLink: /guide/
+actionLink: /player/
 features:
 - title: typescript
   details: 基于 typescript 编写的视频播放器。
 - title: 插件化
-  details: 提供插件的功能，可定制化需求。
+  details: 可对播放器的功能进行扩展。
 - title: 组件化
-  details: 播放器中的每一个控件都是一个组件。
+  details: 可定制UI组件。
 - title: 自定义主题
   details: 通过css原生变量实现自定义主题，无需重新打包。
 - title: 轻量灵活

@@ -33,16 +33,26 @@ module.exports = {
     editLinkText: "帮助我们改善此页面！",
     nav: [
       { text: "首页", link: "/" },
-      { text: "指南", link: "/guide/" },
+      { text: "指南", link: "/player/" },
+      { text: "架构设计", link: "/framework/" },
+      {
+        text: "组件",
+        items: [
+          { text: "介绍", link: "/components/guide/" },
+          { text: "内置组件", link: "/components/built-in/" },
+          { text: "弹幕", link: "/components/danmaku/" },
+          { text: "截图", link: "/components/screenshot/" },
+          { text: "缩放", link: "/components/zoom/" },
+          { text: "右键菜单", link: "/components/contextmenu/" },
+          { text: "视频缩略图预览", link: "/components/preview/" },
+          { text: "自定义进度条提示点", link: "components//highlight/" }
+        ]
+      },
       {
         text: "插件",
         items: [
-          { text: "弹幕", link: "/danmaku/" },
-          { text: "截图", link: "/screenshot/" },
-          { text: "缩放", link: "/zoom/" },
-          { text: "右键菜单", link: "/contextmenu/" },
-          { text: "视频缩略图预览", link: "/preview/" },
-          { text: "自定义进度条提示点", link: "/highlight/" }
+          { text: "介绍", link: "/plugins/guide/" },
+          { text: "内置组件", link: "/plugins/built-in/" }
         ]
       },
       { text: "生态", link: "/ecology/" },

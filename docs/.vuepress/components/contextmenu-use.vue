@@ -1,10 +1,9 @@
 <template>
-  <demo-player ref="demoPlayer" @init-success='onInitSuccess' />
+  <demo-player ref="demoPlayer" @init-success="onInitSuccess" />
 </template>
 
 <script>
 import DemoPlayer from "./demo-player.vue";
-import Contextmenu from "@lin-media/contextmenu";
 
 export default {
   components: { DemoPlayer },
@@ -82,20 +81,21 @@ export default {
     ];
   },
   mounted() {
-     this.$refs.demoPlayer.initPlayer({
-      Contextmenu: {
-        menuList: this.contextMenuList,
-        // 一级菜单宽度
-        menuItemWidth: "200px",
-        // 二级菜单宽度
-        subMenuItemWidth: "100px"
-      },
-      plugins: [Contextmenu]
+    this.$refs.demoPlayer.initPlayer({
+      components: {
+        Contextmenu: {
+          menuList: this.contextMenuList,
+          // 一级菜单宽度
+          menuItemWidth: "200px",
+          // 二级菜单宽度
+          subMenuItemWidth: "100px"
+        }
+      }
     });
   },
-  methods:{
-    onInitSuccess(player){
-      this.player = player
+  methods: {
+    onInitSuccess(player) {
+      this.player = player;
     }
   }
 };

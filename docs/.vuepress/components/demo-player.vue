@@ -6,15 +6,24 @@
 
 <script>
 import MediaPlayer from "@lin-media/player";
+// import "@lin-media/preview";
+// import "@lin-media/contextmenu";
+// import "@lin-media/danmaku";
+// import "@lin-media/highlight";
+// import "@lin-media/screenshot";
+// import "@lin-media/preview";
+// import "@lin-media/zoom";
 const playerOptions = {
-  videoList: [
+  source: [
     {
       label: "标清",
-      url: "/test.mp4"
+      url: "/test.mp4",
+      type:'video/mp4'
     },
     {
       label: "高清",
-      url: "/test.mp4"
+      url: "/test.mp4",
+      type:'video/mp4'
     }
   ],
   speedList: [
@@ -39,14 +48,14 @@ export default {
   },
   methods: {
     initPlayer(options = {}) {
-      this.destroyPlayer();
-      this.player = new MediaPlayer({
-        el: this.$refs.wrapper,
-        ...playerOptions,
-        ...options
-      });
-      this.$emit("init-success", this.player);
-      return this.player
+      // this.destroyPlayer();
+      // this.player = new MediaPlayer({
+      //   el: this.$refs.wrapper,
+      //   ...playerOptions,
+      //   ...options
+      // });
+      // this.$emit("init-success", this.player);
+      // return this.player
     },
     destroyPlayer() {
       if (this.player) {

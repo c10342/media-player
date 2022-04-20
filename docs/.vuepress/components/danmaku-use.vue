@@ -16,7 +16,6 @@
 
 <script>
 import DemoPlayer from "./demo-player.vue";
-import Danmaku from "@lin-media/danmaku";
 
 const messages = [
   "你可以通过下面的参数来自定义你的播放器具体需要什么功能",
@@ -55,12 +54,13 @@ export default {
   },
   mounted() {
     this.$refs.demoPlayer.initPlayer({
-      Danmaku: {
-        fontColors: ["blue", "red", "green", "purple", "yellow"],
-        fontSizes: [16, 18, 20, 22, 24, 26, 28],
-        speedArg: 0.009
-      },
-      plugins: [Danmaku]
+      components: {
+        Danmaku: {
+          fontColors: ["blue", "red", "green", "purple", "yellow"],
+          fontSizes: [16, 18, 20, 22, 24, 26, 28],
+          speedArg: 0.009
+        }
+      }
     });
   },
   methods: {

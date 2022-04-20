@@ -4,7 +4,6 @@
 
 <script>
 import DemoPlayer from "./demo-player.vue";
-import Preview from "@lin-media/preview";
 
 const previewList = [
   {
@@ -33,11 +32,12 @@ export default {
   components: { DemoPlayer },
   mounted() {
     this.$refs.demoPlayer.initPlayer({
-      Preview: {
-        // 通过参数传入或者通过setPreview方法设置
-        list: previewList
-      },
-      plugins: [Preview]
+      components: {
+        Preview: {
+          // 通过参数传入或者通过setPreview方法设置
+          list: previewList
+        }
+      }
     });
   }
 };

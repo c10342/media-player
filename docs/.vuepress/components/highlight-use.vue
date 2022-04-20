@@ -4,7 +4,6 @@
 
 <script>
 import DemoPlayer from "./demo-player.vue";
-import Highlight from "@lin-media/highlight";
 
 const highlightList = [
   {
@@ -33,10 +32,11 @@ export default {
   components: { DemoPlayer },
   mounted() {
     this.$refs.demoPlayer.initPlayer({
-      Highlight: {
-        list: highlightList
-      },
-      plugins: [Highlight]
+      components: {
+        Highlight: {
+          list: highlightList
+        }
+      }
     });
   }
 };
