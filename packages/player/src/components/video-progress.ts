@@ -9,7 +9,7 @@ import {
   secondToTime,
   updateStyle
 } from "@lin-media/utils";
-import { VideoEvents } from "../config/event";
+import { PlayerEvents, VideoEvents } from "../config/event";
 import Player from "../player";
 import ProgressTpl from "../templates/progress";
 import { DragDataInfo } from "../types";
@@ -157,6 +157,10 @@ class VideoProgress extends Component {
     this.player.$on(VideoEvents.PROGRESS, this.onVideoProgress.bind(this));
     this.player.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
     this.player.$on(VideoEvents.ENDED, this.onVideoEnd.bind(this));
+    this.player.$on(
+      PlayerEvents.SWITCH_DEFINITION_END,
+      this.onSwitchDefinition.bind(this)
+    );
     if (!isMobile()) {
       this.eventManager.addEventListener({
         element: this.progressMaskElement,
@@ -169,6 +173,11 @@ class VideoProgress extends Component {
         handler: this.onMaskMouseleave.bind(this)
       });
     }
+  }
+
+  // 清晰度切换完成
+  private onSwitchDefinition() {
+    this.setPlayedProgress();
   }
 
   // 视频播放完成
@@ -215,6 +224,7 @@ class VideoProgress extends Component {
     if (isUndef(currentTime)) {
       currentTime = this.currentTime;
     }
+
     if (duration > 0 && currentTime > 0) {
       // 计算出百分比
       let percent = currentTime / duration;
