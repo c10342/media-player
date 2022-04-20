@@ -55,18 +55,19 @@ class Highlight extends Component {
 
   // 初始化
   private init() {
+    const exec = () => {
+      this.load = true;
+      this.initElement();
+    };
     // 提示点需要获取总时长，计算出提示点的位置
     if (this.duration && this.duration > 0) {
       // 总时长存在并且大于0，说明视频已经加载好了
-      this.load = true;
-      this.initElement();
+      exec();
     } else {
       // 获取不到总时长说明视频没有加载完成，需要等待加载完成在执行下一步操作
-      this.player.$once(Player.Events.LOADEDMETADATA, () => {
-        this.load = true;
-        this.initElement();
-      });
+      this.player.$once(Player.Events.LOADEDMETADATA, exec);
     }
+    this.player.$on(Player.Events.SWITCH_DEFINITION_END, exec);
   }
 
   private initElement() {
@@ -75,6 +76,7 @@ class Highlight extends Component {
       // 视频没加载完成或者提示点列表为空不做任何操作
       return;
     }
+
     // 为防止重复设置,每次设置需要销毁上一次的
     this.removeElementAndListener();
 
