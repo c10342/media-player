@@ -53,7 +53,7 @@ export default {
         import("@lin-media/screenshot"),
         import("@lin-media/zoom")
       ]);
-      const MediaPlayer = ret[0]
+      const MediaPlayer = ret[0].default
       this.destroyPlayer();
       this.player = new MediaPlayer({
         el: this.$refs.wrapper,
