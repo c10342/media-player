@@ -5,25 +5,18 @@
 </template>
 
 <script>
-import MediaPlayer from "@lin-media/player";
-// import "@lin-media/preview";
-// import "@lin-media/contextmenu";
-// import "@lin-media/danmaku";
-// import "@lin-media/highlight";
-// import "@lin-media/screenshot";
-// import "@lin-media/preview";
-// import "@lin-media/zoom";
+
 const playerOptions = {
   source: [
     {
       label: "标清",
       url: "/test.mp4",
-      type:'video/mp4'
+      type: "video/mp4"
     },
     {
       label: "高清",
       url: "/test.mp4",
-      type:'video/mp4'
+      type: "video/mp4"
     }
   ],
   speedList: [
@@ -47,15 +40,28 @@ export default {
     this.player = null;
   },
   methods: {
-    initPlayer(options = {}) {
-      // this.destroyPlayer();
-      // this.player = new MediaPlayer({
-      //   el: this.$refs.wrapper,
-      //   ...playerOptions,
-      //   ...options
-      // });
-      // this.$emit("init-success", this.player);
-      // return this.player
+    async initPlayer(options = {}) {
+      if (!window) {
+        return;
+      }
+      const ret = await Promise.all([
+        import("@lin-media/player"),
+        import("@lin-media/preview"),
+        import("@lin-media/contextmenu"),
+        import("@lin-media/danmaku"),
+        import("@lin-media/highlight"),
+        import("@lin-media/screenshot"),
+        import("@lin-media/zoom")
+      ]);
+      const MediaPlayer = ret[0]
+      this.destroyPlayer();
+      this.player = new MediaPlayer({
+        el: this.$refs.wrapper,
+        ...playerOptions,
+        ...options
+      });
+      this.$emit("init-success", this.player);
+      return this.player;
     },
     destroyPlayer() {
       if (this.player) {
