@@ -1,4 +1,6 @@
 import { registerTech } from "./global-api/tech";
 import Html5 from "./techs/html5";
+import Tech from "./techs/tech";
 
+registerTech("Tech", Tech);
 registerTech("Html5", Html5);
