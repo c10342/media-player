@@ -1,6 +1,5 @@
 import { isFunction, logError, logWarn } from "@lin-media/utils";
-import { ClassType } from "../types";
-import { TechsMap } from "../types/tech";
+import { TechClass, TechsMap } from "../types/tech";
 
 const techsMap: TechsMap = {};
 
@@ -10,7 +9,7 @@ function keyInMap(key: string) {
   return key in techsMap;
 }
 
-export function registerTech(name: string, tech: ClassType) {
+export function registerTech(name: string, tech: TechClass) {
   if (keyInMap(name)) {
     logWarn(`tech: ${name} is registered`);
     return;
@@ -41,7 +40,7 @@ export function getTech(name: string) {
 }
 
 export function forEachTech(
-  cb: (name: string, tech: ClassType) => boolean,
+  cb: (name: string, tech: TechClass) => boolean,
   techOrder: string[] = []
 ) {
   const keys = [...new Set([...techOrder, ...techsKey])];
