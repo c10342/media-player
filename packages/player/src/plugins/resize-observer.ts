@@ -27,6 +27,7 @@ class DomResizeObserver extends Plugin {
 
   destroy() {
     this.resizeObserver?.disconnect();
+    super.destroy();
   }
 }
 

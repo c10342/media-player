@@ -103,6 +103,7 @@ class ShortcutKey extends Plugin {
 
   destroy() {
     this.eventManager.removeEventListener();
+    super.destroy();
   }
 }
 
