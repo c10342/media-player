@@ -26,7 +26,12 @@ import { PlayerEvents, VideoEvents } from "./config/event";
 import defaultOptions from "./config/defaults";
 import mergeConfig from "./utils/merge-config";
 import initLocale from "./locale";
-import { destroyComponents, initComponents, initPlugins } from "./utils/helper";
+import {
+  destroyComponents,
+  destroyPlugins,
+  initComponents,
+  initPlugins
+} from "./utils/helper";
 import { HookCallback, HookType } from "./types/hook";
 import { DefaultPluginOptions, PluginClass } from "./types/plugin";
 import {
@@ -43,6 +48,8 @@ import {
 import { SourceHandleCallback } from "./types/source";
 import Component from "./components/component";
 import Plugin from "./plugins/plugin";
+import { TechClass } from "./types/tech";
+import { getTech, registerTech, removeTech } from "./global-api/tech";
 
 class Player extends EventEmit {
   static Events = {
@@ -60,6 +67,21 @@ class Player extends EventEmit {
   // 自定义语言包
   static useLang(customLanguage: Record<string, any>) {
     this.defaults.customLanguage = customLanguage;
+    return this;
+  }
+
+  static registerTech(name: string, tech: TechClass) {
+    registerTech(name, tech);
+    return this;
+  }
+
+  static removeTech(name: string) {
+    removeTech(name);
+    return this;
+  }
+
+  static getTech(name: string) {
+    getTech(name);
     return this;
   }
 
@@ -207,15 +229,7 @@ class Player extends EventEmit {
   }
 
   private destroyPlugins() {
-    Object.keys(this.plugins).forEach((name) => {
-      const plugin = this.plugins[name];
-      this.$emit(`beforePluginDestroy:${name}`, plugin);
-      if (isFunction(plugin.destroy)) {
-        plugin.destroy();
-      }
-      this.$emit(`afterPluginDestroy:${name}`);
-    });
-    this.plugins = {};
+    destroyPlugins(this);
   }
   private destroyComponents() {
     destroyComponents(this.components, this);
