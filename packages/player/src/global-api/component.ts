@@ -64,7 +64,7 @@ export function forEachComponent(
 
   // 根据优先级初始化
   componentList
-    .sort((a, b) => (a.options.level ?? 0) - (b.options.level ?? 0))
+    .sort((a, b) => (b.options.level ?? 0) - (a.options.level ?? 0))
     .forEach((item) => {
       cb(item.name, item.handler, item.options);
     });
