@@ -1,14 +1,11 @@
+import Player from "../player";
 import { PlayerConfig } from "./player";
 
 export type HookType = "beforeSetup" | "afterSetup";
 
-export type BeforeSetupCallback = (
-  data: PlayerConfig
-) => PlayerConfig | Promise<PlayerConfig>;
-
-export type AfterSetupCallback = (player: any) => void;
-
-export type HookCallback = BeforeSetupCallback | AfterSetupCallback;
+export type HookCallback = (
+  data: PlayerConfig | Player
+) => PlayerConfig | Promise<PlayerConfig> | Player | Promise<Player>;
 
 export interface HooksMap {
   beforeSetup: HookCallback[];
