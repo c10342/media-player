@@ -1,54 +1,46 @@
 import { logError } from "@lin-media/utils";
 import { SourceItem } from "../types/player";
-import { SourceHandleCallback } from "../types/source";
+import {
+  NextFunction,
+  SourceArrItem,
+  SourceHandleCallback
+} from "../types/source";
 
-const sourcesMap: { [key: string]: Array<SourceHandleCallback> } = {
-  "*": []
-};
+const sourceArray: Array<SourceArrItem> = [];
 
-function keyInMap(key: string) {
-  return key in sourcesMap;
-}
-
-function findIndex(type: string, callback: SourceHandleCallback) {
-  return sourcesMap[type].findIndex(
-    (item: any) => (item || item._fn_) === callback
+function findSource(type: string, callback: SourceHandleCallback) {
+  return sourceArray.findIndex(
+    (source) =>
+      source.type === type &&
+      (source.handler === callback || (source.handler as any)._fn_ === callback)
   );
 }
 
 export function registerSource(type: string, callback: SourceHandleCallback) {
-  if (!keyInMap(type)) {
-    sourcesMap[type] = [];
-  }
-  const index = findIndex(type, callback);
-  if (index > -1) {
-    const fn = (callback as any)._fn_ ? (callback as any)._fn_ : callback;
-    logError(`source: ${fn} is registered`);
+  if (findSource(type, callback) > -1) {
+    logError(`source: ${callback} is registered`);
     return;
   }
-  sourcesMap[type].push(callback);
+  sourceArray.push({
+    type,
+    handler: callback
+  });
 }
 
-export function removeSource(type: string, callback?: SourceHandleCallback) {
-  if (!keyInMap(type)) {
-    return;
-  }
-  if (!callback) {
-    delete sourcesMap[type];
+export function removeSource(type: string, callback: SourceHandleCallback) {
+  const index = findSource(type, callback);
+  if (index === -1) {
     return;
   }
 
-  const index = findIndex(type, callback);
-  if (index > -1) {
-    sourcesMap[type].splice(index, 1);
-  }
+  sourceArray.splice(index, 1);
 }
 export function registerOnceSource(
   type: string,
   callback: SourceHandleCallback
 ) {
-  const fn = (data: SourceItem) => {
-    const ret = callback(data);
+  const fn = (data: SourceItem, next: NextFunction) => {
+    const ret = callback(data, next);
     removeSource(type, fn);
     return ret;
   };
@@ -57,13 +49,9 @@ export function registerOnceSource(
 }
 
 export function forEachSource(
-  type: string,
-  callback: (fn: SourceHandleCallback) => void
+  callback: (type: string, fn: SourceHandleCallback) => void
 ) {
-  if (!keyInMap(type)) {
-    return;
-  }
-  sourcesMap[type].forEach((fn) => {
-    callback(fn);
+  sourceArray.forEach((item) => {
+    callback(item.type, item.handler);
   });
 }

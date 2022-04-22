@@ -95,26 +95,33 @@ class VideoPlayer extends Component {
       });
       this.initVideoEvents(videoElement);
     };
-    const chain: Function[] = [];
+    const chain: Array<{ type: string; handler: Function }> = [];
 
-    forEachSource("*", (fn) => {
-      chain.push(fn);
+    forEachSource((type, handler) => {
+      chain.push({ type, handler });
     });
-    forEachSource(sourceItem.type, (fn) => {
-      chain.push(fn);
-    });
-    chain.push(initTech);
+    const next = (index: number, si: SourceItem) => {
+      if (index === chain.length) {
+        initTech(si);
+        return;
+      }
+      const item = chain[index];
+      if (item.type === si.type) {
+        let called = false;
+        item.handler(si, (s: SourceItem) => {
+          if (called) {
+            logError("next have been called");
 
-    let p: Promise<any> = Promise.resolve(sourceItem);
-
-    while (chain.length) {
-      p = p.then(chain.shift() as any);
-    }
-    p = p.catch((error: any) => {
-      this.player.$emit("error", error);
-      logError(error);
-    });
-    return p;
+            return;
+          }
+          next(index + 1, s);
+          called = true;
+        });
+      } else {
+        next(index + 1, si);
+      }
+    };
+    next(0, sourceItem);
   }
 
   // 初始化video标签事件

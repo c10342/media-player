@@ -147,7 +147,7 @@ class Player extends EventEmit {
     return this;
   }
 
-  static removeSource(type: string, callback?: SourceHandleCallback) {
+  static removeSource(type: string, callback: SourceHandleCallback) {
     removeSource(type, callback);
     return this;
   }
