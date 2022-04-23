@@ -160,6 +160,7 @@ class Player extends EventEmit {
   i18n: any = null;
   private readyCallback: Array<Function> = [];
   private isReady = false;
+  videoElement: HTMLVideoElement | null;
   constructor(options: PlayerConfig) {
     super();
     this.init(options);
