@@ -196,6 +196,9 @@ class Preview extends Component {
     if (!isUndef(barPreviewUrl)) {
       // 创建一个div出来，图片使用背景图
       const div = this.createBarViewWrapper();
+      if (!div) {
+        return;
+      }
       // 找到进度条容器
       this.progressElement = this.slotElement.querySelector(
         ".player-process-content"
@@ -214,9 +217,10 @@ class Preview extends Component {
 
   // 创建一个进度条预览的div出来
   private createBarViewWrapper() {
-    const videoElement = this.slotElement.querySelector(
-      ".player-video"
-    ) as HTMLVideoElement;
+    const videoElement = this.player.videoElement;
+    if (!videoElement) {
+      return;
+    }
     const height =
       (videoElement!.videoHeight / videoElement!.videoWidth) *
       barViewImageWidth;
