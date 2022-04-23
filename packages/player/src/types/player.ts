@@ -19,7 +19,7 @@ export interface PlayerConfig {
   components?: { [key: string]: any };
   el: HTMLElement;
   // 视频播放列表
-  source: VideoListParams;
+  sources: VideoListParams;
   tech?: Array<string>;
   live?: boolean;
   customLanguage?: Record<string, any>;

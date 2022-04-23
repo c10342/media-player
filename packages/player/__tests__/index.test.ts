@@ -42,7 +42,7 @@ const speedList = [
 ];
 
 const playerOptions = {
-  source: videoList,
+  sources: videoList,
   speedList
 };
 

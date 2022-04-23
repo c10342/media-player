@@ -46,10 +46,10 @@ class VideoPlayer extends Component {
 
   // 获取默认播放的视频，有default的就是默认得了
   private getDefaultIndex() {
-    const source = this.player.options.source;
+    const sources = this.player.options.sources;
 
-    if (source.length > 0) {
-      const index = source.findIndex((video) => video.default);
+    if (sources.length > 0) {
+      const index = sources.findIndex((video) => video.default);
       if (index > -1) {
         return index;
       }
@@ -60,11 +60,11 @@ class VideoPlayer extends Component {
 
   // 获取视频
   private getVideoItem() {
-    const { source } = this.player.options;
+    const { sources } = this.player.options;
     const { currentIndex } = this;
 
-    if (source.length !== 0) {
-      return source[currentIndex];
+    if (sources.length !== 0) {
+      return sources[currentIndex];
     }
     return null;
   }
@@ -178,7 +178,7 @@ class VideoPlayer extends Component {
   // 判断能否进行切换,因为可能越界
   private isCanSwitchQuality(index: number) {
     const player = this.player;
-    if (index < 0 || index > player.options.source.length - 1) {
+    if (index < 0 || index > player.options.sources.length - 1) {
       player.setNotice(player.i18n.t("invalidDefinition"));
       return false;
     }

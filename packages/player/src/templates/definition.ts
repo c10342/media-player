@@ -1,14 +1,14 @@
 import { SourceItem } from "../types/player";
 
 interface Params {
-  source: SourceItem[];
+  sources: SourceItem[];
 }
 
-function getListHtml({ source }: Params) {
-  if (source.length > 1) {
+function getListHtml({ sources }: Params) {
+  if (sources.length > 1) {
     return `
         <ul class="player-label-list-wrapper player-definition-wrapper">
-        ${source
+        ${sources
           .map((value, index) => {
             return `
             <li class="player-label-list-item player-definition-item" data-index="${index}">

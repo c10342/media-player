@@ -7,7 +7,7 @@ import { PlayerConfig } from "../types/player";
 import Component from "./component";
 class VideoDefinition extends Component {
   static shouldInit(options: PlayerConfig) {
-    return options.source && options.source.length > 0;
+    return options.sources && options.sources.length > 0;
   }
   static componentName = "VideoDefinition";
 
@@ -53,9 +53,9 @@ class VideoDefinition extends Component {
 
   // 获取默认播放的视频，有default的就是默认得了
   private getDefaultIndex() {
-    const source = this.player.options.source;
-    if (source.length > 0) {
-      const index = source.findIndex((video) => video.default);
+    const sources = this.player.options.sources;
+    if (sources.length > 0) {
+      const index = sources.findIndex((video) => video.default);
       if (index > -1) {
         return index;
       }
@@ -67,7 +67,7 @@ class VideoDefinition extends Component {
   // 判断能否进行切换,因为可能越界
   private isCanSwitchQuality(index: number) {
     const playerInstance = this.player;
-    if (index < 0 || index > playerInstance.options.source.length - 1) {
+    if (index < 0 || index > playerInstance.options.sources.length - 1) {
       playerInstance.setNotice(playerInstance.i18n.t("invalidDefinition"));
       return false;
     }
@@ -90,9 +90,9 @@ class VideoDefinition extends Component {
   private setCurrentLabel() {
     const definitionLabelElement = this.definitionLabelElement;
 
-    const source = this.player.options.source;
-    if (source.length > 0 && definitionLabelElement) {
-      definitionLabelElement.innerHTML = source[this.currentIndex].label;
+    const sources = this.player.options.sources;
+    if (sources.length > 0 && definitionLabelElement) {
+      definitionLabelElement.innerHTML = sources[this.currentIndex].label;
     }
   }
 
