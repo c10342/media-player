@@ -55,6 +55,13 @@ module.exports = {
           { text: "内置组件", link: "/plugins/built-in/" }
         ]
       },
+      {
+        text: "Tech",
+        items: [
+          { text: "介绍", link: "/techs/guide/" },
+          { text: "内置Tech", link: "/techs/built-in/" }
+        ]
+      },
       { text: "生态", link: "/ecology/" },
       {
         text: "其他",

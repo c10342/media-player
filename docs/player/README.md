@@ -30,50 +30,53 @@ import MediaPlayer from "@lin-media/player";
 
 const player = new MediaPlayer({
   // 容器
-  el: ".container",
+  el: document.querySelector(".container"),
   // 视频列表
-  videoList: [
+  sources: [
     {
       label: "标清",
-      url: "http://127.0.0.1/demo.mp4"
+      url: "http://127.0.0.1/demo.mp4",
+      type: "video/mp4"
     },
     {
       label: "高清",
-      url: "http://127.0.0.1/demo.mp4"
+      url: "http://127.0.0.1/demo.mp4",
+      type: "video/mp4"
     }
   ]
 });
 ```
 
-一个简单的`MediaPlayer`实例已经初始化完成了，它已经具有一些基本的功能了
+一个简单的播放器实例已经初始化完成了，它已经具有一些基本的功能了
 
 ## 参数
 
 你可以通过下面的参数来自定义你的播放器具体需要什么功能
 
-| 参数        | 说明                                               | 类型                               | 可选值               | 默认值      |
-| ----------- | -------------------------------------------------- | ---------------------------------- | -------------------- | ----------- |
-| el          | 播放容器                                           | String，HTMLElement                | —                    | —           |
-| videoList   | 视频播放列表，格式见下方                           | Array                              | —                    | —           |
-| speedList   | 倍数列表，可选，格式见下方                         | Array                              | —                    | —           |
-| plugins     | 注册局部插件，可选                                 | Array                              | —                    | —           |
-| autoplay    | 是否自动播放，可选                                 | Boolean                            | —                    | false       |
-| muted       | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | Boolean                            | —                    | false       |
-| customType  | 自定义 esm，可选，格式见下方                       | Function                           | —                    | —           |
-| live        | 是否为直播，可选                                   | Boolean                            | —                    | false       |
-| crossorigin | 是否开启跨域，可选                                 | Boolean                            | —                    | true        |
-| preload     | 视频预加载，可选                                   | String                             | none，metadata，auto | auto        |
-| poster      | 视频封面，可选                                     | String                             | —                    | —           |
-| controls    | 播放器控件是否显示，可选，详细见下方                             | Boolean，ControlsObj | false，ControlsObj   | ControlsObj |
-| lang    | 使用的语言                     | String | zh，en   | zh |
-| customLanguage    | 自定义语言包                     | Object | —   | — |
+| 参数           | 说明                                               | 类型                | 可选值               | 默认值 |
+| -------------- | -------------------------------------------------- | ------------------- | -------------------- | ------ |
+| el             | 播放容器                                           | String，HTMLElement | —                    | —      |
+| sources        | 视频播放列表，格式见下方                           | Array               | —                    | —      |
+| speedList      | 倍数列表，可选，格式见下方                         | Array               | —                    | —      |
+| Plugins        | 插件初始化，可选                                   | Object              | —                    | —      |
+| Components     | 组件初始化，可选                                   | Object              | —                    | —      |
+| tech           | 调整视频资源处理顺序，可选                         | Array               | —                    | —      |
+| autoplay       | 是否自动播放，可选                                 | Boolean             | —                    | false  |
+| muted          | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | Boolean             | —                    | false  |
+| live           | 是否为直播，可选                                   | Boolean             | —                    | false  |
+| crossorigin    | 是否开启跨域，可选                                 | Boolean             | —                    | true   |
+| preload        | 视频预加载，可选                                   | String              | none，metadata，auto | auto   |
+| poster         | 视频封面，可选                                     | String              | —                    | —      |
+| lang           | 使用的语言                                         | String              | zh，en               | zh     |
+| customLanguage | 自定义语言包                                       | Object              | —                    | —      |
 
-### videoList 参数格式
+### sources 参数格式
 
 | 字段    | 说明                     | 类型    |
 | ------- | ------------------------ | ------- |
 | label   | 清晰度文本               | String  |
 | url     | 播放地址                 | String  |
+| type    | 视频类型                 | String  |
 | default | 是否默认播放该视频，可选 | Boolean |
 
 ### speedList 参数格式
@@ -84,37 +87,43 @@ const player = new MediaPlayer({
 | value   | 倍数值，可选值 0-2               | Number  |
 | default | 是否默认使用该倍数进行播放，可选 | Boolean |
 
-### customType 函数参数
-
-| 字段         | 说明             | 类型             |
-| ------------ | ---------------- | ---------------- |
-| videoElement | video 标签       | HTMLVideoElement |
-| options      | videoList 列表项 | Object           |
-
-### controls 参数格式
+### Components 参数格式
 
 ::: tip 注意
-当 `controls` 值为 `false` 时，所有控件将不会显示。当 `controls` 值为一个对象时（即`ControlsObj`），可根据下方的字段来选择那些控件需要显示，那些不需要显示，其中 `true` 为显示控件， `false` 为隐藏控件。所有控件默认显示
+`Components`选项是`key-value`的形式，当`value`是`boolean`类型的时候，`true`表示会对组件进行初始化，`false`表示关闭对组件的初始化。当`value`是`Object`类型的时候，组件会进行初始化，并且`value`值将会作为初始化配置传递给组件
 :::
 
-| 字段             | 说明               | 类型    | 默认值 |
-| ---------------- | ------------------ | ------- | ------ |
-| VideoPlayButton       | 播放按钮控件  | Boolean | true   |
-| VideoVolume           | 音量控件           | Boolean | true   |
-| VideoLive             | 直播提示控件       | Boolean | true   |
-| VideoSpeed            | 倍速控件           | Boolean | true   |
-| VideoFullscreen       | 全屏控件           | Boolean | true   |
-| VideoDefinition       | 清晰度控件         | Boolean | true   |
-| VideoProgress         | 进度条控件         | Boolean | true   |
-| VideoTip              | 通知提示控件       | Boolean | true   |
-| VideoTime             | 时间控件           | Boolean | true   |
-| VideoLoading          | loading 控件       | Boolean | true   |
-| VideoFloatButton | 悬浮播放按钮控件 | Boolean | true   |
-| VideoMask        | 视频遮罩层控件     | Boolean | true   |
-| VideoControls       | 视频下方控制条     | Boolean | true   |
-| DomResizeObserver        | 播放器`DOM`元素大小发生变化监听   | Boolean | true   |
-| ShortcutKey        | 快捷键功能控件   | Boolean | true   |
-| VideoPlayer        | 视频播放控件   | Boolean | true   |
+以下列出播放器内置组件的名称
+
+| 字段             | 说明             | 类型           | 默认值 |
+| ---------------- | ---------------- | -------------- | ------ |
+| VideoPlayButton  | 播放按钮控件     | Boolean,Object | true   |
+| VideoVolume      | 音量控件         | Boolean,Object | true   |
+| VideoLive        | 直播提示控件     | Boolean,Object | true   |
+| VideoSpeed       | 倍速控件         | Boolean,Object | true   |
+| VideoFullscreen  | 全屏控件         | Boolean,Object | true   |
+| VideoDefinition  | 清晰度控件       | Boolean,Object | true   |
+| VideoProgress    | 进度条控件       | Boolean,Object | true   |
+| VideoTip         | 通知提示控件     | Boolean,Object | true   |
+| VideoTime        | 时间控件         | Boolean,Object | true   |
+| VideoLoading     | loading 控件     | Boolean,Object | true   |
+| VideoFloatButton | 悬浮播放按钮控件 | Boolean,Object | true   |
+| VideoMask        | 视频遮罩层控件   | Boolean,Object | true   |
+| VideoControls    | 视频下方控制条   | Boolean,Object | true   |
+| VideoPlayer      | 视频播放控件     | Boolean,Object | true   |
+
+### Plugins 参数格式
+
+::: tip 注意
+`Plugins`选项是`key-value`的形式，当`value`是`boolean`类型的时候，`true`表示会对插件进行初始化，`false`表示关闭对插件的初始化。当`value`是`Object`类型的时候，插件会进行初始化，并且`value`值将会作为初始化配置传递给插件
+:::
+
+以下列出播放器内置插件的名称
+
+| 字段              | 说明                            | 类型    | 默认值 |
+| ----------------- | ------------------------------- | ------- | ------ |
+| DomResizeObserver | 播放器`DOM`元素大小发生变化监听 | Boolean | true   |
+| ShortcutKey       | 快捷键功能控件                  | Boolean | true   |
 
 ## 事件绑定
 
@@ -128,58 +137,67 @@ player.$on("ended", function () {
 
 - **播放器自定义事件**
 
-| 事件名称                | 说明                     | 回调参数 |
-| ----------------------- | ------------------------ | -------- |
-| destroy                 | 播放器销毁时触发         | —        |
-| switch_definition_start | 清晰度切换前触发         | —        |
-| switch_definition_end   | 清晰度切换后触发         | —        |
-| enter_browser_screen    | 浏览器进入全屏时触发     | —        |
-| exit_browser_screen     | 浏览器退出全屏时触发     | —        |
-| enter_web_screen        | 网页进入全屏时触发       | —        |
-| exit_web_screen         | 网页退出全屏时触发       | —        |
-| show_controls           | 控制条显示时触发         | —        |
-| hide_controls           | 控制条隐藏时触发         | —        |
-| resize                  | 播放器大小发生变化时触发 | —        |
-| keyboard_right                  | 按下键盘 → 键时触发   | —        |
-| keyboard_left                  | 按下键盘 ← 键时触发   | —        |
-| keyboard_up                  | 按下键盘 ↑ 键时触发   | —        |
-| keyboard_down                  | 按下键盘 ↓ 键时触发   | —        |
-| keyboard_space                  | 按下键盘 空格 键时触发   | —        |
-| picture_in_picture_window_resize          | 画中画窗口发生变化时触发   | —        |
+| 事件名称                         | 说明                     | 回调参数                          |
+| -------------------------------- | ------------------------ | --------------------------------- |
+| destroy                          | 播放器销毁时触发         | —                                 |
+| switch_definition_start          | 清晰度切换前触发         | —                                 |
+| switch_definition_end            | 清晰度切换后触发         | —                                 |
+| enter_browser_screen             | 浏览器进入全屏时触发     | —                                 |
+| exit_browser_screen              | 浏览器退出全屏时触发     | —                                 |
+| enter_web_screen                 | 网页进入全屏时触发       | —                                 |
+| exit_web_screen                  | 网页退出全屏时触发       | —                                 |
+| show_controls                    | 控制条显示时触发         | —                                 |
+| hide_controls                    | 控制条隐藏时触发         | —                                 |
+| resize                           | 播放器大小发生变化时触发 | —                                 |
+| keyboard_right                   | 按下键盘 → 键时触发      | —                                 |
+| keyboard_left                    | 按下键盘 ← 键时触发      | —                                 |
+| keyboard_up                      | 按下键盘 ↑ 键时触发      | —                                 |
+| keyboard_down                    | 按下键盘 ↓ 键时触发      | —                                 |
+| keyboard_space                   | 按下键盘 空格 键时触发   | —                                 |
+| picture_in_picture_window_resize | 画中画窗口发生变化时触发 | —                                 |
+| beforeComponentSetup             | 组件初始化前             | {name:string}                     |
+| afterComponentSetup              | 组件初始化完成之后       | {name:string,component:Component} |
+| beforeComponentDestroy           | 组件销毁前               | {name:string,component:Component} |
+| afterComponentDestroy            | 组件销毁完成之后         | {name:string}                     |
+| beforePluginSetup                | 插件初始化前             | {name:string}                     |
+| afterPluginSetup                 | 插件初始化完成之后       | {name:string,plugin:Plugin}       |
+| beforePluginDestroy              | 插件销毁前               | {name:string,plugin:Plugin}       |
+| afterPluginDestroy               | 插件销毁完成之后         | {name:string}                     |
+| beforeTechSetup                  | tech 初始前              | {name:string}                     |
+| afterTechSetup                   | tech 初始化完成之后      | {name:string,tech:Tech}           |
 
 - **原生 video 标签事件**
 
-| 事件名称       | 说明                                                    | 回调参数 |
-| -------------- | ------------------------------------------------------- | -------- |
-| abort          | 发生中断时触发                                          | event    |
-| canplay        | 视频能够播放，但可能因缓冲停止时触发                    | event    |
-| canplaythrough | 视频能够播放，并且无需因缓冲而停止，ie 上触发不了改事件 | event    |
-| durationchange | 视频总时长发生变化时触发                                | event    |
-| emptied        | 媒介资源元素突然为空时（网络错误、加载错误等）时触发    | event    |
-| ended          | 视频播放结束时触发                                      | event    |
-| error          | 视频加载发生错误时触发                                  | event    |
-| loadeddata     | 加载数据时触发                                          | event    |
-| loadedmetadata | 媒介元素的持续时间以及其他媒介数据已加载时触发          | event    |
-| loadstart      | 开始加载数据时触发                                      | event    |
-| pause          | 视频暂停触发                                            | event    |
-| play           | 视频播放时触发                                          | event    |
-| playing        | 视频已经开始播放时触发                                  | event    |
-| progress       | 获取数据（缓冲数据）时触发                              | event    |
-| ratechange     | 视频倍数发生变化时触发                                  | event    |
-| seeked         | 跳转到指定时间之后触发，一般是用户拖拽进度条时触发的    | event    |
-| seeking        | 正在跳转到指定的时间时触发                              | event    |
-| stalled        | 取回媒介数据过程中（延迟）存在错误时触发                | event    |
-| suspend        | 浏览器已在取媒介数据但在取回整个媒介文件之前停止时触发  | event    |
-| timeupdate     | 播放位置发生变化时触发                                  | event    |
-| volumechange   | 视频音量发生变化时触发                                  | event    |
-| waiting        | 正在播放，但是因为缓冲而卡顿时触发                      | event    |
-| enterpictureinpicture        | 进入画中画时触发                      | event    |
-| leavepictureinpicture        | 退出画中画时触发                      | event    |
-
+| 事件名称              | 说明                                                    | 回调参数 |
+| --------------------- | ------------------------------------------------------- | -------- |
+| abort                 | 发生中断时触发                                          | event    |
+| canplay               | 视频能够播放，但可能因缓冲停止时触发                    | event    |
+| canplaythrough        | 视频能够播放，并且无需因缓冲而停止，ie 上触发不了改事件 | event    |
+| durationchange        | 视频总时长发生变化时触发                                | event    |
+| emptied               | 媒介资源元素突然为空时（网络错误、加载错误等）时触发    | event    |
+| ended                 | 视频播放结束时触发                                      | event    |
+| error                 | 视频加载发生错误时触发                                  | event    |
+| loadeddata            | 加载数据时触发                                          | event    |
+| loadedmetadata        | 媒介元素的持续时间以及其他媒介数据已加载时触发          | event    |
+| loadstart             | 开始加载数据时触发                                      | event    |
+| pause                 | 视频暂停触发                                            | event    |
+| play                  | 视频播放时触发                                          | event    |
+| playing               | 视频已经开始播放时触发                                  | event    |
+| progress              | 获取数据（缓冲数据）时触发                              | event    |
+| ratechange            | 视频倍数发生变化时触发                                  | event    |
+| seeked                | 跳转到指定时间之后触发，一般是用户拖拽进度条时触发的    | event    |
+| seeking               | 正在跳转到指定的时间时触发                              | event    |
+| stalled               | 取回媒介数据过程中（延迟）存在错误时触发                | event    |
+| suspend               | 浏览器已在取媒介数据但在取回整个媒介文件之前停止时触发  | event    |
+| timeupdate            | 播放位置发生变化时触发                                  | event    |
+| volumechange          | 视频音量发生变化时触发                                  | event    |
+| waiting               | 正在播放，但是因为缓冲而卡顿时触发                      | event    |
+| enterpictureinpicture | 进入画中画时触发                                        | event    |
+| leavepictureinpicture | 退出画中画时触发                                        | event    |
 
 ## API
 
-**播放器实例方法：**
+**实例方法：**
 
 - `player.$on(eventName: string, handler: Function)` : 监听播放器自定义事件或者原生 video 标签事件
 
@@ -216,12 +234,12 @@ player.$on("ended", function () {
 - `player.toggleControls()` : 切换下方控制条显示/隐藏状态
 
 - `player.destroy()` : 销毁播放器
-  
+
 - `player.requestPictureInPicture()` : 进入画中画
-  
+
 - `player.exitPictureInPicture()` : 退出画中画
 
-**播放器实例属性：**
+**实例属性：**
 
 - `player.videoElement` : 原生 video 标签
 
@@ -233,7 +251,7 @@ player.$on("ended", function () {
 
 - `player.volume` : 当前音量
 
-**播放器构造函数静态方法：**
+**静态方法：**
 
 - `MediaPlayer.useLang(lang:Object)` : 自定义语言包，会跟默认的语言包进行合并
 
@@ -253,191 +271,65 @@ MediaPlayer.useLang({
 
 - `MediaPlayer.setLang(lang:string)` : 设置使用何种语言，zh/en，默认 zh
 
-- `MediaPlayer.use(ctor: Function)` : 注册全局插件
+- `MediaPlayer.registerTech(name: string, tech: TechClass)` : 注册`Tech`
 
+- `MediaPlayer.removeTech(name: string)` : 移除`Tech`
 
-**播放器构造函数静态属性：**
+- `MediaPlayer.getTech(name: string)` : 获取`Tech`
 
-- `MediaPlayer.PlayerEvents` : 播放器自定义事件
-  
-- `MediaPlayer.VideoEvents` : video标签事件
+- `MediaPlayer.registerHook(hook: HookType, callback: HookCallback)` : 注册`Hook`
 
-- `MediaPlayer.globalConfig` : 默认的全局配置项，播放器在初始化的时候，会将用户传入的配置项跟全局的配置项进行合并，形成一个新的配置项
+- `MediaPlayer.removeHook(hook: HookType, callback?: HookCallback)` : 移除`Hook`
 
-## 配合 MSE 库使用
+- `MediaPlayer.registerHookOnce(hook: HookType, callback?: HookCallback)` : 注册`Hook`，只触发一次
 
-你可以通过 `customType` 参数与任何 MSE 库一起使用，比如`hls.js`，`flv.js`
+- `MediaPlayer.registerPlugin(name: string,plugin: PluginClass,options: DefaultPluginOptions)` : 注册插件
 
-```javascript
-import Hls from "hls.js";
-import MediaPlayer from "@lin-media/player";
+- `MediaPlayer.removePlugin(name: string)` : 移除插件
 
-const player = new MediaPlayer({
-  el: ".container",
-  videoList: [
-    {
-      label: "标清",
-      url: "https://127.0.0.1/demo.m3u8"
-    },
-    {
-      label: "高清",
-      url: "https://127.0.0.1/demo.m3u8"
-    }
-  ],
-  customType(videoElement, videoObj) {
-    const hls = new Hls();
-    hls.loadSource(videoObj.url);
-    hls.attachMedia(videoElement);
-  }
-});
-```
+- `MediaPlayer.getPlugin(name: string)` : 获取插件
+
+- `MediaPlayer.registerComponent(name: string,component: ComponentClass,options: DefaultComponentOptions)` : 注册组件
+
+- `MediaPlayer.removeComponent(name: string)` : 移除组件
+
+- `MediaPlayer.getComponent(name: string)` : 获取组件
+
+- `MediaPlayer.registerSource(type: string, callback: SourceHandleCallback)` : 注册资源中间件
+
+- `MediaPlayer.removeSource(type: string, callback: SourceHandleCallback)` : 移除资源中间件
+
+- `MediaPlayer.registerOnceSource(type: string, callback: SourceHandleCallback)` : 注册资源中间件，只触发一次
+
+**静态属性：**
+
+- `MediaPlayer.Events` : 播放器自定义事件和 video 标签事件
 
 ## 直播
 
 你可以把`MediaPlayer`用在直播中，你只需要把`live`参数设置为`true`即可。如果你需要在直播中使用弹幕，请使用弹幕插件。
 
+**注意：你需要自定义`Tech`支持`m3u8`文件播放**
+
 ```javascript
-import Hls from "hls.js";
 import MediaPlayer from "@lin-media/player";
 
 const player = new MediaPlayer({
   el: ".container",
-  videoList: [
+  sources: [
     {
       label: "标清",
-      url: "https://127.0.0.1/demo.m3u8"
+      url: "https://127.0.0.1/demo.m3u8",
+      type: "video/hls"
     },
     {
       label: "高清",
-      url: "https://127.0.0.1/demo.m3u8"
+      url: "https://127.0.0.1/demo.m3u8",
+      type: "video/hls"
     }
   ],
   // 开启直播
-  live: true,
-  customType(videoElement, videoObj) {
-    const hls = new Hls();
-    hls.loadSource(videoObj.url);
-    hls.attachMedia(videoElement);
-  }
-});
-```
-
-## 插件
-
-### 介绍
-
-- 播放器提供了插件功能，可自己定制一些需求，比如自定义进度条提示点，截图，弹幕等等。
-
-- 插件的初始化时机是在播放器实例的所有东西初始化完成之后进行初始化的。这样子插件就可以访问到播放器实例上面的属性和方法，以及播放器的`DOM`元素
-
-- 插件分为全局插件和局部插件，使用全局插件时，每个播放器实例都会具备全局插件的功能。使用局部插件时，只有当前播放器实例才会存在局部插件的功能。
-
-  - 全局插件是通过`MediaPlayer.use(ctor: Function)`进行注册的
-
-  - 局部插件是通过播放器初始化时传入的配置参数`plugins`字段进行注册的
-
-### 插件的构成
-
-- 每一个插件都需要是一个构造器函数（类），并且需要包含`pluginName`静态属性，`pluginName` 是用来作为插件的唯一标识，同时外部可以通过`player.$plugins[pluginName]`访问到插件实例
-
-- 构造器函数（类）会接受到两个参数：
-
-  - player：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法和属性
-  
-  - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`。因为当你同时初始化了 2 个播放器的时候，`document.querySelector()`获取的始终是第一个元素
-
-  
-
-### 插件开发示例
-
-**Test 插件：**
-
-```javascript
-import MediaPlayer from "@lin-media/player";
-
-class Test {
-  // 提供一个pluginName静态属性
-  static pluginName = "Test";
-  el = null;
-  player = null;
-
-  constructor(player,el) {
-    // 保存接受到的两个参数
-    this.el = el;
-    this.player = player;
-    // 往播放器实例中添加一个sleep方法
-    Object.defineProperty(player,'sleep',{
-      get(){
-        console.log("sleep");
-      }
-    })
-    // 开始实现其他的功能
-    this.init();
-  }
-  // 往播放器上面追加一个悬浮按钮，点击的时候发射click自定义事件，并对播放状态进行切换
-  init() {
-    const div = document.createElement("div");
-    div.innerHTML = "切换播放状态";
-    div.addEventListener("click", () => {
-      // 通过发布订阅模式，实现事件的监听和发射
-      this.player.$emit("test-click");
-      // 切换播放器的播放状态
-      this.player.toggle();
-    });
-    // 添加到播放器中
-    this.el.appendChild(div);
-  }
-}
-```
-
-**使用插件：**
-
-```javascript
-import MediaPlayer from "@lin-media/player";
-
-// 全局注册插件
-MediaPlayer.use(Test);
-
-const player = new MediaPlayer({
-  // ...
-  // 或者通过局部注册
-  // plugins:[Test]
-  // 关闭插件功能
-  // Test:false
-});
-
-// 监听Test插件发射出来的事件
-player.$on("test-click", () => {
-  console.log("test-click");
-});
-// Test插件在播放器实例上面挂载的方法
-player.sleep();
-// 访问Test插件的实例
-player.$plugins.Test;
-```
-
-### 注意事项
-
-- 插件必须是一个构造器函数（类），因为内部是通过 `new` 的方式去初始化插件
-
-- 插件中必须提供一个`pluginName`静态属性。`pluginName` 会作为插件的唯一标识
-
-- 如果有其他副作用的代码，可以通过监听 `destroy` 事件来销毁这些副作用代码
-
-- 如果需要监听原生 `video` 标签事件，请通过`player.$on(eventName:string,handler:Function)`进行监听，而不是通过`video.addEventListener()`进行监听，因为清晰度切换的时候，会删除旧的 `video` 标签，插入新的 `video` 标签，此时通过`video.addEventListener()`监听的事件会失效。当然，你也可以通过监听`switch_definition_end`事件，重新对 `video` 标签进行监听，但这样显得没必要
-
-- 当你需要读取原生`video`标签时，请不要缓存`video`标签，而是每次动态去读取，因为清晰度切换的时候，会删除旧的`video`标签，插入新的`video`标签。当然，出于对性能的考虑，你也可以对`video`标签进行缓存，然后监听`switch_definition_end`事件，重新刷新`video`标签的缓存
-
-- 如果 `MediaPlayer` 的初始化参数中出现 `key` 值为插件的唯一标识，且 `value` 值为 false，那么该插件不会被初始化。这个是用来关闭插件的初始化。以关闭弹幕插件为例：
-
-```javascript
-import MediaPlayer from "@lin-media/player";
-import DanmakuPlugin from "@lin-media/danmaku";
-MediaPlayer.use(DanmakuPlugin);
-
-const player = new MediaPlayer({
-  // ...
-  Danmaku: false
+  live: true
 });
 ```
 
@@ -475,7 +367,7 @@ document.documentElement.style.setProperty("--player-theme-color", "green");
 
 | 变量名                                 | 说明                       | 默认值                   |
 | -------------------------------------- | -------------------------- | ------------------------ |
-| --player-theme-color                         | 主题色                     | #fb6640                  |
+| --player-theme-color                   | 主题色                     | #fb6640                  |
 | --player-icon-color                    | 字体图标颜色               | #fff                     |
 | --player-container-background-color    | 播放器容器背景色           | #000                     |
 | --player-text-color                    | 文本颜色                   | #fff                     |
@@ -484,91 +376,19 @@ document.documentElement.style.setProperty("--player-theme-color", "green");
 | --player-process-background-color      | 进度条背景色               | rgba(255, 255, 255, 0.2) |
 | --player-loaded-background-color       | 缓冲进度背景色             | rgba(255, 255, 255, 0.4) |
 
-## 内置组件
+## 插件和组件
 
-播放器是以组件化的形式进行设计的，播放器中的每一个控件都是一个组件。如果大家想自定义组件的效果，可以关闭对应组件的初始化，然后通过自定义插件的形式去实现对应的控件效果。默认情况下，所有内置组件都是会被初始化的，可通过初始化时传入`controls`参数，关闭一些内置组件的初始化
+插件和组件本质上都是为了给播放器扩展功能。插件能实现的，组件也能实现，本质上是有相同点的，但是也有不同点的。
 
-### 内置组件与插件的区别
+组件一般是用来定制`UI`，操作`DOM`的，并且组件的初始化是跟随其父组件一起初始化的。
 
-内置组件本质上也算是插件的一种。不同的是内置组件的初始化是有顺序的，比如`video-play-button`组件是`video-controls`组件的子组件，所以要先初始化`video-controls`组件，然后再初始化`video-play-button`组件。插件是在播放器的所有东西都初始化了之后才进行初始化的
+插件一般是用来扩展功能的（不涉及到`DOM`操作的），比如扩展一些快捷键的功能，并且插件的初始化是跟随播放器的初始化
 
-插件和内置组件接受的参数不一样。内置组件分别接收播放器实例和插槽元素，插槽元素是用来指定内置组件插入到的位置，这样子就可以实现组件的复用，因为内置组件插入的位置是由外部控制的，可以插入到任意的地方。插件分别接受播放器实例和整个播放器的`DOM`元素，插入的位置由插件内部控制，受限于播放器本身的`DOM`元素。换句话来说，就是内置组件可以拿出来用到其他播放器中，但是插件只能在对应的播放器中使用，因为插件是针对播放器去进行设计的，内置组件是针对通用性去设计的
+实际上，组件也可以实现快捷键的功能，插件也可以定制`UI`、操作`DOM`。但是我们不推荐这么做（虽然你可以这么做），因为组件存在父子组件的概念
 
-插件和内置组件在功能上定义是不一样的。内置组件是为了给播放器提供一些基础功能，比如音量调节(通过`video-volume`内置组件提供的)，倍数切换(通过`video-speed`内置组件提供的)等等功能。插件是为了解决用户自定义需求而提出来的解决方案，插件是通过内置组件提供的一些基础功能去实现自己的功能的
+关于组件，详情请查看[组件章节](/components/guide/)
 
-### 内置组件列表
-
-- **DomResizeObserver 组件**
-
-提供监听播放器`DOM`元素大小发生变化并广播的功能，`resize`自定义事件来源于该组件。可通过`controls.DomResizeObserver`字段关闭该内置组件的初始化，使用插件去实现
-
-- **ShortcutKey 组件**
-
-提供快捷键的功能，`keyboard_right`，`keyboard_left`，`keyboard_up`，`keyboard_down`，`keyboard_space`自定义事件就是来源于该组件。移动端环境下不会被初始化。可通过`controls.ShortcutKey`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoControls 组件**
-
-提供视频控制条的显示和隐藏功能，`show_controls`和`hide_controls`自定义事件来源于该组件。该组件的子组件包含`VideoProgress`，`VideoPlayButton`，`VideoVolume`，`VideoTime`，`VideoLive`，`VideoSpeed`，`VideoDefinition`，`VideoFullscreen`。一旦关闭了该组件的初始化，其子组件也不会被初始化，子组件所提供的基础功能也将失效。所以请慎重考虑是否关闭该组件的初始化。可通过`controls.VideoControls`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoDefinition 组件**
-
-提供视频清晰度切换控件，传入的`videoList`参数长度要大于1才会被初始化。可通过`controls.VideoDefinition`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoFloatButton 组件**
-
-播放器中间的悬浮按钮控件，点击可以切换视频的`播放/暂停`状态。可通过`controls.VideoFloatButton`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoFullscreen 组件**
-
-提供播放器网页全屏和浏览器全屏的功能，`enter_browser_screen`，`exit_browser_screen`，`enter_web_screen`，`exit_web_screen`自定义事件来源于该组件。可通过`controls.VideoFullscreen`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoLive 组件**
-
-直播提示控件。非直播环境(`live=false`)下不会被初始化。可通过`controls.VideoLive`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoLoading 组件**
-
-loading控件，视频发生卡顿时会被显示出来，用来提高用户的体验度。可通过`controls.VideoLoading`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoMask 组件**
-
-视频遮罩层，位于`video`标签上方，用来禁止用户在`video`标签中的右键功能。pc端点击可以切换视频的`播放/暂停`状态，移动端点击可以切换`VideoControls`组件的`显示/隐藏`状态。可通过`controls.VideoMask`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoPlayButton 组件**
-
-`播放/暂停`按钮控件，点击可以切换视频的`播放/暂停`状态，移动端环境下不会被初始化。可通过`controls.VideoPlayButton`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoPlayer 组件**
-
-`video`标签控件，一个非常重要的核心内置组件。所有跟`video`标签相关的属性，事件和操作，都是由该组件提供的。其中，`video`标签的原生事件和`switch_definition_start`，`switch_definition_end`自定义事件都是由改组件提供的。可通过`controls.VideoPlayer`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoProgress 组件**
-
-进度条控件，直播环境下(`live=true`)不会被初始化。可通过`controls.VideoProgress`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoSpeed 组件**
-
-视频倍数控件，传入的`speedList`参数长度要大于1才会被初始化。可通过`controls.VideoSpeed`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoTime 组件**
-
-时间控件，直播环境下(`live=true`)不会被初始化。可通过`controls.VideoTime`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoTip 组件**
-
-提示通知控件。可通过`controls.VideoTip`字段关闭该内置组件的初始化，使用插件去实现
-
-- **VideoVolume 组件**
-
-视频音量控制控件，移动端环境下不会被初始化。可通过`controls.VideoVolume`字段关闭该内置组件的初始化，使用插件去实现
-
-
-::: warning 警告
-
-一般情况下，不推荐直接关闭内置组件的初始化，因为一旦关闭了某些内置组件，将会丧失部分基础功能，部分依赖于内置组件的插件也将会无法运行。比如`highlight`插件依赖于`VideoProgress`内置组件。当然，如果插件也提供了对应的基础功能和`DOM`元素，`highlight`插件依旧可以运行
-
-:::
-
+关于插件，详情请查看[插件章节](/plugins/guide/)
 
 ## 常见问题
 

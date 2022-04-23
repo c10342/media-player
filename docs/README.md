@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.png
 heroText: 欢迎使用 MediaPlayer
-tagline: 一个插件化、组件化的H5视频播放器
+tagline: 一个插件化、组件化的视频播放器
 actionText: 快速上手 →
 actionLink: /player/
 features:
@@ -13,9 +13,9 @@ features:
 - title: 组件化
   details: 可定制UI组件。
 - title: 自定义主题
-  details: 通过css原生变量实现自定义主题，无需重新打包。
-- title: 轻量灵活
-  details: 没有第三方依赖，天然支持按需加载。
+  details: css原生变量实现自定义主题。
+- title: Tech
+  details: 支持自定义视频播放。
 - title: 响应式布局
   details: 同时支持移动端和pc端。
 footer: MIT Licensed | Copyright © 2021-present
