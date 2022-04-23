@@ -1,6 +1,5 @@
 import {
   EventEmit,
-  isFunction,
   isUndef,
   LangTypeEnum,
   logError,
