@@ -42,14 +42,10 @@ const exitPictureInPictureButton = document.querySelector(
 
 function addEventListener(player: MediaPlayer) {
   setoptionsButton?.addEventListener("click", () => {
-    // (player as any).setBarView('https://i.loli.net/2019/06/06/5cf8c5d9cec8510758.jpg');
-    // (player as any).highlight.set(highlightList);
-    // (player as any).screenshot.snapshot();
-    // speedList[0].label = "123";
-    // console.log(speedList, player.options);
+    // todo
   });
   destroyoptionsButton?.addEventListener("click", () => {
-    (player as any).preview.destroyPreview();
+    player.destroy();
   });
 
   playButton?.addEventListener("click", function () {
