@@ -7,7 +7,7 @@
 <script>
 
 const playerOptions = {
-  source: [
+  sources: [
     {
       label: "标清",
       url: "/test.mp4",

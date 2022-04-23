@@ -45,7 +45,7 @@ module.exports = {
           { text: "缩放", link: "/components/zoom/" },
           { text: "右键菜单", link: "/components/contextmenu/" },
           { text: "视频缩略图预览", link: "/components/preview/" },
-          { text: "自定义进度条提示点", link: "components//highlight/" }
+          { text: "自定义进度条提示点", link: "/components/highlight/" }
         ]
       },
       {

@@ -4,7 +4,6 @@
 
 <time-preview-use />
 
-
 ## 进度条缩略图预览演示
 
 <bar-preview-use />
@@ -19,8 +18,7 @@ npm i @lin-media/preview
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
-import Preview from "@lin-media/preview";
-MediaPlayer.use(Preview);
+import "@lin-media/preview";
 ```
 
 缩略图有 2 中形式，一种是通过列表传入对应时间点的缩略图，另一种是传入整个视频的缩略图地址（这种是可以查看任意时间点的缩略图，但是缩略图必须是完整的）
@@ -40,9 +38,11 @@ const previewList = [
 ];
 const player = new MediaPlayer({
   // ...
-  Preview: {
-    // 通过参数传入或者通过setPreview方法设置
-    list: previewList
+  Components: {
+    Preview: {
+      // 通过参数传入或者通过setPreview方法设置
+      list: previewList
+    }
   }
 });
 
@@ -60,22 +60,17 @@ player.$on("preview-click", (item: any) => {
 ```javascript
 const player = new MediaPlayer({
   // ...
-  Preview: {
-    // 通过参数传入或者通过setBarView方法设置
-    barPreviewUrl: "https://xxx/demo.jpg"
+  Components: {
+    Preview: {
+      // 通过参数传入或者通过setBarView方法设置
+      barPreviewUrl: "https://xxx/demo.jpg"
+    }
   }
 });
 // player.preview.setBarView('https://xxx/demo.jpg')
 ```
 
 ## Preview 参数
-
-::: tip 提示
-
-Preview 参数设置为 `false` 可关闭插件功能
-
-:::
-
 
 | 参数          | 说明                               | 类型   | 可选值 | 默认值 |
 | ------------- | ---------------------------------- | ------ | ------ | ------ |

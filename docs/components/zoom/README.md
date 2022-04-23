@@ -12,7 +12,7 @@
 
 ::: warning 警告
 
-此插件只适用于pc端
+此插件只适用于 pc 端
 
 :::
 
@@ -26,24 +26,25 @@ npm i @lin-media/zoom
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
-import Zoom from "@lin-media/zoom";
-MediaPlayer.use(Zoom);
+import "@lin-media/zoom";
 
 const player = new MediaPlayer({
   // ...
-  Zoom: {
-    // 是否允许横向缩放，默认true
-    x: true,
-    // 是否允许纵向缩放，默认true
-    y: true,
-    // 最大缩放宽度
-    maxWidth: 400,
-    // 最大缩放高度
-    maxHeight: 400,
-    // 最小缩放高度
-    minHeight: 100,
-    // 最小缩放宽度
-    minWidth: 100
+  Components: {
+    Zoom: {
+      // 是否允许横向缩放，默认true
+      x: true,
+      // 是否允许纵向缩放，默认true
+      y: true,
+      // 最大缩放宽度
+      maxWidth: 400,
+      // 最大缩放高度
+      maxHeight: 400,
+      // 最小缩放高度
+      minHeight: 100,
+      // 最小缩放宽度
+      minWidth: 100
+    }
   }
 });
 
@@ -54,12 +55,6 @@ player.$on("zoom", (item) => {
 ```
 
 ## Zoom 参数
-
-::: tip 提示
-
-Zoom 参数设置为 `false` 可关闭插件功能
-
-:::
 
 | 参数      | 说明                    | 类型    | 可选值 | 默认值 |
 | --------- | ----------------------- | ------- | ------ | ------ |

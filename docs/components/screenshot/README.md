@@ -14,14 +14,16 @@ npm i @lin-media/screenshot
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
-import Screenshot from "@lin-media/screenshot";
-MediaPlayer.use(Screenshot);
+import "@lin-media/screenshot";
 
 const player = new MediaPlayer({
   // ...
-  Screenshot: {
-    // 点击后自动下载,默认true，你可以设置为false，然后通过事件监听来自定义点击之后的操作
-    download: true
+  Components: {
+    Screenshot: {
+      // 点击后自动下载,默认true，
+      // 你可以设置为false，然后通过事件监听来自定义点击之后的操作
+      download: true
+    }
   }
 });
 
@@ -30,7 +32,8 @@ player.$on("screenshot", (imageBase64) => {
   console.log(imageBase64);
 });
 
-// 调用截图方法，请务必当open为true是才能使用该方法，false的是时候是不会往实例上面挂载该方法的
+// 调用截图方法，请务必当open为true是才能使用该方法，
+// false的是时候是不会往实例上面挂载该方法的
 player.screenshot.snapshot();
 ```
 
@@ -42,18 +45,10 @@ player.screenshot.snapshot();
 
 ## Screenshot 参数
 
-
-::: tip 提示
-
-Screenshot 参数设置为 `false` 可关闭插件功能
-
-:::
-
-
-| 参数     | 说明                                                        | 类型    | 可选值 | 默认值         |
-| -------- | ----------------------------------------------------------- | ------- | ------ | -------------- |
-| download | 是否点击后自动下载                                          | boolean | —      | true           |
-| picName  | 下载的图片名称                                              | string  | —      | screenshot.png |
+| 参数     | 说明               | 类型    | 可选值 | 默认值         |
+| -------- | ------------------ | ------- | ------ | -------------- |
+| download | 是否点击后自动下载 | boolean | —      | true           |
+| picName  | 下载的图片名称     | string  | —      | screenshot.png |
 
 ## 事件
 

@@ -14,34 +14,29 @@ npm i @lin-media/danmaku
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
-import Danmaku from "@lin-media/danmaku";
-MediaPlayer.use(Danmaku);
+import "@lin-media/danmaku";
 
 const player = new MediaPlayer({
   // ...
-  Danmaku: {
-    // 弹幕字体颜色，随机
-    fontColors: ["blue", "red", "green", "#fff"],
-    // 弹幕字体大小随机
-    fontSizes: [16, 18, 20, 22, 24, 26, 28]
+  Components: {
+    Danmaku: {
+      // 弹幕字体颜色，随机
+      fontColors: ["blue", "red", "green", "#fff"],
+      // 弹幕字体大小随机
+      fontSizes: [16, 18, 20, 22, 24, 26, 28]
+    }
   }
 });
 ```
 
 ## Danmaku 参数
 
-::: tip 提示
-
-Danmaku 参数设置为 `false` 可关闭插件功能
-
-:::
-
-| 参数           | 说明                             | 类型          | 可选值 | 默认值          |
-| -------------- | -------------------------------- | ------------- | ------ | --------------- |
-| trackSize      | 轨道高度，可选                         | number        | —      | 12              |
-| renderInterval | 弹幕数据队列默认轮询间隔时间，可选     | number        | —      | 150             |
-| speedArg       | 移动速率，可选                         | number        | —      | 0.0058          |
-| discardTime    | 弹幕的超时时间，超过时间会被丢弃，可选 | number        | —      | 5 \* 60 \* 1000 |
+| 参数           | 说明                                   | 类型                | 可选值 | 默认值          |
+| -------------- | -------------------------------------- | ------------------- | ------ | --------------- |
+| trackSize      | 轨道高度，可选                         | number              | —      | 12              |
+| renderInterval | 弹幕数据队列默认轮询间隔时间，可选     | number              | —      | 150             |
+| speedArg       | 移动速率，可选                         | number              | —      | 0.0058          |
+| discardTime    | 弹幕的超时时间，超过时间会被丢弃，可选 | number              | —      | 5 \* 60 \* 1000 |
 | fontColors     | 弹幕字体颜色，随机，可选               | Array&lt;string&gt; | —      | —               |
 | fontSizes      | 弹幕字体大小，随机，可选               | Array&lt;number&gt; | —      | —               |
 
@@ -71,9 +66,9 @@ Danmaku 参数设置为 `false` 可关闭插件功能
 
 当参数是`Object`或者`Array`类型时，下列字段可选
 
-| 字段      | 说明                 | 类型   |
-| --------- | -------------------- | ------ |
-| text      | 弹幕文本             | string |
+| 字段      | 说明                       | 类型   |
+| --------- | -------------------------- | ------ |
+| text      | 弹幕文本                   | string |
 | fontSize  | 字体大小，可选             | number |
 | fontColor | 字体颜色，可选             | string |
 | rollTime  | 弹幕移动时间，单位秒，可选 | number |

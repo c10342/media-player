@@ -14,8 +14,7 @@ npm i @lin-media/highlight
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
-import Highlight from "@lin-media/highlight";
-MediaPlayer.use(Highlight);
+import "@lin-media/highlight";
 
 const highlightList = [
   {
@@ -25,13 +24,15 @@ const highlightList = [
 ];
 const player = new MediaPlayer({
   // ...
-  Highlight: {
+  Components:{
+    Highlight: {
     // 点击跳转到提示点的时间点，默认true
     jump: true,
     // 显示点击的提示点的文本，默认true
     showTip: true
     // 提示点列表，直接通过options参数传入，或者调用set()
     list:highlightList
+  }
   }
 });
 
@@ -48,12 +49,6 @@ player.$on("highlight-click", (item) => {
 ```
 
 ## Highlight 参数
-
-::: tip 提示
-
-Highlight 参数设置为 `false` 可关闭插件功能
-
-:::
 
 | 参数    | 说明                               | 类型    | 可选值 | 默认值 |
 | ------- | ---------------------------------- | ------- | ------ | ------ |

@@ -4,10 +4,9 @@
 
 <contextmenu-use />
 
-
 ::: warning 警告
 
-此插件只适用于pc端
+此插件只适用于 pc 端
 
 :::
 
@@ -21,8 +20,7 @@ npm i @lin-media/contextmenu
 
 ```javascript
 import MediaPlayer from "@lin-media/player";
-import Contextmenu from "@lin-media/contextmenu";
-MediaPlayer.use(Contextmenu);
+import "@lin-media/contextmenu";
 
 const contextMenuList = [
   {
@@ -96,12 +94,14 @@ const contextMenuList = [
 ];
 const player = new MediaPlayer({
   // ...
-  Contextmenu: {
-    menuList: contextMenuList,
-    // 一级菜单宽度
-    menuItemWidth: "300px",
-    // 二级菜单宽度
-    subMenuItemWidth: "100px"
+  Components: {
+    Contextmenu: {
+      menuList: contextMenuList,
+      // 一级菜单宽度
+      menuItemWidth: "300px",
+      // 二级菜单宽度
+      subMenuItemWidth: "100px"
+    }
   }
 });
 
@@ -111,12 +111,6 @@ player.$on("click-play", (item) => {
 ```
 
 ## Contextmenu 参数
-
-::: tip 提示
-
-Contextmenu 参数设置为 `false` 可关闭插件功能
-
-:::
 
 | 参数             | 说明                 | 类型   | 可选值 | 默认值 |
 | ---------------- | -------------------- | ------ | ------ | ------ |
