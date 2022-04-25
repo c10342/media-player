@@ -52,7 +52,7 @@ module.exports = {
         text: "插件",
         items: [
           { text: "介绍", link: "/plugins/guide/" },
-          { text: "内置组件", link: "/plugins/built-in/" }
+          { text: "内置插件", link: "/plugins/built-in/" }
         ]
       },
       {
