@@ -198,6 +198,7 @@ player.$on("beforeComponentSetup", ({ name }: { name: string }) => {
 | afterComponentDestroy  | 组件销毁完成之后   | { name: string }                      |
 
 - `name`：组件的名称，使用注册的时候的名称
+
 - `component`：组件的实例
 
 ## 其他
@@ -217,8 +218,3 @@ const Component = Player.getComponent("Component");
 ```typescript
 Player.removeComponent("VideoTip");
 ```
-
-
-::: warning
-一般情况下，我们不推荐你去移除任何一个组件，除非你真的有一些特殊的需求
-:::
