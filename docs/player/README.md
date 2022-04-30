@@ -283,13 +283,13 @@ MediaPlayer.useLang({
 
 - `MediaPlayer.registerHookOnce(hook: HookType, callback?: HookCallback)` : 注册`Hook`，只触发一次
 
-- `MediaPlayer.registerPlugin(name: string,plugin: PluginClass,options: DefaultPluginOptions)` : 注册插件
+- `MediaPlayer.registerPlugin(name: string,plugin: PluginClass,options: PluginOptions)` : 注册插件
 
 - `MediaPlayer.removePlugin(name: string)` : 移除插件
 
 - `MediaPlayer.getPlugin(name: string)` : 获取插件
 
-- `MediaPlayer.registerComponent(name: string,component: ComponentClass,options: DefaultComponentOptions)` : 注册组件
+- `MediaPlayer.registerComponent(name: string,component: ComponentClass,options: ComponentOptions)` : 注册组件
 
 - `MediaPlayer.removeComponent(name: string)` : 移除组件
 
