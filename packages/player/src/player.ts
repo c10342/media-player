@@ -32,10 +32,10 @@ import {
   initPlugins
 } from "./utils/helper";
 import { HookCallback, HookType } from "./types/hook";
-import { DefaultPluginOptions, PluginClass } from "./types/plugin";
+import { PluginOptions, PluginClass } from "./types/plugin";
 import {
   ComponentClass,
-  DefaultComponentOptions,
+  ComponentOptions,
   FullscreenType
 } from "./types/component";
 import { PlayerConfig } from "./types/player";
@@ -47,7 +47,7 @@ import {
 import { SourceHandleCallback } from "./types/source";
 import Component from "./components/component";
 import Plugin from "./plugins/plugin";
-import { TechClass } from "./types/tech";
+import { TechOptions, TechClass } from "./types/tech";
 import { getTech, registerTech, removeTech } from "./global-api/tech";
 
 class Player extends EventEmit {
@@ -69,8 +69,8 @@ class Player extends EventEmit {
     return this;
   }
 
-  static registerTech(name: string, tech: TechClass) {
-    registerTech(name, tech);
+  static registerTech(name: string, tech: TechClass, options: TechOptions) {
+    registerTech(name, tech, options);
     return this;
   }
 
@@ -99,7 +99,7 @@ class Player extends EventEmit {
   static registerPlugin(
     name: string,
     plugin: PluginClass,
-    options: DefaultPluginOptions = {}
+    options: PluginOptions = {}
   ) {
     registerPlugin(name, plugin, options);
     return this;
@@ -117,7 +117,7 @@ class Player extends EventEmit {
   static registerComponent(
     name: string,
     component: ComponentClass,
-    options: DefaultComponentOptions = {}
+    options: ComponentOptions = {}
   ) {
     registerComponent(name, component, {
       ...options,

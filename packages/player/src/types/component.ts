@@ -12,7 +12,7 @@ export interface ComponentClass<Options = any> {
   shouldInit?: (options: PlayerConfig) => boolean;
 }
 
-export interface DefaultComponentOptions {
+export interface ComponentOptions {
   init?: boolean;
   defaults?: { [key: string]: any };
   level?: number;
@@ -21,7 +21,7 @@ export interface DefaultComponentOptions {
 
 export interface ComponentItem {
   name: string;
-  options: DefaultComponentOptions;
+  options: ComponentOptions;
   handler: ComponentClass;
 }
 

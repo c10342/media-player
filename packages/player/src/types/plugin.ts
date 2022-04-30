@@ -10,11 +10,11 @@ export interface PluginClass<Options = any> {
 
 export interface PluginItem {
   name: string;
-  options: DefaultPluginOptions;
+  options: PluginOptions;
   handler: PluginClass;
 }
 
-export interface DefaultPluginOptions {
+export interface PluginOptions {
   init?: boolean;
   defaults?: { [key: string]: any };
 }
