@@ -3,6 +3,7 @@ import { PlayerEvents, VideoEvents } from "../config/event";
 import { forEachSource } from "../global-api/source";
 import { forEachTech } from "../global-api/tech";
 import Player from "../player";
+import Tech from "../techs/tech";
 import VideoTpl from "../templates/video";
 import VideoTagTpl from "../templates/video-tag";
 import { SourceItem } from "../types/player";
@@ -14,6 +15,8 @@ class VideoPlayer extends Component {
   private currentIndex = -1;
 
   videoElement: HTMLVideoElement;
+
+  private oldTech: Tech | null = null;
 
   constructor(player: Player, slotElement: HTMLElement, options = {}) {
     super(player, slotElement, options);
@@ -84,15 +87,16 @@ class VideoPlayer extends Component {
     const initTech = (data: SourceItem) => {
       forEachTech((name, Tech, options = {}) => {
         if (Tech.canHandleSource(data, this.player.options)) {
-          this.player.$emit(`beforeTechSetup`, { name });
+          this.player.$emit(PlayerEvents.BEFORETECHSETUP, { name });
           const techs = this.player.options.techs || {};
           const defaultOPtions = techs[name] || {};
           const tech = new Tech(this.player, videoElement, data, {
             ...defaultOPtions,
             ...options
           });
+          this.oldTech = this.player.tech;
           this.player.tech = tech;
-          this.player.$emit(`afterTechSetup`, { name, tech });
+          this.player.$emit(PlayerEvents.AFTERTECHSETUP, { name, tech });
           return true;
         }
         return false;
@@ -126,6 +130,21 @@ class VideoPlayer extends Component {
       }
     };
     next(0, sourceItem);
+  }
+
+  private destroyOldTech() {
+    if (this.oldTech) {
+      const name = (this.oldTech.constructor as any).id;
+      this.player.$emit(PlayerEvents.BEFORETECHDESTROY, {
+        tech: this.oldTech,
+        name
+      });
+      this.oldTech.destroy();
+      this.oldTech = null;
+      this.player.$emit(PlayerEvents.BEFORETECHDESTROY, {
+        name
+      });
+    }
   }
 
   // 初始化video标签事件
@@ -238,6 +257,7 @@ class VideoPlayer extends Component {
       this.rootElement.removeChild(prevVideoElement);
       // 切换完记得更新video标签
       this.videoElement = nextVideoElement;
+      this.destroyOldTech();
       // 设置通知
       player.setNotice(player.i18n.t("switch", { quality: videoItem?.label }));
       // 清晰度切换完毕
@@ -307,6 +327,11 @@ class VideoPlayer extends Component {
       // 存在画中画才能关闭，否则会报错
       document.exitPictureInPicture();
     }
+  }
+
+  destroy() {
+    this.destroyOldTech();
+    super.destroy();
   }
 }
 
