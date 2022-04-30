@@ -1,4 +1,4 @@
-import { LangTypeEnum } from "@lin-media/utils";
+export type LangType = "en" | "zh";
 
 // 视频列表项
 export type SourceItem = {
@@ -24,7 +24,7 @@ export interface PlayerConfig {
   sources: VideoListParams;
   live?: boolean;
   customLanguage?: Record<string, any>;
-  lang?: LangTypeEnum;
+  lang?: LangType;
   // 倍数列表
   speedList?: Array<SpeedItem>;
   // 是否自动播放

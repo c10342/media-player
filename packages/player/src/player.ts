@@ -1,10 +1,4 @@
-import {
-  EventEmit,
-  isUndef,
-  LangTypeEnum,
-  logError,
-  parseHtmlToDom
-} from "@lin-media/utils";
+import { EventEmit, isUndef, logError, parseHtmlToDom } from "@lin-media/utils";
 import "./styles/index.scss";
 import {
   registerComponent,
@@ -33,7 +27,7 @@ import {
   ComponentOptions,
   FullscreenType
 } from "./types/component";
-import { PlayerConfig } from "./types/player";
+import { LangType, PlayerConfig } from "./types/player";
 import { useSource, removeSource } from "./global-api/source";
 import { SourceHandleCallback } from "./types/source";
 import Component from "./components/component";
@@ -49,7 +43,7 @@ class Player extends EventEmit {
   // 全局配置
   static defaults = defaultOptions;
   //   设置中英文，zh/en
-  static setLang(lang: LangTypeEnum) {
+  static setLang(lang: LangType) {
     this.defaults.lang = lang;
     return this;
   }
