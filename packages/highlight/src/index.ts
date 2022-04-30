@@ -24,9 +24,15 @@ class Highlight extends Component {
   constructor(
     player: Player,
     slotElement: HTMLElement,
-    options: HighlightOptions = {}
+    options: HighlightOptions = {},
+    parentComponent: any
   ) {
-    super(player, slotElement, { ...defaultOptions, ...options });
+    super(
+      player,
+      slotElement,
+      { ...defaultOptions, ...options },
+      parentComponent
+    );
 
     // 开始初始化
     this.init();

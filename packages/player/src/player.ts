@@ -102,8 +102,8 @@ class Player extends EventEmit {
     options: ComponentOptions = {}
   ) {
     registerComponent(name, component, {
-      ...options,
-      parentComponent: "Player"
+      parentComponent: "Player",
+      ...options
     });
     return this;
   }
@@ -150,7 +150,7 @@ class Player extends EventEmit {
     chain.push(this.initI18n.bind(this));
     chain.push(this.initPlugins.bind(this));
     chain.push(this.initLayout.bind(this));
-    chain.push(this.initComponent.bind(this));
+    chain.push(this.initComponents.bind(this));
     forEachHook("afterSetup", (fn) => {
       chain.push(fn);
     });
@@ -199,8 +199,8 @@ class Player extends EventEmit {
     return this;
   }
 
-  private initComponent() {
-    initComponents("Player", this, this.rootElement, this.components);
+  private initComponents() {
+    initComponents("Player", this, this.rootElement, this);
     return this;
   }
 

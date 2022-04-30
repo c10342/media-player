@@ -6,8 +6,13 @@ import Component from "./component";
 class VideoTip extends Component {
   // 定时器
   private timer: number | null;
-  constructor(player: Player, slotElement: HTMLElement, options = {}) {
-    super(player, slotElement, options);
+  constructor(
+    player: Player,
+    slotElement: HTMLElement,
+    options = {},
+    parentComponent: any
+  ) {
+    super(player, slotElement, options, parentComponent);
     this.initDom(slotElement);
     this.initPlayerMethods();
     this.triggerReady();

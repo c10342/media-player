@@ -38,9 +38,10 @@ class VideoProgress extends Component {
   constructor(
     player: Player,
     slotElement: HTMLElement,
-    options: Record<string, any>
+    options: Record<string, any>,
+    parentComponent: any
   ) {
-    super(player, slotElement, options);
+    super(player, slotElement, options, parentComponent);
 
     // 初始化dom
     this.initDom(slotElement);

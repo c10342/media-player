@@ -9,18 +9,24 @@ export function initComponents(
   name: string,
   player: Player,
   rootElement: HTMLElement,
-  components: { [key: string]: Component } = {}
+  currentInstance: Component | Player
 ) {
   const opts = player.options.components ?? {};
   forEachComponent(name, (name, Component, options) => {
     const init = (config: Record<string, any> = {}) => {
       const defaults = options.defaults;
       player.$emit(PlayerEvents.BEFORECOMPONENTSETUP, { name });
-      const instance = new Component(player, rootElement, {
-        ...defaults,
-        ...config
-      });
-      components[name] = instance;
+      const instance = new Component(
+        player,
+        rootElement,
+        {
+          ...defaults,
+          ...config
+        },
+        currentInstance
+      );
+      currentInstance.components[name] = instance;
+
       player.$emit(PlayerEvents.AFTERCOMPONENTSETUP, {
         name,
         component: instance

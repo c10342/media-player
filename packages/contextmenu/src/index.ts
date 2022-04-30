@@ -18,9 +18,10 @@ class Contextmenu extends Component {
   constructor(
     player: Player,
     slotElement: HTMLElement,
-    options: ContextmenuOptions
+    options: ContextmenuOptions,
+    parentComponent: any
   ) {
-    super(player, slotElement, options);
+    super(player, slotElement, options, parentComponent);
     const menuList = this.options.menuList;
     if (isArray(menuList) && menuList.length > 0) {
       this.createElement();

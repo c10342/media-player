@@ -24,9 +24,15 @@ class Zoom extends Component {
   constructor(
     player: Player,
     slotElement: HTMLElement,
-    options: ZoomOptions = {}
+    options: ZoomOptions = {},
+    parentComponent: any
   ) {
-    super(player, slotElement, { ...defaultOptions, ...options });
+    super(
+      player,
+      slotElement,
+      { ...defaultOptions, ...options },
+      parentComponent
+    );
     this.parentElement = player.options.el;
     this.init();
     this.initDrag();

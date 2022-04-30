@@ -6,7 +6,8 @@ export interface ComponentClass<Options = any> {
   new (
     player: Player,
     rootElement: HTMLElement,
-    options: Options
+    options: Options,
+    parentComponent: any
   ): Component<Options>;
   id?: string;
   shouldInit?: (options: PlayerConfig) => boolean;

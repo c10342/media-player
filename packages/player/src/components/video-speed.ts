@@ -19,8 +19,13 @@ class VideoSpeed extends Component {
   private speedItemsElement: NodeListOf<Element>;
   private speedLabelElement: HTMLElement;
 
-  constructor(player: Player, slotElement: HTMLElement, options = {}) {
-    super(player, slotElement, options);
+  constructor(
+    player: Player,
+    slotElement: HTMLElement,
+    options = {},
+    parentComponent: any
+  ) {
+    super(player, slotElement, options, parentComponent);
 
     // 初始化dom
     this.initDom(slotElement);

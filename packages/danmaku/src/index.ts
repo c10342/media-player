@@ -55,9 +55,10 @@ class Danmaku extends Component {
   constructor(
     player: Player,
     slotElement: HTMLElement,
-    options: DanmakuOptions = {}
+    options: DanmakuOptions = {},
+    parentComponent: any
   ) {
-    super(player, slotElement, options);
+    super(player, slotElement, options, parentComponent);
 
     // 初始化语言
     this.initLang();

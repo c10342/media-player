@@ -22,9 +22,15 @@ class Screenshot extends Component {
   constructor(
     player: Player,
     slotElement: HTMLElement,
-    options: ScreenshotOptions
+    options: ScreenshotOptions,
+    parentComponent: any
   ) {
-    super(player, slotElement, { ...defaultOptions, ...options });
+    super(
+      player,
+      slotElement,
+      { ...defaultOptions, ...options },
+      parentComponent
+    );
 
     // 初始化
     this.handleInit();

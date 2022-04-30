@@ -1,4 +1,4 @@
-import { EventEmit, EventManager, isFunction } from "@lin-media/utils";
+import { EventEmit, EventManager } from "@lin-media/utils";
 import Player from "../player";
 import { PlayerConfig } from "../types/player";
 import { destroyComponents, initComponents } from "../utils/helper";
@@ -20,13 +20,20 @@ class Component<T extends Record<string, any> = {}> extends EventEmit {
   // dom事件管理器
   eventManager = new EventManager();
   options: T = {} as T;
+  parentComponent: any = null;
   private isReady = false;
   private readyCallback: Array<Function> = [];
-  constructor(player: Player, slotElement: HTMLElement, options: T = {} as T) {
+  constructor(
+    player: Player,
+    slotElement: HTMLElement,
+    options: T = {} as T,
+    parentComponent: any
+  ) {
     super();
     this.player = player;
     this.slotElement = slotElement;
     this.options = options;
+    this.parentComponent = parentComponent;
     this.player.ready(this.onPlayerReady.bind(this));
   }
 
@@ -44,10 +51,9 @@ class Component<T extends Record<string, any> = {}> extends EventEmit {
       this.rootElement = null as any;
     }
   }
-  private initComponent() {
+  private initComponents() {
     const id = (this.constructor as any).id;
-
-    initComponents(id, this.player, this.rootElement, this.components);
+    initComponents(id, this.player, this.rootElement, this);
   }
 
   ready(fn: Function) {
@@ -71,7 +77,7 @@ class Component<T extends Record<string, any> = {}> extends EventEmit {
     if (this.isReady) {
       return;
     }
-    this.initComponent();
+    this.initComponents();
     this.isReady = true;
     this.$emit("ready");
     this.runReadyCallback();

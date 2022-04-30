@@ -7,8 +7,13 @@ import LoadingTpl from "../templates/loading";
 import Component from "./component";
 
 class VideoLoading extends Component {
-  constructor(player: Player, slotElement: HTMLElement, options = {}) {
-    super(player, slotElement, options);
+  constructor(
+    player: Player,
+    slotElement: HTMLElement,
+    options = {},
+    parentComponent: any
+  ) {
+    super(player, slotElement, options, parentComponent);
 
     // 初始化dom
     this.initDom(slotElement);
