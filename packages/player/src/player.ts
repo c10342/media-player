@@ -80,8 +80,7 @@ class Player extends EventEmit {
   }
 
   static getTech(name: string) {
-    getTech(name);
-    return this;
+    return getTech(name);
   }
 
   static registerHook(hook: HookType, callback: HookCallback) {
