@@ -21,6 +21,11 @@ const options = {
   init: true
 };
 
+const videoControlsChildOptions = {
+  ...options,
+  parentComponent: "VideoControls"
+};
+
 Player.registerComponent("Component", Component);
 Player.registerComponent("VideoPlayer", VideoPlayer, options);
 Player.registerComponent("VideoMask", VideoMask, options);
@@ -29,15 +34,29 @@ Player.registerComponent("VideoControls", VideoControls, options);
 Player.registerComponent("VideoLoading", VideoLoading, options);
 Player.registerComponent("VideoTip", VideoTip, options);
 
-VideoControls.registerComponent("VideoProgress", VideoProgress, options);
-VideoControls.registerComponent("VideoPlayButton", VideoPlayButton, {
+Player.registerComponent(
+  "VideoProgress",
+  VideoProgress,
+  videoControlsChildOptions
+);
+Player.registerComponent("VideoPlayButton", VideoPlayButton, {
+  ...videoControlsChildOptions,
   init: !isMobile()
 });
-VideoControls.registerComponent("VideoVolume", VideoVolume, {
+Player.registerComponent("VideoVolume", VideoVolume, {
+  ...videoControlsChildOptions,
   init: !isMobile()
 });
-VideoControls.registerComponent("VideoTime", VideoTime, options);
-VideoControls.registerComponent("VideoLive", VideoLive, options);
-VideoControls.registerComponent("VideoSpeed", VideoSpeed, options);
-VideoControls.registerComponent("VideoDefinition", VideoDefinition, options);
-VideoControls.registerComponent("VideoFullscreen", VideoFullscreen, options);
+Player.registerComponent("VideoTime", VideoTime, videoControlsChildOptions);
+Player.registerComponent("VideoLive", VideoLive, videoControlsChildOptions);
+Player.registerComponent("VideoSpeed", VideoSpeed, videoControlsChildOptions);
+Player.registerComponent(
+  "VideoDefinition",
+  VideoDefinition,
+  videoControlsChildOptions
+);
+Player.registerComponent(
+  "VideoFullscreen",
+  VideoFullscreen,
+  videoControlsChildOptions
+);
