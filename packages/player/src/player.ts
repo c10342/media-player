@@ -34,6 +34,7 @@ import Component from "./components/component";
 import Plugin from "./plugins/plugin";
 import { TechOptions, TechClass } from "./types/tech";
 import { getTech, registerTech, removeTech } from "./global-api/tech";
+import Tech from "./techs/tech";
 
 class Player extends EventEmit {
   static Events = {
@@ -130,7 +131,7 @@ class Player extends EventEmit {
   components: { [key: string]: Component } = {};
   options: PlayerConfig = {} as any;
   rootElement: HTMLElement;
-  tech: any = null;
+  tech: Tech | null = null;
   i18n: any = null;
   private readyCallback: Array<Function> = [];
   private isReady = false;
@@ -205,10 +206,26 @@ class Player extends EventEmit {
 
   private destroyPlugins() {
     destroyPlugins(this);
+    this.plugins = {};
   }
   private destroyComponents() {
     destroyComponents(this.components, this);
     this.components = {};
+  }
+
+  destroyTech() {
+    if (this.tech) {
+      const name = (this.tech.constructor as any).id;
+      this.$emit(PlayerEvents.BEFORETECHDESTROY, {
+        tech: this.tech,
+        name
+      });
+      this.tech.destroy();
+      this.tech = null;
+      this.$emit(PlayerEvents.BEFORETECHDESTROY, {
+        name
+      });
+    }
   }
 
   private runReadyCallback() {
@@ -326,6 +343,7 @@ class Player extends EventEmit {
     this.$emit(PlayerEvents.DESTROY);
     this.destroyPlugins();
     this.destroyComponents();
+    this.destroyTech();
     this.clear();
     this.tech?.destroy();
     this.resetData();
