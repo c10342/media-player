@@ -82,10 +82,15 @@ class VideoPlayer extends Component {
       return;
     }
     const initTech = (data: SourceItem) => {
-      forEachTech((name, Tech) => {
+      forEachTech((name, Tech, options = {}) => {
         if (Tech.canHandleSource(data, this.player.options)) {
           this.player.$emit(`beforeTechSetup`, { name });
-          const tech = new Tech(this.player, videoElement, data);
+          const techs = this.player.options.techs || {};
+          const defaultOPtions = techs[name] || {};
+          const tech = new Tech(this.player, videoElement, data, {
+            ...defaultOPtions,
+            ...options
+          });
           this.player.tech = tech;
           this.player.$emit(`afterTechSetup`, { name, tech });
           return true;
