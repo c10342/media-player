@@ -1,10 +1,5 @@
 import { logError } from "@lin-media/utils";
-import { SourceItem } from "../types/player";
-import {
-  NextFunction,
-  SourceArrItem,
-  SourceHandleCallback
-} from "../types/source";
+import { SourceArrItem, SourceHandleCallback } from "../types/source";
 
 const sourceArray: Array<SourceArrItem> = [];
 
@@ -16,7 +11,7 @@ function findSource(type: string, callback: SourceHandleCallback) {
   );
 }
 
-export function registerSource(type: string, callback: SourceHandleCallback) {
+export function useSource(type: string, callback: SourceHandleCallback) {
   if (findSource(type, callback) > -1) {
     logError(`source: ${callback} is registered`);
     return;
@@ -34,18 +29,6 @@ export function removeSource(type: string, callback: SourceHandleCallback) {
   }
 
   sourceArray.splice(index, 1);
-}
-export function registerOnceSource(
-  type: string,
-  callback: SourceHandleCallback
-) {
-  const fn = (data: SourceItem, next: NextFunction) => {
-    const ret = callback(data, next);
-    removeSource(type, fn);
-    return ret;
-  };
-  fn._fn_ = callback;
-  registerSource(type, fn);
 }
 
 export function forEachSource(

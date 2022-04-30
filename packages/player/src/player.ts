@@ -34,11 +34,7 @@ import {
   FullscreenType
 } from "./types/component";
 import { PlayerConfig } from "./types/player";
-import {
-  registerOnceSource,
-  registerSource,
-  removeSource
-} from "./global-api/source";
+import { useSource, removeSource } from "./global-api/source";
 import { SourceHandleCallback } from "./types/source";
 import Component from "./components/component";
 import Plugin from "./plugins/plugin";
@@ -126,13 +122,8 @@ class Player extends EventEmit {
     return getComponent<Options>(name);
   }
 
-  static registerSource(type: string, callback: SourceHandleCallback) {
-    registerSource(type, callback);
-    return this;
-  }
-
-  static registerOnceSource(type: string, callback: SourceHandleCallback) {
-    registerOnceSource(type, callback);
+  static useSource(type: string, callback: SourceHandleCallback) {
+    useSource(type, callback);
     return this;
   }
 
