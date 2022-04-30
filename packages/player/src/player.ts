@@ -177,7 +177,7 @@ class Player extends EventEmit {
     forEachHook("afterSetup", (fn) => {
       chain.push(fn);
     });
-    chain.push(this.onReady.bind(this));
+    chain.push(this.triggerReady.bind(this));
 
     let p: any = Promise.resolve(options);
 
@@ -243,7 +243,10 @@ class Player extends EventEmit {
     this.readyCallback = [];
     list.forEach((fn) => fn());
   }
-  private onReady() {
+  private triggerReady() {
+    if (this.isReady) {
+      return this;
+    }
     this.isReady = true;
     this.$emit("ready");
     this.runReadyCallback();
