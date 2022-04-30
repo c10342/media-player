@@ -1,7 +1,5 @@
 import { EventEmit, EventManager, isFunction } from "@lin-media/utils";
-import { registerComponent } from "../global-api/component";
 import Player from "../player";
-import { ComponentClass, DefaultComponentOptions } from "../types/component";
 import { PlayerConfig } from "../types/player";
 import { destroyComponents, initComponents } from "../utils/helper";
 
@@ -12,17 +10,6 @@ class Component<T extends Record<string, any> = {}> extends EventEmit {
     return true;
   }
 
-  static registerComponent(
-    name: string,
-    component: ComponentClass,
-    options?: DefaultComponentOptions
-  ) {
-    registerComponent(name, component, {
-      ...options,
-      parentComponent: this.id
-    });
-    return this;
-  }
   // 播放器实例
   player: Player;
   // 插槽
@@ -58,6 +45,7 @@ class Component<T extends Record<string, any> = {}> extends EventEmit {
   }
   private initComponent() {
     const id = (this.constructor as any).id;
+
     initComponents(id, this.player, this.rootElement, this.components);
   }
 
