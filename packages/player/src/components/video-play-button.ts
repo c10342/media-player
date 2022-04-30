@@ -6,14 +6,12 @@ import PlayButtonTpl from "../templates/play-button";
 import Component from "./component";
 
 class VideoPlayButton extends Component {
-  static componentName = "VideoPlayButton";
-
   constructor(player: Player, slotElement: HTMLElement, options = {}) {
     super(player, slotElement, options);
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
-    this.initComponent(VideoPlayButton.componentName);
+    this.initComponent(VideoPlayButton.id);
   }
 
   private initDom(slotElement: HTMLElement) {

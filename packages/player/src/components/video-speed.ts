@@ -13,7 +13,6 @@ class VideoSpeed extends Component {
       options.speedList.length > 0
     );
   }
-  static componentName = "VideoSpeed";
 
   // 倍数索引，当前是那个倍数
   private currentIndex = 0;
@@ -30,7 +29,7 @@ class VideoSpeed extends Component {
     // 设置video标签倍数
     this.initDefaultRate();
     this.initListener();
-    this.initComponent(VideoSpeed.componentName);
+    this.initComponent(VideoSpeed.id);
   }
 
   // 查询元素

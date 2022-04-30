@@ -9,7 +9,6 @@ class VideoTime extends Component {
   static shouldInit(options: PlayerConfig) {
     return !options.live;
   }
-  static componentName = "VideoTime";
 
   // 当前播放时间
   private currentTime = 0;
@@ -24,7 +23,7 @@ class VideoTime extends Component {
     this.initDom(slotElement);
     // 初始化事件
     this.initListener();
-    this.initComponent(VideoTime.componentName);
+    this.initComponent(VideoTime.id);
   }
   // 查询元素
   private querySelector<T extends HTMLElement>(selector: string) {

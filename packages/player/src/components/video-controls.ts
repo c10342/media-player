@@ -12,8 +12,6 @@ import { definePlayerMethods } from "../utils/helper";
 import Component from "./component";
 
 class VideoControls extends Component {
-  static componentName = "VideoControls";
-
   // 是否进入播放器标志位
   private isEnter = false;
   // 定时器
@@ -26,7 +24,7 @@ class VideoControls extends Component {
     this.initListener();
     this.initPlayerMethods();
     // 初始化组件
-    this.initComponent(VideoControls.componentName);
+    this.initComponent(VideoControls.id);
   }
 
   private initDom(slotElement: HTMLElement) {

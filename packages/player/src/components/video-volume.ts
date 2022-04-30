@@ -7,8 +7,6 @@ import { DragDataInfo } from "../types";
 import Component from "./component";
 
 class VideoVolume extends Component {
-  static componentName = "VideoVolume";
-
   private volumeProcessElement: HTMLElement;
 
   private volumeButtonElement: HTMLElement;
@@ -33,7 +31,7 @@ class VideoVolume extends Component {
     this.initDrag();
     // 初始化事件
     this.initListener();
-    this.initComponent(VideoVolume.componentName);
+    this.initComponent(VideoVolume.id);
   }
 
   private initDom(slotElement: HTMLElement) {

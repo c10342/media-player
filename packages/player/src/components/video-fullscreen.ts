@@ -19,8 +19,6 @@ import { definePlayerMethods } from "../utils/helper";
 import Component from "./component";
 
 class VideoFullscreen extends Component {
-  static componentName = "VideoFullscreen";
-
   private isWebFullscreen = false;
   constructor(player: Player, slotElement: HTMLElement, options = {}) {
     super(player, slotElement, options);
@@ -28,7 +26,7 @@ class VideoFullscreen extends Component {
     this.initDom(slotElement);
     this.initListener();
     this.initPlayerMethods();
-    this.initComponent(VideoFullscreen.componentName);
+    this.initComponent(VideoFullscreen.id);
   }
 
   // 查询元素

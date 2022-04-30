@@ -9,7 +9,6 @@ class VideoDefinition extends Component {
   static shouldInit(options: PlayerConfig) {
     return options.sources && options.sources.length > 0;
   }
-  static componentName = "VideoDefinition";
 
   // 当前正在播放的视频索引
   private currentIndex = -1;
@@ -33,7 +32,7 @@ class VideoDefinition extends Component {
     // 设置索引，播放的是哪个视频
     this.setCurrentIndex(this.getDefaultIndex());
     this.initListener();
-    this.initComponent(VideoDefinition.componentName);
+    this.initComponent(VideoDefinition.id);
   }
 
   private initDom(slotElement: HTMLElement) {

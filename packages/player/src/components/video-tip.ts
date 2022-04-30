@@ -4,15 +4,13 @@ import TipTpl from "../templates/tip";
 import { definePlayerMethods } from "../utils/helper";
 import Component from "./component";
 class VideoTip extends Component {
-  static componentName = "VideoTip";
-
   // 定时器
   private timer: number | null;
   constructor(player: Player, slotElement: HTMLElement, options = {}) {
     super(player, slotElement, options);
     this.initDom(slotElement);
     this.initPlayerMethods();
-    this.initComponent(VideoTip.componentName);
+    this.initComponent(VideoTip.id);
   }
 
   private initPlayerMethods() {

@@ -10,7 +10,6 @@ import { definePlayerMethods } from "../utils/helper";
 import Component from "./component";
 
 class VideoPlayer extends Component {
-  static componentName = "VideoPlayer";
   // 当前正在播放的视频索引
   private currentIndex = -1;
 
@@ -27,7 +26,7 @@ class VideoPlayer extends Component {
     this.initPlayer();
     // 添加事件
     this.initPlayerMethods();
-    this.initComponent(VideoPlayer.componentName);
+    this.initComponent(VideoPlayer.id);
   }
   // 查询元素
   private querySelector<T extends HTMLVideoElement>(selector: string) {

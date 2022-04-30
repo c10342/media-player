@@ -8,7 +8,7 @@ export interface ComponentClass<Options = any> {
     rootElement: HTMLElement,
     options: Options
   ): Component<Options>;
-  componentName: string;
+  id?: string;
   shouldInit?: (options: PlayerConfig) => boolean;
   registerComponent: (
     name: string,

@@ -6,7 +6,7 @@ import { PlayerConfig } from "../types/player";
 import { destroyComponents, initComponents } from "../utils/helper";
 
 class Component<T extends Record<string, any> = {}> extends EventEmit {
-  static componentName = "Component";
+  static id = "Component";
 
   static shouldInit(options: PlayerConfig) {
     return true;
@@ -19,7 +19,7 @@ class Component<T extends Record<string, any> = {}> extends EventEmit {
   ) {
     registerComponent(name, component, {
       ...options,
-      parentComponent: this.componentName
+      parentComponent: this.id
     });
     return this;
   }

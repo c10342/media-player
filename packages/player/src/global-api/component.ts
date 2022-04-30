@@ -29,6 +29,9 @@ export function registerComponent(
     logError(`component:${name} should provide a destroy function`);
     return;
   }
+
+  component.id = name;
+
   componentArray.push({
     name,
     handler: component,

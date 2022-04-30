@@ -4,15 +4,13 @@ import MaskTpl from "../templates/mask";
 import Component from "./component";
 
 class VideoMask extends Component {
-  static componentName = "VideoMask";
-
   constructor(player: Player, slotElement: HTMLElement, options = {}) {
     super(player, slotElement, options);
 
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
-    this.initComponent(VideoMask.componentName);
+    this.initComponent(VideoMask.id);
   }
 
   private initDom(slotElement: HTMLElement) {

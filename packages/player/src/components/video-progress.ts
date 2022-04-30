@@ -20,7 +20,6 @@ class VideoProgress extends Component {
   static shouldInit(options: PlayerConfig) {
     return !options.live;
   }
-  static componentName = "VideoProgress";
 
   private progressMaskElement: HTMLElement;
 
@@ -48,7 +47,7 @@ class VideoProgress extends Component {
     // 初始化拖拽事件
     this.initDrag();
     this.initListener();
-    this.initComponent(VideoProgress.componentName);
+    this.initComponent(VideoProgress.id);
   }
 
   // 查询元素

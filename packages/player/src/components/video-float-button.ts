@@ -12,8 +12,6 @@ import Component from "./component";
 const isPhone = isMobile();
 
 class VideoFloatButton extends Component {
-  static componentName = "VideoFloatButton";
-
   private iconElement: HTMLElement;
 
   private isShow = true;
@@ -25,7 +23,7 @@ class VideoFloatButton extends Component {
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
-    this.initComponent(VideoFloatButton.componentName);
+    this.initComponent(VideoFloatButton.id);
   }
 
   private initDom(slotElement: HTMLElement) {

@@ -7,14 +7,13 @@ class VideoLive extends Component {
   static shouldInit(options: PlayerConfig) {
     return !!options.live;
   }
-  static componentName = "VideoLive";
 
   constructor(player: Player, slotElement: HTMLElement, options = {}) {
     super(player, slotElement, options);
 
     // 初始化dom
     this.initDom(slotElement);
-    this.initComponent(VideoLive.componentName);
+    this.initComponent(VideoLive.id);
   }
 
   private initDom(slotElement: HTMLElement) {
