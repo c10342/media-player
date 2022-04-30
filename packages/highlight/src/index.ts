@@ -32,6 +32,7 @@ class Highlight extends Component {
     this.init();
     // 挂载方法给外部用
     this.initPlayerMethods();
+    this.triggerReady();
   }
 
   private initPlayerMethods() {

@@ -26,6 +26,7 @@ class Contextmenu extends Component {
       this.createElement();
       this.initListener();
     }
+    this.triggerReady();
   }
 
   private initListener() {

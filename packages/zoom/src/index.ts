@@ -30,6 +30,7 @@ class Zoom extends Component {
     this.parentElement = player.options.el;
     this.init();
     this.initDrag();
+    this.triggerReady();
   }
 
   // 初始化拖拽行为

@@ -1,5 +1,5 @@
 import "./style/index.scss";
-import { EventManager, isUndef, logError } from "@lin-media/utils";
+import { isUndef, logError } from "@lin-media/utils";
 import { ScreenshotOptions } from "./types";
 import { downloadBase64 } from "./js/utils";
 import { downloadPicName } from "./config/constant";
@@ -30,6 +30,7 @@ class Screenshot extends Component {
     this.handleInit();
     // 挂载方法给外部使用
     this.initPlayerMethods();
+    this.triggerReady();
   }
 
   private handleInit() {

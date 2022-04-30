@@ -1,4 +1,4 @@
-import { Drag, EventManager, updateStyle } from "@lin-media/utils";
+import { Drag, updateStyle } from "@lin-media/utils";
 import { CheckboxClassNameEnum, DanmakuAreaEnum } from "./config/enum";
 import BulletChat from "./js/bullet-chat";
 import { DanmakuOptions, PushData } from "./types";
@@ -75,6 +75,7 @@ class Danmaku extends Component {
     this.initListener();
     // 挂载方法给外部用
     this.initMethods();
+    this.triggerReady();
   }
 
   private initMethods() {

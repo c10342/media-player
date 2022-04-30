@@ -1,7 +1,6 @@
 import pointListTpl from "./template/preview-list";
 import "./style/index.scss";
 import {
-  EventManager,
   isArray,
   isUndef,
   checkData,
@@ -41,6 +40,7 @@ class Preview extends Component {
     this.initList();
     // 挂载方法给外部使用
     this.initMethods();
+    this.triggerReady();
   }
 
   private get duration() {
