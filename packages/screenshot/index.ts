@@ -1,8 +1,8 @@
 import Player from "@lin-media/player";
 import Screenshot from "./src/index";
 
-const VideoControls = Player.getComponent("VideoControls");
-
-VideoControls.registerComponent("Screenshot", Screenshot);
+Player.registerComponent("Screenshot", Screenshot, {
+  parentComponent: "VideoControls"
+});
 
 export default Screenshot;
