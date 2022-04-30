@@ -1,6 +1,6 @@
 import { isFunction, logError, logWarn } from "@lin-media/utils";
 
-import { DefaultPluginOptions, PluginClass, PluginItem } from "../types/plugin";
+import { PluginOptions, PluginClass, PluginItem } from "../types/plugin";
 
 const pluginArray: Array<PluginItem> = [];
 
@@ -11,7 +11,7 @@ function keyInArray(key: string) {
 export function registerPlugin(
   name: string,
   plugin: PluginClass,
-  options: DefaultPluginOptions = {}
+  options: PluginOptions = {}
 ) {
   if (keyInArray(name) > -1) {
     logWarn(`plugin: ${name} is registered`);
@@ -48,7 +48,7 @@ export function getPlugin<Options = any>(name: string) {
 }
 
 export function forEachPlugins(
-  cb: (name: string, plugin: PluginClass, options: DefaultPluginOptions) => any
+  cb: (name: string, plugin: PluginClass, options: PluginOptions) => any
 ) {
   pluginArray.forEach((plugin) => {
     cb(plugin.name, plugin.handler, plugin.options);

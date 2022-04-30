@@ -3,10 +3,10 @@ import { isFunction, logError, logWarn } from "@lin-media/utils";
 import {
   ComponentClass,
   ComponentItem,
-  DefaultComponentOptions
+  ComponentOptions
 } from "../types/component";
 
-const defaults: DefaultComponentOptions = {
+const defaults: ComponentOptions = {
   level: 0,
   parentComponent: "Player"
 };
@@ -19,7 +19,7 @@ const keyInArray = (name: string) => {
 export function registerComponent(
   name: string,
   component: ComponentClass,
-  options: DefaultComponentOptions = {}
+  options: ComponentOptions = {}
 ) {
   if (keyInArray(name) > -1) {
     logWarn(`component: ${name} is registered`);
@@ -61,7 +61,7 @@ export function forEachComponent(
   cb: (
     name: string,
     component: ComponentClass,
-    options: DefaultComponentOptions
+    options: ComponentOptions
   ) => void
 ) {
   const copy = componentArray.slice();
