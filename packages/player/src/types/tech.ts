@@ -12,5 +12,6 @@ export interface TechClass {
     videoElement: HTMLVideoElement,
     source: SourceItem
   ): Tech;
+  id: string;
   canHandleSource: (source: SourceItem, options: PlayerConfig) => string;
 }
