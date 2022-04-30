@@ -1,16 +1,13 @@
-import { canPlayType } from "@lin-media/utils";
 import Player from "../player";
 import { SourceItem } from "../types/player";
 import { TechOptions } from "../types/tech";
 import Tech from "./tech";
 
-const canHandleSourceType = "video/mp4";
-
-const playType = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';
+const canHandleSourceType = ["video/mp4", "video/ogg", "video/webm"];
 
 class Html5 extends Tech {
   static canHandleSource(sourceItem: SourceItem) {
-    if (sourceItem.type === canHandleSourceType && canPlayType(playType)) {
+    if (canHandleSourceType.includes(sourceItem.type)) {
       return "maybe";
     }
     return "";
@@ -22,8 +19,11 @@ class Html5 extends Tech {
     options: TechOptions
   ) {
     super(player, videoElement, source, options);
+    this.initVideo();
+  }
 
-    videoElement.src = source.url;
+  private initVideo() {
+    this.videoElement.src = this.source.url;
     this.triggerReady();
   }
 }
