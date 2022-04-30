@@ -17,10 +17,11 @@ export interface PlayerConfig {
   plugins?: { [key: string]: any };
   // 组件配置
   components?: { [key: string]: any };
+  // tech配置
+  techs?: { [key: string]: any };
   el: HTMLElement;
   // 视频播放列表
   sources: VideoListParams;
-  tech?: Array<string>;
   live?: boolean;
   customLanguage?: Record<string, any>;
   lang?: LangTypeEnum;
@@ -36,5 +37,7 @@ export interface PlayerConfig {
   preload?: string;
   // 视频封面
   poster?: string;
+  // tech执行顺序
+  techsOrder?: string[];
   [key: string]: any;
 }
