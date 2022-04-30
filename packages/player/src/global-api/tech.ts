@@ -1,16 +1,18 @@
 import { isFunction, logError, logWarn } from "@lin-media/utils";
-import { TechClass, TechsMap } from "../types/tech";
+import { TechOptions, TechClass, TechItem } from "../types/tech";
 
-const techsMap: TechsMap = {};
+const techArray: Array<TechItem> = [];
 
-const techsKey: string[] = [];
-
-function keyInMap(key: string) {
-  return key in techsMap;
+function keyInArray(key: string) {
+  return techArray.findIndex((tech) => tech.name === key);
 }
 
-export function registerTech(name: string, tech: TechClass) {
-  if (keyInMap(name)) {
+export function registerTech(
+  name: string,
+  tech: TechClass,
+  options: TechOptions = {}
+) {
+  if (keyInArray(name) > -1) {
     logWarn(`tech: ${name} is registered`);
     return;
   }
@@ -20,37 +22,44 @@ export function registerTech(name: string, tech: TechClass) {
     return;
   }
 
-  techsMap[name] = tech;
-  techsKey.push(name);
+  class DefaultTech extends tech {
+    static id = name;
+  }
+  techArray.push({
+    name,
+    handler: DefaultTech,
+    options
+  });
 }
 
 export function removeTech(name: string) {
-  if (!keyInMap(name)) {
+  const index = keyInArray(name);
+  if (index === -1) {
     return;
   }
-  delete techsMap[name];
-  const index = techsKey.findIndex((k) => k === name);
-  if (index > -1) {
-    techsKey.splice(index, 1);
-  }
+
+  techArray.splice(index, 1);
 }
 
 export function getTech(name: string) {
-  return techsMap[name];
+  const index = keyInArray(name);
+  return techArray[index];
 }
 
 export function forEachTech(
-  cb: (name: string, tech: TechClass) => boolean,
-  techOrder: string[] = []
+  cb: (name: string, tech: TechClass, options: TechOptions) => boolean,
+  techsOrder: string[] = []
 ) {
-  const keys = [...new Set([...techOrder, ...techsKey])];
-
+  const techsKey = techArray.map((tech) => tech.name);
+  const keys = [...new Set([...techsOrder, ...techsKey])];
   for (let i = 0; i < keys.length; i++) {
-    const name = keys[i];
-    const tech = techsMap[name];
-    const ret = cb(name, tech);
-    if (ret) {
-      return;
+    const index = keyInArray(keys[i]);
+    if (index > -1) {
+      const tech = techArray[index];
+      const ret = cb(tech.name, tech.handler, tech.options);
+      if (ret) {
+        return;
+      }
     }
   }
 }
