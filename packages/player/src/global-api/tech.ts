@@ -22,12 +22,11 @@ export function registerTech(
     return;
   }
 
-  class DefaultTech extends tech {
-    static id = name;
-  }
+  tech.id = name;
+
   techArray.push({
     name,
-    handler: DefaultTech,
+    handler: tech,
     options
   });
 }

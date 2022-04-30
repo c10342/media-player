@@ -23,13 +23,11 @@ export function registerPlugin(
     return;
   }
 
-  class DefaultPlugin extends plugin {
-    static id = name;
-  }
+  plugin.id = name;
 
   pluginArray.push({
     name,
-    handler: DefaultPlugin,
+    handler: plugin,
     options
   });
 }

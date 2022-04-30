@@ -30,15 +30,11 @@ export function registerComponent(
     return;
   }
 
-  // 通过继承的方式给每个组件添加一个id静态属性
-  // 不要直接component.id=xx，会修改到原有的组件属性
-  class DefaultComponent extends component {
-    static id = name;
-  }
+  component.id = name;
 
   componentArray.push({
     name,
-    handler: DefaultComponent,
+    handler: component,
     options: { ...defaults, ...options }
   });
 }
