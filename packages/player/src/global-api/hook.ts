@@ -1,7 +1,5 @@
 import { logWarn } from "@lin-media/utils";
-import Player from "../player";
 import { HookCallback, HooksMap, HookType } from "../types/hook";
-import { PlayerConfig } from "../types/player";
 
 const hooksMap: HooksMap = {
   beforeSetup: [],
@@ -12,7 +10,7 @@ function keyInMap(key: string) {
   return key in hooksMap;
 }
 
-export function registerHook(hook: HookType, callback: HookCallback) {
+export function useHook(hook: HookType, callback: HookCallback) {
   if (keyInMap(hook)) {
     //   防止重复注册
     const index = hooksMap[hook].findIndex((cb) => cb === callback);
@@ -38,19 +36,6 @@ export function removeHook(hook: HookType, callback?: HookCallback) {
   if (index > -1) {
     hooksMap[hook].splice(index, 1);
   }
-}
-
-export function registerHookOnce(hook: HookType, callback: HookCallback) {
-  if (!keyInMap(hook)) {
-    return;
-  }
-  const fn = (data: PlayerConfig | Player) => {
-    const result = callback(data);
-    removeHook(hook, fn);
-    return result;
-  };
-  fn._fn_ = callback;
-  registerHook(hook, fn);
 }
 
 export function forEachHook(

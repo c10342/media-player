@@ -11,12 +11,7 @@ import {
   removeComponent,
   getComponent
 } from "./global-api/component";
-import {
-  registerHook,
-  removeHook,
-  registerHookOnce,
-  forEachHook
-} from "./global-api/hook";
+import { useHook, removeHook, forEachHook } from "./global-api/hook";
 import { registerPlugin, removePlugin, getPlugin } from "./global-api/plugin";
 
 import LayoutTpl from "./templates/layout";
@@ -83,16 +78,12 @@ class Player extends EventEmit {
     return getTech(name);
   }
 
-  static registerHook(hook: HookType, callback: HookCallback) {
-    registerHook(hook, callback);
+  static useHook(hook: HookType, callback: HookCallback) {
+    useHook(hook, callback);
     return this;
   }
   static removeHook(hook: HookType, callback?: HookCallback) {
     removeHook(hook, callback);
-    return this;
-  }
-  static registerHookOnce(hook: HookType, callback: HookCallback) {
-    registerHookOnce(hook, callback);
     return this;
   }
 
