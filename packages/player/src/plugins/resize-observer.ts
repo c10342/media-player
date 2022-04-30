@@ -7,6 +7,7 @@ class DomResizeObserver extends Plugin {
 
   onPlayerReady() {
     this.initDomResizeObserver();
+    this.triggerReady();
   }
 
   private initDomResizeObserver() {

@@ -4,7 +4,7 @@ import { PlayerConfig } from "./player";
 
 export interface PluginClass<Options = any> {
   new (player: Player, options: Options): Plugin;
-
+  id?: string;
   shouldInit?: (options: PlayerConfig) => boolean;
 }
 

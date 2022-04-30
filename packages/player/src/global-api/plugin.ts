@@ -23,9 +23,13 @@ export function registerPlugin(
     return;
   }
 
+  class DefaultPlugin extends plugin {
+    static id = name;
+  }
+
   pluginArray.push({
     name,
-    handler: plugin,
+    handler: DefaultPlugin,
     options
   });
 }

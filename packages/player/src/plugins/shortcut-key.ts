@@ -10,6 +10,7 @@ class ShortcutKey extends Plugin {
 
   onPlayerReady() {
     this.initListener();
+    this.triggerReady();
   }
 
   private initListener() {
