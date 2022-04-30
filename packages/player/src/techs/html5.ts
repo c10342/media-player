@@ -21,6 +21,7 @@ class Html5 extends Tech {
   ) {
     super(player, videoElement, source);
     videoElement.src = source.url;
+    this.triggerReady();
   }
 }
 
