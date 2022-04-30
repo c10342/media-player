@@ -1,4 +1,4 @@
-import { EventEmit, isFunction } from "@lin-media/utils";
+import { EventEmit } from "@lin-media/utils";
 import Player from "../player";
 
 class Plugin<Options = any> extends EventEmit {

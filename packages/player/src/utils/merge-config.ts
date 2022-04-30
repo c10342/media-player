@@ -4,7 +4,6 @@ import {
   isKeyInObject,
   isPlainObject
 } from "@lin-media/utils";
-import { PlayerConfig } from "../types/player";
 
 function getType(data: any) {
   return Object.prototype.toString.call(data);
