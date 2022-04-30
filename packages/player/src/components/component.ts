@@ -33,6 +33,8 @@ class Component<T extends Record<string, any> = {}> extends EventEmit {
   // dom事件管理器
   eventManager = new EventManager();
   options: T = {} as T;
+  private isReady = false;
+  private readyCallback: Array<Function> = [];
   constructor(player: Player, slotElement: HTMLElement, options: T = {} as T) {
     super();
     this.player = player;
@@ -43,6 +45,7 @@ class Component<T extends Record<string, any> = {}> extends EventEmit {
       this.player.ready(onPlayerReady.bind(this));
     }
   }
+
   destroyComponents() {
     destroyComponents(this.components, this.player);
     this.components = {};
@@ -53,9 +56,38 @@ class Component<T extends Record<string, any> = {}> extends EventEmit {
       this.rootElement = null as any;
     }
   }
-  initComponent(name: string) {
-    initComponents(name, this.player, this.rootElement, this.components);
+  private initComponent() {
+    const id = (this.constructor as any).id;
+    initComponents(id, this.player, this.rootElement, this.components);
   }
+
+  ready(fn: Function) {
+    if (this.isReady) {
+      fn();
+    } else {
+      this.readyCallback.push(fn);
+    }
+  }
+
+  private runReadyCallback() {
+    const list = this.readyCallback.slice();
+    if (list.length === 0) {
+      return;
+    }
+    this.readyCallback = [];
+    list.forEach((fn) => fn());
+  }
+
+  triggerReady() {
+    if (this.isReady) {
+      return;
+    }
+    this.initComponent();
+    this.isReady = true;
+    this.$emit("ready");
+    this.runReadyCallback();
+  }
+
   destroy() {
     this.destroyComponents();
     this.destroyElement();

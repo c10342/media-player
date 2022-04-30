@@ -13,7 +13,7 @@ class VideoLoading extends Component {
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
-    this.initComponent(VideoLoading.id);
+    this.triggerReady();
   }
 
   private initDom(slotElement: HTMLElement) {

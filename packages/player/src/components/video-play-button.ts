@@ -11,7 +11,7 @@ class VideoPlayButton extends Component {
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
-    this.initComponent(VideoPlayButton.id);
+    this.triggerReady();
   }
 
   private initDom(slotElement: HTMLElement) {

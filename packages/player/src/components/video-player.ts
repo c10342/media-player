@@ -26,7 +26,7 @@ class VideoPlayer extends Component {
     this.initPlayer();
     // 添加事件
     this.initPlayerMethods();
-    this.initComponent(VideoPlayer.id);
+    this.triggerReady();
   }
   // 查询元素
   private querySelector<T extends HTMLVideoElement>(selector: string) {

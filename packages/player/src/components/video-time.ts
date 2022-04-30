@@ -23,7 +23,7 @@ class VideoTime extends Component {
     this.initDom(slotElement);
     // 初始化事件
     this.initListener();
-    this.initComponent(VideoTime.id);
+    this.triggerReady();
   }
   // 查询元素
   private querySelector<T extends HTMLElement>(selector: string) {

@@ -47,7 +47,7 @@ class VideoProgress extends Component {
     // 初始化拖拽事件
     this.initDrag();
     this.initListener();
-    this.initComponent(VideoProgress.id);
+    this.triggerReady();
   }
 
   // 查询元素

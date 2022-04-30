@@ -23,7 +23,7 @@ class VideoFloatButton extends Component {
     // 初始化dom
     this.initDom(slotElement);
     this.initListener();
-    this.initComponent(VideoFloatButton.id);
+    this.triggerReady();
   }
 
   private initDom(slotElement: HTMLElement) {

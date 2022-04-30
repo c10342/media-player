@@ -31,7 +31,7 @@ class VideoVolume extends Component {
     this.initDrag();
     // 初始化事件
     this.initListener();
-    this.initComponent(VideoVolume.id);
+    this.triggerReady();
   }
 
   private initDom(slotElement: HTMLElement) {

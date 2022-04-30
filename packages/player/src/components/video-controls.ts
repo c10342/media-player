@@ -23,8 +23,7 @@ class VideoControls extends Component {
     this.initDom(slotElement);
     this.initListener();
     this.initPlayerMethods();
-    // 初始化组件
-    this.initComponent(VideoControls.id);
+    this.triggerReady();
   }
 
   private initDom(slotElement: HTMLElement) {

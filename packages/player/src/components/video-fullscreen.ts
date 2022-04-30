@@ -26,7 +26,7 @@ class VideoFullscreen extends Component {
     this.initDom(slotElement);
     this.initListener();
     this.initPlayerMethods();
-    this.initComponent(VideoFullscreen.id);
+    this.triggerReady();
   }
 
   // 查询元素

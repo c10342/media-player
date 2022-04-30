@@ -13,7 +13,7 @@ class VideoLive extends Component {
 
     // 初始化dom
     this.initDom(slotElement);
-    this.initComponent(VideoLive.id);
+    this.triggerReady();
   }
 
   private initDom(slotElement: HTMLElement) {

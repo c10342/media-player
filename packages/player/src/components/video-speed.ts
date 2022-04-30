@@ -29,7 +29,7 @@ class VideoSpeed extends Component {
     // 设置video标签倍数
     this.initDefaultRate();
     this.initListener();
-    this.initComponent(VideoSpeed.id);
+    this.triggerReady();
   }
 
   // 查询元素

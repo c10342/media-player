@@ -32,7 +32,7 @@ class VideoDefinition extends Component {
     // 设置索引，播放的是哪个视频
     this.setCurrentIndex(this.getDefaultIndex());
     this.initListener();
-    this.initComponent(VideoDefinition.id);
+    this.triggerReady();
   }
 
   private initDom(slotElement: HTMLElement) {

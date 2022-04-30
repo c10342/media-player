@@ -10,7 +10,7 @@ class VideoTip extends Component {
     super(player, slotElement, options);
     this.initDom(slotElement);
     this.initPlayerMethods();
-    this.initComponent(VideoTip.id);
+    this.triggerReady();
   }
 
   private initPlayerMethods() {
