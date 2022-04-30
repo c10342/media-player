@@ -1,6 +1,7 @@
 import { EventEmit } from "@lin-media/utils";
 import Player from "../player";
 import { PlayerConfig, SourceItem } from "../types/player";
+import { TechOptions } from "../types/tech";
 
 class Tech extends EventEmit {
   static id = "Tech";
@@ -10,17 +11,20 @@ class Tech extends EventEmit {
   player: Player;
   videoElement: HTMLVideoElement;
   source: SourceItem;
+  options: TechOptions;
   private isReady = false;
   private readyCallback: Array<Function> = [];
   constructor(
     player: Player,
     videoElement: HTMLVideoElement,
-    source: SourceItem
+    source: SourceItem,
+    options: TechOptions
   ) {
     super();
     this.player = player;
     this.videoElement = videoElement;
     this.source = source;
+    this.options = options;
     this.player.ready(this.onPlayerReady.bind(this));
   }
 

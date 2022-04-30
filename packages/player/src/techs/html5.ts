@@ -1,6 +1,7 @@
 import { canPlayType } from "@lin-media/utils";
 import Player from "../player";
 import { SourceItem } from "../types/player";
+import { TechOptions } from "../types/tech";
 import Tech from "./tech";
 
 const canHandleSourceType = "video/mp4";
@@ -17,9 +18,11 @@ class Html5 extends Tech {
   constructor(
     player: Player,
     videoElement: HTMLVideoElement,
-    source: SourceItem
+    source: SourceItem,
+    options: TechOptions
   ) {
-    super(player, videoElement, source);
+    super(player, videoElement, source, options);
+
     videoElement.src = source.url;
     this.triggerReady();
   }
