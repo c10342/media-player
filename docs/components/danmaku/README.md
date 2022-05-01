@@ -13,10 +13,10 @@ npm i @lin-media/danmaku
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 import "@lin-media/danmaku";
 
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   Components: {
     Danmaku: {
@@ -76,7 +76,7 @@ const player = new MediaPlayer({
 ## 自定义语言包
 
 ```javascript
-MediaPlayer.useLang({
+Player.useLang({
   Danmaku: {
     full: "全屏",
     top: "顶部",

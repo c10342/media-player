@@ -17,7 +17,7 @@ npm i @lin-media/preview
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 import "@lin-media/preview";
 ```
 
@@ -36,7 +36,7 @@ const previewList = [
     url: "http://xxx/demo2.png"
   }
 ];
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   Components: {
     Preview: {
@@ -58,7 +58,7 @@ player.$on("preview-click", (item: any) => {
 完整视频缩略图可通过[video-screenshot](https://github.com/c10342/media-player/tree/main/tools/video-screenshot)工具生成
 
 ```javascript
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   Components: {
     Preview: {

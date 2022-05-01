@@ -12,10 +12,10 @@
 
 **执行 beforeSetup 钩子函数**
 
-`beforeSetup`钩子函数是通过`MediaPlayer.registerHook`进行注册的，代码如下:
+`beforeSetup`钩子函数是通过`Player.registerHook`进行注册的，代码如下:
 
 ```javascript
-MediaPlayer.registerHook("beforeSetup", (options) => {
+Player.registerHook("beforeSetup", (options) => {
   return options;
 });
 ```
@@ -25,7 +25,7 @@ MediaPlayer.registerHook("beforeSetup", (options) => {
 如果钩子函数中包含了异步的操作，你需要返回一个`Promise`的实例，代码如下：
 
 ```javascript
-MediaPlayer.registerHook("beforeSetup", (options) => {
+Player.registerHook("beforeSetup", (options) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(options);
@@ -62,10 +62,10 @@ MediaPlayer.registerHook("beforeSetup", (options) => {
 
 **执行 afterSetup 钩子函数**
 
-`afterSetup`钩子函数是通过`MediaPlayer.registerHook`进行注册的，代码如下:
+`afterSetup`钩子函数是通过`Player.registerHook`进行注册的，代码如下:
 
 ```javascript
-MediaPlayer.registerHook("afterSetup", (player) => {
+Player.registerHook("afterSetup", (player) => {
   return player;
 });
 ```
@@ -75,7 +75,7 @@ MediaPlayer.registerHook("afterSetup", (player) => {
 如果钩子函数中包含了异步的操作，你需要返回一个`Promise`的实例，代码如下：
 
 ```javascript
-MediaPlayer.registerHook("afterSetup", (player) => {
+Player.registerHook("afterSetup", (player) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(player);

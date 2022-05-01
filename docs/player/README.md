@@ -26,9 +26,9 @@ npm i @lin-media/player
 ```
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 
-const player = new MediaPlayer({
+const player = new Player({
   // 容器
   el: document.querySelector(".container"),
   // 视频列表
@@ -256,10 +256,10 @@ player.$on("ended", function (data) {
 
 **静态方法：**
 
-- `MediaPlayer.useLang(lang:Object)` : 自定义语言包，会跟默认的语言包进行合并
+- `Player.useLang(lang:Object)` : 自定义语言包，会跟默认的语言包进行合并
 
 ```javascript
-MediaPlayer.useLang({
+Player.useLang({
   Player: {
     live: "直播",
     goBack: "快退{time}秒",
@@ -272,50 +272,50 @@ MediaPlayer.useLang({
 });
 ```
 
-- `MediaPlayer.setLang(lang:string)` : 设置使用何种语言，zh/en，默认 zh
+- `Player.setLang(lang:string)` : 设置使用何种语言，zh/en，默认 zh
 
-- `MediaPlayer.registerTech(name: string, tech: TechClass)` : 注册`Tech`
+- `Player.registerTech(name: string, tech: TechClass)` : 注册`Tech`
 
-- `MediaPlayer.removeTech(name: string)` : 移除`Tech`
+- `Player.removeTech(name: string)` : 移除`Tech`
 
-- `MediaPlayer.getTech(name: string)` : 获取`Tech`
+- `Player.getTech(name: string)` : 获取`Tech`
 
-- `MediaPlayer.useHook(hook: HookType, callback: HookCallback)` : 注册`Hook`
+- `Player.useHook(hook: HookType, callback: HookCallback)` : 注册`Hook`
 
-- `MediaPlayer.removeHook(hook: HookType, callback?: HookCallback)` : 移除`Hook`
+- `Player.removeHook(hook: HookType, callback?: HookCallback)` : 移除`Hook`
 
-- `MediaPlayer.registerPlugin(name: string,plugin: PluginClass,options: PluginOptions)` : 注册插件
+- `Player.registerPlugin(name: string,plugin: PluginClass,options: PluginOptions)` : 注册插件
 
-- `MediaPlayer.removePlugin(name: string)` : 移除插件
+- `Player.removePlugin(name: string)` : 移除插件
 
-- `MediaPlayer.getPlugin(name: string)` : 获取插件
+- `Player.getPlugin(name: string)` : 获取插件
 
-- `MediaPlayer.registerComponent(name: string,component: ComponentClass,options: ComponentOptions)` : 注册组件
+- `Player.registerComponent(name: string,component: ComponentClass,options: ComponentOptions)` : 注册组件
 
-- `MediaPlayer.removeComponent(name: string)` : 移除组件
+- `Player.removeComponent(name: string)` : 移除组件
 
-- `MediaPlayer.getComponent(name: string)` : 获取组件
+- `Player.getComponent(name: string)` : 获取组件
 
-- `MediaPlayer.useSource(type: string, callback: SourceHandleCallback)` : 注册资源中间件
+- `Player.useSource(type: string, callback: SourceHandleCallback)` : 注册资源中间件
 
-- `MediaPlayer.removeSource(type: string, callback: SourceHandleCallback)` : 移除资源中间件
+- `Player.removeSource(type: string, callback: SourceHandleCallback)` : 移除资源中间件
 
 **静态属性：**
 
-- `MediaPlayer.Events` : 播放器自定义事件和 video 标签事件
+- `Player.Events` : 播放器自定义事件和 video 标签事件
 
-- `MediaPlayer.defaults` : 播放器全局配置
+- `Player.defaults` : 播放器全局配置
 
 ## 直播
 
-你可以把`MediaPlayer`用在直播中，你只需要把`live`参数设置为`true`即可。如果你需要在直播中使用弹幕，请使用弹幕插件。
+你可以把`Player`用在直播中，你只需要把`live`参数设置为`true`即可。如果你需要在直播中使用弹幕，请使用弹幕插件。
 
 **注意：你需要自定义`Tech`支持`m3u8`文件播放**
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 
-const player = new MediaPlayer({
+const player = new Player({
   el: ".container",
   sources: [
     {
@@ -399,7 +399,7 @@ document.documentElement.style.setProperty("--player-theme-color", "green");
 
 - 用户与网页进行交互。浏览器是不允许在用户没有操作的的时候自动播放视频的，所以你需要想办法让用户跟网页产生交互，然后才去初始化播放器。但是这种做法基本用不上。。。
 
-- 静音播放。浏览器是不允许有声音的视频进行自动播放的，但是允许静音的视频进行播放的。所以你可以将视频的音量设置为 0，然后在进行自动播放。`MediaPlayer`可以通过设置对应的参数实现这种静音自动播放的功能
+- 静音播放。浏览器是不允许有声音的视频进行自动播放的，但是允许静音的视频进行播放的。所以你可以将视频的音量设置为 0，然后在进行自动播放。`Player`可以通过设置对应的参数实现这种静音自动播放的功能
 
 ::: warning 警告
 

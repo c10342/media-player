@@ -13,10 +13,10 @@ npm i @lin-media/screenshot
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 import "@lin-media/screenshot";
 
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   Components: {
     Screenshot: {

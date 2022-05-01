@@ -13,7 +13,7 @@ npm i @lin-media/highlight
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 import "@lin-media/highlight";
 
 const highlightList = [
@@ -22,7 +22,7 @@ const highlightList = [
     text: "这是第 20 秒"
   }
 ];
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   Components:{
     Highlight: {

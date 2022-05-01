@@ -19,7 +19,7 @@ npm i @lin-media/contextmenu
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 import "@lin-media/contextmenu";
 
 const contextMenuList = [
@@ -92,7 +92,7 @@ const contextMenuList = [
     ]
   }
 ];
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   Components: {
     Contextmenu: {
