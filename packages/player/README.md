@@ -9,9 +9,9 @@ npm i @lin-media/player
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 
-const player = new MediaPlayer({
+const player = new Player({
   // 容器
   el: ".container",
   // 视频列表
@@ -207,10 +207,10 @@ const player = new MediaPlayer({
 
 **静态方法**
 
-- `MediaPlayer.useLang(lang:Object)` : 自定义语言包，会跟默认的语言包进行合并
+- `Player.useLang(lang:Object)` : 自定义语言包，会跟默认的语言包进行合并
 
 ```javascript
-MediaPlayer.useLang({
+Player.useLang({
   Player: {
     live: "直播",
     goBack: "快退{time}秒",
@@ -223,17 +223,17 @@ MediaPlayer.useLang({
 });
 ```
 
-- `MediaPlayer.setLang(lang:string)` : 设置使用何种语言，zh/en，默认 zh
+- `Player.setLang(lang:string)` : 设置使用何种语言，zh/en，默认 zh
 
-- `MediaPlayer.use(ctor: Function)` : 注册全局插件
+- `Player.use(ctor: Function)` : 注册全局插件
 
 **静态属性**
 
-- `MediaPlayer.PlayerEvents` : 播放器自定义事件
+- `Player.PlayerEvents` : 播放器自定义事件
 
-- `MediaPlayer.VideoEvents` : video 标签事件
+- `Player.VideoEvents` : video 标签事件
 
-- `MediaPlayer.globalConfig` : 默认的全局配置项，播放器在初始化的时候，会将用户传入的配置项跟全局的配置项进行合并，形成一个新的配置项
+- `Player.globalConfig` : 默认的全局配置项，播放器在初始化的时候，会将用户传入的配置项跟全局的配置项进行合并，形成一个新的配置项
 
 ## 插件
 
@@ -241,7 +241,7 @@ MediaPlayer.useLang({
 
 插件分为全局插件和局部插件，使用全局插件时，每个播放器实例都会具备全局插件的功能。使用局部插件时，只有当前播放器实例才会存在局部插件的功能。
 
-全局插件是通过`MediaPlayer.use(ctor: Function)`进行注册的
+全局插件是通过`Player.use(ctor: Function)`进行注册的
 
 局部插件是通过 options 参数中的`plugins`字段进行注册的
 
@@ -249,7 +249,7 @@ MediaPlayer.useLang({
 
 构造器函数（类）会接受到三个参数：
 
-- player：播放器实例，即`new MediaPlayer()`，你可以使用该实例提供的任意方法
+- player：播放器实例，即`new Player()`，你可以使用该实例提供的任意方法
 - el：整个播放器的 dom 元素，当你需要获取某个元素时，请使用`el.querySelector()`，而不是`document.querySelector()`
 
 插件代码示例：
@@ -257,7 +257,7 @@ MediaPlayer.useLang({
 Test 插件
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 
 class Test {
   // 提供一个pluginName静态属性
@@ -297,15 +297,15 @@ class Test {
 使用插件：
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 
 // 全局注册插件
-MediaPlayer.use(Test);
+Player.use(Test);
 
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   // 或者通过局部注册
-  // plugins:[MediaPlayer]
+  // plugins:[Player]
 });
 
 // Test插件发射出来的事件

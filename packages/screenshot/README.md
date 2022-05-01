@@ -9,11 +9,10 @@ npm i @lin-media/screenshot
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
-import Screenshot from "@lin-media/screenshot";
-MediaPlayer.use(Screenshot);
+import Player from "@lin-media/player";
+import "@lin-media/screenshot";
 
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   Screenshot: {
     // 点击后自动下载,默认true，你可以设置为false，然后通过事件监听来自定义点击之后的操作

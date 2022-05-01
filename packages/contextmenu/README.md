@@ -9,9 +9,8 @@ npm i @lin-media/contextmenu
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
-import Contextmenu from "@lin-media/contextmenu";
-MediaPlayer.use(Contextmenu);
+import Player from "@lin-media/player";
+import "@lin-media/contextmenu";
 
 const contextMenuList = [
   {
@@ -83,7 +82,7 @@ const contextMenuList = [
     ]
   }
 ];
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   Contextmenu: {
     // 一级菜单宽度

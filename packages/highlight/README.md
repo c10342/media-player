@@ -9,9 +9,8 @@ npm i @lin-media/highlight
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
-import Highlight from "@lin-media/highlight";
-MediaPlayer.use(Highlight);
+import Player from "@lin-media/player";
+import "@lin-media/highlight";
 
 const highlightList = [
   {
@@ -19,7 +18,7 @@ const highlightList = [
     text: "这是第 20 秒"
   }
 ];
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   Highlight: {
     // 点击跳转到提示点的时间点，默认true

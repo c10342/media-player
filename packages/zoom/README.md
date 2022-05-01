@@ -9,11 +9,10 @@ npm i @lin-media/zoom
 ## 初始化
 
 ```javascript
-import MediaPlayer from "@lin-media/player";
-import Zoom from "@lin-media/zoom";
-MediaPlayer.use(Zoom);
+import Player from "@lin-media/player";
+import "@lin-media/zoom";
 
-const player = new MediaPlayer({
+const player = new Player({
   // ...
   Zoom: {
     // 是否允许横向缩放，默认true
