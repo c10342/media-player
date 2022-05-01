@@ -42,7 +42,7 @@ export function removeTech(name: string) {
 
 export function getTech(name: string) {
   const index = keyInArray(name);
-  return techArray[index];
+  return techArray[index].handler;
 }
 
 export function forEachTech(
