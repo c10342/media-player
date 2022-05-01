@@ -5,7 +5,14 @@ export interface DragDataInfo {
   percentY: number;
 }
 
-export interface ClassType<T = any> {
-  new (...data: any): T;
-  [key: string]: any;
-}
+export * from "./component";
+
+export * from "./hook";
+
+export * from "./player";
+
+export * from "./plugin";
+
+export * from "./source";
+
+export * from "./tech";
