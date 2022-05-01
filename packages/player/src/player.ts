@@ -20,19 +20,24 @@ import {
   initComponents,
   initPlugins
 } from "./utils/helper";
-import { HookCallback, HookType } from "./types/hook";
-import { PluginOptions, PluginClass } from "./types/plugin";
 import {
+  HookCallback,
+  HookType,
   ComponentClass,
+  LangType,
+  PlayerConfig,
   ComponentOptions,
-  FullscreenType
-} from "./types/component";
-import { LangType, PlayerConfig } from "./types/player";
+  FullscreenType,
+  PluginOptions,
+  PluginClass,
+  SourceHandleCallback,
+  TechOptions,
+  TechClass
+} from "./types/index";
+
 import { useSource, removeSource } from "./global-api/source";
-import { SourceHandleCallback } from "./types/source";
 import Component from "./components/component";
 import Plugin from "./plugins/plugin";
-import { TechOptions, TechClass } from "./types/tech";
 import { getTech, registerTech, removeTech } from "./global-api/tech";
 import Tech from "./techs/tech";
 

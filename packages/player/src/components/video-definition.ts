@@ -3,7 +3,7 @@ import { LISTACTIVECLASSNAME } from "../config/constant";
 import { PlayerEvents } from "../config/event";
 import Player from "../player";
 import DefinitionTpl from "../templates/definition";
-import { PlayerConfig } from "../types/player";
+import { PlayerConfig } from "../types/index";
 import Component from "./component";
 class VideoDefinition extends Component {
   static shouldInit(options: PlayerConfig) {

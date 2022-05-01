@@ -3,7 +3,7 @@ import { VolumeButtonIconEnum } from "../config/enum";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import VolumeTpl from "../templates/volume";
-import { DragDataInfo } from "../types";
+import { DragDataInfo } from "../types/index";
 import Component from "./component";
 
 class VideoVolume extends Component {

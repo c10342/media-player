@@ -1,5 +1,5 @@
 import { isFunction, logError, logWarn } from "@lin-media/utils";
-import { TechOptions, TechClass, TechItem } from "../types/tech";
+import { TechOptions, TechClass, TechItem } from "../types/index";
 
 const techArray: Array<TechItem> = [];
 

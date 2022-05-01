@@ -1,5 +1,5 @@
 import { LangTypeEnum } from "@lin-media/utils";
-import { PlayerConfig } from "../types/player";
+import { PlayerConfig } from "../types/index";
 
 const defaultOptions: Partial<PlayerConfig> = {
   live: false,

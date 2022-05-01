@@ -1,6 +1,5 @@
 import Player from "../player";
-import { SourceItem } from "../types/player";
-import { TechOptions } from "../types/tech";
+import { SourceItem, TechOptions } from "../types/index";
 import Tech from "./tech";
 
 const canHandleSourceType = ["video/mp4", "video/ogg", "video/webm"];

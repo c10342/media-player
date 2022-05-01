@@ -3,7 +3,7 @@ import { LISTACTIVECLASSNAME } from "../config/constant";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import SpeedTpl from "../templates/speed";
-import { PlayerConfig } from "../types/player";
+import { PlayerConfig } from "../types/index";
 import Component from "./component";
 class VideoSpeed extends Component {
   static shouldInit(options: PlayerConfig) {

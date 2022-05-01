@@ -1,6 +1,6 @@
 import { isFunction, logError, logWarn } from "@lin-media/utils";
 
-import { PluginOptions, PluginClass, PluginItem } from "../types/plugin";
+import { PluginOptions, PluginClass, PluginItem } from "../types/index";
 
 const pluginArray: Array<PluginItem> = [];
 

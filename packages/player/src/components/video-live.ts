@@ -1,7 +1,7 @@
 import { parseHtmlToDom } from "@lin-media/utils";
 import Player from "../player";
 import LiveTpl from "../templates/live";
-import { PlayerConfig } from "../types/player";
+import { PlayerConfig } from "../types/index";
 import Component from "./component";
 class VideoLive extends Component {
   static shouldInit(options: PlayerConfig) {

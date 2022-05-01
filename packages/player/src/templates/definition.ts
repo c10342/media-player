@@ -1,4 +1,4 @@
-import { SourceItem } from "../types/player";
+import { SourceItem } from "../types/index";
 
 interface Params {
   sources: SourceItem[];

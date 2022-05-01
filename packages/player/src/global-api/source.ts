@@ -1,5 +1,5 @@
 import { logError } from "@lin-media/utils";
-import { SourceArrItem, SourceHandleCallback } from "../types/source";
+import { SourceArrItem, SourceHandleCallback } from "../types/index";
 
 const sourceArray: Array<SourceArrItem> = [];
 

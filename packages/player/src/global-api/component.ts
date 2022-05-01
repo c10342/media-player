@@ -4,7 +4,7 @@ import {
   ComponentClass,
   ComponentItem,
   ComponentOptions
-} from "../types/component";
+} from "../types/index";
 
 const defaults: ComponentOptions = {
   level: 0,

@@ -12,8 +12,7 @@ import {
 import { PlayerEvents, VideoEvents } from "../config/event";
 import Player from "../player";
 import ProgressTpl from "../templates/progress";
-import { DragDataInfo } from "../types";
-import { PlayerConfig } from "../types/player";
+import { PlayerConfig, DragDataInfo } from "../types/index";
 import Component from "./component";
 
 class VideoProgress extends Component {

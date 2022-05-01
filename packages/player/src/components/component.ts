@@ -1,6 +1,6 @@
 import { EventEmit, EventManager } from "@lin-media/utils";
 import Player from "../player";
-import { PlayerConfig } from "../types/player";
+import { PlayerConfig } from "../types/index";
 import { destroyComponents, initComponents } from "../utils/helper";
 
 class Component<T extends Record<string, any> = {}> extends EventEmit {

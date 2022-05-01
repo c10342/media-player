@@ -1,7 +1,6 @@
 import { EventEmit } from "@lin-media/utils";
 import Player from "../player";
-import { PlayerConfig, SourceItem } from "../types/player";
-import { TechOptions } from "../types/tech";
+import { PlayerConfig, SourceItem, TechOptions } from "../types/index";
 
 class Tech extends EventEmit {
   static id = "Tech";

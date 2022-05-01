@@ -6,7 +6,7 @@ import Player from "../player";
 import Tech from "../techs/tech";
 import VideoTpl from "../templates/video";
 import VideoTagTpl from "../templates/video-tag";
-import { SourceItem } from "../types/player";
+import { SourceItem } from "../types/index";
 import { definePlayerMethods } from "../utils/helper";
 import Component from "./component";
 

@@ -1,5 +1,5 @@
 import { logWarn } from "@lin-media/utils";
-import { HookCallback, HooksMap, HookType } from "../types/hook";
+import { HookCallback, HooksMap, HookType } from "../types/index";
 
 const hooksMap: HooksMap = {
   beforeSetup: [],

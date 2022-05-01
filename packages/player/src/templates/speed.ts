@@ -1,4 +1,4 @@
-import { SpeedItem } from "../types/player";
+import { SpeedItem } from "../types/index";
 
 interface Params {
   speedList?: SpeedItem[];

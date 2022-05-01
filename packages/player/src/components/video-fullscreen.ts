@@ -14,7 +14,7 @@ import { FullScreenTypeEnum, KeyCodeEnum } from "../config/enum";
 import { PlayerEvents } from "../config/event";
 import Player from "../player";
 import FullscreenTpl from "../templates/fullscreen";
-import { FullscreenType } from "../types/component";
+import { FullscreenType } from "../types/index";
 import { definePlayerMethods } from "../utils/helper";
 import Component from "./component";
 

@@ -2,7 +2,7 @@ import { isMobile, parseHtmlToDom, secondToTime } from "@lin-media/utils";
 import { VideoEvents } from "../config/event";
 import Player from "../player";
 import TimeTpl from "../templates/time";
-import { PlayerConfig } from "../types/player";
+import { PlayerConfig } from "../types/index";
 import Component from "./component";
 
 class VideoTime extends Component {
