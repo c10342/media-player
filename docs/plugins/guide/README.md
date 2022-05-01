@@ -52,7 +52,7 @@ class DomResizeObserver extends Plugin {
 
 **destroy**
 
-成员函数（可选），播放器在销毁的时候，会调用`destroy`来执行销毁操作
+成员函数（可选），播放器在销毁的时候，会调用`destroy`来执行销毁操作。如果你需要自己实现`destroy`成员函数，请务必调用`super.destroy()`，否则可能会导致某些副作用代码无法被销毁
 
 **注意事项**
 

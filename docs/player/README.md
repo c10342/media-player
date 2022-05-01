@@ -55,37 +55,38 @@ const player = new MediaPlayer({
 
 | 参数           | 说明                                               | 类型                | 可选值               | 默认值 |
 | -------------- | -------------------------------------------------- | ------------------- | -------------------- | ------ |
-| el             | 播放容器                                           | String，HTMLElement | —                    | —      |
+| el             | 播放容器                                           | string，HTMLElement | —                    | —      |
 | sources        | 视频播放列表，格式见下方                           | Array               | —                    | —      |
 | speedList      | 倍数列表，可选，格式见下方                         | Array               | —                    | —      |
 | Plugins        | 插件初始化，可选                                   | Object              | —                    | —      |
 | Components     | 组件初始化，可选                                   | Object              | —                    | —      |
-| tech           | 调整视频资源处理顺序，可选                         | Array               | —                    | —      |
-| autoplay       | 是否自动播放，可选                                 | Boolean             | —                    | false  |
-| muted          | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | Boolean             | —                    | false  |
-| live           | 是否为直播，可选                                   | Boolean             | —                    | false  |
-| crossorigin    | 是否开启跨域，可选                                 | Boolean             | —                    | true   |
-| preload        | 视频预加载，可选                                   | String              | none，metadata，auto | auto   |
-| poster         | 视频封面，可选                                     | String              | —                    | —      |
-| lang           | 使用的语言                                         | String              | zh，en               | zh     |
+| techs          | tech 初始化，可选                                  | Object              | —                    | —      |
+| autoplay       | 是否自动播放，可选                                 | boolean             | —                    | false  |
+| muted          | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean             | —                    | false  |
+| live           | 是否为直播，可选                                   | boolean             | —                    | false  |
+| crossorigin    | 是否开启跨域，可选                                 | boolean             | —                    | true   |
+| preload        | 视频预加载，可选                                   | string              | none，metadata，auto | auto   |
+| poster         | 视频封面，可选                                     | string              | —                    | —      |
+| lang           | 使用的语言                                         | string              | zh，en               | zh     |
 | customLanguage | 自定义语言包                                       | Object              | —                    | —      |
+| techsOrder     | tech 执行顺序                                      | string[]            | —                    | —      |
 
 ### sources 参数格式
 
-| 字段    | 说明                     | 类型    |
-| ------- | ------------------------ | ------- |
-| label   | 清晰度文本               | String  |
-| url     | 播放地址                 | String  |
-| type    | 视频类型                 | String  |
-| default | 是否默认播放该视频，可选 | Boolean |
+| 字段    | 说明               | 是否必填 | 类型    |
+| ------- | ------------------ | -------- | ------- |
+| label   | 清晰度文本         | 是       | string  |
+| url     | 播放地址           | 是       | string  |
+| type    | 视频类型           | 是       | string  |
+| default | 是否默认播放该视频 | 否       | boolean |
 
 ### speedList 参数格式
 
-| 字段    | 说明                             | 类型    |
-| ------- | -------------------------------- | ------- |
-| label   | 倍数文本                         | String  |
-| value   | 倍数值，可选值 0-2               | Number  |
-| default | 是否默认使用该倍数进行播放，可选 | Boolean |
+| 字段    | 说明                       | 是否必填 | 类型    |
+| ------- | -------------------------- | -------- | ------- |
+| label   | 倍数文本                   | 是       | string  |
+| value   | 倍数值，可选值 0-2         | 是       | number  |
+| default | 是否默认使用该倍数进行播放 | 否       | boolean |
 
 ### Components 参数格式
 
@@ -97,20 +98,20 @@ const player = new MediaPlayer({
 
 | 字段             | 说明             | 类型           | 默认值 |
 | ---------------- | ---------------- | -------------- | ------ |
-| VideoPlayButton  | 播放按钮控件     | Boolean,Object | true   |
-| VideoVolume      | 音量控件         | Boolean,Object | true   |
-| VideoLive        | 直播提示控件     | Boolean,Object | true   |
-| VideoSpeed       | 倍速控件         | Boolean,Object | true   |
-| VideoFullscreen  | 全屏控件         | Boolean,Object | true   |
-| VideoDefinition  | 清晰度控件       | Boolean,Object | true   |
-| VideoProgress    | 进度条控件       | Boolean,Object | true   |
-| VideoTip         | 通知提示控件     | Boolean,Object | true   |
-| VideoTime        | 时间控件         | Boolean,Object | true   |
-| VideoLoading     | loading 控件     | Boolean,Object | true   |
-| VideoFloatButton | 悬浮播放按钮控件 | Boolean,Object | true   |
-| VideoMask        | 视频遮罩层控件   | Boolean,Object | true   |
-| VideoControls    | 视频下方控制条   | Boolean,Object | true   |
-| VideoPlayer      | 视频播放控件     | Boolean,Object | true   |
+| VideoPlayButton  | 播放按钮控件     | boolean,Object | true   |
+| VideoVolume      | 音量控件         | boolean,Object | true   |
+| VideoLive        | 直播提示控件     | boolean,Object | true   |
+| VideoSpeed       | 倍速控件         | boolean,Object | true   |
+| VideoFullscreen  | 全屏控件         | boolean,Object | true   |
+| VideoDefinition  | 清晰度控件       | boolean,Object | true   |
+| VideoProgress    | 进度条控件       | boolean,Object | true   |
+| VideoTip         | 通知提示控件     | boolean,Object | true   |
+| VideoTime        | 时间控件         | boolean,Object | true   |
+| VideoLoading     | loading 控件     | boolean,Object | true   |
+| VideoFloatButton | 悬浮播放按钮控件 | boolean,Object | true   |
+| VideoMask        | 视频遮罩层控件   | boolean,Object | true   |
+| VideoControls    | 视频下方控制条   | boolean,Object | true   |
+| VideoPlayer      | 视频播放控件     | boolean,Object | true   |
 
 ### Plugins 参数格式
 
@@ -122,16 +123,16 @@ const player = new MediaPlayer({
 
 | 字段              | 说明                            | 类型    | 默认值 |
 | ----------------- | ------------------------------- | ------- | ------ |
-| DomResizeObserver | 播放器`DOM`元素大小发生变化监听 | Boolean | true   |
-| ShortcutKey       | 快捷键功能控件                  | Boolean | true   |
+| DomResizeObserver | 播放器`DOM`元素大小发生变化监听 | boolean | true   |
+| ShortcutKey       | 快捷键功能控件                  | boolean | true   |
 
 ## 事件绑定
 
 `player.$on(eventName: string, handler: Function)`
 
 ```javascript
-player.$on("ended", function () {
-  console.log("player ended");
+player.$on("ended", function (data) {
+  console.log("player ended", data);
 });
 ```
 
@@ -165,6 +166,8 @@ player.$on("ended", function () {
 | afterPluginDestroy               | 插件销毁完成之后         | {name:string}                     |
 | beforeTechSetup                  | tech 初始前              | {name:string}                     |
 | afterTechSetup                   | tech 初始化完成之后      | {name:string,tech:Tech}           |
+| beforeTechDestroy                | tech 销毁前              | {name:string,tech:Tech}           |
+| afterTechDestroy                 | tech 销毁完成之后        | {name:string}                     |
 
 - **原生 video 标签事件**
 
@@ -277,11 +280,9 @@ MediaPlayer.useLang({
 
 - `MediaPlayer.getTech(name: string)` : 获取`Tech`
 
-- `MediaPlayer.registerHook(hook: HookType, callback: HookCallback)` : 注册`Hook`
+- `MediaPlayer.useHook(hook: HookType, callback: HookCallback)` : 注册`Hook`
 
 - `MediaPlayer.removeHook(hook: HookType, callback?: HookCallback)` : 移除`Hook`
-
-- `MediaPlayer.registerHookOnce(hook: HookType, callback?: HookCallback)` : 注册`Hook`，只触发一次
 
 - `MediaPlayer.registerPlugin(name: string,plugin: PluginClass,options: PluginOptions)` : 注册插件
 
@@ -295,15 +296,15 @@ MediaPlayer.useLang({
 
 - `MediaPlayer.getComponent(name: string)` : 获取组件
 
-- `MediaPlayer.registerSource(type: string, callback: SourceHandleCallback)` : 注册资源中间件
+- `MediaPlayer.useSource(type: string, callback: SourceHandleCallback)` : 注册资源中间件
 
 - `MediaPlayer.removeSource(type: string, callback: SourceHandleCallback)` : 移除资源中间件
-
-- `MediaPlayer.registerOnceSource(type: string, callback: SourceHandleCallback)` : 注册资源中间件，只触发一次
 
 **静态属性：**
 
 - `MediaPlayer.Events` : 播放器自定义事件和 video 标签事件
+
+- `MediaPlayer.defaults` : 播放器全局配置
 
 ## 直播
 

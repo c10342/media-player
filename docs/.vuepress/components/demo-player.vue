@@ -60,7 +60,9 @@ export default {
         ...playerOptions,
         ...options
       });
-      this.$emit("init-success", this.player);
+      this.player.ready(()=>{
+        this.$emit("init-success", this.player);
+      })
       return this.player;
     },
     destroyPlayer() {
