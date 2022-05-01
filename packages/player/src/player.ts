@@ -55,7 +55,11 @@ class Player extends EventEmit {
     return this;
   }
 
-  static registerTech(name: string, tech: TechClass, options: TechOptions) {
+  static registerTech(
+    name: string,
+    tech: TechClass,
+    options: TechOptions = {}
+  ) {
     registerTech(name, tech, options);
     return this;
   }
