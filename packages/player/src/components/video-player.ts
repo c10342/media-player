@@ -106,7 +106,7 @@ class VideoPlayer extends Component {
           return true;
         }
         return false;
-      });
+      }, this.player.options.techsOrder);
       this.initVideoEvents(videoElement);
     };
     const chain: Array<{ type: string; handler: Function }> = [];
