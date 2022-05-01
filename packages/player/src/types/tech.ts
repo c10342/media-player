@@ -3,6 +3,7 @@ import Tech from "../techs/tech";
 import { PlayerConfig, SourceItem } from "./player";
 
 export interface TechOptions {
+  defaults?: Record<string, any>;
   [key: string]: any;
 }
 
