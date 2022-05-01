@@ -1,8 +1,8 @@
-import MediaPlayer from "./src/player";
+import Player from "./src/player";
 import "./src/register-component";
 import "./src/register-plugin";
 import "./src/register-tech";
 
-export default MediaPlayer;
+export default Player;
 
 export * from "./src/types/index";
