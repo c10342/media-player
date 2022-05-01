@@ -1,4 +1,4 @@
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 import { describe, test, expect } from "@jest/globals";
 import {{importName}} from "@lin-media/{{name}}";
 
@@ -23,7 +23,7 @@ const playerOptions = {
 describe("render", () => {
   test("base", () => {
     const div = document.createElement("div");
-    const player = new MediaPlayer({
+    const player = new Player({
       el: div,
       ...playerOptions
     });

@@ -1,4 +1,4 @@
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 import { pluginName } from "./config/constant";
 import { {{importName}}Options } from "./types";
 
@@ -10,11 +10,11 @@ class {{importName}} {
   // 播放器的dom
   private el: HTMLElement;
   // 播放器实例
-  private playerInstance: MediaPlayer;
+  private playerInstance: Player;
 
   private options: {{importName}}Options;
 
-  constructor(playerInstance: MediaPlayer, el: HTMLElement) {
+  constructor(playerInstance: Player, el: HTMLElement) {
     // 保存一下播放器给来的参数
     this.el = el;
     this.playerInstance = playerInstance;
@@ -40,7 +40,7 @@ class {{importName}} {
 
   private initListener() {
     // 销毁
-    this.playerInstance.$on(MediaPlayer.PlayerEvents.DESTROY, () => {
+    this.playerInstance.$on(Player.PlayerEvents.DESTROY, () => {
       // ...
     });
   }
