@@ -170,7 +170,7 @@ player.$on("beforePluginSetup", ({ name }: { name: string }) => {
 
 - `name`：插件的名称，使用注册的时候的名称
 
-- `Plugin`：插件的实例
+- `plugin`：插件的实例
 
 ## 其他
 
