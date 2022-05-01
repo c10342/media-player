@@ -12,6 +12,8 @@ import "./index.scss";
 
 import DanmukuTest from "./danmaku";
 
+import "./hls";
+
 import {
   speedList,
   getContextMenuList,
@@ -28,32 +30,39 @@ const videoList = [
   {
     label: "高清",
     url: "http://player.linjiafu.top/test.mp4",
-    type: "video/mp4",
+    type: "video/mp4"
+    // default: true
+  },
+  {
+    label: "超清",
+    url: "https://api.dogecloud.com/player/get.m3u8?vcode=5ac682e6f8231991&userId=17&ext=.m3u8",
+    type: "video/hls",
     default: true
   }
 ];
 
-VideoPlayer.registerHook("beforeSetup", (data) => {
-  console.log(data);
+// VideoPlayer.useHook("beforeSetup", (data) => {
+//   console.log(data);
 
-  return data;
-});
-VideoPlayer.registerHook("afterSetup", (data) => {
-  console.log(data);
+//   return data;
+// });
+// VideoPlayer.useHook("afterSetup", (data) => {
+//   console.log(data);
 
-  return data;
-});
-VideoPlayer.registerSource("video/mp4", (data, next) => {
-  console.log(data);
+//   return data;
+// });
+// VideoPlayer.useSource("video/mp4", (data, next) => {
+//   console.log(data);
 
-  next(data);
-});
+//   next(data);
+// });
 
 const player = new VideoPlayer({
   el: document.querySelector(".container") as HTMLElement,
   sources: videoList,
   // live:true,
   speedList,
+  // lang:'zh',
   components: {
     Contextmenu: {
       menuList: getContextMenuList()
@@ -69,41 +78,47 @@ const player = new VideoPlayer({
     },
     Screenshot: true,
     Zoom: true
+  },
+  techs: {
+    HlsHandler: {
+      name: "张三"
+    }
   }
 });
 
 player.ready(() => {
   DanmukuTest(player);
   addEventListener(player);
+  console.log(player);
 });
 
-player.$on("beforeComponentSetup", ({ name }: { name: string }) => {
-  console.log("beforeComponentSetup", name);
-});
-player.$on("afterComponentSetup", ({ name }: { name: string }) => {
-  console.log("afterComponentSetup", name);
-});
-player.$on("beforePluginSetup", ({ name }: { name: string }) => {
-  console.log("beforePluginSetup", name);
-});
-player.$on("afterPluginSetup", ({ name }: { name: string }) => {
-  console.log("afterPluginSetup", name);
-});
-player.$on("afterComponentDestroy", ({ name }: { name: string }) => {
-  console.log("afterComponentDestroy", name);
-});
-player.$on("beforeComponentDestroy", ({ name }: { name: string }) => {
-  console.log("beforeComponentDestroy", name);
-});
-player.$on("afterPluginDestroy", ({ name }: { name: string }) => {
-  console.log("afterPluginDestroy", name);
-});
-player.$on("beforePluginDestroy", ({ name }: { name: string }) => {
-  console.log("beforePluginDestroy", name);
-});
-player.$on("afterTechSetup", ({ name }: { name: string }) => {
-  console.log("afterTechSetup", name);
-});
-player.$on("beforeTechSetup", ({ name }: { name: string }) => {
-  console.log("beforeTechSetup", name);
-});
+// player.$on("beforeComponentSetup", ({ name }: { name: string }) => {
+//   console.log("beforeComponentSetup", name);
+// });
+// player.$on("afterComponentSetup", ({ name }: { name: string }) => {
+//   console.log("afterComponentSetup", name);
+// });
+// player.$on("beforePluginSetup", ({ name }: { name: string }) => {
+//   console.log("beforePluginSetup", name);
+// });
+// player.$on("afterPluginSetup", ({ name }: { name: string }) => {
+//   console.log("afterPluginSetup", name);
+// });
+// player.$on("afterComponentDestroy", ({ name }: { name: string }) => {
+//   console.log("afterComponentDestroy", name);
+// });
+// player.$on("beforeComponentDestroy", ({ name }: { name: string }) => {
+//   console.log("beforeComponentDestroy", name);
+// });
+// player.$on("afterPluginDestroy", ({ name }: { name: string }) => {
+//   console.log("afterPluginDestroy", name);
+// });
+// player.$on("beforePluginDestroy", ({ name }: { name: string }) => {
+//   console.log("beforePluginDestroy", name);
+// });
+// player.$on("afterTechSetup", ({ name }: { name: string }) => {
+//   console.log("afterTechSetup", name);
+// });
+// player.$on("beforeTechSetup", ({ name }: { name: string }) => {
+//   console.log("beforeTechSetup", name);
+// });
