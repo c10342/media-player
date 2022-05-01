@@ -1,5 +1,3 @@
-import MediaPlayer from "@lin-media/player";
-
 export const highlightList = [
   {
     time: 0,

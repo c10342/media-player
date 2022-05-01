@@ -1,4 +1,4 @@
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 
 const setoptionsButton = document.querySelector(".setoptions");
 
@@ -40,7 +40,7 @@ const exitPictureInPictureButton = document.querySelector(
   ".exitPictureInPicture"
 );
 
-function addEventListener(player: MediaPlayer) {
+function addEventListener(player: Player) {
   setoptionsButton?.addEventListener("click", () => {
     // todo
   });
