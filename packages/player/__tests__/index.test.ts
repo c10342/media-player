@@ -1,4 +1,4 @@
-import MediaPlayer from "@lin-media/player";
+import Player from "@lin-media/player";
 import { describe, it, expect } from "@jest/globals";
 
 function createEvent(eventName: string) {
@@ -49,7 +49,7 @@ const playerOptions = {
 describe("render", () => {
   it("base", async () => {
     const div = document.createElement("div");
-    const player = new MediaPlayer({
+    const player = new Player({
       el: div,
       ...playerOptions
     });
@@ -104,7 +104,7 @@ describe("render", () => {
   });
   it("live", async () => {
     const div = document.createElement("div");
-    const player = new MediaPlayer({
+    const player = new Player({
       el: div,
       ...playerOptions,
       live: true
@@ -131,7 +131,7 @@ describe("render", () => {
       }
     });
     const div = document.createElement("div");
-    const player = new MediaPlayer({
+    const player = new Player({
       el: div,
       ...playerOptions
     });
