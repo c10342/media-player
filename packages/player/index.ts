@@ -4,3 +4,5 @@ import "./src/register-plugin";
 import "./src/register-tech";
 
 export default MediaPlayer;
+
+export * from "./src/types/index";
