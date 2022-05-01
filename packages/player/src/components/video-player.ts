@@ -94,10 +94,11 @@ class VideoPlayer extends Component {
         if (Tech.canHandleSource(data, this.player.options)) {
           this.player.$emit(PlayerEvents.BEFORETECHSETUP, { name });
           const techs = this.player.options.techs || {};
-          const defaultOPtions = techs[name] || {};
+          const userOptions = techs[name] || {};
+          const defaults = options.defaults ?? {};
           const tech = new Tech(this.player, videoElement, data, {
-            ...defaultOPtions,
-            ...options
+            ...userOptions,
+            ...defaults
           });
           this.oldTech = this.player.tech;
           this.player.tech = tech;
