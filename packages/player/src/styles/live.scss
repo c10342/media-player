@@ -9,11 +9,11 @@
   width: 6px;
   height: 6px;
   margin-right: 5px;
-  background-color: var(--player-theme-color, $theme-color);
+  background-color: var(--player-theme-color);
   border-radius: 50%;
 }
 
 .player-live-tip {
   font-size: 14px;
-  color: var(--player-text-color, $text-color);
+  color: var(--player-text-color);
 }
