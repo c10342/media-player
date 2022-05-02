@@ -4,5 +4,6 @@
     "fastForward": "快进{time}秒",
     "volume": "音量{volume}",
     "switch": "已经切换至{quality}",
-    "invalidDefinition":"无效清晰度"
+    "invalidDefinition":"无效清晰度",
+    "canNotFindTech":"找不到视频资源处理器"
 }

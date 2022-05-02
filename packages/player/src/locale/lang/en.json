@@ -5,5 +5,6 @@
     "fastForward": "Fast forward {time} s",
     "volume": "volume {volume}",
     "switch": "Switch {quality}",
-    "invalidDefinition":"Invalid Definition"
+    "invalidDefinition":"Invalid Definition",
+    "canNotFindTech":"can not find tech"
 }
