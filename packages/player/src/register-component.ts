@@ -5,6 +5,7 @@ import VideoFloatButton from "./components/video-float-button";
 import VideoControls from "./components/video-controls";
 import VideoLoading from "./components/video-loading";
 import VideoTip from "./components/video-tip";
+import VideoError from "./components/video-error";
 
 import VideoProgress from "./components/video-progress";
 import VideoPlayButton from "./components/video-play-button";
@@ -33,6 +34,7 @@ Player.registerComponent("VideoFloatButton", VideoFloatButton, options);
 Player.registerComponent("VideoControls", VideoControls, options);
 Player.registerComponent("VideoLoading", VideoLoading, options);
 Player.registerComponent("VideoTip", VideoTip, options);
+Player.registerComponent("VideoError", VideoError, options);
 
 Player.registerComponent(
   "VideoProgress",
