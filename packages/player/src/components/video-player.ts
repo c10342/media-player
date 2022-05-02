@@ -7,7 +7,7 @@ import Tech from "../techs/tech";
 import VideoTpl from "../templates/video";
 import VideoTagTpl from "../templates/video-tag";
 import { SourceItem } from "../types/index";
-import { definePlayerMethods } from "../utils/helper";
+import { definePlayerMethods, definePlayerProperty } from "../utils/helper";
 import Component from "./component";
 
 class VideoPlayer extends Component {
@@ -90,6 +90,7 @@ class VideoPlayer extends Component {
       return;
     }
     const initTech = (data: SourceItem) => {
+      let flag = false;
       forEachTech((name, Tech, options = {}) => {
         if (Tech.canHandleSource(data, this.player.options)) {
           this.player.$emit(PlayerEvents.BEFORETECHSETUP, { name });
@@ -100,13 +101,26 @@ class VideoPlayer extends Component {
             ...userOptions,
             ...defaults
           });
+
           this.oldTech = this.player.tech;
+
           this.player.tech = tech;
+
           this.player.$emit(PlayerEvents.AFTERTECHSETUP, { name, tech });
+          flag = true;
           return true;
         }
         return false;
       }, this.player.options.techsOrder);
+      // 找不到对应的视频资源处理器
+      if (!flag && videoElement.readyState === 0) {
+        this.destroyOldTech();
+        this.player.destroyTech();
+        this.player.ready(() => {
+          // showError功能是video-error提供的，可能还没初始化完成
+          this.player.showError(this.player.i18n.t("canNotFindTech"));
+        });
+      }
       this.initVideoEvents(videoElement);
     };
     const chain: Array<{ type: string; handler: Function }> = [];
@@ -192,16 +206,21 @@ class VideoPlayer extends Component {
       });
     });
 
-    Object.defineProperty(this.player, "videoElement", {
-      get: () => {
+    const props = {
+      videoElement: () => {
         return this.videoElement;
-      }
-    });
-    Object.defineProperty(this.player, "sourceItem", {
-      get: () => {
+      },
+      sourceItem: () => {
         return this.getVideoItem();
+      },
+      videoReadyState: () => {
+        return this.videoElement.readyState;
+      },
+      mediaError: () => {
+        return this.videoElement.error;
       }
-    });
+    };
+    definePlayerProperty(this.player, props);
   }
 
   // 判断能否进行切换,因为可能越界
