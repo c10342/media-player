@@ -32,7 +32,8 @@ import {
   PluginClass,
   SourceHandleCallback,
   TechOptions,
-  TechClass
+  TechClass,
+  SourceItem
 } from "./types/index";
 
 import { useSource, removeSource } from "./global-api/source";
@@ -293,6 +294,21 @@ class Player extends EventEmit {
     return 0;
   }
 
+  get videoReadyState() {
+    logError("prop videoReadyState is not defined");
+    return 0;
+  }
+
+  get mediaError(): MediaError | null {
+    logError("prop mediaError is not defined");
+    return null;
+  }
+
+  get sourceItem(): SourceItem | null {
+    logError("prop sourceItem is not defined");
+    return null;
+  }
+
   toggle() {
     logError("method toggle is not defined");
     return this;
@@ -345,6 +361,16 @@ class Player extends EventEmit {
   }
   exitPictureInPicture() {
     logError("method exitPictureInPicture is not defined");
+    return this;
+  }
+
+  showError(e: Error | string) {
+    logError("method showError is not defined");
+    return this;
+  }
+
+  hideError() {
+    logError("method hideError is not defined");
     return this;
   }
 
