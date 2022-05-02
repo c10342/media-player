@@ -19,11 +19,18 @@ class Html5 extends Tech {
   ) {
     super(player, videoElement, source, options);
     this.initVideo();
+    this.triggerReady();
   }
 
   private initVideo() {
     this.videoElement.src = this.source.url;
-    this.triggerReady();
+  }
+
+  destroy() {
+    // 重置视频
+    this.videoElement.load();
+    // this.videoElement.src = "";
+    super.destroy();
   }
 }
 
