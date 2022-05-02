@@ -120,3 +120,14 @@ export function definePlayerMethods(
     });
   });
 }
+
+export function definePlayerProperty(
+  player: Player,
+  props: { [key: string]: () => any }
+) {
+  Object.keys(props).forEach((key) => {
+    Object.defineProperty(player, key, {
+      get: props[key]
+    });
+  });
+}
