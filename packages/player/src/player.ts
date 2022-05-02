@@ -171,7 +171,7 @@ class Player extends EventEmit {
       p = p.then(chain.shift());
     }
     p.catch((error: any) => {
-      this.$emit("error", error);
+      this.$emit(PlayerEvents.PLAYERERROR, error);
       logError(error);
     });
   }

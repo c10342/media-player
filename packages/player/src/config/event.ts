@@ -27,7 +27,8 @@ export enum PlayerEvents {
   BEFORETECHSETUP = "beforeTechSetup",
   AFTERTECHSETUP = "afterTechSetup",
   BEFORETECHDESTROY = "beforeTechDestroy",
-  AFTERTECHDESTROY = "afterTechDestroy"
+  AFTERTECHDESTROY = "afterTechDestroy",
+  PLAYERERROR = "player_error"
 }
 
 // video标签事件
