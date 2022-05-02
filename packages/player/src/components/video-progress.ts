@@ -157,7 +157,7 @@ class VideoProgress extends Component {
     this.player.$on(VideoEvents.SEEKED, this.onVideoSeeked.bind(this));
     this.player.$on(VideoEvents.ENDED, this.onVideoEnd.bind(this));
     this.player.$on(
-      PlayerEvents.SWITCH_DEFINITION_END,
+      PlayerEvents.SWITCHDEFINITIONEND,
       this.onSwitchDefinition.bind(this)
     );
     if (!isMobile()) {

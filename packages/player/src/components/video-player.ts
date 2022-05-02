@@ -227,7 +227,7 @@ class VideoPlayer extends Component {
     // 获取视频播放地址
     const videoItem = this.getVideoItem();
     // 清晰度切换前
-    this.player.$emit(PlayerEvents.SWITCH_DEFINITION_START, {
+    this.player.$emit(PlayerEvents.SWITCHDEFINITIONSTART, {
       ...videoItem,
       index: this.currentIndex
     });
@@ -267,7 +267,7 @@ class VideoPlayer extends Component {
       // 设置通知
       player.setNotice(player.i18n.t("switch", { quality: videoItem?.label }));
       // 清晰度切换完毕
-      this.player.$emit(PlayerEvents.SWITCH_DEFINITION_END, {
+      this.player.$emit(PlayerEvents.SWITCHDEFINITIONEND, {
         ...videoItem,
         index: this.currentIndex
       });

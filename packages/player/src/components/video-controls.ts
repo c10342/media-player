@@ -123,14 +123,14 @@ class VideoControls extends Component {
     updateStyle(this.rootElement, {
       transform: ""
     });
-    this.player.$emit(PlayerEvents.SHOW_CONTROLS);
+    this.player.$emit(PlayerEvents.SHOWCONTROLS);
   }
 
   private hide() {
     updateStyle(this.rootElement, {
       transform: "translateY(100%)"
     });
-    this.player.$emit(PlayerEvents.HIDE_CONTROLS);
+    this.player.$emit(PlayerEvents.HIDECONTROLS);
   }
 
   destroy() {

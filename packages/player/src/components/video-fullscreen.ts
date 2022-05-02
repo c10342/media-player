@@ -104,7 +104,7 @@ class VideoFullscreen extends Component {
     const containerElement = this.player.rootElement;
     if (!isUndef(containerElement) && !isBrowserFullscreen()) {
       enterBrowserFullScreen(containerElement);
-      this.player.$emit(PlayerEvents.ENTER_BROWSER_SCREEN);
+      this.player.$emit(PlayerEvents.ENTERBROWSERSCREEN);
     }
   }
   // 退出浏览器全屏
@@ -115,7 +115,7 @@ class VideoFullscreen extends Component {
     }
     if (isBrowserFullscreen()) {
       exitBrowserFullscreen();
-      this.player.$emit(PlayerEvents.EXIT_BROWSER_SCREEN);
+      this.player.$emit(PlayerEvents.EXITBROWSERSCREEN);
     }
   }
   // 退出网页全屏
@@ -125,7 +125,7 @@ class VideoFullscreen extends Component {
     if (containerElement.classList.contains(WEBFULLSCREENCLASSNAME)) {
       containerElement.classList.remove(WEBFULLSCREENCLASSNAME);
       document.body.classList.remove(BODYHIDDENCLASSNAME);
-      this.player.$emit(PlayerEvents.EXIT_WEB_SCREEN);
+      this.player.$emit(PlayerEvents.EXITWEBSCREEN);
     }
   }
   // 进入网页全屏
@@ -135,7 +135,7 @@ class VideoFullscreen extends Component {
     if (!containerElement.classList.contains(WEBFULLSCREENCLASSNAME)) {
       containerElement.classList.add(WEBFULLSCREENCLASSNAME);
       document.body.classList.add(BODYHIDDENCLASSNAME);
-      this.player.$emit(PlayerEvents.ENTER_WEB_SCREEN);
+      this.player.$emit(PlayerEvents.ENTERWEBSCREEN);
     }
   }
 

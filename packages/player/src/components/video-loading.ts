@@ -30,7 +30,7 @@ class VideoLoading extends Component {
   private initListener() {
     // 切换清晰度前
     this.player.$on(
-      PlayerEvents.SWITCH_DEFINITION_START,
+      PlayerEvents.SWITCHDEFINITIONSTART,
       this.onBeforeSwitchDefinition.bind(this)
     );
     this.player.$on(VideoEvents.WAITING, this.onVideoWaiting.bind(this));

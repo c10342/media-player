@@ -44,20 +44,20 @@ class VideoFloatButton extends Component {
     this.player.$on(VideoEvents.PLAY, this.onPlay.bind(this));
     this.player.$on(VideoEvents.PAUSE, this.onPause.bind(this));
     this.player.$on(
-      PlayerEvents.SWITCH_DEFINITION_START,
+      PlayerEvents.SWITCHDEFINITIONSTART,
       this.onSwitchDefinitionStart.bind(this)
     );
     this.player.$on(
-      PlayerEvents.SWITCH_DEFINITION_END,
+      PlayerEvents.SWITCHDEFINITIONEND,
       this.onSwitchDefinitionEnd.bind(this)
     );
     if (isPhone) {
       this.player.$on(
-        PlayerEvents.SHOW_CONTROLS,
+        PlayerEvents.SHOWCONTROLS,
         this.showPlayButtonAnimation.bind(this)
       );
       this.player.$on(
-        PlayerEvents.HIDE_CONTROLS,
+        PlayerEvents.HIDECONTROLS,
         this.hidePlayButtonAnimation.bind(this)
       );
     }

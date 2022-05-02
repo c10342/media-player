@@ -118,7 +118,7 @@ class VideoDefinition extends Component {
 
   private initListener() {
     this.player.$on(
-      PlayerEvents.SWITCH_DEFINITION_END,
+      PlayerEvents.SWITCHDEFINITIONEND,
       this.onSwitchDefinition.bind(this)
     );
 
