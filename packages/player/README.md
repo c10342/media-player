@@ -37,8 +37,8 @@ const player = new Player({
 | el             | 播放容器                                           | string，HTMLElement | —                    | —      |
 | sources        | 视频播放列表，格式见下方                           | Array               | —                    | —      |
 | speedList      | 倍数列表，可选，格式见下方                         | Array               | —                    | —      |
-| Plugins        | 插件初始化，可选                                   | Object              | —                    | —      |
-| Components     | 组件初始化，可选                                   | Object              | —                    | —      |
+| plugins        | 插件初始化，可选                                   | Object              | —                    | —      |
+| components     | 组件初始化，可选                                   | Object              | —                    | —      |
 | techs          | tech 初始化，可选                                  | Object              | —                    | —      |
 | autoplay       | 是否自动播放，可选                                 | boolean             | —                    | false  |
 | muted          | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean             | —                    | false  |
@@ -67,7 +67,7 @@ const player = new Player({
 | value   | 倍数值，可选值 0-2         | 是       | number  |
 | default | 是否默认使用该倍数进行播放 | 否       | boolean |
 
-## Components 参数格式
+## components 参数格式
 
 | 字段         | 说明             | 类型             |
 | ------------ | ---------------- | ---------------- |
@@ -78,7 +78,7 @@ const player = new Player({
 
 **注意：**
 
-`Components`选项是`key-value`的形式，当`value`是`boolean`类型的时候，`true`表示会对组件进行初始化，`false`表示关闭对组件的初始化。当`value`是`Object`类型的时候，组件会进行初始化，并且`value`值将会作为初始化配置传递给组件
+`components`选项是`key-value`的形式，当`value`是`boolean`类型的时候，`true`表示会对组件进行初始化，`false`表示关闭对组件的初始化。当`value`是`Object`类型的时候，组件会进行初始化，并且`value`值将会作为初始化配置传递给组件
 
 以下列出播放器内置组件的名称
 
