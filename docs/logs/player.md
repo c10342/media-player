@@ -49,6 +49,8 @@
   - `beforeTechDestroy`：tech 销毁前
 
   - `afterTechDestroy`：tech 销毁完成之后
+  
+  - `playerError`：播放器初始化出错
 
 - `feat`：调整插件注册方法：`use` -> `registerPlugin`
 

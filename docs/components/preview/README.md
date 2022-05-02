@@ -38,7 +38,7 @@ const previewList = [
 ];
 const player = new Player({
   // ...
-  Components: {
+  components: {
     Preview: {
       // 通过参数传入或者通过setPreview方法设置
       list: previewList
@@ -60,7 +60,7 @@ player.$on("preview-click", (item: any) => {
 ```javascript
 const player = new Player({
   // ...
-  Components: {
+  components: {
     Preview: {
       // 通过参数传入或者通过setBarView方法设置
       barPreviewUrl: "https://xxx/demo.jpg"

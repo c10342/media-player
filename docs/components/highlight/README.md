@@ -24,7 +24,7 @@ const highlightList = [
 ];
 const player = new Player({
   // ...
-  Components:{
+  components:{
     Highlight: {
     // 点击跳转到提示点的时间点，默认true
     jump: true,

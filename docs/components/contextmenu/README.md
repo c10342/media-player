@@ -94,7 +94,7 @@ const contextMenuList = [
 ];
 const player = new Player({
   // ...
-  Components: {
+  components: {
     Contextmenu: {
       menuList: contextMenuList,
       // 一级菜单宽度

@@ -30,7 +30,7 @@ import "@lin-media/zoom";
 
 const player = new Player({
   // ...
-  Components: {
+  components: {
     Zoom: {
       // 是否允许横向缩放，默认true
       x: true,

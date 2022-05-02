@@ -18,7 +18,7 @@ import "@lin-media/danmaku";
 
 const player = new Player({
   // ...
-  Components: {
+  components: {
     Danmaku: {
       // 弹幕字体颜色，随机
       fontColors: ["blue", "red", "green", "#fff"],

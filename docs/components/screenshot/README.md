@@ -18,7 +18,7 @@ import "@lin-media/screenshot";
 
 const player = new Player({
   // ...
-  Components: {
+  components: {
     Screenshot: {
       // 点击后自动下载,默认true，
       // 你可以设置为false，然后通过事件监听来自定义点击之后的操作

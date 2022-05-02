@@ -58,8 +58,8 @@ const player = new Player({
 | el             | 播放容器                                           | string，HTMLElement | —                    | —      |
 | sources        | 视频播放列表，格式见下方                           | Array               | —                    | —      |
 | speedList      | 倍数列表，可选，格式见下方                         | Array               | —                    | —      |
-| Plugins        | 插件初始化，可选                                   | Object              | —                    | —      |
-| Components     | 组件初始化，可选                                   | Object              | —                    | —      |
+| plugins        | 插件初始化，可选                                   | Object              | —                    | —      |
+| components     | 组件初始化，可选                                   | Object              | —                    | —      |
 | techs          | tech 初始化，可选                                  | Object              | —                    | —      |
 | autoplay       | 是否自动播放，可选                                 | boolean             | —                    | false  |
 | muted          | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean             | —                    | false  |
@@ -88,10 +88,10 @@ const player = new Player({
 | value   | 倍数值，可选值 0-2         | 是       | number  |
 | default | 是否默认使用该倍数进行播放 | 否       | boolean |
 
-### Components 参数格式
+### components 参数格式
 
 ::: tip 注意
-`Components`选项是`key-value`的形式，当`value`是`boolean`类型的时候，`true`表示会对组件进行初始化，`false`表示关闭对组件的初始化。当`value`是`Object`类型的时候，组件会进行初始化，并且`value`值将会作为初始化配置传递给组件
+`components`选项是`key-value`的形式，当`value`是`boolean`类型的时候，`true`表示会对组件进行初始化，`false`表示关闭对组件的初始化。当`value`是`Object`类型的时候，组件会进行初始化，并且`value`值将会作为初始化配置传递给组件
 :::
 
 以下列出播放器内置组件的名称
@@ -113,18 +113,26 @@ const player = new Player({
 | VideoControls    | 视频下方控制条   | boolean,Object | true   |
 | VideoPlayer      | 视频播放控件     | boolean,Object | true   |
 
-### Plugins 参数格式
+### plugins 参数格式
 
 ::: tip 注意
-`Plugins`选项是`key-value`的形式，当`value`是`boolean`类型的时候，`true`表示会对插件进行初始化，`false`表示关闭对插件的初始化。当`value`是`Object`类型的时候，插件会进行初始化，并且`value`值将会作为初始化配置传递给插件
+`plugins`选项是`key-value`的形式，当`value`是`boolean`类型的时候，`true`表示会对插件进行初始化，`false`表示关闭对插件的初始化。当`value`是`Object`类型的时候，插件会进行初始化，并且`value`值将会作为初始化配置传递给插件
 :::
 
 以下列出播放器内置插件的名称
 
-| 字段              | 说明                            | 类型    | 默认值 |
-| ----------------- | ------------------------------- | ------- | ------ |
-| DomResizeObserver | 播放器`DOM`元素大小发生变化监听 | boolean | true   |
-| ShortcutKey       | 快捷键功能控件                  | boolean | true   |
+| 字段              | 说明                            | 类型           | 默认值 |
+| ----------------- | ------------------------------- | -------------- | ------ |
+| DomResizeObserver | 播放器`DOM`元素大小发生变化监听 | boolean,Object | true   |
+| ShortcutKey       | 快捷键功能控件                  | boolean,Object | true   |
+
+### techs 参数格式
+
+以下列出播放器内置`tech`的名称
+
+| 字段  | 说明           | 类型   | 默认值 |
+| ----- | -------------- | ------ | ------ |
+| Html5 | html5 视频播放 | Object | —      |
 
 ## 事件绑定
 
