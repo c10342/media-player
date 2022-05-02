@@ -41,6 +41,7 @@ class EventManager {
     for (let i = length - 1; i >= 0; i--) {
       const eventItem = this.eventList[i];
       if (eventItem.element === element) {
+        element?.removeEventListener(eventItem.eventName, eventItem.handler);
         this.eventList.splice(i, 1);
       }
     }
