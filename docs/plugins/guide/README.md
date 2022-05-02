@@ -1,6 +1,6 @@
 # 插件介绍
 
-## 插件开发
+## 示例
 
 所有的插件都必须是一个类，因为播放器内部是通过`new`的形式对插件进行初始化。并且需要通过继承`Plugin`基类来实现。我们来看一个最简单的插件实现
 
@@ -58,7 +58,7 @@ class DomResizeObserver extends Plugin {
 
 - 此时的`player`播放器实例还没完全初始化完成，如果你需要使用到其他组件/插件的功能，因为组件/插件的初始化顺序的问题，可能你所需要的组件/插件还没进行初始化，你可以等待播放器初始化完成或者监听组件的`afterPluginSetup`钩子函数或者插件的`afterPluginSetup`钩子函数，然后在使用其他组件/插件的功能
 
-## 注册插件
+## 注册
 
 注册插件的方式如下：
 
@@ -73,7 +73,7 @@ Player.registerPlugin("DomResizeObserver", DomResizeObserver, options);
 | init     | 是否默认进行初始化，有优先级 | boolean | —      | —      |
 | defaults | 默认配置参数                 | Object  | —      | —      |
 
-## 插件的初始化
+## 初始化
 
 有三个地方可以控制插件是否需要进行初始化，分别如下：
 

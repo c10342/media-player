@@ -1,6 +1,6 @@
 # 组件介绍
 
-## 组件开发
+## 示例
 
 所有的组件都必须是一个类，因为播放器内部是通过`new`的形式对组件进行初始化。并且需要通过继承`Component`基类来实现。我们来看一个最简单的组件实现
 
@@ -21,7 +21,7 @@ class TitleBar extends Component {
   ) {
     super(player, slotElement, options, parentComponent);
     this.initDom(slotElement);
-    this.initComponent();
+    this.triggerReady();
   }
 
   private initDom(slotElement: HTMLElement) {
@@ -63,7 +63,11 @@ class TitleBar extends Component {
 
 - 你需要在自定义组件初始化完成之后，调用`this.triggerReady()`方法。如果没有进行调用，会导致注册在该组件下面的子组件无法被初始化
 
-## 注册组件
+::: warning
+在组件初始化完毕之后，必须调用`this.triggerReady()`方法，否则其子组件将会无法初始化
+:::
+
+## 注册
 
 注册组件的代码示例如下：
 
@@ -80,7 +84,7 @@ Player.registerComponent("TitleBar", TitleBar, options);
 | parentComponent | 父组件，当指定父组件后，该组件将会在父组件初始化完成之后进行初始化 | string  | —      | —      |
 | defaults        | 默认配置参数                                                       | Object  | —      | —      |
 
-## 组件的初始化
+## 初始化
 
 有三个地方可以控制组件是否需要进行初始化，分别如下：
 
@@ -120,7 +124,7 @@ const player = new Player({
 
 `shouldInit` -> `配置选项` -> `init`
 
-## 组件初始化顺序
+## 初始化顺序
 
 默认情况下，组件的初始化顺序是按照组件的注册先后顺序来进行的。组件的初始化顺序可能会影响到`UI`的排版，先初始化的组件`UI`在前，后初始化的`UI`在后。如果你想调整组件的初始化顺序，可以在注册组件的时候使用`level`选项来调整，值越大的就会被优先初始化。
 
@@ -130,6 +134,22 @@ Player.registerComponent("TitleBar", TitleBar, {
   level: 10
 });
 ```
+
+## 父子组件
+
+默认情况下，组件的父组件是`Player`。在注册组件的时候，我们可以通过`parentComponent`来指定组件的父组件是谁
+
+```typescript
+Player.registerComponent("TitleBar", TitleBar, {
+  parentComponent: "VideoControls"
+});
+```
+
+通过上述的注册方式，`TitleBar`和`VideoControls`组件就形成父子关系，`VideoControls`是父组件，`TitleBar`是子组件。
+
+`TitleBar`组件将会在父组件`VideoControls`初始化完毕之后进行初始化。如果用户设置了`VideoControls`组件不进行初始化，那么`TitleBar`也不会被初始化
+
+在`TitleBar`组件实例中，可通过`parentComponent`属性查询到其父组件。在`VideoControls`组件实例中，可通过`components`属性，查询到其所有的子组件
 
 ## 传递参数
 
