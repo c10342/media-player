@@ -112,6 +112,8 @@ class VideoPlayer extends Component {
         }
         return false;
       }, this.player.options.techsOrder);
+      // 先注册和销毁原来的video标签事件，否则可能会触发原来的video标签事件
+      this.initVideoEvents(videoElement);
       // 找不到对应的视频资源处理器
       if (!flag && videoElement.readyState === 0) {
         this.destroyOldTech();
@@ -121,7 +123,6 @@ class VideoPlayer extends Component {
           this.player.showError(this.player.i18n.t("canNotFindTech"));
         });
       }
-      this.initVideoEvents(videoElement);
     };
     const chain: Array<{ type: string; handler: Function }> = [];
 
@@ -169,6 +170,7 @@ class VideoPlayer extends Component {
 
   // 初始化video标签事件
   private initVideoEvents(videoElement: HTMLVideoElement) {
+    this.eventManager.removeElementEventListener(this.videoElement);
     // 外部统一使用$on来进行监听，因为切换清晰度之后，video标签会被替换掉，所有事件需要重新监听
     for (const key in VideoEvents) {
       const eventName = (VideoEvents as any)[key];
@@ -280,9 +282,10 @@ class VideoPlayer extends Component {
     this.player.$once(VideoEvents.CANPLAY, () => {
       // 这个时候说明新的video标签已经准备好了，可以移除旧的video标签了，这样子就可以完美解决切换清晰度闪屏的问题了
       this.rootElement.removeChild(prevVideoElement);
+      // 先销毁，在重新赋值videoElement属性值，否则销毁的是新video标签
+      this.destroyOldTech();
       // 切换完记得更新video标签
       this.videoElement = nextVideoElement;
-      this.destroyOldTech();
       // 设置通知
       player.setNotice(player.i18n.t("switch", { quality: videoItem?.label }));
       // 清晰度切换完毕
