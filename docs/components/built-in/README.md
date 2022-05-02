@@ -8,7 +8,7 @@
 
 提供视频控制条的显示和隐藏功能。
 
-`show_controls`和`hide_controls`自定义事件来源于该组件
+`showControls`和`hideControls`自定义事件来源于该组件
 
 该组件的子组件包含`VideoProgress`，`VideoPlayButton`，`VideoVolume`，`VideoTime`，`VideoLive`，`VideoSpeed`，`VideoDefinition`，`VideoFullscreen`。
 
@@ -24,7 +24,7 @@
 
 ## VideoFullscreen
 
-提供播放器网页全屏和浏览器全屏的功能，`enter_browser_screen`，`exit_browser_screen`，`enter_web_screen`，`exit_web_screen`自定义事件来源于该组件
+提供播放器网页全屏和浏览器全屏的功能，`enterBrowserScreen`，`exitBrowserScreen`，`enterWebScreen`，`exitWebScreen`自定义事件来源于该组件
 
 ## VideoLive
 
@@ -60,7 +60,7 @@ loading 控件，视频发生卡顿时会被显示出来，用来提高用户的
 
 ## VideoPlayer
 
-`video`标签控件，一个非常重要的核心内置组件。所有跟`video`标签相关的属性，事件和操作，都是由该组件提供的。其中，`video`标签的原生事件和`switch_definition_start`，`switch_definition_end`自定义事件都是由改组件提供的
+`video`标签控件，一个非常重要的核心内置组件。所有跟`video`标签相关的属性，事件和操作，都是由该组件提供的。其中，`video`标签的原生事件和`switchDefinitionStart`，`switchDefinitionEnd`自定义事件都是由改组件提供的
 
 ::: warning 警告
 

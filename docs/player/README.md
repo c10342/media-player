@@ -141,21 +141,21 @@ player.$on("ended", function (data) {
 | 事件名称                         | 说明                     | 回调参数                          |
 | -------------------------------- | ------------------------ | --------------------------------- |
 | destroy                          | 播放器销毁时触发         | —                                 |
-| switch_definition_start          | 清晰度切换前触发         | —                                 |
-| switch_definition_end            | 清晰度切换后触发         | —                                 |
-| enter_browser_screen             | 浏览器进入全屏时触发     | —                                 |
-| exit_browser_screen              | 浏览器退出全屏时触发     | —                                 |
-| enter_web_screen                 | 网页进入全屏时触发       | —                                 |
-| exit_web_screen                  | 网页退出全屏时触发       | —                                 |
-| show_controls                    | 控制条显示时触发         | —                                 |
-| hide_controls                    | 控制条隐藏时触发         | —                                 |
+| switchDefinitionStart          | 清晰度切换前触发         | —                                 |
+| switchDefinitionEnd            | 清晰度切换后触发         | —                                 |
+| enterBrowserScreen             | 浏览器进入全屏时触发     | —                                 |
+| exitBrowserScreen              | 浏览器退出全屏时触发     | —                                 |
+| enterWebScreen                 | 网页进入全屏时触发       | —                                 |
+| exitWebScreen                  | 网页退出全屏时触发       | —                                 |
+| showControls                    | 控制条显示时触发         | —                                 |
+| hideControls                    | 控制条隐藏时触发         | —                                 |
 | resize                           | 播放器大小发生变化时触发 | —                                 |
-| keyboard_right                   | 按下键盘 → 键时触发      | —                                 |
-| keyboard_left                    | 按下键盘 ← 键时触发      | —                                 |
-| keyboard_up                      | 按下键盘 ↑ 键时触发      | —                                 |
-| keyboard_down                    | 按下键盘 ↓ 键时触发      | —                                 |
-| keyboard_space                   | 按下键盘 空格 键时触发   | —                                 |
-| picture_in_picture_window_resize | 画中画窗口发生变化时触发 | —                                 |
+| keyboardRight                   | 按下键盘 → 键时触发      | —                                 |
+| keyboardLeft                    | 按下键盘 ← 键时触发      | —                                 |
+| keyboardUp                      | 按下键盘 ↑ 键时触发      | —                                 |
+| keyboardDown                    | 按下键盘 ↓ 键时触发      | —                                 |
+| keyboardSpace                   | 按下键盘 空格 键时触发   | —                                 |
+| pictureInPictureWindowResize | 画中画窗口发生变化时触发 | —                                 |
 | beforeComponentSetup             | 组件初始化前             | {name:string}                     |
 | afterComponentSetup              | 组件初始化完成之后       | {name:string,component:Component} |
 | beforeComponentDestroy           | 组件销毁前               | {name:string,component:Component} |

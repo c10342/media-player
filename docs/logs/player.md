@@ -150,7 +150,7 @@
 - `feat`：`fullScreen.request/cancel`方法分别调整为`requestFullscreen`和`cancelFullscreen`
 - `feat`：所有对外暴露的方法都返回`this`，实现链式调用
 - `feat`：新增画中画功能，API：`requestPictureInPicture`和`exitPictureInPicture`
-- `feat`：新增`video`标签原生事件`enterpictureinpicture`和`leavepictureinpicture`，播放器自定义事件`picture_in_picture_window_resize`
+- `feat`：新增`video`标签原生事件`enterpictureinpicture`和`leavepictureinpicture`，播放器自定义事件`pictureInPictureWindowResize`
 
 - `style`：代码优化，使用`updateStyle`函数统一更新样式
 
@@ -170,15 +170,15 @@
 - `feat`：新增`showControls`实例方法，用来控制下方控制条显示
 - `feat`：新增`toggleControls`实例方法，用来控制下方控制条显示/隐藏状态
 
-- `feat`：新增`keyboard_right`播放器自定义事件，按下键盘 → 键触发
+- `feat`：新增`keyboardRight`播放器自定义事件，按下键盘 → 键触发
 
-- `feat`：新增`keyboard_left`播放器自定义事件，按下键盘 ← 键触发
+- `feat`：新增`keyboardLeft`播放器自定义事件，按下键盘 ← 键触发
 
-- `feat`：新增`keyboard_up`播放器自定义事件，按下键盘 ↑ 键触发
+- `feat`：新增`keyboardUp`播放器自定义事件，按下键盘 ↑ 键触发
 
-- `feat`：新增`keyboard_down`播放器自定义事件，按下键盘 ↓ 键触发
+- `feat`：新增`keyboardDown`播放器自定义事件，按下键盘 ↓ 键触发
 
-- `feat`：新增`keyboard_space`播放器自定义事件，按下键盘 空格 键触发
+- `feat`：新增`keyboardSpace`播放器自定义事件，按下键盘 空格 键触发
 
 ## `1.1.0`
 
