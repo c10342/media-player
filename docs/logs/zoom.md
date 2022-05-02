@@ -6,6 +6,8 @@
 
 - `chore`：升级`@lin-media/player`版本号`3.0.0`
 
+- `feat`：默认进行注册，不需要在手动注册
+
 ## `1.0.3`
 
 - `style`：代码优化，使用`updateStyle`函数统一更新样式
