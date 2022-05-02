@@ -74,7 +74,7 @@ class Highlight extends Component {
       // 获取不到总时长说明视频没有加载完成，需要等待加载完成在执行下一步操作
       this.player.$once(Player.Events.LOADEDMETADATA, exec);
     }
-    this.player.$on(Player.Events.SWITCH_DEFINITION_END, exec);
+    this.player.$on(Player.Events.SWITCHDEFINITIONEND, exec);
   }
 
   private initElement() {
