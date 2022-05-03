@@ -16,11 +16,11 @@
 
 - [视频缩略图生成工具](https://github.com/c10342/video-screenshot)
 
-### 插件
+### 组件
 
-- 弹幕插件：[@lin-media/danmaku](https://github.com/c10342/media-player/tree/main/packages/danmaku)
-- 缩放插件：[@lin-media/zoom](https://github.com/c10342/media-player/tree/main/packages/zoom)
-- 截图插件：[@lin-media/screenshot](https://github.com/c10342/media-player/tree/main/packages/screenshot)
-- 右键菜单插件：[@lin-media/screenshot](https://github.com/c10342/media-player/tree/main/packages/contextmenu)
-- 视频缩略图预览插件：[@lin-media/preview](https://github.com/c10342/media-player/tree/main/packages/preview)
-- 自定义进度条提示插件：[@lin-media/highlight](https://github.com/c10342/media-player/tree/main/packages/highlight)
+- 弹幕组件：[@lin-media/danmaku](https://github.com/c10342/media-player/tree/main/packages/danmaku)
+- 缩放组件：[@lin-media/zoom](https://github.com/c10342/media-player/tree/main/packages/zoom)
+- 截图组件：[@lin-media/screenshot](https://github.com/c10342/media-player/tree/main/packages/screenshot)
+- 右键菜单组件：[@lin-media/screenshot](https://github.com/c10342/media-player/tree/main/packages/contextmenu)
+- 视频缩略图预览组件：[@lin-media/preview](https://github.com/c10342/media-player/tree/main/packages/preview)
+- 自定义进度条提示组件：[@lin-media/highlight](https://github.com/c10342/media-player/tree/main/packages/highlight)

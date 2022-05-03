@@ -4,9 +4,13 @@
 
 - `feat`：新增`beforeSetup`和`afterSetup`全局钩子函数
 
-- `feat`：整个初始化流程调整为异步初始化
+- `feat`：新增`source`中间件
 
-- `feat`：新增组件/Tech 功能
+- `feat`：初始化流程使用中间件进行串联
+
+- `feat`：新增组件功能
+
+- `feat`：新增 Tech 功能实现自定义视频播放
 
 - `feat`：播放器初始化配置参数调整
 
@@ -49,11 +53,9 @@
   - `beforeTechDestroy`：tech 销毁前
 
   - `afterTechDestroy`：tech 销毁完成之后
-  
-  - `playerError`：播放器初始化出错
-  
+
   - `showErrorMessage`：显示错误遮罩层
-  
+
   - `hideErrorMessage`：隐藏错误遮罩层
 
 - `feat`：调整插件注册方法：`use` -> `registerPlugin`
@@ -88,7 +90,15 @@
 
   - `ready`：播放器初始化完成
 
+  - `showError`：显示错误信息
+
+  - `hideError`：隐藏错误信息
+
 - `feat`：入口文件导出类型声明文件
+
+- `fix`：修复`removeElementEventListener`方法无法移除事件监听
+
+- `refactor`：插件功能优化调整
 
 ## `2.1.0`
 

@@ -27,6 +27,7 @@ class HlsHandler extends Tech {
   ) {
     super(player, videoElement, source, options);
     this.initVideo();
+    this.triggerReady();
   }
 
   private initVideo() {
@@ -69,6 +70,10 @@ Tech 在初始化的时候会接受到四个参数：
 **destroy**
 
 成员函数（可选），播放器在销毁的时候，会调用`destroy`来执行销毁操作。如果你需要自己实现`destroy`成员函数，请务必调用`super.destroy()`，否则可能会导致某些副作用代码无法被销毁
+
+::: warning 警告
+在 Tech 初始化完毕之后，必须调用`this.triggerReady()`方法
+:::
 
 ## 注册 Tech
 
@@ -121,7 +126,7 @@ const player = new Player({
 
 播放器提供了`beforeTechSetup`，`afterTechSetup`，`beforeTechDestroy`，`afterTechDestroy`四个钩子函数来让外部知道`Tech`是何时进行初始化的，何时进行销毁的。
 
-对于某些插件/组件需要依赖于`Tech`的时候，可以通过这些个钩子函数来得知所依赖的`Tech`的初始化和销毁时机，从而执行某些任务
+对于某些插件/组件需要依赖于`Tech`的时候，可以通过这些钩子函数来得知所依赖的`Tech`的初始化和销毁时机，从而执行某些任务
 
 使用如下方法进行监听：
 
