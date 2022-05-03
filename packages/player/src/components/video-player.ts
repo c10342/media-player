@@ -120,7 +120,9 @@ class VideoPlayer extends Component {
         this.player.destroyTech();
         this.player.ready(() => {
           // showError功能是video-error提供的，可能还没初始化完成
-          this.player.showError(this.player.i18n.t("canNotFindTech"));
+          this.player.showError({
+            message: this.player.i18n.t("canNotFindTech")
+          });
         });
       }
     };

@@ -46,7 +46,7 @@ class VideoError extends Component {
     if (this.player.videoReadyState !== 0 || !this.player.mediaError) {
       return;
     }
-    this.showError(this.player.mediaError.message);
+    this.showError(this.player.mediaError);
   }
 
   private onPlayerError(error: Error | string) {
@@ -54,11 +54,11 @@ class VideoError extends Component {
       return;
     }
     if (isString(error)) {
-      this.showError(error);
+      this.showError({ message: error });
     } else if (isPlainObject(error)) {
-      this.showError(error.message);
+      this.showError(error);
     } else {
-      this.showError((error as any).toString());
+      this.showError({ message: (error as any).toString() });
     }
   }
 
@@ -71,13 +71,12 @@ class VideoError extends Component {
     ) as HTMLElement;
   }
 
-  private showError(message: string) {
-    if (!message) {
-      return;
+  private showError(data: { message: string; [key: string]: any }) {
+    if (data && data.message) {
+      this.errorElement.innerHTML = data.message;
+      this.rootElement.style.display = "block";
+      this.player.$emit(PlayerEvents.SHOWERROR, data);
     }
-    this.errorElement.innerHTML = message;
-    this.rootElement.style.display = "block";
-    this.player.$emit(PlayerEvents.SHOWERROR, message);
   }
 
   private hideError() {

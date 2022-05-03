@@ -364,7 +364,7 @@ class Player extends EventEmit {
     return this;
   }
 
-  showError(e: Error | string) {
+  showError(data: { message: string; [key: string]: any }) {
     logError("method showError is not defined");
     return this;
   }

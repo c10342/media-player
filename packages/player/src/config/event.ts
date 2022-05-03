@@ -29,8 +29,8 @@ export enum PlayerEvents {
   BEFORETECHDESTROY = "beforeTechDestroy",
   AFTERTECHDESTROY = "afterTechDestroy",
   PLAYERERROR = "playerError",
-  SHOWERROR = "showError",
-  HIDEERROR = "hideError"
+  SHOWERROR = "showErrorMessage",
+  HIDEERROR = "hideErrorMessage"
 }
 
 // video标签事件
