@@ -1,3 +1,5 @@
+import Player from "../player";
+
 export type LangType = "en" | "zh";
 
 // 视频列表项
@@ -41,3 +43,5 @@ export interface PlayerConfig {
   techsOrder?: string[];
   [key: string]: any;
 }
+
+export type PlayerNextCallbackFn = (data: PlayerConfig | Player) => void;

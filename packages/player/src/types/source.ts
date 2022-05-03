@@ -1,10 +1,10 @@
 import { SourceItem } from "./player";
 
-export type NextFunction = (data: SourceItem) => void;
+export type SourceNextFunction = (data: SourceItem) => void;
 
 export type SourceHandleCallback = (
   data: SourceItem,
-  next: NextFunction
+  next: SourceNextFunction
 ) => void;
 
 export interface SourceArrItem {
