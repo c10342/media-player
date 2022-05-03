@@ -40,7 +40,7 @@ class VideoLoading extends Component {
   // 视频缓冲事件
   private onVideoWaiting(event: Event) {
     const target = event.target as HTMLVideoElement;
-    if (target.readyState !== VideoReadyStateEnum.complete) {
+    if (target.readyState !== VideoReadyStateEnum.HAVE_ENOUGH_DATA) {
       // 显示loading
       this.showLoading();
     }

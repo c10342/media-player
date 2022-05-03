@@ -1,4 +1,5 @@
 import { parseHtmlToDom } from "@lin-media/utils";
+import { VideoReadyStateEnum } from "../config/enum";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import Player from "../player";
 import getErrorHtml from "../templates/error";
@@ -42,7 +43,10 @@ class VideoError extends Component {
 
   private onError() {
     // 0：媒体资源没加载
-    if (this.player.videoReadyState !== 0 || !this.player.mediaError) {
+    if (
+      this.player.videoReadyState !== VideoReadyStateEnum.HAVE_NOTHING ||
+      !this.player.mediaError
+    ) {
       return;
     }
     this.showError(this.player.mediaError);
