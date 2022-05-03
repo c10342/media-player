@@ -1,4 +1,4 @@
-import { isPlainObject, isString, parseHtmlToDom } from "@lin-media/utils";
+import { parseHtmlToDom } from "@lin-media/utils";
 import { PlayerEvents, VideoEvents } from "../config/event";
 import Player from "../player";
 import getErrorHtml from "../templates/error";
@@ -22,7 +22,6 @@ class VideoError extends Component {
 
   private initListener() {
     this.player.$on(VideoEvents.ERROR, this.onError.bind(this));
-    this.player.$on(PlayerEvents.PLAYERERROR, this.onPlayerError.bind(this));
     this.eventManager.addEventListener({
       element: this.rootElement,
       eventName: "contextmenu",
@@ -47,19 +46,6 @@ class VideoError extends Component {
       return;
     }
     this.showError(this.player.mediaError);
-  }
-
-  private onPlayerError(error: Error | string) {
-    if (this.player.videoReadyState !== 0 || !error) {
-      return;
-    }
-    if (isString(error)) {
-      this.showError({ message: error });
-    } else if (isPlainObject(error)) {
-      this.showError(error);
-    } else {
-      this.showError({ message: (error as any).toString() });
-    }
   }
 
   private initDom(slotElement: HTMLElement) {

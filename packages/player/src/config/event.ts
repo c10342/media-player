@@ -28,7 +28,6 @@ export enum PlayerEvents {
   AFTERTECHSETUP = "afterTechSetup",
   BEFORETECHDESTROY = "beforeTechDestroy",
   AFTERTECHDESTROY = "afterTechDestroy",
-  PLAYERERROR = "playerError",
   SHOWERROR = "showErrorMessage",
   HIDEERROR = "hideErrorMessage"
 }
