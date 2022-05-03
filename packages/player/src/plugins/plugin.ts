@@ -1,7 +1,11 @@
 import { EventEmit } from "@lin-media/utils";
 import Player from "../player";
+import { PlayerConfig } from "../types/index";
 
 class Plugin<Options = any> extends EventEmit {
+  static shouldInit(config: PlayerConfig) {
+    return true;
+  }
   static id = "Plugin";
   player: Player;
   options: Options = {} as Options;
