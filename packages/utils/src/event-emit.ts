@@ -51,7 +51,7 @@ class EventEmit {
       delete this.eventMap[eventName];
     } else {
       const index = this.eventMap[eventName].findIndex(
-        (fn: any) => fn === handler || fn._fn == handler
+        (fn: any) => fn === handler || fn._fn === handler
       );
       if (index > -1) {
         this.eventMap[eventName].splice(index, 1);
