@@ -108,7 +108,7 @@ class VideoVolume extends Component {
   private setNotice() {
     this.player.setNotice(
       this.player.i18n.t("volume", {
-        volume: `${Math.round(this.player.volume * 100)}%`
+        volume: `${Math.round((this.player.volume ?? 0) * 100)}%`
       })
     );
   }
@@ -122,8 +122,9 @@ class VideoVolume extends Component {
 
   // 初始化音量进度条长度
   private initVolumeProgress() {
-    this.prevVolume = this.player.volume || 1;
-    this.setProgressWidth(this.player.volume);
+    const volume = this.player.volume ?? 0;
+    this.prevVolume = volume;
+    this.setProgressWidth(volume);
   }
 
   // 设置音量长度

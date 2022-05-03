@@ -71,7 +71,7 @@ class ShortcutKey extends Plugin {
         // 按下左箭头，时间后退5秒
         if (!live) {
           // 直播不能后退
-          player.seek(player.currentTime - 5);
+          player.seek((player.currentTime ?? 0) - 5);
         }
         this.player.$emit(PlayerEvents.KEYBOARD_LEFT);
         break;
@@ -79,20 +79,20 @@ class ShortcutKey extends Plugin {
         event.preventDefault();
         if (!live) {
           // 按下右箭头，时间前进5秒
-          player.seek(player.currentTime + 5);
+          player.seek((player.currentTime ?? 0) + 5);
         }
         this.player.$emit(PlayerEvents.KEYBOARD_RIGHT);
         break;
       case KeyCodeEnum.up:
         event.preventDefault();
         // 按下上箭头，音量增大
-        player.setVolume(player.volume + 0.1);
+        player.setVolume((player.volume ?? 0) + 0.1);
         this.player.$emit(PlayerEvents.KEYBOARD_UP);
         break;
       case KeyCodeEnum.down:
         event.preventDefault();
         // 按下下箭头，音量减少
-        player.setVolume(player.volume - 0.1);
+        player.setVolume((player.volume ?? 0) - 0.1);
         this.player.$emit(PlayerEvents.KEYBOARD_DOWN);
         break;
     }

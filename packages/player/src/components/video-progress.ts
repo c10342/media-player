@@ -125,7 +125,7 @@ class VideoProgress extends Component {
 
   // 根据百分比跳转到指定时间
   private seekByPercent(percent: number) {
-    const duration = this.player.duration;
+    const duration = this.player.duration ?? 0;
     if (duration > 0) {
       percent = checkData(percent, 0, 1);
       // 时间点
@@ -218,7 +218,7 @@ class VideoProgress extends Component {
 
   // 设置已播放的进度
   private setPlayedProgress(currentTime?: number) {
-    const duration = this.player.duration;
+    const duration = this.player.duration ?? 0;
 
     if (isUndef(currentTime)) {
       currentTime = this.currentTime;
@@ -236,7 +236,7 @@ class VideoProgress extends Component {
 
   // 设置缓冲的进度
   private setLoadedProgress(preloadTime: number) {
-    const duration = this.player.duration;
+    const duration = this.player.duration ?? 0;
     if (duration > 0) {
       let percent = preloadTime / duration;
       percent = checkData(percent, 0, 1);
@@ -268,7 +268,7 @@ class VideoProgress extends Component {
     const { left, width } = this.getProcessMaskInfo();
     let offsetX = event.pageX - left;
     offsetX = checkData(offsetX, 0, width);
-    const time = this.player.duration * (offsetX / width);
+    const time = (this.player.duration ?? 0) * (offsetX / width);
     processTimeElement.innerHTML = secondToTime(time);
     updateStyle(processTimeElement, {
       left: `${offsetX}px`,

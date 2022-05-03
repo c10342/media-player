@@ -284,103 +284,89 @@ class Player extends EventEmit {
     return this;
   }
 
-  get currentTime() {
-    logError("prop currentTime is not defined");
-    return 0;
+  get currentTime(): null | number {
+    return null;
   }
 
-  get volume() {
-    logError("prop volume is not defined");
-    return 1;
+  get volume(): null | number {
+    return null;
   }
 
-  get paused() {
-    logError("prop paused is not defined");
-    return true;
+  get paused(): null | boolean {
+    return null;
   }
 
-  get duration() {
-    logError("prop duration is not defined");
-    return 0;
+  get duration(): null | number {
+    return null;
   }
 
-  get videoReadyState() {
-    logError("prop videoReadyState is not defined");
-    return 0;
+  get videoReadyState(): null | number {
+    return null;
   }
 
   get mediaError(): MediaError | null {
-    logError("prop mediaError is not defined");
     return null;
   }
 
   get sourceItem(): SourceItem | null {
-    logError("prop sourceItem is not defined");
     return null;
   }
 
   toggle() {
-    logError("method toggle is not defined");
     return this;
   }
   play() {
-    logError("method play is not defined");
     return this;
   }
   pause() {
-    logError("method pause is not defined");
     return this;
   }
 
   seek(time: number) {
-    logError("method seek is not defined");
     return this;
   }
   setVolume(volume: number) {
-    logError("method setVolume is not defined");
     return this;
   }
   toggleControls() {
-    logError("method toggleControls is not defined");
     return this;
   }
   setNotice(message: string, time?: number) {
-    logError("method setNotice is not defined");
     return this;
   }
   setSpeed(value: number) {
-    logError("method setSpeed is not defined");
     return this;
   }
   switchDefinition(index: number) {
-    logError("method switchDefinition is not defined");
     return this;
   }
   requestFullscreen(type: FullscreenType) {
-    logError("method requestFullscreen is not defined");
     return this;
   }
 
   cancelFullscreen(type: FullscreenType) {
-    logError("method cancelFullscreen is not defined");
     return this;
   }
   requestPictureInPicture() {
-    logError("method requestPictureInPicture is not defined");
     return this;
   }
   exitPictureInPicture() {
-    logError("method exitPictureInPicture is not defined");
     return this;
   }
 
   showError(data: { message: string; [key: string]: any }) {
-    logError("method showError is not defined");
     return this;
   }
 
   hideError() {
-    logError("method hideError is not defined");
+    return this;
+  }
+
+  showControls() {
+    return this;
+  }
+
+  hideControls() {
     return this;
   }
 
