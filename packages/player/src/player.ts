@@ -157,11 +157,11 @@ class Player extends EventEmit {
     forEachHook("beforeSetup", (fn) => {
       chain.push(fn);
     });
-    chain.push(this.initOptions.bind(this));
-    chain.push(this.initI18n.bind(this));
-    chain.push(this.initPlugins.bind(this));
-    chain.push(this.initLayout.bind(this));
-    chain.push(this.initComponents.bind(this));
+    chain.push(this.initOptions);
+    chain.push(this.initI18n);
+    chain.push(this.initPlugins);
+    chain.push(this.initLayout);
+    chain.push(this.initComponents);
     forEachHook("afterSetup", (fn) => {
       chain.push(fn);
     });
@@ -171,7 +171,7 @@ class Player extends EventEmit {
       if (index === chain.length) {
         return;
       }
-      const fn = chain[index];
+      const fn = chain[index].bind(this);
       let called = false;
       fn(data, (opts: PlayerConfig | Player) => {
         if (called) {
