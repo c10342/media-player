@@ -6,8 +6,12 @@
 
 ## DomResizeObserver
 
-提供监听播放器`DOM`元素大小发生变化并广播的功能，`resize`自定义事件来源于该插件
+提供监听播放器`DOM`元素大小发生变化并广播的功能
+
+`resize`自定义事件来源于该插件
 
 ## ShortcutKey
 
-提供快捷键的功能，`keyboardRight`，`keyboardLeft`，`keyboardUp`，`keyboardDown`，`keyboardSpace`自定义事件就是来源于该插件。移动端环境下不会被初始化
+提供快捷键的功能
+
+`keyboardRight`，`keyboardLeft`，`keyboardUp`，`keyboardDown`，`keyboardSpace`自定义事件就是来源于该插件。移动端环境下不会被初始化

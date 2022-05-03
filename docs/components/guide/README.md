@@ -28,6 +28,7 @@ class TitleBar extends Component {
     const div = document.createElement("div");
     div.innerHTML = "hello";
     slotElement.appendChild(div);
+    this.rootElement = div;
   }
 
   //   可选
@@ -53,6 +54,10 @@ class TitleBar extends Component {
 
 - `parentComponent`：父组件实例
 
+**onPlayerReady**
+
+成员函数（可选），播放器实例初始化完毕就会调用该函数
+
 **destroy**
 
 成员函数（可选），播放器在销毁的时候，会调用`destroy`来执行销毁操作。如果你需要自己实现`destroy`成员函数，请务必调用`super.destroy()`，否则可能会导致某些副作用代码无法被销毁
@@ -61,10 +66,8 @@ class TitleBar extends Component {
 
 - 此时的`player`播放器实例还没完全初始化完成，如果你需要使用到其他组件的功能，因为组件的初始化顺序的问题，可能你所需要的组件还没进行初始化，你可以等待播放器初始化完成或者监听`afterComponentSetup`钩子函数，然后在使用其他组件的功能
 
-- 你需要在自定义组件初始化完成之后，调用`this.triggerReady()`方法。如果没有进行调用，会导致注册在该组件下面的子组件无法被初始化
-
-::: warning
-在组件初始化完毕之后，必须调用`this.triggerReady()`方法，否则其子组件将会无法初始化
+::: warning 警告
+在组件初始化完毕之后，必须调用`this.triggerReady()`方法，否则其子组件（如果存在）将会无法初始化
 :::
 
 ## 注册

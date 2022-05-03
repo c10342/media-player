@@ -53,23 +53,23 @@ const player = new Player({
 
 你可以通过下面的参数来自定义你的播放器具体需要什么功能
 
-| 参数           | 说明                                               | 类型                | 可选值               | 默认值 |
-| -------------- | -------------------------------------------------- | ------------------- | -------------------- | ------ |
+| 参数           | 说明                                               | 类型        | 可选值               | 默认值 |
+| -------------- | -------------------------------------------------- | ----------- | -------------------- | ------ |
 | el             | 播放容器                                           | HTMLElement | —                    | —      |
-| sources        | 视频播放列表，格式见下方                           | Array               | —                    | —      |
-| speedList      | 倍数列表，可选，格式见下方                         | Array               | —                    | —      |
-| plugins        | 插件初始化，可选                                   | Object              | —                    | —      |
-| components     | 组件初始化，可选                                   | Object              | —                    | —      |
-| techs          | tech 初始化，可选                                  | Object              | —                    | —      |
-| autoplay       | 是否自动播放，可选                                 | boolean             | —                    | false  |
-| muted          | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean             | —                    | false  |
-| live           | 是否为直播，可选                                   | boolean             | —                    | false  |
-| crossorigin    | 是否开启跨域，可选                                 | boolean             | —                    | true   |
-| preload        | 视频预加载，可选                                   | string              | none，metadata，auto | auto   |
-| poster         | 视频封面，可选                                     | string              | —                    | —      |
-| lang           | 使用的语言                                         | string              | zh，en               | zh     |
-| customLanguage | 自定义语言包                                       | Object              | —                    | —      |
-| techsOrder     | tech 执行顺序                                      | string[]            | —                    | —      |
+| sources        | 视频播放列表，格式见下方                           | Array       | —                    | —      |
+| speedList      | 倍数列表，可选，格式见下方                         | Array       | —                    | —      |
+| plugins        | 插件初始化，可选                                   | Object      | —                    | —      |
+| components     | 组件初始化，可选                                   | Object      | —                    | —      |
+| techs          | tech 初始化，可选                                  | Object      | —                    | —      |
+| autoplay       | 是否自动播放，可选                                 | boolean     | —                    | false  |
+| muted          | 是否静音，一般配合 autoplay 属性实现自动播放，可选 | boolean     | —                    | false  |
+| live           | 是否为直播，可选                                   | boolean     | —                    | false  |
+| crossorigin    | 是否开启跨域，可选                                 | boolean     | —                    | true   |
+| preload        | 视频预加载，可选                                   | string      | none，metadata，auto | auto   |
+| poster         | 视频封面，可选                                     | string      | —                    | —      |
+| lang           | 使用的语言                                         | string      | zh，en               | zh     |
+| customLanguage | 自定义语言包                                       | Object      | —                    | —      |
+| techsOrder     | tech 执行顺序                                      | string[]    | —                    | —      |
 
 ### sources 参数格式
 
@@ -112,6 +112,7 @@ const player = new Player({
 | VideoMask        | 视频遮罩层控件   | boolean,Object | true   |
 | VideoControls    | 视频下方控制条   | boolean,Object | true   |
 | VideoPlayer      | 视频播放控件     | boolean,Object | true   |
+| VideoError       | 错误显示控件     | boolean,Object | true   |
 
 ### plugins 参数格式
 
@@ -176,8 +177,6 @@ player.$on("ended", function (data) {
 | afterTechSetup               | tech 初始化完成之后      | {name:string,tech:Tech}           |
 | beforeTechDestroy            | tech 销毁前              | {name:string,tech:Tech}           |
 | afterTechDestroy             | tech 销毁完成之后        | {name:string}                     |
-| afterTechDestroy             | tech 销毁完成之后        | {name:string}                     |
-| playerError                  | 播放器初始化出错         | error:Error                       |
 
 - **原生 video 标签事件**
 
@@ -252,6 +251,12 @@ player.$on("ended", function (data) {
 
 - `player.exitPictureInPicture()` : 退出画中画
 
+- `player.showError(data: { message: string; [key: string]: any })` : 显示错误信息
+
+- `player.hideError()` : 隐藏错误信息
+
+- `player.ready(fn: Function)` : 播放器初始化完成
+
 **实例属性：**
 
 - `player.videoElement` : 原生 video 标签
@@ -263,6 +268,12 @@ player.$on("ended", function (data) {
 - `player.duration` : 视频总时长
 
 - `player.volume` : 当前音量
+
+- `player.mediaError` : 媒体错误信息
+
+- `player.sourceItem` : 当前正在播放的视频
+
+- `player.videoReadyState` : 媒体的就绪状态
 
 **静态方法：**
 
@@ -326,7 +337,7 @@ Player.useLang({
 import Player from "@lin-media/player";
 
 const player = new Player({
-  el: ".container",
+  el: document.querySelector(".container"),
   sources: [
     {
       label: "标清",
@@ -386,6 +397,8 @@ document.documentElement.style.setProperty("--player-theme-color", "green");
 | --player-label-background-color        | 标签背景色（倍速，清晰度） | rgba(255, 255, 255, 0.2) |
 | --player-process-background-color      | 进度条背景色               | rgba(255, 255, 255, 0.2) |
 | --player-loaded-background-color       | 缓冲进度背景色             | rgba(255, 255, 255, 0.4) |
+| --player-error-background-color        | 错误遮罩层背景色           | rgba(0, 0, 0, 0.5)       |
+| --player-error-color                   | 错误字体颜色               | red                      |
 
 ## 插件和组件
 
@@ -407,7 +420,7 @@ document.documentElement.style.setProperty("--player-theme-color", "green");
 
 由于浏览器的策略问题，很多时候就算我们设置了`autoplay`属性也无法实现自动播放的。以下提供 2 种思路实现自动播放，这 2 种思路的前提是设置了`autoplay`属性
 
-- 用户与网页进行交互。浏览器是不允许在用户没有操作的的时候自动播放视频的，所以你需要想办法让用户跟网页产生交互，然后才去初始化播放器。但是这种做法基本用不上。。。
+- 用户与网页进行交互。浏览器是不允许在用户没有操作的的时候自动播放视频的，所以你需要想办法让用户跟网页产生交互，然后才去初始化播放器
 
 - 静音播放。浏览器是不允许有声音的视频进行自动播放的，但是允许静音的视频进行播放的。所以你可以将视频的音量设置为 0，然后在进行自动播放。`Player`可以通过设置对应的参数实现这种静音自动播放的功能
 

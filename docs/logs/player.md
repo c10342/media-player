@@ -51,6 +51,10 @@
   - `afterTechDestroy`：tech 销毁完成之后
   
   - `playerError`：播放器初始化出错
+  
+  - `showErrorMessage`：显示错误遮罩层
+  
+  - `hideErrorMessage`：隐藏错误遮罩层
 
 - `feat`：调整插件注册方法：`use` -> `registerPlugin`
 
