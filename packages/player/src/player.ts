@@ -146,7 +146,6 @@ class Player extends EventEmit {
   i18n: any = null;
   private readyCallback: Array<Function> = [];
   private isReady = false;
-  videoElement: HTMLVideoElement | null;
   constructor(options: PlayerConfig) {
     super();
     this.init(options);
@@ -284,6 +283,7 @@ class Player extends EventEmit {
     return this;
   }
 
+  // 以下所有属性和方法都是由组件提供的，这里填写是为了做一个类型的声明
   get currentTime(): null | number {
     return null;
   }
@@ -309,6 +309,10 @@ class Player extends EventEmit {
   }
 
   get sourceItem(): SourceItem | null {
+    return null;
+  }
+
+  get videoElement(): HTMLVideoElement | null {
     return null;
   }
 
