@@ -165,7 +165,7 @@ class Player extends EventEmit {
     forEachHook("afterSetup", (fn) => {
       chain.push(fn);
     });
-    chain.push(this.triggerReady.bind(this));
+    chain.push(this.triggerReady);
 
     const next = (index: number, data: PlayerConfig | Player) => {
       if (index === chain.length) {
