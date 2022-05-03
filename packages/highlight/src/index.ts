@@ -57,7 +57,7 @@ class Highlight extends Component {
   }
 
   private get duration() {
-    return this.player.duration;
+    return this.player.duration ?? 0;
   }
 
   // 初始化
