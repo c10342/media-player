@@ -33,7 +33,8 @@ import {
   SourceHandleCallback,
   TechOptions,
   TechClass,
-  SourceItem
+  SourceItem,
+  PlayerNextCallbackFn
 } from "./types/index";
 
 import { useSource, removeSource } from "./global-api/source";
@@ -166,18 +167,25 @@ class Player extends EventEmit {
     });
     chain.push(this.triggerReady.bind(this));
 
-    let p: any = Promise.resolve(options);
-
-    while (chain.length) {
-      p = p.then(chain.shift());
-    }
-    p.catch((error: any) => {
-      this.$emit(PlayerEvents.PLAYERERROR, error);
-      logError(error);
-    });
+    const next = (index: number, data: PlayerConfig | Player) => {
+      if (index === chain.length) {
+        return;
+      }
+      const fn = chain[index];
+      let called = false;
+      fn(data, (opts: PlayerConfig | Player) => {
+        if (called) {
+          logError("next have been called");
+          return;
+        }
+        next(index + 1, opts);
+        called = true;
+      });
+    };
+    next(0, options);
   }
 
-  private initI18n() {
+  private initI18n(options: PlayerConfig, next: PlayerNextCallbackFn) {
     const i18n = initLocale();
     const { lang, customLanguage } = this.options;
     if (!isUndef(lang)) {
@@ -189,29 +197,31 @@ class Player extends EventEmit {
       i18n.use(customLanguage?.Player);
     }
     this.i18n = i18n;
-    return this;
+    next(options);
   }
 
-  private initOptions(options: PlayerConfig) {
-    this.options = mergeConfig(options, Player.defaults) as PlayerConfig;
-    return this;
+  private initOptions(options: PlayerConfig, next: PlayerNextCallbackFn) {
+    options = mergeConfig(options, Player.defaults) as PlayerConfig;
+    this.options = options;
+    next(options);
   }
 
-  private initPlugins() {
+  private initPlugins(options: PlayerConfig, next: PlayerNextCallbackFn) {
     initPlugins(this);
-    return this;
+    next(options);
   }
 
-  private initLayout() {
+  private initLayout(options: PlayerConfig, next: PlayerNextCallbackFn) {
     const html = LayoutTpl();
     this.rootElement = parseHtmlToDom(html);
     this.options.el?.appendChild(this.rootElement);
-    return this;
+    next(options);
   }
 
-  private initComponents() {
+  private initComponents(options: PlayerConfig, next: PlayerNextCallbackFn) {
     initComponents("Player", this, this.rootElement, this);
-    return this;
+    // initComponents为最后的初始化步骤，需要传入player实例参数，否则afterSetup是获取不到player实例的
+    next(this);
   }
 
   private destroyPlugins() {
