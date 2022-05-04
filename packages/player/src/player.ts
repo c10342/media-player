@@ -17,6 +17,7 @@ import initLocale from "./locale";
 import {
   destroyComponents,
   destroyPlugins,
+  handleMiddleware,
   initComponents,
   initPlugins
 } from "./utils/helper";
@@ -166,22 +167,7 @@ class Player extends EventEmit {
     });
     chain.push(this.triggerReady);
 
-    const next = (index: number, data: PlayerConfig | Player) => {
-      if (index === chain.length) {
-        return;
-      }
-      const fn = chain[index].bind(this);
-      let called = false;
-      fn(data, (opts: PlayerConfig | Player) => {
-        if (called) {
-          logError("next have been called");
-          return;
-        }
-        next(index + 1, opts);
-        called = true;
-      });
-    };
-    next(0, options);
+    handleMiddleware(chain, this, options);
   }
 
   private initI18n(options: PlayerConfig, next: PlayerNextCallbackFn) {
@@ -206,7 +192,9 @@ class Player extends EventEmit {
   }
 
   private initPlugins(options: PlayerConfig, next: PlayerNextCallbackFn) {
+    this.$emit(PlayerEvents.BEFOREPLUGINSETUP, this);
     initPlugins(this);
+    this.$emit(PlayerEvents.AFTERPLUGINSETUP, this);
     next(options);
   }
 
@@ -218,32 +206,32 @@ class Player extends EventEmit {
   }
 
   private initComponents(options: PlayerConfig, next: PlayerNextCallbackFn) {
+    this.$emit(PlayerEvents.BEFORECOMPONENTSETUP, this);
     initComponents("Player", this, this.rootElement, this);
+    this.$emit(PlayerEvents.AFTERPLUGINSETUP, this);
     // initComponents为最后的初始化步骤，需要传入player实例参数，否则afterSetup是获取不到player实例的
     next(this);
   }
 
   private destroyPlugins() {
+    this.$emit(PlayerEvents.BEFOREPLUGINDESTROY, this);
     destroyPlugins(this);
     this.plugins = {};
+    this.$emit(PlayerEvents.AFTERPLUGINDESTROY, this);
   }
   private destroyComponents() {
+    this.$emit(PlayerEvents.BEFORECOMPONENTDESTROY, this);
     destroyComponents(this.components, this);
     this.components = {};
+    this.$emit(PlayerEvents.AFTERCOMPONENTDESTROY, this);
   }
 
   destroyTech() {
     if (this.tech) {
-      const name = (this.tech.constructor as any).id;
-      this.$emit(PlayerEvents.BEFORETECHDESTROY, {
-        tech: this.tech,
-        name
-      });
+      this.$emit(PlayerEvents.BEFORETECHDESTROY, this);
       this.tech.destroy();
       this.tech = null;
-      this.$emit(PlayerEvents.BEFORETECHDESTROY, {
-        name
-      });
+      this.$emit(PlayerEvents.AFTERTECHDESTROY, this);
     }
   }
 
@@ -272,6 +260,10 @@ class Player extends EventEmit {
     this.tech = null;
     this.i18n = null;
     this.options = {} as any;
+  }
+
+  private triggerDestroy() {
+    this.$emit(PlayerEvents.DESTROY, this);
   }
 
   ready(fn: Function) {
@@ -375,13 +367,29 @@ class Player extends EventEmit {
   }
 
   destroy() {
-    this.$emit(PlayerEvents.DESTROY);
-    this.destroyPlugins();
-    this.destroyComponents();
-    this.destroyTech();
-    this.clear();
-    this.tech?.destroy();
-    this.resetData();
+    const chain: Array<Function> = [];
+    forEachHook("beforeDestroy", (fn) => {
+      chain.push(fn);
+    });
+    const fns = [
+      this.triggerDestroy,
+      this.destroyPlugins,
+      this.destroyComponents,
+      this.destroyTech,
+      this.clear,
+      this.resetData
+    ];
+    fns.forEach((fn) => {
+      const func = (data: any, next: PlayerNextCallbackFn<any>) => {
+        fn.call(this);
+        next(data);
+      };
+      chain.push(func);
+    });
+    forEachHook("afterDestroy", (fn) => {
+      chain.push(fn);
+    });
+    handleMiddleware(chain, this, this);
   }
 }
 
