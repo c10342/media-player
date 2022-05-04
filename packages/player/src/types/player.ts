@@ -44,4 +44,4 @@ export interface PlayerConfig {
   [key: string]: any;
 }
 
-export type PlayerNextCallbackFn = (data: PlayerConfig | Player) => void;
+export type PlayerNextCallbackFn<T = PlayerConfig | Player> = (data: T) => void;
