@@ -12,31 +12,7 @@
 
 **执行 beforeSetup 钩子函数**
 
-`beforeSetup`钩子函数是通过`Player.registerHook`进行注册的，代码如下:
-
-```javascript
-Player.registerHook("beforeSetup", (options, next) => {
-  next(options);
-});
-```
-
-在钩子函数中，你可以获得两个参数：
-
-- `options`：用户所设置的初始化配置
-
-- `next`：在钩子函数执行结束之后，必须调用`next`函数，并且把修改过后的`options`初始化配置回传回去，否则，将无法进行下一步的初始化
-
-如果钩子函数中包含了异步的操作，你可以这样子：
-
-```javascript
-Player.registerHook("beforeSetup", (options, next) => {
-  setTimeout(() => {
-    next(options);
-  }, 1000);
-});
-```
-
-虽然钩子函数中可以进行异步操作，但是不建议进行耗时的异步操作，因为这样子会使整个播放器初始化完成时间变长
+这个阶段将会执行通过`Player.useHook`函数注册的`beforeSetup`钩子函数。在这个阶段，你可以对用户传入的配置进行操作，比如修改一个配置或者新增一个配置
 
 **合并配置**
 
@@ -60,31 +36,7 @@ Player.registerHook("beforeSetup", (options, next) => {
 
 **执行 source 资源中间件**
 
-`source`资源中间件是通过如下方式进行注册的：
-
-```javascript
-VideoPlayer.useSource("video/mp4", (source, next) => {
-  next(source);
-});
-```
-
-如果播放的视频`type`类型是`video/mp4`，就会执行该中间件。
-
-在函数中，你可以获得两个参数:
-
-- `source`：将要播放的视频信息
-
-- `next`：在函数执行结束之后，必须调用`next`函数，并且把`source`视频信息回传回去，否则，将无法执行下一步的操作
-
-如果钩子函数中包含了异步的操作，你可以这样子：
-
-```javascript
-VideoPlayer.useSource("video/mp4", (source, next) => {
-  setTimeout(() => {
-    next(source);
-  }, 1000);
-});
-```
+这个阶段将会执行通过`Player.useSource`函数注册的中间件。在这个阶段你可以对即将要播放的视频地址，类型等信息进行修改
 
 **初始化 Tech**
 
@@ -92,34 +44,60 @@ VideoPlayer.useSource("video/mp4", (source, next) => {
 
 **执行 afterSetup 钩子函数**
 
-`afterSetup`钩子函数是通过`Player.registerHook`进行注册的，代码如下:
-
-```javascript
-Player.registerHook("afterSetup", (player, next) => {
-  next(player);
-});
-```
-
-在钩子函数中，你可以获得两个参数：
-
-- `player`：播放器实例，此时的播放器实例已经完全初始化完毕了
-
-- `next`：在钩子函数执行结束之后，必须调用`next`函数，并且把`player`播放器实例回传回去，否则，将无法执行下一个中间件
-
-如果钩子函数中包含了异步的操作，你可以这样子：
-
-```javascript
-Player.registerHook("afterSetup", (player, next) => {
-  setTimeout(() => {
-    next(player);
-  }, 1000);
-});
-```
+这个阶段将会执行通过`Player.useHook`函数注册的`afterSetup`钩子函数。在这个阶段，你可以对播放器的实例进行扩展，比如往播放器实例上面新增属性或者函数
 
 ## 销毁流程
 
 ![销毁流程](/images/destroy.png)
 
+**执行 beforeDestroy 钩子函数**
+
+这个阶段将会执行通过`Player.useHook`函数注册的`beforeDestroy`钩子函数。在这个阶段你可以清除一些副作用代码
+
+**触发 destroy 事件**
+
+这个阶段将会对外广播`destroy`事件。你可以在这个事件毁掉中清除一些副作用代码
+
+**销毁插件**
+
+这个阶段将会对所有的插件进行销毁
+
+**销毁组件**
+
+这个阶段将会对所有的组件进行销毁
+
+**销毁 Tech**
+
+这个阶段将会对 Tech 进行销毁。在这个阶段，你可以清除一些副作用代码，比如`hls.js`的拉流
+
+**销毁事件监听**
+
+这个阶段将会销毁`player.$on`或者`player.$once`监听的事件
+
+**销毁 DOM 布局**
+
+这个阶段将会移除所有的`DOM`元素
+
+**销毁相关对象**
+
+这个阶段将会播放器实例上面的一些属性销毁，释放内存
+
+**执行 afterDestroy 钩子函数**
+
+这个阶段将会执行通过`Player.useHook`函数注册的`afterDestroy`钩子函数。在这个阶段你可以清除一些副作用代码
+
 ## 播放器组成
 
 ![销毁流程](/images/framework.png)
+
+播放器主要有三部分组成，分别是`Plugin`，`Component`，`Tech`，`Hook`，`Source`
+
+- `Plugin`：提供一些扩展的功能
+
+- `Component`：提供 UI 组件，控件等
+
+- `Tech`：可结合`ESM`库实现自定义格式视频播放。比如结合`hls.js`实现`.m3u8`文件的播放
+
+- `Hook`：播放器生命周期中间件
+
+- `Source`：视频播放资源中间件

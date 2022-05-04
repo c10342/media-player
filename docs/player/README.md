@@ -207,6 +207,68 @@ player.$on("ended", function (data) {
 | enterpictureinpicture | 进入画中画时触发                                        | event    |
 | leavepictureinpicture | 退出画中画时触发                                        | event    |
 
+## 中间件
+
+中间件分为两种，一种是播放器生命周期中间件，一种是视频播放资源中间件
+
+**播放器生命周期中间件**
+
+你可以通过如下形式使用生命周期中间件
+
+```javascript
+Player.useHook("beforeSetup", (data, next) => {
+  // 修改配置
+  data.age = 11;
+  // 函数执行完毕之后必须调用next，并把data回传回去
+  next(data);
+});
+```
+
+如果钩子函数中包含了异步的操作，你可以这样子：
+
+```javascript
+Player.useHook("beforeSetup", (options, next) => {
+  setTimeout(() => {
+    next(options);
+  }, 1000);
+});
+```
+
+| 名称          | 说明               | 回调参数                                         |
+| ------------- | ------------------ | ------------------------------------------------ |
+| beforeSetup   | 播放器初始化前     | {data: PlayerConfig, next: PlayerNextCallbackFn} |
+| afterSetup    | 播放器初始化完成后 | {data: Player, next: PlayerNextCallbackFn}       |
+| beforeDestroy | 播放器销毁前       | {data: Player, next: PlayerNextCallbackFn}       |
+| afterDestroy  | 播放器销毁完成后   | {data: Player, next: PlayerNextCallbackFn}       |
+
+**视频播放资源中间件**
+
+你可以通过如下形式使用视频播放资源中间件
+
+```javascript
+Player.useSource("video/mp4", (source, next) => {
+  next(source);
+});
+```
+
+如果播放的视频`type`类型是`video/mp4`，就会执行该中间件。
+
+在函数中，你可以获得两个参数:
+
+- `source`：将要播放的视频信息
+
+- `next`：在函数执行结束之后，必须调用`next`函数，并且把`source`视频信息回传回去，否则，将无法执行下一步的操作
+
+如果钩子函数中包含了异步的操作，你可以这样子：
+
+```javascript
+Player.useSource("video/mp4", (source, next) => {
+  setTimeout(() => {
+    next(source);
+  }, 1000);
+});
+```
+
 ## API
 
 **实例方法：**
