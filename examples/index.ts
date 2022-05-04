@@ -30,26 +30,29 @@ const videoList = [
   {
     label: "高清",
     url: "http://player.linjiafu.top/test.mp4",
-    type: "video/mp4"
-    // default: true
+    type: "video/mp4",
+    default: true
   },
   {
     label: "超清",
     url: "https://api.dogecloud.com/player/get.m3u8?vcode=5ac682e6f8231991&userId=17&ext=.m3u8",
-    type: "video/hls",
-    default: true
+    type: "video/hls"
+    // default: true
   }
 ];
 
-// VideoPlayer.useHook("beforeSetup", (data) => {
+// VideoPlayer.useHook("beforeSetup", (data,next) => {
+//   // console.log(data);
+// // throw new Error('beforeSetup')
 //   console.log(data);
 
-//   return data;
+//   next(data)
 // });
-// VideoPlayer.useHook("afterSetup", (data) => {
-//   console.log(data);
-
-//   return data;
+// VideoPlayer.useHook("afterSetup", (player,next) => {
+//   // console.log(data);
+//   // throw new Error('11')
+//   next(player)
+//   // return data;
 // });
 // VideoPlayer.useSource("video/mp4", (data, next) => {
 //   console.log(data);
