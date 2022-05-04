@@ -3,7 +3,9 @@ import { HookCallback, HooksMap, HookType } from "../types/index";
 
 const hooksMap: HooksMap = {
   beforeSetup: [],
-  afterSetup: []
+  afterSetup: [],
+  beforeDestroy: [],
+  afterDestroy: []
 };
 
 function keyInMap(key: string) {

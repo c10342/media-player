@@ -1,8 +1,6 @@
 import Player from "../player";
 import { PlayerNextCallbackFn, PlayerConfig } from "./player";
 
-export type HookType = "beforeSetup" | "afterSetup";
-
 export type HookCallback = (
   data: PlayerConfig | Player,
   next: PlayerNextCallbackFn
@@ -11,4 +9,8 @@ export type HookCallback = (
 export interface HooksMap {
   beforeSetup: HookCallback[];
   afterSetup: HookCallback[];
+  beforeDestroy: HookCallback[];
+  afterDestroy: HookCallback[];
 }
+
+export type HookType = keyof HooksMap;
