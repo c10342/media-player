@@ -44,10 +44,23 @@ const videoList = [
 // VideoPlayer.useHook("beforeSetup", (data,next) => {
 //   // console.log(data);
 // // throw new Error('beforeSetup')
-//   console.log(data);
+//   // console.log(data);
+
+//   setTimeout(() => {
+//     next(data)
+//   })
+// });
+// VideoPlayer.useHook()
+VideoPlayer.useHook("beforeDestroy", (data: any, next) => {
+  console.log("beforeDestroy", data);
+
+  next(data);
+});
+// VideoPlayer.useHook('afterDestroy', (data, next) => {
+//   console.log('afterDestroy',data);
 
 //   next(data)
-// });
+// })
 // VideoPlayer.useHook("afterSetup", (player,next) => {
 //   // console.log(data);
 //   // throw new Error('11')
@@ -101,11 +114,11 @@ player.ready(() => {
 // player.$on("afterComponentSetup", ({ name }: { name: string }) => {
 //   console.log("afterComponentSetup", name);
 // });
-// player.$on("beforePluginSetup", ({ name }: { name: string }) => {
-//   console.log("beforePluginSetup", name);
+// player.$on("beforePluginSetup", (data:any) => {
+//   console.log("beforePluginSetup", data);
 // });
-// player.$on("afterPluginSetup", ({ name }: { name: string }) => {
-//   console.log("afterPluginSetup", name);
+// player.$on("afterPluginSetup", (data:any) => {
+//   console.log("afterPluginSetup", data);
 // });
 // player.$on("afterComponentDestroy", ({ name }: { name: string }) => {
 //   console.log("afterComponentDestroy", name);
