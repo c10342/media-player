@@ -102,7 +102,7 @@ export default {
     background-color: #1a1a1a;
     position: relative;
     box-sizing: border-box;
-    padding: 10px;
+    overflow: hidden;
   }
   .iframe {
     width: 100%;
@@ -117,6 +117,7 @@ export default {
     outline: none;
     background-color: #262626;
     box-sizing: border-box;
+    overflow: hidden;
   }
   .button {
     box-sizing: border-box;
