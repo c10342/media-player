@@ -10,12 +10,12 @@ const playerOptions = {
   sources: [
     {
       label: "标清",
-      url: "/test.mp4",
+      url: "/videos/test.mp4",
       type: "video/mp4"
     },
     {
       label: "高清",
-      url: "/test.mp4",
+      url: "/videos/test.mp4",
       type: "video/mp4"
     }
   ],

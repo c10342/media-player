@@ -62,6 +62,7 @@ module.exports = {
           { text: "内置Tech", link: "/techs/built-in/" }
         ]
       },
+      { text: "在线编辑", link: "/edit/index" },
       { text: "生态", link: "/ecology/" },
       {
         text: "其他",
