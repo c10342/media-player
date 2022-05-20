@@ -93,7 +93,6 @@ class VideoPlayer extends Component {
       let flag = false;
       forEachTech((name, Tech, options = {}) => {
         if (Tech.canHandleSource(data, this.player.options)) {
-          this.player.$emit(PlayerEvents.BEFORETECHSETUP, { name });
           const techs = this.player.options.techs || {};
           const userOptions = techs[name] || {};
           const defaults = options.defaults ?? {};
@@ -105,8 +104,6 @@ class VideoPlayer extends Component {
           this.oldTech = this.player.tech;
 
           this.player.tech = tech;
-
-          this.player.$emit(PlayerEvents.AFTERTECHSETUP, { name, tech });
           flag = true;
           return true;
         }
@@ -157,16 +154,8 @@ class VideoPlayer extends Component {
 
   private destroyOldTech() {
     if (this.oldTech) {
-      const name = (this.oldTech.constructor as any).id;
-      this.player.$emit(PlayerEvents.BEFORETECHDESTROY, {
-        tech: this.oldTech,
-        name
-      });
       this.oldTech.destroy();
       this.oldTech = null;
-      this.player.$emit(PlayerEvents.BEFORETECHDESTROY, {
-        name
-      });
     }
   }
 

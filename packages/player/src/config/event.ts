@@ -16,20 +16,9 @@ export enum PlayerEvents {
   KEYBOARD_DOWN = "keyboardDown",
   KEYBOARD_SPACE = "keyboardSpace",
   PICTURE_IN_PICTURE_WINDOW_RESIZE = "pictureInPictureWindowResize",
-  BEFORECOMPONENTSETUP = "beforeComponentSetup",
-  AFTERCOMPONENTSETUP = "afterComponentSetup",
-  BEFORECOMPONENTDESTROY = "beforeComponentDestroy",
-  AFTERCOMPONENTDESTROY = "afterComponentDestroy",
-  BEFOREPLUGINSETUP = "beforePluginSetup",
-  AFTERPLUGINSETUP = "afterPluginSetup",
-  BEFOREPLUGINDESTROY = "beforePluginDestroy",
-  AFTERPLUGINDESTROY = "afterPluginDestroy",
-  BEFORETECHSETUP = "beforeTechSetup",
-  AFTERTECHSETUP = "afterTechSetup",
-  BEFORETECHDESTROY = "beforeTechDestroy",
-  AFTERTECHDESTROY = "afterTechDestroy",
   SHOWERROR = "showErrorMessage",
-  HIDEERROR = "hideErrorMessage"
+  HIDEERROR = "hideErrorMessage",
+  READY = "ready"
 }
 
 // video标签事件

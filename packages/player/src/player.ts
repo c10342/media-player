@@ -192,9 +192,7 @@ class Player extends EventEmit {
   }
 
   private initPlugins(options: PlayerConfig, next: PlayerNextCallbackFn) {
-    this.$emit(PlayerEvents.BEFOREPLUGINSETUP, this);
     initPlugins(this);
-    this.$emit(PlayerEvents.AFTERPLUGINSETUP, this);
     next(options);
   }
 
@@ -206,32 +204,24 @@ class Player extends EventEmit {
   }
 
   private initComponents(options: PlayerConfig, next: PlayerNextCallbackFn) {
-    this.$emit(PlayerEvents.BEFORECOMPONENTSETUP, this);
     initComponents("Player", this, this.rootElement, this);
-    this.$emit(PlayerEvents.AFTERPLUGINSETUP, this);
     // initComponents为最后的初始化步骤，需要传入player实例参数，否则afterSetup是获取不到player实例的
     next(this);
   }
 
   private destroyPlugins() {
-    this.$emit(PlayerEvents.BEFOREPLUGINDESTROY, this);
     destroyPlugins(this);
     this.plugins = {};
-    this.$emit(PlayerEvents.AFTERPLUGINDESTROY, this);
   }
   private destroyComponents() {
-    this.$emit(PlayerEvents.BEFORECOMPONENTDESTROY, this);
-    destroyComponents(this.components, this);
+    destroyComponents(this.components);
     this.components = {};
-    this.$emit(PlayerEvents.AFTERCOMPONENTDESTROY, this);
   }
 
   destroyTech() {
     if (this.tech) {
-      this.$emit(PlayerEvents.BEFORETECHDESTROY, this);
       this.tech.destroy();
       this.tech = null;
-      this.$emit(PlayerEvents.AFTERTECHDESTROY, this);
     }
   }
 
@@ -248,7 +238,7 @@ class Player extends EventEmit {
       return this;
     }
     this.isReady = true;
-    this.$emit("ready");
+    this.$emit(PlayerEvents.READY);
     this.runReadyCallback();
     return this;
   }

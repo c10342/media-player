@@ -5,7 +5,6 @@ import {
   logError
 } from "@lin-media/utils";
 import Component from "../components/component";
-import { PlayerEvents } from "../config/event";
 import { forEachComponent } from "../global-api/component";
 import { forEachPlugins } from "../global-api/plugin";
 import Player from "../player";
@@ -20,8 +19,6 @@ export function initComponents(
   forEachComponent(name, (name, Component, options) => {
     const init = (config: Record<string, any> = {}) => {
       const defaults = options.defaults;
-      player.$emit(`${PlayerEvents.BEFORECOMPONENTSETUP}:${name}`);
-      player.$emit(`${PlayerEvents.BEFORECOMPONENTSETUP}:*`, { name });
       const instance = new Component(
         player,
         rootElement,
@@ -32,12 +29,6 @@ export function initComponents(
         currentInstance
       );
       currentInstance.components[name] = instance;
-
-      player.$emit(`${PlayerEvents.AFTERCOMPONENTSETUP}:${name}`, instance);
-      player.$emit(`${PlayerEvents.AFTERCOMPONENTSETUP}:*`, {
-        name,
-        component: instance
-      });
     };
     // 先判断构造函数中是否有shouldInit静态函数，判断是否需要进行初始化
     if (
@@ -59,22 +50,12 @@ export function initComponents(
   });
 }
 
-export function destroyComponents(
-  components: { [key: string]: Component },
-  player: Player
-) {
+export function destroyComponents(components: { [key: string]: Component }) {
   Object.keys(components).forEach((name) => {
     const component = components[name];
-    player.$emit(`${PlayerEvents.BEFORECOMPONENTDESTROY}:${name}`);
-    player.$emit(`${PlayerEvents.BEFORECOMPONENTDESTROY}:*`, {
-      name,
-      component
-    });
     if (isFunction(component.destroy)) {
       component.destroy();
     }
-    player.$emit(`${PlayerEvents.AFTERCOMPONENTDESTROY}:${name}`);
-    player.$emit(`${PlayerEvents.AFTERCOMPONENTDESTROY}:*`, { name });
   });
 }
 
@@ -83,15 +64,8 @@ export function initPlugins(player: Player) {
   forEachPlugins((name, Plugin, options) => {
     const init = (config: Record<string, any> = {}) => {
       const defaults = options.defaults;
-      player.$emit(`${PlayerEvents.BEFOREPLUGINSETUP}:${name}`);
-      player.$emit(`${PlayerEvents.BEFOREPLUGINSETUP}:*`, { name });
       const plugin = new Plugin(player, { ...defaults, ...config });
       player.plugins[name] = plugin;
-      player.$emit(`${PlayerEvents.AFTERPLUGINSETUP}:${name}`, {
-        name,
-        plugin
-      });
-      player.$emit(`${PlayerEvents.AFTERPLUGINSETUP}:*`, { name, plugin });
     };
     if (isFunction(Plugin.shouldInit) && !Plugin.shouldInit(player.options)) {
       return;
@@ -114,13 +88,9 @@ export function initPlugins(player: Player) {
 export function destroyPlugins(player: Player) {
   Object.keys(player.plugins).forEach((name) => {
     const plugin = player.plugins[name];
-    player.$emit(`${PlayerEvents.BEFOREPLUGINDESTROY}:${name}`, plugin);
-    player.$emit(`${PlayerEvents.BEFOREPLUGINDESTROY}:*`, { name, plugin });
     if (isFunction(plugin.destroy)) {
       plugin.destroy();
     }
-    player.$emit(`${PlayerEvents.AFTERPLUGINDESTROY}:${name}`);
-    player.$emit(`${PlayerEvents.AFTERPLUGINDESTROY}:*`, { name });
   });
 }
 
