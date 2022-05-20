@@ -13,7 +13,8 @@ const {
   clean,
   packagesRoot,
   resolveRoot,
-  resolvePackages
+  resolvePackages,
+  getUmdName
 } = require("./utils.js");
 
 const tempTypesDir = resolveRoot("./temp_types");
@@ -27,7 +28,8 @@ function createConfig(name) {
     output: {
       path: resolvePackages(`./${name}/dist`),
       filename: "index.js",
-      libraryTarget: "commonjs2"
+      libraryTarget: "umd",
+      library: getUmdName(name)
     }
   };
   return config;

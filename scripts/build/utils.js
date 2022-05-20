@@ -20,6 +20,15 @@ function resolveRoot(...data) {
   return path.resolve(root, ...data);
 }
 
+function ucfirst(str) {
+  const firstChar = str.charAt(0).toUpperCase();
+  return `${firstChar}${str.substr(1)}`;
+}
+
+function getUmdName(name) {
+  return "Media" + ucfirst(name);
+}
+
 function getExternals(name) {
   const dir = resolvePackages(name);
   const pck = require(path.resolve(dir, "./package.json"));
@@ -35,7 +44,11 @@ function getExternals(name) {
   const dep = {};
 
   [...new Set(externals)].forEach((key) => {
-    dep[key] = key;
+    let rootKey = key;
+    if (key.startsWith("@lin-media")) {
+      rootKey = getUmdName(key.split("/")[1]);
+    }
+    dep[key] = { root: rootKey, commonjs: key, commonjs2: key, amd: key };
   });
 
   return dep;
@@ -55,5 +68,6 @@ module.exports = {
   examplesRoot,
   resolveRoot,
   resolvePackages,
-  resolveExamples
+  resolveExamples,
+  getUmdName
 };
