@@ -61,7 +61,7 @@ class DomResizeObserver extends Plugin {
 
 **注意事项**
 
-- 此时的`player`播放器实例还没完全初始化完成，如果你需要使用到其他组件/插件的功能，因为组件/插件的初始化顺序的问题，可能你所需要的组件/插件还没进行初始化，你可以等待播放器初始化完成或者监听组件的`afterPluginSetup`钩子函数或者插件的`afterPluginSetup`钩子函数，然后在使用其他组件/插件的功能
+- 此时的`player`播放器实例还没完全初始化完成，如果你需要使用到其他组件/插件的功能，因为组件/插件的初始化顺序的问题，可能你所需要的组件/插件还没进行初始化，你可以等待播放器初始化完成，然后在使用其他组件/插件的功能
 
 ::: warning 警告
 在插件初始化完毕之后，必须调用`this.triggerReady()`方法
@@ -155,31 +155,6 @@ const player = new Player({
   "name": "张三"
 }
 ```
-
-## 钩子函数
-
-播放器提供了`beforePluginSetup`，`afterPluginSetup`，`beforePluginDestroy`，`afterPluginDestroy`四个钩子函数来让外部知道插件是何时进行初始化的，何时进行销毁的。
-
-对于某些插件需要依赖于其他的插件的时候，可以通过这些个钩子函数来得知所依赖的插件的初始化和销毁时机，从而执行某些任务
-
-使用如下方法进行监听：
-
-```typescript
-player.$on("beforePluginSetup", ({ name }: { name: string }) => {
-  console.log("beforePluginSetup", name);
-});
-```
-
-| 事件名称            | 说明               | 回调参数                        |
-| ------------------- | ------------------ | ------------------------------- |
-| beforePluginSetup   | 插件开始初始化前   | { name: string }                |
-| afterPluginSetup    | 插件初始化完成之后 | { name: string,plugin: Plugin } |
-| beforePluginDestroy | 插件开始销毁前     | { name: string,plugin: Plugin } |
-| afterPluginDestroy  | 插件销毁完成之后   | { name: string }                |
-
-- `name`：插件的名称，使用注册的时候的名称
-
-- `plugin`：插件的实例
 
 ## 其他
 

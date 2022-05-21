@@ -64,7 +64,7 @@ class TitleBar extends Component {
 
 **注意事项**
 
-- 此时的`player`播放器实例还没完全初始化完成，如果你需要使用到其他组件的功能，因为组件的初始化顺序的问题，可能你所需要的组件还没进行初始化，你可以等待播放器初始化完成或者监听`afterComponentSetup`钩子函数，然后在使用其他组件的功能
+- 此时的`player`播放器实例还没完全初始化完成，如果你需要使用到其他组件的功能，因为组件的初始化顺序的问题，可能你所需要的组件还没进行初始化，你可以等待播放器初始化完成，然后在使用其他组件的功能
 
 ::: warning 警告
 在组件初始化完毕之后，必须调用`this.triggerReady()`方法，否则其子组件（如果存在）将会无法初始化
@@ -185,31 +185,6 @@ const player = new Player({
   "name": "张三"
 }
 ```
-
-## 钩子函数
-
-播放器提供了`beforeComponentSetup`，`afterComponentSetup`，`beforeComponentDestroy`，`afterComponentDestroy`四个钩子函数来让外部知道组件是何时进行初始化的，何时进行销毁的。
-
-对于某些组件需要依赖于其他的组件的时候，可以通过这些个钩子函数来得知所依赖的组件的初始化和销毁时机，从而执行某些任务
-
-使用如下方法进行监听：
-
-```typescript
-player.$on("beforeComponentSetup", ({ name }: { name: string }) => {
-  console.log("beforeComponentSetup", name);
-});
-```
-
-| 事件名称               | 说明               | 回调参数                              |
-| ---------------------- | ------------------ | ------------------------------------- |
-| beforeComponentSetup   | 组件开始初始化前   | { name: string }                      |
-| afterComponentSetup    | 组件初始化完成之后 | { name: string,component: Component } |
-| beforeComponentDestroy | 组件开始销毁前     | { name: string,component: Component } |
-| afterComponentDestroy  | 组件销毁完成之后   | { name: string }                      |
-
-- `name`：组件的名称，使用注册的时候的名称
-
-- `component`：组件的实例
 
 ## 其他
 

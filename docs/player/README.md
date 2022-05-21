@@ -147,36 +147,27 @@ player.$on("ended", function (data) {
 
 - **播放器自定义事件**
 
-| 事件名称                     | 说明                     | 回调参数                          |
-| ---------------------------- | ------------------------ | --------------------------------- |
-| destroy                      | 播放器销毁时触发         | —                                 |
-| switchDefinitionStart        | 清晰度切换前触发         | —                                 |
-| switchDefinitionEnd          | 清晰度切换后触发         | —                                 |
-| enterBrowserScreen           | 浏览器进入全屏时触发     | —                                 |
-| exitBrowserScreen            | 浏览器退出全屏时触发     | —                                 |
-| enterWebScreen               | 网页进入全屏时触发       | —                                 |
-| exitWebScreen                | 网页退出全屏时触发       | —                                 |
-| showControls                 | 控制条显示时触发         | —                                 |
-| hideControls                 | 控制条隐藏时触发         | —                                 |
-| resize                       | 播放器大小发生变化时触发 | —                                 |
-| keyboardRight                | 按下键盘 → 键时触发      | —                                 |
-| keyboardLeft                 | 按下键盘 ← 键时触发      | —                                 |
-| keyboardUp                   | 按下键盘 ↑ 键时触发      | —                                 |
-| keyboardDown                 | 按下键盘 ↓ 键时触发      | —                                 |
-| keyboardSpace                | 按下键盘 空格 键时触发   | —                                 |
-| pictureInPictureWindowResize | 画中画窗口发生变化时触发 | —                                 |
-| beforeComponentSetup         | 组件初始化前             | {name:string}                     |
-| afterComponentSetup          | 组件初始化完成之后       | {name:string,component:Component} |
-| beforeComponentDestroy       | 组件销毁前               | {name:string,component:Component} |
-| afterComponentDestroy        | 组件销毁完成之后         | {name:string}                     |
-| beforePluginSetup            | 插件初始化前             | {name:string}                     |
-| afterPluginSetup             | 插件初始化完成之后       | {name:string,plugin:Plugin}       |
-| beforePluginDestroy          | 插件销毁前               | {name:string,plugin:Plugin}       |
-| afterPluginDestroy           | 插件销毁完成之后         | {name:string}                     |
-| beforeTechSetup              | tech 初始前              | {name:string}                     |
-| afterTechSetup               | tech 初始化完成之后      | {name:string,tech:Tech}           |
-| beforeTechDestroy            | tech 销毁前              | {name:string,tech:Tech}           |
-| afterTechDestroy             | tech 销毁完成之后        | {name:string}                     |
+| 事件名称                     | 说明                     | 回调参数 |
+| ---------------------------- | ------------------------ | -------- |
+| destroy                      | 播放器销毁时触发         | —        |
+| switchDefinitionStart        | 清晰度切换前触发         | —        |
+| switchDefinitionEnd          | 清晰度切换后触发         | —        |
+| enterBrowserScreen           | 浏览器进入全屏时触发     | —        |
+| exitBrowserScreen            | 浏览器退出全屏时触发     | —        |
+| enterWebScreen               | 网页进入全屏时触发       | —        |
+| exitWebScreen                | 网页退出全屏时触发       | —        |
+| showControls                 | 控制条显示时触发         | —        |
+| hideControls                 | 控制条隐藏时触发         | —        |
+| resize                       | 播放器大小发生变化时触发 | —        |
+| keyboardRight                | 按下键盘 → 键时触发      | —        |
+| keyboardLeft                 | 按下键盘 ← 键时触发      | —        |
+| keyboardUp                   | 按下键盘 ↑ 键时触发      | —        |
+| keyboardDown                 | 按下键盘 ↓ 键时触发      | —        |
+| keyboardSpace                | 按下键盘 空格 键时触发   | —        |
+| pictureInPictureWindowResize | 画中画窗口发生变化时触发 | —        |
+| ready                        | 播放器初始化完成时触发   | —        |
+| showErrorMessage             | 显示错误信息时触发       | —        |
+| hideErrorMessage             | 隐藏错误信息时触发       | —        |
 
 - **原生 video 标签事件**
 

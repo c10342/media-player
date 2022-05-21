@@ -2,7 +2,7 @@
 
 ## `3.0.0`
 
-- `feat`：新增`beforeSetup`和`afterSetup`全局钩子函数
+- `feat`：新增`beforeSetup`、`afterSetup`、`beforeDestroy`、`afterDestroy`全局钩子函数
 
 - `feat`：新增`source`中间件
 
@@ -16,7 +16,7 @@
 
   - 新增`plugins`插件配置
 
-  - 新增`components`插件配置
+  - 新增`components`组件配置
 
   - 新增`techs`tech 配置
 
@@ -30,29 +30,7 @@
 
 - `feat`：新增播放器自定义事件
 
-  - `beforeComponentSetup`：组件初始化前
-
-  - `afterComponentSetup`：组件初始化完成之后
-
-  - `beforeComponentDestroy`：组件销毁前
-
-  - `afterComponentDestroy`：组件销毁完成之后
-
-  - `beforePluginSetup`：插件初始化前
-
-  - `afterPluginSetup`：插件初始化完成之后
-
-  - `beforePluginDestroy`：插件销毁前
-
-  - `afterPluginDestroy`：插件销毁完成之后
-
-  - `beforeTechSetup`：tech 初始化前
-
-  - `afterTechSetup`：tech 初始化完成之后
-
-  - `beforeTechDestroy`：tech 销毁前
-
-  - `afterTechDestroy`：tech 销毁完成之后
+  - `ready`：播放器初始化完成之后
 
   - `showErrorMessage`：显示错误遮罩层
 

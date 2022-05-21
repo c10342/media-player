@@ -122,31 +122,6 @@ const player = new Player({
 }
 ```
 
-## 钩子函数
-
-播放器提供了`beforeTechSetup`，`afterTechSetup`，`beforeTechDestroy`，`afterTechDestroy`四个钩子函数来让外部知道`Tech`是何时进行初始化的，何时进行销毁的。
-
-对于某些插件/组件需要依赖于`Tech`的时候，可以通过这些钩子函数来得知所依赖的`Tech`的初始化和销毁时机，从而执行某些任务
-
-使用如下方法进行监听：
-
-```typescript
-player.$on("beforeTechSetup", ({ name }: { name: string }) => {
-  console.log("beforeTechSetup", name);
-});
-```
-
-| 事件名称          | 说明                 | 回调参数                    |
-| ----------------- | -------------------- | --------------------------- |
-| beforeTechSetup   | `Tech`开始初始化前   | { name: string }            |
-| afterTechSetup    | `Tech`初始化完成之后 | { name: string,tech: Tech } |
-| beforeTechDestroy | `Tech`开始销毁前     | { name: string,tech: Tech } |
-| afterTechDestroy  | `Tech`销毁完成之后   | { name: string }            |
-
-- `name`：`Tech`的名称，使用注册的时候的名称
-
-- `tech`：`Tech`的实例
-
 ## 其他
 
 **获取`Tech`**
