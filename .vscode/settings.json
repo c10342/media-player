@@ -17,7 +17,7 @@
         "autoFix": true
       },
       {
-        "language": "tyypescript",
+        "language": "typescript",
         "autoFix": true
       }
     ],
